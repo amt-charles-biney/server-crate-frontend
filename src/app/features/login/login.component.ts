@@ -10,12 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import {
-  checkIfPasswordsMatch,
-  checkIfTermsAreAccepted,
-  formValidator,
-} from '../../core/utils/validators';
-import { passwordRegex } from '../../core/utils/constants/patterns';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -30,6 +25,7 @@ import { passwordRegex } from '../../core/utils/constants/patterns';
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
   loginForm!: FormGroup;

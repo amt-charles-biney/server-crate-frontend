@@ -15,7 +15,6 @@
       (ngSubmit)="submitRegistrationForm()"
       class="md:p-0 px-4 md:w-[500px] mx-auto"
     >
-      <div>
         <app-custom-input
           id="name"
           label="Name"
@@ -26,8 +25,6 @@
         @if (name?.invalid && (name?.touched || name?.dirty)) {
         <span class="text-red-600">A name is required</span>
         }
-      </div>
-      <div>
         <app-custom-input
           id="email"
           label="Email"
@@ -38,8 +35,6 @@
         @if (email?.invalid && (email?.touched || email?.dirty)) {
         <span class="text-red-600">Please enter a valid email</span>
         }
-      </div>
-      <div>
         <app-custom-input
           id="password"
           label="Password"
@@ -64,8 +59,6 @@
           Use a minimum of 8 characters (case sensitive) with at least one
           number and special character.
         </p>
-      </div>
-      <div>
         <app-custom-input
           id="confirmPwd"
           label="Confirm Password"
@@ -103,7 +96,6 @@
             >
           </p>
         </label>
-      </div>
       <app-custom-button
         buttonText="Sign up"
         [disableButton]="this.signUpForm.invalid"

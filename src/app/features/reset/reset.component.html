@@ -1,0 +1,24 @@
+<main class="grid grid-cols-1 p-3 md:p-0 md:grid-cols-2">
+    <section class="flex flex-col items-center md:py-12 md:px-16">
+      <img
+        class="mb-6 self-start md:mb-16"
+        ngSrc="/assets/logo.svg"
+        width="173"
+        height="56"
+        priority
+        alt="Company logo"
+      />
+      <h1 class="text-3xl mt-6 md:m-0 font-bold">Reset Password</h1>
+      <section class="w-full">
+        <router-outlet />
+      </section>
+    </section>
+    <img
+      class="hidden md:flex w-full !h-screen !relative"
+      ngSrc="/assets/reset-pic.jpg"
+      fill
+      priority
+      alt="Side image of signup form"
+    />
+  </main>
+  
