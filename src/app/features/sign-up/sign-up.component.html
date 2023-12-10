@@ -5,6 +5,7 @@
       ngSrc="/assets/logo.svg"
       width="173"
       height="56"
+      priority
       alt="Company logo"
     />
     <h1 class="text-3xl mt-6 md:m-0 font-bold">Create your account</h1>
@@ -91,7 +92,6 @@
         >
           <input
             type="checkbox"
-            class="border-red-300 checked:!bg-figma-green"
             name="termsAndConditions"
             id="termsAndConditions"
             formControlName="acceptTerms"
@@ -110,16 +110,15 @@
       />
       <p class="text-center mt-6">
         Already have an account?
-        <a class="font-semibold underline" routerLink="/">Sign in</a>
+        <a class="font-semibold underline" routerLink="/login">Sign in</a>
       </p>
     </form>
   </section>
   <img
-    class="hidden md:flex w-full"
-    ngSrc="/assets/signup-image.svg"
+    class="hidden md:flex w-full !relative"
+    ngSrc="/assets/signup-pic.jpg"
     priority
-    width="720"
-    height="1024"
+    fill
     alt="Side image of signup form"
   />
 </main>
