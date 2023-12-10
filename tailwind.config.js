@@ -4,7 +4,12 @@ module.exports = {
     "./src/**/*.{html,ts}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'figma-gray': '#bdbdbd',
+        'figma-green': '#3cb043'
+      }
+    },
   },
   plugins: [],
 }
