@@ -27,7 +27,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -48,9 +48,9 @@ export class LoginComponent {
   }
 
   get email() {
-    return this.loginForm.get('email' ?? '');
+    return this.loginForm.get('email');
   }
   get password() {
-    return this.loginForm.get('password' ?? '');
+    return this.loginForm.get('password');
   }
 }

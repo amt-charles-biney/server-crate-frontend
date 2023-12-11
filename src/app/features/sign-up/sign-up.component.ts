@@ -67,19 +67,19 @@ export class SignUpComponent implements OnInit {
   }
 
   get name() {
-    return this.signUpForm.get('name' ?? '');
+    return this.signUpForm.get('name');
   }
 
   get email() {
-    return this.signUpForm.get('email' ?? '');
+    return this.signUpForm.get('email');
   }
   get password() {
-    return this.signUpForm.get('password' ?? '');
+    return this.signUpForm.get('password');
   }
   get confirmPwd() {
-    return this.signUpForm.get('confirmPwd' ?? '');
+    return this.signUpForm.get('confirmPwd');
   }
   get acceptTerms() {
-    return this.signUpForm.get('acceptTerms' ?? '');
+    return this.signUpForm.get('acceptTerms');
   }
 }

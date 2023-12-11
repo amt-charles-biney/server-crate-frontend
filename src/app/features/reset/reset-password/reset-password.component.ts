@@ -52,7 +52,7 @@ export class ResetPasswordComponent implements OnInit{
   }
 
   get confirmPwd() {
-    return this.resetPasswordForm.get('confirmPwd' ?? '');
+    return this.resetPasswordForm.get('confirmPwd');
   }
   
 }
