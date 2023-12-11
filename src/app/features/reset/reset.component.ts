@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -5,7 +6,8 @@ import { RouterModule } from '@angular/router';
   selector: 'app-reset',
   standalone: true,
   imports: [
-    RouterModule
+    RouterModule,
+    NgOptimizedImage
   ],
   templateUrl: './reset.component.html',
   styleUrl: './reset.component.scss',

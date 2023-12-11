@@ -1,8 +1,9 @@
 <main class="grid grid-cols-1 p-3 md:p-0 md:grid-cols-2">
   <section class="flex flex-col items-center md:py-12 md:px-16">
     <img
-      class="mb-6 self-start md:mb-16"
+      class="mb-6 self-start md:mb-16 cursor-pointer"
       ngSrc="/assets/logo.svg"
+      routerLink="/"
       width="173"
       height="56"
       priority
@@ -91,8 +92,8 @@
           />
           <p>
             I agree to the
-            <a class="font-semibold underline" routerLink="/"
-              >Terms and Conditions</a
+            <button type="button" (click)="openTermsAndConditionsModal()" class="font-semibold underline outline-none" 
+              >Terms and Conditions</button
             >
           </p>
         </label>
