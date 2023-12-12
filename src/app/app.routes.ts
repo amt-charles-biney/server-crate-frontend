@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { HomeComponent } from './features/home/home.component';
 
 export const routes: Routes = [
     {
@@ -12,5 +13,9 @@ export const routes: Routes = [
     {
         path: 'forgot-password',
         loadChildren: () => import('./features/reset/reset.routes').then(m => m.route)
+    },
+    {
+        path: '',
+        loadChildren: () => import('./features/home/home.routes').then(m => m.route)
     }
 ];
