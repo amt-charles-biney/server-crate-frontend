@@ -37,6 +37,39 @@ input[type="checkbox"]:checked::before {
   transform: scale(1);
   background-color: white;
 }
+
+app-account-settings .mdc-tab--active {
+  background-color: #ecf7ec;
+  transition: all 1s
+}
+app-account-settings .mdc-tab--active {
+  background-color: #ecf7ec;
+  transition: all 1s
+}
+
+app-account-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043
+}
+app-account-settings .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
+  color: #3cb043
+}
+
+app-account-settings .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+
+app-account-settings .mat-mdc-tab.mdc-tab--active:focus .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+
+app-account-settings .mat-mdc-tab-body {
+  background-color: white
+}
+
+app-account-settings .mat-mdc-tab-header{
+  background-color: #fbfbfb;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
