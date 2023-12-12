@@ -1,4 +1,75 @@
 /* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+input[type="checkbox"] {
+  display: grid;
+  place-content: center;
+  appearance: none;
+  border: 1px solid #c5c5c5;
+  border-radius: 2px;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-0.075em);
+  background-color: white;
+  margin: 0;
+}
+input[type="checkbox"]:checked {
+    background-color: #3cb043;
+    border-color: #3cb043;
+}
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform-origin: center;
+  transition: 120ms transform ease-in-out;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  background-color: green;
+}
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+  background-color: white;
+}
+
+app-account-settings .mdc-tab--active {
+  background-color: #ecf7ec;
+  transition: all 1s
+}
+app-account-settings .mdc-tab--active {
+  background-color: #ecf7ec;
+  transition: all 1s
+}
+
+app-account-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043
+}
+app-account-settings .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
+  color: #3cb043
+}
+
+app-account-settings .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+
+app-account-settings .mat-mdc-tab.mdc-tab--active:focus .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+
+app-account-settings .mat-mdc-tab-body {
+  background-color: white
+}
+
+app-account-settings .mat-mdc-tab-header{
+  background-color: #fbfbfb;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
