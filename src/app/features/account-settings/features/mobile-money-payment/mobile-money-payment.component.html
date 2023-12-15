@@ -1,0 +1,18 @@
+<form [formGroup]="mobileMoneyForm" (ngSubmit)="addWallet()">
+    <app-custom-input
+      label="Network"
+      type="select"
+      formControlName="network"
+      id="network"
+      [options]="['MTN', 'Vodafone']"
+    />
+    <app-custom-input
+      label="Contact"
+      type="contact"
+      formControlName="contact"
+      id="contact"
+    />
+
+    <app-custom-button buttonText="Add Wallet" [isPrimaryButton]="true"/>
+</form>
+  

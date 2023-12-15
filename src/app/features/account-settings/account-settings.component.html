@@ -1,20 +1,37 @@
 <main>
-    <header class="">
-        <h2 class="font-bold text-xl pb-12 px-12 pt-6 bg-[#fbfbfb]">Settings</h2>
-        <mat-tab-group class="border-b shadow-sm">
-            <mat-tab label="General">
-            </mat-tab>
-            <mat-tab label="Password">
-            </mat-tab>
-            <mat-tab label="Shipping">
-            </mat-tab>
-            <mat-tab label="Payment">
-            </mat-tab>
-            <mat-tab label="Terms & Conditions">
-            </mat-tab>
-            <mat-tab label="Privacy Policy">
-
-            </mat-tab>
-        </mat-tab-group>
-    </header>
+  <header>
+    <h2 class="font-bold text-xl pb-12 px-12 pt-6 bg-[#fbfbfb]">Settings</h2>
+    <mat-tab-group animationDuration="0ms" class="">
+      <mat-tab label="General">
+        <app-profile-element>
+          <app-general-information />
+        </app-profile-element>
+      </mat-tab>
+      <mat-tab routerLink="/password" label="Password">
+        <app-profile-element>
+          <app-password-information />
+        </app-profile-element>
+      </mat-tab>
+      <mat-tab label="Shipping">
+        <app-profile-element>
+          <app-shipping-information />
+        </app-profile-element>
+      </mat-tab>
+      <mat-tab label="Payment"> 
+        <app-profile-element>
+          <app-payment-details />
+        </app-profile-element>
+      </mat-tab>
+      <mat-tab label="Terms & Conditions">
+        <app-profile-element>
+          <app-terms-and-conditions />
+        </app-profile-element>
+      </mat-tab>
+      <mat-tab label="Privacy Policy">
+        <app-profile-element>
+          <app-privacy-policy />
+        </app-profile-element>
+      </mat-tab>
+    </mat-tab-group>
+  </header>
 </main>

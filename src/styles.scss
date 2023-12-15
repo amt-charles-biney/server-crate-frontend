@@ -1,4 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 html,
 body {
   height: 100%;
@@ -42,10 +52,6 @@ app-account-settings .mdc-tab--active {
   background-color: #ecf7ec;
   transition: all 1s
 }
-app-account-settings .mdc-tab--active {
-  background-color: #ecf7ec;
-  transition: all 1s
-}
 
 app-account-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: #3cb043
@@ -70,6 +76,63 @@ app-account-settings .mat-mdc-tab-header{
   background-color: #fbfbfb;
 }
 
+app-account-settings .mdc-tab-indicator {
+  display: none;
+}
+
+app-payment-details .mat-mdc-tab:not(.mdc-tab--stacked) {
+  height: 40px;
+  border-radius: 8px;
+}
+
+app-payment-details .mat-mdc-tab-header {
+  border-radius: 8px;
+}
+
+app-payment-details  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: white;
+}
+
+app-payment-details .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
+  color: white;
+}
+
+app-payment-details  .mdc-tab--active {
+  background-color: #3cb043;
+  transition: all 1s
+}
+app-payment-details .mdc-tab {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+app-payment-details .mat-mdc-tab-label-container {
+  padding: 8px;
+  background-color: #f6f8f8;
+}
+
+app-payment-details .mat-mdc-tab-group {
+  width: 600px;
+  max-width: 120%;
+}
+
+// .iti {
+//   width: 100%;
+// }
+
+// app-custom-input .cdk-overlay-pane {
+//   width: 53px;
+// }
+.custom-panel {
+  width: fit-content;
+}
+
+.otp-input[_ngcontent-ng-c3470639301] {
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-bottom: 2px solid #dddfe1 !important;
+  outline: none;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

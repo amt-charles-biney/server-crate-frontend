@@ -1,0 +1,51 @@
+<form (ngSubmit)="saveGeneralInfoChanges()" [formGroup]="generalInfoForm">
+  <h2 class="font-bold">Basic Information</h2>
+
+  <app-custom-input
+    id="name"
+    label="Name"
+    type="text"
+    placeholder="Enter your name"
+    formControlName="name"
+  />
+  @if (name?.invalid && (name?.touched || name?.dirty)) {
+  
+    <div *ngIf="name?.errors?.['required']">
+      <span class="text-red-600">A name is required</span>
+    </div>
+  }
+  <app-custom-input
+    id="email"
+    label="Email"
+    type="email"
+    placeholder="Enter your email"
+    formControlName="email"
+  />
+  @if (email?.invalid && (email?.touched || email?.dirty)) {
+    <div *ngIf="email?.errors?.['required']">
+      <span class="text-red-600">A email is required</span>
+    </div>
+    <div *ngIf="email?.errors?.['email']">
+      <span class="text-red-600">Please enter a valid email</span>
+    </div>
+  }
+  <app-custom-input
+    label="Gender"
+    type="select"
+    formControlName="gender"
+    id="gender"
+    [options]="['Male', 'Female']"
+  />
+  <app-custom-input
+    label="Contact"
+    type="contact"
+    formControlName="contact"
+    id="contact"
+  />
+  @if (contact?.invalid && (contact?.touched || contact?.dirty)) {
+    <div *ngIf="contact?.errors?.['required']">
+      <span class="text-red-600">A contact is required</span>
+    </div>
+  }
+  <app-custom-button buttonText="Save Changes" [isPrimaryButton]="true" />
+</form>
