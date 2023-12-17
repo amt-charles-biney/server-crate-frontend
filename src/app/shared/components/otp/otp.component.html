@@ -1,7 +1,62 @@
-<form class="md:p-0 px-4 md:w-[500px] mx-auto flex flex-col items-center gap-4">
+<div class="flex flex-col items-center" *ngIf="loadingState | async as loadingState">
+  @if (loadingState.isLoading) {
+  <div
+    class="text-figma-green mt-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite]"
+    role="status"
+  >
+    <span
+      class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+      >Loading...</span
+    >
+  </div>
+  }
+  <div
+    [ngClass]="
+      loadingState.isError
+        ? 'bg-[#fcf3f3] text-red-500'
+        : 'bg-[#ecf7ec] text-figma-green'
+    "
+    *ngIf="loadingState.message"
+    class="flex items-center justify-center mt-4 gap-4 text-sm p-3 rounded-lg w-3/4 mx-auto"
+  >
+    @if (loadingState.isError) {
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-6 h-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+      />
+    </svg>
+    } @else {
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-6 h-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    }
+    <p>{{ loadingState.message }}</p>
+  </div>
+</div>
+<form (ngSubmit)="verifyEmail()" class="md:p-0 px-4 md:w-[500px] mx-auto flex flex-col items-center gap-4">
   <p class="mt-4">We have sent you a One Time Password on your mobile</p>
-  <app-countdown [timeInMinutes]="5"/>
-  <ng-otp-input [formCtrl]="otp" [config]="{ length: 5 }"></ng-otp-input>
+  <app-countdown [timeInMinutes]="time"/>
+  <ng-otp-input [formCtrl]="otp" [config]="{ length: 6 }"></ng-otp-input>
   <p>
     Didn't receive OTP? <button class="font-semibold underline">Resend</button>
   </p>

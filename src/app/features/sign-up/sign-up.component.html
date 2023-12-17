@@ -10,93 +10,151 @@
       alt="Company logo"
     />
     <h1 class="text-3xl mt-6 md:m-0 font-bold">Create your account</h1>
+    <ng-container *ngIf="loadingState | async as loadingState">
+      @if (loadingState.isLoading) {
+      <div
+        class="text-figma-green mt-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status"
+      >
+        <span
+          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+          >Loading...</span
+        >
+      </div>
+      }
+      <div
+        [ngClass]="
+          loadingState.isError
+            ? 'bg-[#fcf3f3] text-red-500'
+            : 'bg-[#ecf7ec] text-figma-green'
+        "
+        *ngIf="loadingState.message"
+        class="flex items-center justify-center mt-4 gap-4 text-sm p-3 rounded-lg w-3/4"
+      >
+        @if (loadingState.isError) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+          />
+        </svg>
+        } @else {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        }
+        <p>{{ loadingState.message }}</p>
+      </div>
+    </ng-container>
     <form
       novalidate
       [formGroup]="signUpForm"
       (ngSubmit)="submitRegistrationForm()"
       class="md:p-0 px-4 md:w-[500px] mx-auto"
     >
-        <app-custom-input
-          id="name"
-          label="Name"
-          type="text"
-          placeholder="Enter your name"
-          formControlName="name"
-        />
-        @if (name?.invalid && (name?.touched || name?.dirty)) {
-        <span class="text-red-600">A name is required</span>
-        }
-        <app-custom-input
-          id="email"
-          label="Email"
-          type="email"
-          placeholder="Enter your email"
-          formControlName="email"
-        />
-        @if (email?.invalid && (email?.touched || email?.dirty)) {
-        <span class="text-red-600">Please enter a valid email</span>
-        }
-        <app-custom-input
-          id="password"
-          label="Password"
-          type="password"
-          placeholder="Enter password"
-          formControlName="password"
-        />
-        @if (password?.invalid && (password?.touched || password?.dirty)) {
-        <div *ngIf="password?.errors?.['required']">
-          <span class="text-red-600">Please enter a password</span>
-        </div>
-        <div *ngIf="password?.errors?.['minlength']">
-          <span class="text-red-600"
-            >Password must be at least 8 characters long.</span
-          >
-        </div>
-        <div *ngIf="password?.errors?.['pattern']">
-          <span class="text-red-600">Please enter a valid password</span>
-        </div>
-        }
-        <p class="leading-tight text-sm text-gray-500">
-          Use a minimum of 8 characters (case sensitive) with at least one
-          number and special character.
-        </p>
-        <app-custom-input
-          id="confirmPwd"
-          label="Confirm Password"
-          type="password"
-          placeholder="Confirm password"
-          formControlName="confirmPwd"
-        />
-        @if (confirmPwd?.invalid && (confirmPwd?.touched || confirmPwd?.dirty))
-        {
-        <div *ngIf="password?.errors?.['required']">
-          <span class="text-red-600">Please enter a password</span>
-        </div>
-        <div *ngIf="confirmPwd?.errors?.['confirmPwd']">
-          <span
-            class="text-red-600"
-            >{{confirmPwd?.errors?.['confirmPwd']?.value}}</span
-          >
-        </div>
-        }
-
-        <label
-          class="flex items-stretch mt-1 gap-1 text-sm"
-          for="termsAndConditions"
+      <app-custom-input
+        id="name"
+        label="Name"
+        type="text"
+        placeholder="Enter your name"
+        formControlName="name"
+      />
+      @if (name?.invalid && (name?.touched || name?.dirty)) {
+      <span class="text-red-600">A name is required</span>
+      }
+      <app-custom-input
+        id="email"
+        label="Email"
+        type="email"
+        placeholder="Enter your email"
+        formControlName="email"
+      />
+      @if (email?.invalid && (email?.touched || email?.dirty)) {
+      <span class="text-red-600">Please enter a valid email</span>
+      }
+      <app-custom-input
+        id="password"
+        label="Password"
+        type="password"
+        placeholder="Enter password"
+        formControlName="password"
+      />
+      @if (password?.invalid && (password?.touched || password?.dirty)) {
+      <div *ngIf="password?.errors?.['required']">
+        <span class="text-red-600">Please enter a password</span>
+      </div>
+      <div *ngIf="password?.errors?.['minlength']">
+        <span class="text-red-600"
+          >Password must be at least 8 characters long.</span
         >
-          <input
-            type="checkbox"
-            name="termsAndConditions"
-            id="termsAndConditions"
-            formControlName="acceptTerms"
-          />
-          <p>
-            I agree to the
-            <button type="button" (click)="openTermsAndConditionsModal()" class="font-semibold underline outline-none" 
-              >Terms and Conditions</button
-            >
-          </p>
-        </label>
+      </div>
+      <div *ngIf="password?.errors?.['pattern']">
+        <span class="text-red-600">Please enter a valid password</span>
+      </div>
+      }
+      <p class="leading-tight text-sm text-gray-500">
+        Use a minimum of 8 characters (case sensitive) with at least one number
+        and special character.
+      </p>
+      <app-custom-input
+        id="confirmPwd"
+        label="Confirm Password"
+        type="password"
+        placeholder="Confirm password"
+        formControlName="confirmPwd"
+      />
+      @if (confirmPwd?.invalid && (confirmPwd?.touched || confirmPwd?.dirty)) {
+      <div *ngIf="password?.errors?.['required']">
+        <span class="text-red-600">Please enter a password</span>
+      </div>
+      <div *ngIf="confirmPwd?.errors?.['confirmPwd']">
+        <span
+          class="text-red-600"
+          >{{confirmPwd?.errors?.['confirmPwd']?.value}}</span
+        >
+      </div>
+      }
+
+      <label
+        class="flex items-stretch mt-1 gap-1 text-sm"
+        for="termsAndConditions"
+      >
+        <input
+          type="checkbox"
+          name="termsAndConditions"
+          id="termsAndConditions"
+          formControlName="acceptTerms"
+        />
+        <p>
+          I agree to the
+          <button
+            type="button"
+            (click)="openTermsAndConditionsModal()"
+            class="font-semibold underline outline-none"
+          >
+            Terms and Conditions
+          </button>
+        </p>
+      </label>
       <app-custom-button
         buttonText="Sign up"
         [disableButton]="this.signUpForm.invalid"

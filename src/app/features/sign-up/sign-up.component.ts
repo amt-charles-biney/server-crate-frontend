@@ -24,6 +24,11 @@ import { passwordRegex } from '../../core/utils/constants/patterns';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsModalComponent } from '../../shared/components/terms-modal/terms-modal.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
+import { displaySuccess, reset, signUp } from '../../store/signup/actions/signup.actions';
+import { AppState, UserSignUp } from '../../types';
+import { BehaviorSubject, Observable, Subject, combineLatest, map, tap } from 'rxjs';
+import { selectIsError, selectIsLoading, selectMessage } from '../../store/signup/reducers/signup.reducers';
 @Component({
   selector: 'app-sign-up',
   standalone: true,
@@ -42,8 +47,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
-
-  constructor(public termsModal: MatDialog, private destroyRef: DestroyRef) {}
+  private loadingState$ = new Subject<{isLoading: boolean, isError: boolean, message: string}>();
+  loadingState = this.loadingState$.asObservable();
+  constructor(public termsModal: MatDialog, private destroyRef: DestroyRef, private store: Store) {
+    this.loadingState = combineLatest(
+      [this.store.select(selectMessage),
+      this.store.select(selectIsLoading),
+      this.store.select(selectIsError),
+    ]
+    ).pipe(map(([message, isLoading, isError]: [string, boolean, boolean]) => {
+      return { isLoading, message, isError }
+    }))
+  }
   ngOnInit(): void {
     this.signUpForm = new FormGroup(
       {
@@ -68,13 +83,17 @@ export class SignUpComponent implements OnInit {
   }
 
   submitRegistrationForm() {
-    console.log('Form Data', this.signUpForm.value, this.acceptTerms?.value);
     if (this.signUpForm.invalid) return;
-    console.log(
-      'Form Data Submitted',
-      this.signUpForm.value,
-      this.acceptTerms?.value
-    );
+
+    const { email, password } = this.signUpForm.value
+    const formData: UserSignUp = {
+      firstName: this.signUpForm.value.name.split(' ')[0],
+      lastName: this.signUpForm.value.name.split(' ')[1],
+      email,
+      password
+    }
+    localStorage.setItem('server-crate-email', email)
+    this.store.dispatch(signUp(formData))
   }
 
   openTermsAndConditionsModal() {

@@ -13,9 +13,11 @@ export class CountdownComponent {
   @Input() timeInMinutes!: number;
 
   secondsRemaining$ = timer(0, 1000).pipe(
-    tap(x => console.log('n', x)),
-    map(n => ((this.timeInMinutes * 60) - n) * 1000),
-    tap(console.log),
+    map(n => {
+      const time = ((this.timeInMinutes * 60) - n) * 1000
+      sessionStorage.setItem('server-crate-otp-expiration', JSON.stringify(time / 60000))
+      return time
+    }),
     takeWhile(n => n >= 0),
   );
 }

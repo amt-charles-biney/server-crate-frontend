@@ -10,6 +10,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { signIn } from '../../store/signin/actions/login.actions';
 
 @Component({
   selector: 'app-login',
@@ -38,6 +40,10 @@ export class LoginComponent implements OnInit {
     })
   }
 
+  constructor(private store: Store) {
+
+  }
+
   submitRegistrationForm() {
     console.log('Form Data', this.loginForm.value);
     if (this.loginForm.invalid) return;    
@@ -45,6 +51,8 @@ export class LoginComponent implements OnInit {
       'Form Data Submitted',
       this.loginForm.value,
     );
+    const { email, password } = this.loginForm.value
+    this.store.dispatch(signIn({ email, password }))
   }
 
   get email() {
