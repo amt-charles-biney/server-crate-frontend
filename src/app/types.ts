@@ -13,15 +13,6 @@ export type AppState = {
     token: string
 }
 
-
-export type LoginState = {
-    isLoading: boolean;
-    message: string;
-    isError: boolean;
-    user: Omit<SignIn, 'password'>,
-    token: string
-}
-
 export type SignUpSuccess = {
     message: string
 }

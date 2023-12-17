@@ -26,8 +26,7 @@ export class SignUpEffect {
           map((data: SignUpSuccess) => {
             console.log('Successfull');
             setTimeout(() => {
-              this.router.navigateByUrl('/otp');
-              // this.router.navigateByUrl('/otp', { replaceUrl: true }); Use this in prod!!!
+              this.router.navigateByUrl('/otp', { replaceUrl: true });
             }, 2000);
             return signUpSuccess(data);
           }),

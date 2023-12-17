@@ -21,7 +21,11 @@ export const signUpFeature = createFeature({
     on(SignUpActions.signUp, (state, user) => ({
       ...state,
       isLoading: true,
-      user,
+      user: {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
+      },
     })),
     on(SignUpActions.signUpSuccess, (state) => ({
       ...state,

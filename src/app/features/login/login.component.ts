@@ -12,6 +12,7 @@ import {
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { signIn } from '../../store/signin/actions/login.actions';
+import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-loader.component';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,7 @@ import { signIn } from '../../store/signin/actions/login.actions';
     FormsModule,
     ReactiveFormsModule,
     NgOptimizedImage,
+    AuthLoaderComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

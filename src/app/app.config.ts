@@ -14,7 +14,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideRouter(routes),
     provideAnimations(),
     provideStore(),
     provideEffects(),

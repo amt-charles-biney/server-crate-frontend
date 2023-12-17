@@ -2,8 +2,10 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 import { signIn, signInFailure, signInSuccess } from '../actions/login.actions';
 import { initialState } from '../../signup/reducers/signup.reducers';
 
+
+
 export const loginFeature = createFeature({
-  name: 'login',
+  name: 'auth',
   reducer: createReducer(
     initialState,
     on(signIn, (state, user) => ({
@@ -18,7 +20,12 @@ export const loginFeature = createFeature({
       ...state,
       isLoading: false,
       isError: false,
-      user,
+      user: {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
+      },
+      token: user.token,
       message: 'Login Successful',
     })),
     on(signInFailure, (state, { errorMessage }) => ({
@@ -31,3 +38,13 @@ export const loginFeature = createFeature({
   ),
 });
 
+export const {
+  name,
+  reducer,
+  selectIsError,
+  selectIsLoading,
+  selectAuthState,
+  selectMessage,
+  selectToken,
+  selectUser
+} = loginFeature

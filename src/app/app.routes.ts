@@ -10,7 +10,11 @@ import { LoginEffect } from './store/signin/effects/login.effects';
 export const routes: Routes = [
     {
         path: 'signup',
-        loadChildren: () => import('./features/sign-up/sign-up.routes').then(m => m.route),
+        loadComponent: () => import('./features/sign-up/sign-up.component').then(m => m.SignUpComponent),
+        providers: [
+            provideState(signUpFeature),
+            provideEffects(SignUpEffect),
+        ],
     },
     {
         path: 'otp',
@@ -21,7 +25,11 @@ export const routes: Routes = [
     },
     {
         path: 'login',
-        loadChildren: () => import('./features/login/login.routes').then(m => m.route),
+        loadComponent: () => import('./features/login/login.component').then(m => m.LoginComponent),
+        providers: [
+            provideState(loginFeature),
+            provideEffects(LoginEffect)
+        ]
     },
     {
         path: 'forgot-password',

@@ -25,10 +25,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { TermsModalComponent } from '../../shared/components/terms-modal/terms-modal.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { displaySuccess, reset, signUp } from '../../store/signup/actions/signup.actions';
-import { AppState, UserSignUp } from '../../types';
-import { BehaviorSubject, Observable, Subject, combineLatest, map, tap } from 'rxjs';
-import { selectIsError, selectIsLoading, selectMessage } from '../../store/signup/reducers/signup.reducers';
+import { signUp } from '../../store/signup/actions/signup.actions';
+import { UserSignUp } from '../../types';
+import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-loader.component';
 @Component({
   selector: 'app-sign-up',
   standalone: true,
@@ -40,6 +39,7 @@ import { selectIsError, selectIsLoading, selectMessage } from '../../store/signu
     FormsModule,
     ReactiveFormsModule,
     NgOptimizedImage,
+    AuthLoaderComponent
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
@@ -47,17 +47,7 @@ import { selectIsError, selectIsLoading, selectMessage } from '../../store/signu
 })
 export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
-  private loadingState$ = new Subject<{isLoading: boolean, isError: boolean, message: string}>();
-  loadingState = this.loadingState$.asObservable();
   constructor(public termsModal: MatDialog, private destroyRef: DestroyRef, private store: Store) {
-    this.loadingState = combineLatest(
-      [this.store.select(selectMessage),
-      this.store.select(selectIsLoading),
-      this.store.select(selectIsError),
-    ]
-    ).pipe(map(([message, isLoading, isError]: [string, boolean, boolean]) => {
-      return { isLoading, message, isError }
-    }))
   }
   ngOnInit(): void {
     this.signUpForm = new FormGroup(

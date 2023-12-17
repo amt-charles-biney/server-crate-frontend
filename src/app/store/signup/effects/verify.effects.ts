@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { verificationFailure, verificationSuccess, verifyingEmail } from "../actions/signup.actions";
 import { catchError, exhaustMap, map, of, tap } from "rxjs";
-import { VerifiedUser, Verify, Verifying } from "../../../types";
+import { VerifiedUser, Verify } from "../../../types";
 import { AuthService } from "../../../core/services/auth.service";
 import { Router } from "@angular/router";
 
@@ -16,11 +16,10 @@ export class VerifyEffect {
                 return this.signUpService.verifyEmail(user).pipe(
                     tap(verifiedUser => {
                         localStorage.setItem('server-crate-token', verifiedUser.token)
-                        sessionStorage.removeItem('server-crate-otp-expiration')
                     }),
                     map((data: VerifiedUser) => {
                         setTimeout(() => {
-                            this.router.navigateByUrl('/settings')
+                            this.router.navigateByUrl('/settings', { replaceUrl: true })
                         }, 2000);
                         return verificationSuccess(data)
                     }),

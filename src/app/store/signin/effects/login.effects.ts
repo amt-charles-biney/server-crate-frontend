@@ -17,6 +17,9 @@ export class LoginEffect {
                 return this.authService.login(formData).pipe(
                     tap(x => console.log('service---->', x)),
                     map((response: VerifiedUser) => {
+                        setTimeout(() => {
+                            this.router.navigateByUrl('/settings', { replaceUrl: true })
+                        }, 3000);
                         return signInSuccess(response)
                     }),
                     catchError((err) => {
