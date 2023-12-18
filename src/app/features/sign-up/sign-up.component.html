@@ -1,0 +1,117 @@
+<main class="grid grid-cols-1 p-3 md:p-0 md:grid-cols-2">
+  <section class="flex flex-col items-center md:py-12 md:px-16">
+    <img
+      class="mb-6 self-start md:mb-16 cursor-pointer"
+      ngSrc="/assets/logo.svg"
+      routerLink="/"
+      width="173"
+      height="56"
+      priority
+      alt="Company logo"
+    />
+    <h1 class="text-3xl mt-6 md:m-0 font-bold">Create your account</h1>
+    <form
+      novalidate
+      [formGroup]="signUpForm"
+      (ngSubmit)="submitRegistrationForm()"
+      class="md:p-0 px-4 md:w-[500px] mx-auto"
+    >
+        <app-custom-input
+          id="name"
+          label="Name"
+          type="text"
+          placeholder="Enter your name"
+          formControlName="name"
+        />
+        @if (name?.invalid && (name?.touched || name?.dirty)) {
+        <span class="text-red-600">A name is required</span>
+        }
+        <app-custom-input
+          id="email"
+          label="Email"
+          type="email"
+          placeholder="Enter your email"
+          formControlName="email"
+        />
+        @if (email?.invalid && (email?.touched || email?.dirty)) {
+        <span class="text-red-600">Please enter a valid email</span>
+        }
+        <app-custom-input
+          id="password"
+          label="Password"
+          type="password"
+          placeholder="Enter password"
+          formControlName="password"
+        />
+        @if (password?.invalid && (password?.touched || password?.dirty)) {
+        <div *ngIf="password?.errors?.['required']">
+          <span class="text-red-600">Please enter a password</span>
+        </div>
+        <div *ngIf="password?.errors?.['minlength']">
+          <span class="text-red-600"
+            >Password must be at least 8 characters long.</span
+          >
+        </div>
+        <div *ngIf="password?.errors?.['pattern']">
+          <span class="text-red-600">Please enter a valid password</span>
+        </div>
+        }
+        <p class="leading-tight text-sm text-gray-500">
+          Use a minimum of 8 characters (case sensitive) with at least one
+          number and special character.
+        </p>
+        <app-custom-input
+          id="confirmPwd"
+          label="Confirm Password"
+          type="password"
+          placeholder="Confirm password"
+          formControlName="confirmPwd"
+        />
+        @if (confirmPwd?.invalid && (confirmPwd?.touched || confirmPwd?.dirty))
+        {
+        <div *ngIf="password?.errors?.['required']">
+          <span class="text-red-600">Please enter a password</span>
+        </div>
+        <div *ngIf="confirmPwd?.errors?.['confirmPwd']">
+          <span
+            class="text-red-600"
+            >{{confirmPwd?.errors?.['confirmPwd']?.value}}</span
+          >
+        </div>
+        }
+
+        <label
+          class="flex items-stretch mt-1 gap-1 text-sm"
+          for="termsAndConditions"
+        >
+          <input
+            type="checkbox"
+            name="termsAndConditions"
+            id="termsAndConditions"
+            formControlName="acceptTerms"
+          />
+          <p>
+            I agree to the
+            <button type="button" (click)="openTermsAndConditionsModal()" class="font-semibold underline outline-none" 
+              >Terms and Conditions</button
+            >
+          </p>
+        </label>
+      <app-custom-button
+        buttonText="Sign up"
+        [disableButton]="this.signUpForm.invalid"
+      />
+      <p class="text-center mt-6">
+        Already have an account?
+        <a class="font-semibold underline" routerLink="/login">Sign in</a>
+      </p>
+    </form>
+  </section>
+  <img
+    class="hidden md:flex w-full !relative"
+    ngSrc="/assets/signup-pic.jpg"
+    priority
+    fill
+    alt="Side image of signup form"
+  />
+</main>
