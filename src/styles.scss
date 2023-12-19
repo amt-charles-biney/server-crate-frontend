@@ -56,7 +56,10 @@ app-account-settings .mdc-tab--active {
 app-account-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: #3cb043
 }
-app-account-settings .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
+app-account-settings .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
+  color: #3cb043
+}
+app-account-settings .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
   color: #3cb043
 }
 

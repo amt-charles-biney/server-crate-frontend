@@ -83,3 +83,9 @@ export type Contact = {
     iso2Code: string;
     dialCode: string;
 }
+
+export type Link = {
+    label: string;
+    link: string;
+    index: number
+}

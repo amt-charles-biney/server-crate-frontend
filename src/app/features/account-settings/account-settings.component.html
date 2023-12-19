@@ -1,37 +1,38 @@
 <main>
   <header>
     <h2 class="font-bold text-xl pb-12 px-12 pt-6 bg-[#fbfbfb]">Settings</h2>
-    <mat-tab-group animationDuration="0ms" class="">
-      <mat-tab label="General">
-        <app-profile-element>
-          <app-general-information />
-        </app-profile-element>
-      </mat-tab>
-      <mat-tab routerLink="/password" label="Password">
-        <app-profile-element>
-          <app-password-information />
-        </app-profile-element>
-      </mat-tab>
-      <mat-tab label="Shipping">
-        <app-profile-element>
-          <app-shipping-information />
-        </app-profile-element>
-      </mat-tab>
-      <mat-tab label="Payment"> 
-        <app-profile-element>
-          <app-payment-details />
-        </app-profile-element>
-      </mat-tab>
-      <mat-tab label="Terms & Conditions">
-        <app-profile-element>
-          <app-terms-and-conditions />
-        </app-profile-element>
-      </mat-tab>
-      <mat-tab label="Privacy Policy">
-        <app-profile-element>
-          <app-privacy-policy />
-        </app-profile-element>
-      </mat-tab>
-    </mat-tab-group>
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="">
+      @for (link of navLinks; track link.label) {
+      <a
+        mat-tab-link
+        (click)="activeLink = link"
+        [active]="activeLink.label === link.label"
+        [routerLink]="link.link"
+      >
+        {{ link.label }}</a
+      >
+      }
+    </nav>
+    <mat-tab-nav-panel #tabPanel>
+      <section
+        class="flex flex-col items-center md:items-start divide-y md:divide-y-0 md:flex-row justify-around gap-6 py-8 md:gap-48 md:p-16 overflow-hidden"
+      >
+        <div class="flex flex-col gap-4 items-center">
+          <div
+            class="flex flex-col justify-center items-center w-28 h-28 bg-black rounded-full"
+          >
+            <p class="tracking-wider text-white text-5xl">CW</p>
+          </div>
+          <p class="text-lg font-bold">Cameron Williamson [username]</p>
+          <button class="underline text-red-600">Delete Account</button>
+        </div>
+        <div class="hidden md:inline h-96 border bg-black">
+
+        </div>
+        <div class="w-[90%] md:w[80%] xl:w-[40%]">
+          <router-outlet />
+        </div>
+      </section>
+    </mat-tab-nav-panel>
   </header>
 </main>
