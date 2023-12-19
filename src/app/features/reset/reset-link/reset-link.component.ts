@@ -50,9 +50,8 @@ export class ResetLinkComponent {
   get email() {
     return this.resetForm.get('email')
   }
-  // @startLoadingIndicator
   sendResetLink() {
-    this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
+    // this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
     return this.store.dispatch(sendingResetLink({email: this.email?.value }))
   }
   

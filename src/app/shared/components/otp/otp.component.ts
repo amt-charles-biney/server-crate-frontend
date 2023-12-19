@@ -64,9 +64,9 @@ export class OTPComponent implements OnDestroy {
     this.store.dispatch(setOtp({ otp }));
     const currentUrl = this.router.url;
     console.log('Current url', currentUrl);
-    this.store.dispatch(
-      setLoadingSpinner({ status: true, message: '', isError: false })
-    );
+    // this.store.dispatch(
+    //   setLoadingSpinner({ status: true, message: '', isError: false })
+    // );
     if (currentUrl === '/otp') {
       this.store.dispatch(verifyingEmail({ code: otp, email: email }));
     } else {

@@ -81,7 +81,7 @@ export class ResetPasswordComponent implements OnInit{
       newPassword: password,
       confirmNewPassword: confirmPwd
     }
-    this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
+    // this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
     this.store.dispatch(sendNewPassword(changePassword))
   }
 

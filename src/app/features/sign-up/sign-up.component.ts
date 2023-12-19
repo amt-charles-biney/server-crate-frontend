@@ -88,7 +88,7 @@ export class SignUpComponent implements OnInit {
       password
     }
     localStorage.setItem('server-crate-email', email)
-    this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
+    // this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
     this.store.dispatch(signUp(formData))
   }
 

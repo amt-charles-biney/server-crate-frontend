@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
       this.loginForm.value,
     );
     const { email, password } = this.loginForm.value
-    this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
+    // this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
     this.store.dispatch(signIn({ email, password }))
   }
 

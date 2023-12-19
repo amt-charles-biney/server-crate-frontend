@@ -20,12 +20,12 @@ export class LoginEffect {
                     tap(x => console.log('service---->', x)),
                     map((response: VerifiedUser) => {
                         this.authService.setToken(response.token)
-                        this.store.dispatch(setLoadingSpinner({
-                            status: false,
-                            message:
-                              'Login Successful',
-                            isError: false,
-                          }))
+                        // this.store.dispatch(setLoadingSpinner({
+                        //     status: false,
+                        //     message:
+                        //       'Login Successful',
+                        //     isError: false,
+                        //   }))
                         setTimeout(() => {
                             this.router.navigateByUrl('/settings', { replaceUrl: true })
                         }, 1500);
