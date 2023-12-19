@@ -3,7 +3,6 @@ import { signIn, signInFailure, signInSuccess } from '../actions/login.actions';
 import { initialState } from '../../signup/reducers/signup.reducers';
 
 
-
 export const loginFeature = createFeature({
   name: 'auth',
   reducer: createReducer(
@@ -41,10 +40,7 @@ export const loginFeature = createFeature({
 export const {
   name,
   reducer,
-  selectIsError,
-  selectIsLoading,
   selectAuthState,
-  selectMessage,
   selectToken,
   selectUser
 } = loginFeature

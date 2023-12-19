@@ -26,8 +26,11 @@ import { TermsModalComponent } from '../../shared/components/terms-modal/terms-m
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { signUp } from '../../store/signup/actions/signup.actions';
-import { UserSignUp } from '../../types';
+import { LoadingStatus, UserSignUp } from '../../types';
 import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-loader.component';
+import { Observable } from 'rxjs';
+import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
+import { setLoadingSpinner } from '../../store/loader/actions/loader.actions';
 @Component({
   selector: 'app-sign-up',
   standalone: true,
@@ -47,6 +50,7 @@ import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-lo
 })
 export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
+  loadingState$!: Observable<LoadingStatus>
   constructor(public termsModal: MatDialog, private destroyRef: DestroyRef, private store: Store) {
   }
   ngOnInit(): void {
@@ -70,6 +74,7 @@ export class SignUpComponent implements OnInit {
       },
       formValidator('password', 'confirmPwd')
     );
+    this.loadingState$ = this.store.select(selectLoaderState)
   }
 
   submitRegistrationForm() {
@@ -83,6 +88,7 @@ export class SignUpComponent implements OnInit {
       password
     }
     localStorage.setItem('server-crate-email', email)
+    this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
     this.store.dispatch(signUp(formData))
   }
 

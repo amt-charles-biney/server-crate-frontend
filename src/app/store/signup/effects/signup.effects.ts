@@ -2,37 +2,48 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthService } from '../../../core/services/auth.service';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
-import { AuthFailure, SignUpSuccess, UserSignUp } from '../../../types';
+import { Success, UserSignUp } from '../../../types';
 import {
-  displaySuccess,
   signUp,
-  signUpFailure,
-  signUpSuccess,
 } from '../actions/signup.actions';
 import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
+import { Store } from '@ngrx/store';
+import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 
 @Injectable()
 export class SignUpEffect {
   signUp$ = createEffect(() =>
     this.action$.pipe(
       ofType(signUp),
-      tap(userData => console.log('userData', userData)),
+      tap((userData) => console.log('userData', userData)),
       exhaustMap((signUpData: UserSignUp) => {
         console.log('Data', signUpData);
 
         return this.signUpService.signUp(signUpData).pipe(
-          tap((data: SignUpSuccess) => console.log('Sign up', data)),
-          map((data: SignUpSuccess) => {
+          tap((data: Success) => console.log('Sign up', data)),
+          map((data: Success) => {
             console.log('Successfull');
+            // this.store.dispatch(
+            //   setLoadingSpinner({
+            //     status: false,
+            //     message:
+            //       'OTP has been sent to your email. Please verify your email',
+            //     isError: false,
+            //   })
+            // );
             setTimeout(() => {
               this.router.navigateByUrl('/otp', { replaceUrl: true });
             }, 2000);
-            return signUpSuccess(data);
+            return setLoadingSpinner({
+              status: false,
+              message:
+                'OTP has been sent to your email. Please verify your email',
+              isError: false,
+            });
           }),
           catchError((error) => {
-            console.log('Error',error);
-            return of(signUpFailure({ errorMessage: error.error.detail }));
+            const message = error.error.detail  ?? 'Couldn\'t reach the server';
+            return of(setLoadingSpinner({ status: false, message, isError: true }));
           }),
           tap(console.log)
         );
@@ -44,5 +55,6 @@ export class SignUpEffect {
     private action$: Actions,
     private signUpService: AuthService,
     private router: Router,
+    private store: Store
   ) {}
 }

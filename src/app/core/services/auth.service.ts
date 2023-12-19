@@ -1,29 +1,50 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { SignIn, SignUpSuccess, UserSignUp, VerifiedUser, Verify } from '../../types';
+import { ChangePassword, ResetPassword, SignIn, Success, UserSignUp, VerifiedUser, Verify, VerifyOtp } from '../../types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   backendUrl = environment.base
+  profileUrl = environment.profile
   constructor(private http: HttpClient) { 
 
   }
 
-  signUp(formData: UserSignUp) {
-    console.log('FormData submitted', formData);
-    
-    return this.http.post<SignUpSuccess>(`${this.backendUrl}/signup`, formData)
+  signUp(formData: UserSignUp) {    
+    return this.http.post<Success>(`${this.backendUrl}/signup`, formData)
   }
 
-  verifyEmail(user: Verify) {
+  verifyEmail(user: Verify) {    
     return this.http.post<VerifiedUser>(`${this.backendUrl}/verify`, user)
+  }
+  
+  verifyOtp(user: VerifyOtp) {    
+    return this.http.post<Success>(`${this.backendUrl}/verify-otp`, user)
   }
 
   login(formData: SignIn) {
     return this.http.post<VerifiedUser>(`${this.backendUrl}/login`, formData)
+  }
+
+  resetPassword(email: string) {
+    return this.http.post<Success>(`${this.backendUrl}/reset-password`, {email})
+  }
+
+  changePassword(newPassword: ResetPassword) {
+    return this.http.post<Success>(`${this.backendUrl}/change-password`, newPassword)
+  }
+
+  changePasswordInProfile(password: ChangePassword) {
+    return this.http.post<Success>(`${this.profileUrl}/password`, password)
+  }
+
+  isAuthenticated() {
+    const token = this.getToken()
+    if (token) return true;
+    return false
   }
 
   getToken() {

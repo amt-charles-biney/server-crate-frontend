@@ -1,5 +1,5 @@
-<form (ngSubmit)="saveGeneralInfoChanges()" [formGroup]="generalInfoForm">
-  <h2 class="font-bold">Basic Information</h2>
+<form class="mt-4 md:mt-0" (ngSubmit)="saveGeneralInfoChanges()" [formGroup]="generalInfoForm">
+  <h2 class="font-bold text-center md:text-start">Basic Information</h2>
 
   <app-custom-input
     id="name"
@@ -9,10 +9,10 @@
     formControlName="name"
   />
   @if (name?.invalid && (name?.touched || name?.dirty)) {
-  
-    <div *ngIf="name?.errors?.['required']">
-      <span class="text-red-600">A name is required</span>
-    </div>
+
+  <div *ngIf="name?.errors?.['required']">
+    <span class="text-red-600">A name is required</span>
+  </div>
   }
   <app-custom-input
     id="email"
@@ -22,12 +22,12 @@
     formControlName="email"
   />
   @if (email?.invalid && (email?.touched || email?.dirty)) {
-    <div *ngIf="email?.errors?.['required']">
-      <span class="text-red-600">A email is required</span>
-    </div>
-    <div *ngIf="email?.errors?.['email']">
-      <span class="text-red-600">Please enter a valid email</span>
-    </div>
+  <div *ngIf="email?.errors?.['required']">
+    <span class="text-red-600">A email is required</span>
+  </div>
+  <div *ngIf="email?.errors?.['email']">
+    <span class="text-red-600">Please enter a valid email</span>
+  </div>
   }
   <app-custom-input
     label="Gender"
@@ -36,16 +36,24 @@
     id="gender"
     [options]="['Male', 'Female']"
   />
-  <app-custom-input
+  <!-- <app-custom-input
     label="Contact"
     type="contact"
     formControlName="contact"
     id="contact"
-  />
-  @if (contact?.invalid && (contact?.touched || contact?.dirty)) {
-    <div *ngIf="contact?.errors?.['required']">
-      <span class="text-red-600">A contact is required</span>
-    </div>
+  /> -->
+  <label class="flex flex-col gap-0.5 mt-4" for="contact">
+    <span class="">Contact</span>
+    <input
+      id="contact"
+      [ngClass]="showWarning ? 'border-red-600' : ''"
+      type="tel"
+      class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
+      #telInput
+    />
+  </label>
+  @if (showWarning !== '') {
+    <span class="text-red-600 text-sm">{{ showWarning }}</span>
   }
   <app-custom-button buttonText="Save Changes" [isPrimaryButton]="true" />
 </form>

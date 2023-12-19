@@ -6,18 +6,15 @@ export type UserSignUp = {
 }
 
 export type AppState = {
-    isLoading: boolean;
-    message: string;
-    isError: boolean;
     user: Omit<UserSignUp, 'password'>,
     token: string
 }
 
-export type SignUpSuccess = {
+export type Success = {
     message: string
 }
 
-export type AuthFailure = {
+export type Failure = {
     errorMessage: string
 }
 
@@ -46,4 +43,43 @@ export type Verifying = {
 
 export type VerificationFailure = {
     errorMessage: string
+}
+
+export type ResetLink = {
+    email: string
+}
+
+export type LoadingStatus = {
+    status: boolean,
+    message: string,
+    isError: boolean
+}
+
+export type ResetPassword = {
+    email: string;
+    otpCode: string;
+    newPassword: string;
+    confirmNewPassword: string;
+}
+
+export type ChangePassword = {
+    currentPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
+}
+
+export type VerifyOtp = {
+    email: string;
+    otpCode: string;
+}
+
+export type SetOtp = {
+    otp: string
+};
+
+export type Contact = {
+    phoneNumber: string;
+    country: string;
+    iso2Code: string;
+    dialCode: string;
 }

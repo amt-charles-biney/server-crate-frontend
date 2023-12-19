@@ -112,7 +112,7 @@ app-payment-details .mat-mdc-tab-label-container {
 }
 
 app-payment-details .mat-mdc-tab-group {
-  width: 600px;
+  width: 500px;
   max-width: 120%;
 }
 
@@ -132,6 +132,19 @@ app-payment-details .mat-mdc-tab-group {
   border: 0 !important;
   border-bottom: 2px solid #dddfe1 !important;
   outline: none;
+}
+
+.iti {
+  width: 100%;
+}
+.iti__country-list {
+  width: 410px;
+}
+
+@media only screen and (max-width: 768px) {
+  app-payment-details .mat-mdc-tab-group {
+    max-width: 100%;
+  }
 }
 @tailwind base;
 @tailwind components;

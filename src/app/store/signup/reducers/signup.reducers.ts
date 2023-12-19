@@ -4,9 +4,6 @@ import { AppState } from '../../../types';
 import * as SignUpActions from '../actions/signup.actions';
 
 export const initialState: AppState = {
-  isLoading: false,
-  isError: false,
-  message: '',
   user: {
     firstName: '',
     lastName: '',
@@ -20,7 +17,6 @@ export const signUpFeature = createFeature({
     initialState,
     on(SignUpActions.signUp, (state, user) => ({
       ...state,
-      isLoading: true,
       user: {
         email: user.email,
         firstName: user.firstName,
@@ -29,21 +25,6 @@ export const signUpFeature = createFeature({
     })),
     on(SignUpActions.signUpSuccess, (state) => ({
       ...state,
-      isLoading: false,
-      isError: false,
-      message: 'OTP has been sent to your email. Please verify your email',
-    })),
-    on(SignUpActions.reset, (state) => ({
-      ...state,
-      isLoading: false,
-      isError: false,
-      message: '',
-    })),
-    on(SignUpActions.signUpFailure, (state, { errorMessage }) => ({
-      ...state,
-      isLoading: false,
-      message: errorMessage,
-      isError: true,
     })),
     on(SignUpActions.verifyingEmail, (state) => ({
       ...state,
@@ -74,9 +55,6 @@ export const signUpFeature = createFeature({
 export const {
   name,
   reducer,
-  selectMessage,
-  selectIsLoading,
-  selectIsError,
   selectAuthState,
   selectToken,
   selectUser,

@@ -1,6 +1,8 @@
+<app-auth-loader [loadingState]="loadingState$"/>
 <form
   novalidate
   [formGroup]="resetForm"
+  (ngSubmit)="sendResetLink()"
   class="md:p-0 px-4 md:w-[500px] mx-auto w-full"
 >
   <app-custom-input
@@ -19,10 +21,8 @@
   />
   <p class="text-center mt-6">
     Didn't receive link?
-    <!-- Temp routerLink -  -->
     <a
       class="font-semibold underline"
-      routerLink="/forgot-password/reset-password"
       >Resend link</a
     >
   </p>

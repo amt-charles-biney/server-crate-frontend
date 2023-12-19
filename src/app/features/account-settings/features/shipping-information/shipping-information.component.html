@@ -1,5 +1,5 @@
-<form [formGroup]="shippingForm" (ngSubmit)="saveShippingDetails()" class="w-full">
-    <h2 class="font-bold">Shipping</h2>
+<form [formGroup]="shippingForm" (ngSubmit)="saveShippingDetails()" class="w-full overflow-auto md:overflow-hidden mt-4 md:mt-0">
+    <h2 class="font-bold text-center md:text-start">Shipping</h2>
     <div class="flex items-center gap-4 w-[500px]">
         <app-custom-input
               id="firstName"

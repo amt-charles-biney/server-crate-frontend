@@ -28,7 +28,4 @@ import { PrivacyPolicyComponent } from '../../shared/components/privacy-policy/p
   styleUrl: './account-settings.component.scss',
 })
 export class AccountSettingsComponent {
-  constructor() {
-    sessionStorage.clear()
-  }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { map, takeWhile, tap, timer } from 'rxjs';
 
 @Component({
@@ -9,7 +9,7 @@ import { map, takeWhile, tap, timer } from 'rxjs';
   templateUrl: './countdown.component.html',
   styleUrl: './countdown.component.scss'
 })
-export class CountdownComponent {
+export class CountdownComponent  {
   @Input() timeInMinutes!: number;
 
   secondsRemaining$ = timer(0, 1000).pipe(
