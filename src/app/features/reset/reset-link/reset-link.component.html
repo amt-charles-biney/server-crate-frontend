@@ -3,7 +3,7 @@
   novalidate
   [formGroup]="resetForm"
   (ngSubmit)="sendResetLink()"
-  class="md:p-0 px-4 md:w-[500px] mx-auto w-full"
+  class="md:p-0 px-4 md:max-w-[500px] mx-auto w-full"
 >
   <app-custom-input
     id="email"
@@ -16,14 +16,7 @@
   <span class="text-red-600">Please enter a valid email</span>
   }
   <app-custom-button
-    buttonText="Send reset link"
+    buttonText="Get OTP"
     [disableButton]="this.resetForm.invalid"
   />
-  <p class="text-center mt-6">
-    Didn't receive link?
-    <a
-      class="font-semibold underline"
-      >Resend link</a
-    >
-  </p>
 </form>

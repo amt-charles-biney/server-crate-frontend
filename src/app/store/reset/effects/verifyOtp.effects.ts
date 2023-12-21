@@ -12,12 +12,11 @@ import { setLoadingSpinner } from "../../loader/actions/loader.actions";
 export class VerifyOtpEffects {
     verifyOtp$ = createEffect(() => {
         return this.action$.pipe(
-            tap(x => console.log('Verifying otp', x)),
             ofType(verifyingOtp),
             exhaustMap((data: VerifyOtp) => {
                 return this.signUpService.verifyOtp(data).pipe(
+                    tap(x => console.log('Verifying otp', x)),
                     map((data: Success) => {
-                        console.log('SHit is stuck');
                         setTimeout(() => {
                             this.router.navigateByUrl('/forgot-password/reset-password', { replaceUrl: true })
                         }, 2000);

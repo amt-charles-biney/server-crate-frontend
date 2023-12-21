@@ -17,7 +17,7 @@
       novalidate
       [formGroup]="loginForm"
       (ngSubmit)="submitRegistrationForm()"
-      class="md:p-0 px-4 md:w-[500px] mx-auto w-full"
+      class="md:p-0 px-4 md:max-w-[500px] mx-auto w-full"
     >
       <app-custom-input
         id="email"
@@ -56,11 +56,14 @@
       </p>
     </form>
   </section>
-  <img
+  <!-- <img
     class="hidden md:flex w-full !h-screen !relative"
     ngSrc="/assets/login-image.jpg"
     fill
     priority
     alt="Side image of signup form"
-  />
+  /> -->
+  <div class="loginImage">
+
+  </div>
 </main>

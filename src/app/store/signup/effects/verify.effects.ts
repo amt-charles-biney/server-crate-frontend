@@ -6,11 +6,13 @@ import {
   verifyingEmail,
 } from '../actions/signup.actions';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
-import { VerifiedUser, Verify } from '../../../types';
+import { ResendOtp, Success, VerifiedUser, Verify } from '../../../types';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
-import { setLoadingSpinner } from '../../loader/actions/loader.actions';
+import { resetLoader, setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { Store } from '@ngrx/store';
+import { resendingOTP } from '../../otp/otp.actions';
+import { TimerService } from '../../../core/services/timer.service';
 
 @Injectable()
 export class VerifyEffect {
@@ -47,11 +49,38 @@ export class VerifyEffect {
       })
     );
   });
+  resendOtp$ = createEffect(() => {
+    return this.action$.pipe(
+        ofType(resendingOTP),
+        exhaustMap((otpRequest: ResendOtp) => {
+            console.log('resending otp')
+            return this.signUpService.resendOtp({email: otpRequest.email, type: otpRequest.otpType }).pipe(
+                map((message: Success) => {   
+                    console.log('resent otp');
+                    this.timerService.setTimer(5)
+                    setTimeout(() => {
+                      this.store.dispatch(resetLoader({ isError: false, message: '', status: false }))
+                  }, 1500);
+                    return setLoadingSpinner({
+                        status: false,
+                        message: message.message,
+                        isError: false,
+                      });
+                }),
+                catchError((err) => {
+                    console.log('Err in resending', err);
+                    return of(setLoadingSpinner({ status: false, message: err.error.detail, isError: true}))
+                }),
+            )
+        })
+    )
+})
 
   constructor(
     private action$: Actions,
     private router: Router,
     private signUpService: AuthService,
-    private store: Store
+    private store: Store,
+    private timerService: TimerService
   ) {}
 }

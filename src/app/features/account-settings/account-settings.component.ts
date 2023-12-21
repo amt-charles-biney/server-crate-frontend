@@ -10,6 +10,7 @@ import { ShippingInformationComponent } from './features/shipping-information/sh
 import { PaymentDetailsComponent } from './features/payment-details/payment-details.component';
 import { PrivacyPolicyComponent } from '../../shared/components/privacy-policy/privacy-policy.component';
 import { Link } from '../../types';
+import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 @Component({
   selector: 'app-account-settings',
   standalone: true,
@@ -24,6 +25,7 @@ import { Link } from '../../types';
     PaymentDetailsComponent,
     PrivacyPolicyComponent,
     RouterModule,
+    UserProfileImageComponent
   ],
   templateUrl: './account-settings.component.html',
   styleUrl: './account-settings.component.scss',

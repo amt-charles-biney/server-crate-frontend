@@ -1,91 +1,116 @@
 export type UserSignUp = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-}
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
 
 export type AppState = {
-    user: Omit<UserSignUp, 'password'>,
-    token: string
-}
+  user: Omit<UserSignUp, 'password'>;
+  token: string;
+};
 
 export type Success = {
-    message: string
-}
+  message: string;
+};
 
 export type Failure = {
-    errorMessage: string
-}
+  errorMessage: string;
+};
 
 export type SignIn = {
-    email: string,
-    password: string,
-}
+  email: string;
+  password: string;
+};
 
 export type VerifiedUser = {
-    token: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-}
+  token: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+};
 
 export type Verify = {
-    email: string;
-    code: string;
-}
+  email: string;
+  code: string;
+};
 
 export type Verifying = {
-    isLoading: boolean,
-    message: string,
-    isError: boolean
-}
+  isLoading: boolean;
+  message: string;
+  isError: boolean;
+};
 
 export type VerificationFailure = {
-    errorMessage: string
-}
+  errorMessage: string;
+};
 
 export type ResetLink = {
-    email: string
-}
+  email: string;
+};
 
 export type LoadingStatus = {
-    status: boolean,
-    message: string,
-    isError: boolean
-}
+  status: boolean;
+  message: string;
+  isError: boolean;
+};
 
 export type ResetPassword = {
-    email: string;
-    otpCode: string;
-    newPassword: string;
-    confirmNewPassword: string;
-}
+  email: string;
+  otpCode: string;
+  newPassword: string;
+  confirmNewPassword: string;
+};
 
 export type ChangePassword = {
-    currentPassword: string;
-    newPassword: string;
-    confirmNewPassword: string;
-}
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+};
 
 export type VerifyOtp = {
-    email: string;
-    otpCode: string;
-}
+  email: string;
+  otpCode: string;
+};
 
 export type SetOtp = {
-    otp: string
+  otp: string;
 };
 
 export type Contact = {
-    phoneNumber: string;
-    country: string;
-    iso2Code: string;
-    dialCode: string;
-}
+  phoneNumber: string;
+  country: string;
+  iso2Code: string;
+  dialCode: string;
+};
 
 export type Link = {
-    label: string;
-    link: string;
-    index: number
-}
+  label: string;
+  link: string;
+  index: number;
+};
+
+export type AdminLink = {
+  label: string;
+  link: string;
+  svg: string;
+};
+
+export type ProductItem = {
+  image: string;
+  name: string;
+  brand: string;
+  price: string;
+  inStock: number;
+  sales: number;
+};
+
+export type ResendOtp = {
+  email: string;
+  otpType: string;
+};
+
+export type OtpResend = {
+  email: string;
+  type: string;
+};

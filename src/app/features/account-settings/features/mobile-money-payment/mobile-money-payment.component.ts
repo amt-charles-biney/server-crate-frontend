@@ -33,7 +33,6 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
       });
-      console.log('intl', this.intl.selectedCountryData)
     }
   }
 

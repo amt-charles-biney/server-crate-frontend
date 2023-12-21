@@ -18,7 +18,6 @@ export class AppComponent {
   constructor(private router: Router, private store: Store) {
     this.router.events.subscribe((ev) => {
       if (ev instanceof NavigationEnd) { 
-        console.log("New route", router.url);
         this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
       }
     });

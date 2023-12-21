@@ -14,6 +14,7 @@ export class ChangePasswordEffect {
             exhaustMap((newPassword: ChangePassword) => {
                 return this.authService.changePasswordInProfile(newPassword).pipe(
                     map((message) => {
+                        console.log('CHanging profile', message)
                         return setLoadingSpinner({
                             status: false,
                             message: message.message,
@@ -22,7 +23,8 @@ export class ChangePasswordEffect {
                     }),
                     catchError((err) => {
                         console.log('Err', err);
-                        return of(setLoadingSpinner({ status: false, message: err.error.detail, isError: true}))
+                        const error = err.error?.detail ?? 'Please try again'
+                        return of(setLoadingSpinner({ status: false, message: error, isError: true}))
                     }),
                 )
             })

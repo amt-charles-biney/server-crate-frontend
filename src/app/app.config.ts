@@ -13,6 +13,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { reducer } from './store/loader/reducers/loader.reducers';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideState('loader', reducer),
     provideEffects(),
     provideHttpClient(
-      withInterceptors([loadingInterceptor])
+      withInterceptors([loadingInterceptor, authInterceptor])
     ),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],

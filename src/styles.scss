@@ -119,6 +119,41 @@ app-payment-details .mat-mdc-tab-group {
   max-width: 120%;
 }
 
+app-admin-dashboard .mat-mdc-tab-links {
+  flex-direction: column;
+  gap: 5px;
+}
+
+app-admin-dashboard .mdc-tab {
+  justify-content: start;
+}
+
+app-admin-dashboard .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043;
+}
+app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
+  color: #3cb043;
+}
+app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
+  color: #3cb043;
+}
+
+app-admin-dashboard  .mdc-tab--active {
+  background-color: #f7fcf7;
+  transition: all 1s;
+  border-radius: 12px;
+}
+
+app-admin-dashboard  .mdc-tab:hover {
+  border-radius: 12px;
+  background-color: #f7fcf7;
+}
+
+app-admin-dashboard .mdc-tab-indicator {
+  display: none;
+}
+
+
 // .iti {
 //   width: 100%;
 // }

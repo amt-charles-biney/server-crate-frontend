@@ -18,7 +18,7 @@ export class SignUpEffect {
       tap((userData) => console.log('userData', userData)),
       exhaustMap((signUpData: UserSignUp) => {
         console.log('Data', signUpData);
-
+        this.signUpService.setEmail(signUpData.email)
         return this.signUpService.signUp(signUpData).pipe(
           tap((data: Success) => console.log('Sign up', data)),
           map((data: Success) => {

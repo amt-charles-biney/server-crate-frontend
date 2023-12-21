@@ -7,20 +7,23 @@ import { saveChanges } from '../../../../core/utils/settings';
 import { passwordRegex } from '../../../../core/utils/constants/patterns';
 import { checkIfPasswordsMatch, formValidator } from '../../../../core/utils/validators';
 import { AuthService } from '../../../../core/services/auth.service';
-import { ChangePassword } from '../../../../types';
+import { ChangePassword, LoadingStatus } from '../../../../types';
 import { Store } from '@ngrx/store';
 import { changePassword } from '../../../../store/profile/changePassword/changePassword.actions';
+import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
+import { Observable } from 'rxjs';
+import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 
 @Component({
   selector: 'app-password-information',
   standalone: true,
-  imports: [CommonModule, CustomInputComponent, CustomButtonComponent, ReactiveFormsModule],
+  imports: [CommonModule, CustomInputComponent, CustomButtonComponent, ReactiveFormsModule, AuthLoaderComponent],
   templateUrl: './password-information.component.html',
   styleUrl: './password-information.component.scss'
 })
 export class PasswordInformationComponent implements OnInit {
   passwordForm!: FormGroup
-
+  loadingState$!: Observable<LoadingStatus>
   ngOnInit(): void {
     this.passwordForm = new FormGroup({
       currentPwd: new FormControl('', Validators.required),
@@ -34,6 +37,7 @@ export class PasswordInformationComponent implements OnInit {
         checkIfPasswordsMatch(),
       ])
     }, formValidator('newPwd', 'confirmPwd'))
+    this.loadingState$ = this.store.select(selectLoaderState)
   }
 
   constructor(private store: Store) {}

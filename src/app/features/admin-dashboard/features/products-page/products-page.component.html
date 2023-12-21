@@ -1,0 +1,26 @@
+<main class="p-3 flex flex-col gap-4">
+  <section class="flex w-full justify-between">
+    <h2 class="font-bold text-xl">All Products</h2>
+    <button routerLink="/add-product" class="flex items-center gap-2 rounded font-[500] bg-figma-green text-white text-sm py-1 px-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        data-slot="icon"
+        class="w-4 h-4"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 4.5v15m7.5-7.5h-15"
+        />
+      </svg>
+      <p>Add Product</p>
+    </button>
+  </section>
+  <section>
+    <app-product-item [product]="product"/>
+  </section>
+</main>

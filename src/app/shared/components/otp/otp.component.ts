@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
   FormsModule,
@@ -8,18 +8,18 @@ import {
 } from '@angular/forms';
 import { NgOtpInputModule } from 'ng-otp-input';
 import { CustomButtonComponent } from '../custom-button/custom-button.component';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { CountdownComponent } from '../countdown/countdown.component';
 import { Store } from '@ngrx/store';
 import { verifyingEmail } from '../../../store/signup/actions/signup.actions';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadingStatus } from '../../../types';
 import { selectLoaderState } from '../../../store/loader/reducers/loader.reducers';
-import { setLoadingSpinner } from '../../../store/loader/actions/loader.actions';
 import { AuthLoaderComponent } from '../auth-loader/auth-loader.component';
 import { verifyingOtp } from '../../../store/reset/actions/reset.actions';
 import { Router } from '@angular/router';
-import { setOtp } from '../../../store/otp/otp.actions';
+import { resendingOTP, setOtp } from '../../../store/otp/otp.actions';
+import { TimerService } from '../../../core/services/timer.service';
 
 @Component({
   selector: 'app-otp',
@@ -36,23 +36,26 @@ import { setOtp } from '../../../store/otp/otp.actions';
   templateUrl: './otp.component.html',
   styleUrl: './otp.component.scss',
 })
-export class OTPComponent implements OnDestroy {
+export class OTPComponent implements OnInit, OnDestroy {
   otp = new FormControl('', [
     Validators.required,
     Validators.maxLength(6),
     Validators.minLength(6),
   ]);
-  time: number = Number(
-    sessionStorage.getItem('server-crate-otp-expiration') ?? 5
-  );
+  
   loadingState$!: Observable<LoadingStatus>;
-
+  time!: Observable<number>
   constructor(
     private store: Store,
     private signUpService: AuthService,
-    private router: Router
+    private router: Router,
+    private timeService: TimerService
   ) {
     this.loadingState$ = this.store.select(selectLoaderState);
+  }
+
+  ngOnInit(): void {
+    this.time = this.timeService.getTimer()
   }
   verifyEmail() {
     if (this.otp.invalid) {
@@ -73,6 +76,12 @@ export class OTPComponent implements OnDestroy {
       this.store.dispatch(verifyingOtp({ otpCode: otp, email: email }));
     }
     console.log('/email and code', email, otp);
+  }
+
+  resendOtp() {
+    this.timeService.setTimer(0)
+    const email = this.signUpService.getEmail()
+    this.store.dispatch(resendingOTP({ email, otpType: 'CREATE' }))
   }
 
   

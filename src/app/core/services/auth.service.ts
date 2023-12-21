@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { ChangePassword, ResetPassword, SignIn, Success, UserSignUp, VerifiedUser, Verify, VerifyOtp } from '../../types';
+import { ChangePassword, OtpResend, ResendOtp, ResetPassword, SignIn, Success, UserSignUp, VerifiedUser, Verify, VerifyOtp } from '../../types';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,10 @@ export class AuthService {
     return this.http.post<Success>(`${this.backendUrl}/reset-password`, {email})
   }
 
+  resendOtp(otpRequest: OtpResend) {
+    return this.http.post<Success>(`${this.backendUrl}/resend-otp`, otpRequest)
+  }
+
   changePassword(newPassword: ResetPassword) {
     return this.http.post<Success>(`${this.backendUrl}/change-password`, newPassword)
   }
@@ -61,7 +65,13 @@ export class AuthService {
     return email
   }
 
+  setEmail(email: string) {
+    localStorage.setItem('server-crate-email', email)
+  }
+
   setToken(token: string) {
     localStorage.setItem('server-crate-token', token)
   }
+
+
 }

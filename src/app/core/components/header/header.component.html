@@ -73,9 +73,7 @@
       </svg>
       @if (isAuthenticated) {
           <a routerLink="/settings">
-          <div class="flex flex-col justify-center items-center w-10 h-10 bg-black rounded-full">
-            <p class="tracking-wider text-white text-sm">CW</p>
-          </div>
+          <app-user-profile-image [smaller]="true"/>
         </a>
         } @else {
           <a class=" py-1 px-10 font-semibold bg-figma-green text-white rounded-lg" routerLink="/login">
