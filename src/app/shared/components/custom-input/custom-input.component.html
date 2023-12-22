@@ -1,5 +1,5 @@
 <label class="flex flex-col gap-0.5 mt-4" [for]="'#' + id">
-  <span class="">{{ label }}</span>
+  <span [class]="myClass">{{ label }}</span>
   <div class="relative">
     @if (type === 'select') {
 
@@ -13,38 +13,83 @@
         {{ option }}
       </option>
     </select>
+    } @else if (type === "textarea") {
+    <textarea
+      [formControl]="formControl"
+      [placeholder]="placeholder"
+      [id]="id"
+      rows="4"
+      class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green rounded-md resize-none px-4 py-2"
+    ></textarea>
     } @else if (type === 'contact') {
-      <input type="tel" class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-red-500 px-4 py-2 rounded-md" [formControl]="formControl" #telInput />
-    } @else if (type==='date') {
-      <div class="flex w-fit border">
-        <input
-          type="text"
-          name="month"
-          placeholder="MM"
-          [formControl]="formControl"
-          maxlength="2"
-          class="border-0 outline-none text-center"
-          size="2"
-        />
-        <span class="mx-2">/</span>
-        <input
-          type="text"
-          name="year"
-          placeholder="YY"
-          [formControl]="formControl"
-          maxlength="2"
-          class="border-0 outline-none text-center"
-          size="2"
-        />
-      </div>
-    }@else {
     <input
+      type="tel"
+      class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-red-500 px-4 py-2 rounded-md"
+      [formControl]="formControl"
+      #telInput
+    />
+    } @else if (type==='date') {
+    <div class="flex w-fit border">
+      <input
+        type="text"
+        name="month"
+        placeholder="MM"
+        [formControl]="formControl"
+        maxlength="2"
+        class="border-0 outline-none text-center"
+        size="2"
+      />
+      <span class="mx-2">/</span>
+      <input
+        type="text"
+        name="year"
+        placeholder="YY"
+        [formControl]="formControl"
+        maxlength="2"
+        class="border-0 outline-none text-center"
+        size="2"
+      />
+    </div>
+    } @else if (type === "async") {
+      <input
+            type="text"
+            [id]="id"
+            [placeholder]="placeholder"
+            class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
+            aria-label="Number"
+            matInput
+            [formControl]="formControl"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete show autoActiveFirstOption #auto="matAutocomplete">
+            @for (option of filteredOptions | async; track option) {
+            <mat-option [value]="option.name">{{ option.name }}</mat-option>
+            }
+          </mat-autocomplete>
+    }
+    @else if (type === 'generator') {
+      <input
+    [ngClass]="isReadOnly ? 'bg-gray-100' : ''"
+      class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
+      [id]="'#' + id"
+      type="text"
+      [placeholder]="placeholder"
+      [formControl]="formControl"
+      autocomplete="off"
+      [readonly]="isReadOnly"
+    />
+    }
+    
+    @else {
+    <input
+    [ngClass]="isReadOnly ? 'bg-gray-200' : ''"
       class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
       [id]="'#' + id"
       [type]="type === 'password' && showPassword ? 'text' : type"
       [placeholder]="placeholder"
       [formControl]="formControl"
       autocomplete="off"
+      [readonly]="isReadOnly"
     />
     }
     <button type="button" (click)="showPasswordHandler($event)">

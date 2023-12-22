@@ -1,7 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { UserProfileImageComponent } from '../../../shared/components/user-profile-image/user-profile-image.component';
 

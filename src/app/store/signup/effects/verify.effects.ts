@@ -7,12 +7,13 @@ import {
 } from '../actions/signup.actions';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { ResendOtp, Success, VerifiedUser, Verify } from '../../../types';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { resetLoader, setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { Store } from '@ngrx/store';
 import { resendingOTP } from '../../otp/otp.actions';
-import { TimerService } from '../../../core/services/timer.service';
+import { TimerService } from '../../../core/services/timer/timer.service';
+import { ProfileService } from '../../../core/services/user-profile/profile.service';
 
 @Injectable()
 export class VerifyEffect {
@@ -25,7 +26,7 @@ export class VerifyEffect {
           tap((verifiedUser) => {
             localStorage.setItem('server-crate-token', verifiedUser.token);
           }),
-          map((data: VerifiedUser) => {
+          map((verifiedUser: VerifiedUser) => {
             this.store.dispatch(
               setLoadingSpinner({
                 status: false,
@@ -33,10 +34,11 @@ export class VerifyEffect {
                 isError: false,
               })
             );
+            this.profileService.setUser({ firstName: verifiedUser.firstName, lastName: verifiedUser.lastName})
             setTimeout(() => {
               this.router.navigateByUrl('/settings', { replaceUrl: true });
             }, 2000);
-            return verificationSuccess(data);
+            return verificationSuccess(verifiedUser);
           }),
           catchError((err) => {
             const message = err.error.detail;
@@ -81,6 +83,7 @@ export class VerifyEffect {
     private router: Router,
     private signUpService: AuthService,
     private store: Store,
-    private timerService: TimerService
+    private timerService: TimerService,
+    private profileService: ProfileService
   ) {}
 }

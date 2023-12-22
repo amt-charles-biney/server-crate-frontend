@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TermsAndConditionsComponent } from '../../shared/components/terms-and-conditions/terms-and-conditions.component';
-import { ProfileElementComponent } from '../../shared/components/profile-element/profile-element.component';
 import { ResetPasswordComponent } from '../reset/reset-password/reset-password.component';
 import { GeneralInformationComponent } from './features/general-information/general-information.component';
 import { PasswordInformationComponent } from './features/password-information/password-information.component';
@@ -11,13 +10,13 @@ import { PaymentDetailsComponent } from './features/payment-details/payment-deta
 import { PrivacyPolicyComponent } from '../../shared/components/privacy-policy/privacy-policy.component';
 import { Link } from '../../types';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
+import { ProfileService } from '../../core/services/user-profile/profile.service';
 @Component({
   selector: 'app-account-settings',
   standalone: true,
   imports: [
     MatTabsModule,
     TermsAndConditionsComponent,
-    ProfileElementComponent,
     ResetPasswordComponent,
     GeneralInformationComponent,
     PasswordInformationComponent,
@@ -33,8 +32,9 @@ import { UserProfileImageComponent } from '../../shared/components/user-profile-
 export class AccountSettingsComponent implements OnInit {
   navLinks: Link[] = [];
   activeLink!: Link;
-
-  constructor(private router: Router) {}
+  firstName!: string
+  lastName!: string
+  constructor(private router: Router, private profileService: ProfileService) {}
   ngOnInit(): void {
     this.navLinks = [
       {
@@ -72,5 +72,8 @@ export class AccountSettingsComponent implements OnInit {
     if (this.router.url !== '/settings/general') {
       this.router.navigateByUrl('/settings/general');
     }
+    const { firstName, lastName } = this.profileService.getUsername()
+    this.firstName = firstName
+    this.lastName = lastName
   }
 }

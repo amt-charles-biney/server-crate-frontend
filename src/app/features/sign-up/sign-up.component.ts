@@ -56,7 +56,8 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {
     this.signUpForm = new FormGroup(
       {
-        name: new FormControl('', [Validators.required]),
+        firstName: new FormControl('', [Validators.required]),
+        lastName: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', [
           Validators.required,
@@ -80,14 +81,15 @@ export class SignUpComponent implements OnInit {
   submitRegistrationForm() {
     if (this.signUpForm.invalid) return;
 
-    const { email, password } = this.signUpForm.value
+    const { firstName, lastName, email, password } = this.signUpForm.value
     const formData: UserSignUp = {
-      firstName: this.signUpForm.value.name.split(' ')[0],
-      lastName: this.signUpForm.value.name.split(' ')[1],
+      firstName,
+      lastName,
       email,
       password
     }
     // this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
+    localStorage.setItem('server-crate-user', JSON.stringify({ firstName, lastName }))
     this.store.dispatch(signUp(formData))
   }
 
@@ -108,8 +110,12 @@ export class SignUpComponent implements OnInit {
       });
   }
 
-  get name() {
-    return this.signUpForm.get('name');
+  get firstName() {
+    return this.signUpForm.get('firstName');
+  }
+
+  get lastName() {
+    return this.signUpForm.get('lastName')
   }
 
   get email() {

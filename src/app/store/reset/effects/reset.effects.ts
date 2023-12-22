@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { sendingResetLink } from '../actions/reset.actions';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { ResendOtp, Success } from '../../../types';
@@ -11,7 +11,7 @@ import {
   setLoadingSpinner,
 } from '../../loader/actions/loader.actions';
 import { resendingOTP } from '../../otp/otp.actions';
-import { TimerService } from '../../../core/services/timer.service';
+import { TimerService } from '../../../core/services/timer/timer.service';
 
 @Injectable()
 export class ResetEffect {
@@ -41,7 +41,7 @@ export class ResetEffect {
             return of(
               setLoadingSpinner({
                 status: false,
-                message: err.error.detail,
+                message: err.error.detail ?? '',
                 isError: true,
               })
             );
@@ -78,7 +78,7 @@ export class ResetEffect {
               return of(
                 setLoadingSpinner({
                   status: false,
-                  message: err.error.detail,
+                  message: err.error.detail ?? '',
                   isError: true,
                 })
               );

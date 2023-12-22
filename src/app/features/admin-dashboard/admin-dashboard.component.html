@@ -1,6 +1,6 @@
 <main class="flex">
   <!-- sidebar -->
-  <aside class="flex min-h-screen w-72 flex-col p-6 border">
+  <aside class="flex min-h-screen w-72 flex-col p-6 border bg-[#fdfdfd]">
     <a routerLink="/">
       <img
         ngSrc="/assets/logo.svg"
@@ -36,6 +36,7 @@
             mat-tab-link
             (click)="activeLink = settings"
             [active]="activeLink == settings"
+            routerLink="settings"
           >
             <div class="flex items-center gap-3">
               <img
@@ -51,12 +52,12 @@
     </section>
     <article class="flex items-center gap-3">
       <img class="h-5 w-5" src="/assets/logout.svg" alt="logout" />
-      <p class="mt-0.5 text-sm font-bold">Logout</p>
+      <button class="mt-0.5 text-sm font-bold">Logout</button>
     </article>
   </aside>
   <div class="flex-1">
     <mat-tab-nav-panel #tabPanel>
-      <nav class="flex border-b px-6 w-full justify-between items-center">
+      <nav class="flex border-b px-6 w-full justify-between items-center bg-[#fdfdfd]">
         <h2 class="font-bold tracking-wide">{{ activeLink.label }}</h2>
         <div class="flex items-center py-6 justify-around w-[30%]">
           <svg
@@ -92,7 +93,9 @@
         </div>
       </nav>
       <section class="p-5">
-        <router-outlet />
+        <div class="p-3">
+          <router-outlet />
+        </div>
       </section>
     </mat-tab-nav-panel>
   </div>

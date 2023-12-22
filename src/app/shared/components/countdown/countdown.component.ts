@@ -6,7 +6,7 @@ import {
 import { Store } from '@ngrx/store';
 import { map, takeWhile, tap, timer } from 'rxjs';
 import { resetLoader, setLoadingSpinner } from '../../../store/loader/actions/loader.actions';
-import { TimerService } from '../../../core/services/timer.service';
+import { TimerService } from '../../../core/services/timer/timer.service';
 
 @Component({
   selector: 'app-countdown',

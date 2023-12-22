@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { Success, UserSignUp } from '../../../types';
 import {
@@ -42,8 +42,12 @@ export class SignUpEffect {
             });
           }),
           catchError((error) => {
-            const message = error.error.detail  ?? 'Couldn\'t reach the server';
-            return of(setLoadingSpinner({ status: false, message, isError: true }));
+            let errorMessage = 'User with this email already exists'
+            if (error.error && error.error.detail) {
+              errorMessage = error.error.detail ?? 'Couldn\'t reach the server'
+            }
+        
+            return of(setLoadingSpinner({ status: false, message: errorMessage, isError: true }));
           }),
           tap(console.log)
         );

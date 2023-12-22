@@ -5,8 +5,9 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { signIn } from '../actions/login.actions';
 import { SignIn } from '../../../types';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
+import { ProfileService } from '../../../core/services/user-profile/profile.service';
 
 @Injectable()
 export class LoginEffect {
@@ -19,6 +20,7 @@ export class LoginEffect {
           tap((x) => console.log('service---->', x)),
           map((response: VerifiedUser) => {
             this.authService.setToken(response.token);
+            this.profileService.setUser({ firstName: response.firstName, lastName: response.lastName})
             setTimeout(() => {
               this.router.navigateByUrl('/settings', { replaceUrl: true });
             }, 1500);
@@ -32,7 +34,7 @@ export class LoginEffect {
             return of(
               setLoadingSpinner({
                 status: false,
-                message: err.error.detail,
+                message: err.error.detail ?? '',
                 isError: true,
               })
             );
@@ -45,5 +47,6 @@ export class LoginEffect {
     private action$: Actions,
     private router: Router,
     private authService: AuthService,
+    private profileService: ProfileService
   ) {}
 }

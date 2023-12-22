@@ -12,14 +12,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { CountdownComponent } from '../countdown/countdown.component';
 import { Store } from '@ngrx/store';
 import { verifyingEmail } from '../../../store/signup/actions/signup.actions';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { LoadingStatus } from '../../../types';
 import { selectLoaderState } from '../../../store/loader/reducers/loader.reducers';
 import { AuthLoaderComponent } from '../auth-loader/auth-loader.component';
 import { verifyingOtp } from '../../../store/reset/actions/reset.actions';
 import { Router } from '@angular/router';
 import { resendingOTP, setOtp } from '../../../store/otp/otp.actions';
-import { TimerService } from '../../../core/services/timer.service';
+import { TimerService } from '../../../core/services/timer/timer.service';
 
 @Component({
   selector: 'app-otp',

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AuthService } from "../../../core/services/auth.service";
+import { AuthService } from "../../../core/services/auth/auth.service";
 import { changePassword } from "./changePassword.actions";
 import { catchError, exhaustMap, map, of } from "rxjs";
 import { ChangePassword } from "../../../types";
@@ -23,7 +23,7 @@ export class ChangePasswordEffect {
                     }),
                     catchError((err) => {
                         console.log('Err', err);
-                        const error = err.error?.detail ?? 'Please try again'
+                        const error = err.error?.detail ?? 'The password entered does not match the current password. Please check and try again'
                         return of(setLoadingSpinner({ status: false, message: error, isError: true}))
                     }),
                 )

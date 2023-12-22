@@ -18,17 +18,24 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import intlTelInput from 'intl-tel-input';
 import 'intl-tel-input/build/css/intlTelInput.css';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 type OnChange<T> = (value: T) => void;
 type OnTouch = () => void;
 @Component({
   selector: 'app-custom-input',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, MatSelectModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    MatSelectModule,
+    MatAutocompleteModule,
+  ],
   templateUrl: './custom-input.component.html',
   styleUrl: './custom-input.component.scss',
   providers: [
@@ -50,6 +57,9 @@ export class CustomInputComponent
   @Input() isDisabled: boolean = false;
   @Input() options: string[] = [];
   @Input() flags!: Array<{ imgUrl: string; value: string }>;
+  @Input() myClass!: string;
+  @Input() isReadOnly = false;
+  @Input() filteredOptions!: Observable<any>;
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;
 
   formControl!: FormControl;

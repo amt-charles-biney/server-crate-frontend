@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AuthService } from "../../../core/services/auth.service";
+import { AuthService } from "../../../core/services/auth/auth.service";
 import { Store } from "@ngrx/store";
 import { verifyingOtp } from "../actions/reset.actions";
 import { catchError, exhaustMap, map, of, tap } from "rxjs";
@@ -27,7 +27,7 @@ export class VerifyOtpEffects {
                           });
                     }),
                     catchError((err) => {
-                        return of(setLoadingSpinner({ status: false, message: err.error.detail, isError: true}))
+                        return of(setLoadingSpinner({ status: false, message: err.error.detail ?? '', isError: true}))
                     })
                 )
             })

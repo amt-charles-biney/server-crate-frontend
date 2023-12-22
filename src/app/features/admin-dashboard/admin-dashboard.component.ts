@@ -51,7 +51,7 @@ export class AdminDashboardComponent implements OnInit {
     ];
     this.activeLink = this.navLinks[0];
     if (this.router.url !== '/settings/products') {
-      this.router.navigateByUrl('/admin/products');
+      this.router.navigateByUrl('/admin/add-product');
     }
   }
 }

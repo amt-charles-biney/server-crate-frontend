@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-user-profile-image',
@@ -8,6 +8,11 @@ import { Component, Input } from '@angular/core';
   templateUrl: './user-profile-image.component.html',
   styleUrl: './user-profile-image.component.scss'
 })
-export class UserProfileImageComponent {
+export class UserProfileImageComponent implements OnInit {
   @Input() smaller!: boolean
+  initials!: string
+  ngOnInit(): void {
+    const { firstName, lastName } = JSON.parse(localStorage.getItem('server-crate-user') ?? '')
+    this.initials = `${firstName[0]}${lastName[0]}`
+  }
 }

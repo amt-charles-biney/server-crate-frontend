@@ -11,7 +11,7 @@
     />
     <h1 class="text-3xl mt-6 md:m-0 font-bold">Create your account</h1>
     <div class="w-full">
-      <app-auth-loader [loadingState]="loadingState$"/>
+      <app-auth-loader [loadingState]="loadingState$" />
     </div>
     <form
       novalidate
@@ -20,14 +20,30 @@
       class="md:p-0 px-4 md:max-w-[500px] mx-auto"
     >
       <app-custom-input
-        id="name"
-        label="Name"
+        id="firstName"
+        label="First Name"
         type="text"
-        placeholder="Enter your name"
-        formControlName="name"
+        placeholder="Enter your first name"
+        formControlName="firstName"
       />
-      @if (name?.invalid && (name?.touched || name?.dirty)) {
-      <span class="text-red-600">A name is required</span>
+      @if (firstName?.invalid && (firstName?.touched || firstName?.dirty)) {
+
+      <div *ngIf="firstName?.errors?.['required']">
+        <span class="text-red-600">A first name is required</span>
+      </div>
+      }
+      <app-custom-input
+        id="lastName"
+        label="Last Name"
+        type="text"
+        placeholder="Enter your last name"
+        formControlName="lastName"
+      />
+      @if (lastName?.invalid && (lastName?.touched || lastName?.dirty)) {
+
+      <div *ngIf="lastName?.errors?.['required']">
+        <span class="text-red-600">A last name is required</span>
+      </div>
       }
       <app-custom-input
         id="email"

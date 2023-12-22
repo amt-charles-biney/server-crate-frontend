@@ -1,1 +1,195 @@
-<p>add-product works!</p>
+<main class="flex flex-col min-h-screen">
+  <h1 class="font-bold text-xl">Product Details</h1>
+  <form
+    [formGroup]="addProductForm"
+    (ngSubmit)="addProduct()"
+    class="grid grid-cols-2 gap-6 min-h-fit"
+  >
+    <section>
+      <app-custom-input
+        id="productName"
+        label="Product Name"
+        type="text"
+        placeholder="Enter product name"
+        formControlName="productName"
+        myClass="font-[500]"
+      />
+      <app-custom-input
+        id="productDescription"
+        label="Product Description"
+        type="textarea"
+        placeholder="Enter a description"
+        formControlName="productDescription"
+        myClass="font-[500]"
+      />
+
+      <ng-container *ngIf="categories$ | async as categories">
+        <app-custom-input
+          id="category"
+          label="Category"
+          type="async"
+          placeholder="Select an option"
+          formControlName="category"
+          [filteredOptions]="filteredOptions"
+          myClass="font-[500]"
+        />
+
+        <div class="flex justify-between">
+          <div class="w-[45%]">
+            <app-custom-input
+              id="brandName"
+              label="Brand Name"
+              type="async"
+              placeholder="Select an option"
+              formControlName="brandName"
+              [filteredOptions]="filteredOptions"
+              myClass="font-[500]"
+            />
+          </div>
+          <div class="w-[45%]">
+            <app-custom-input
+              id="productId"
+              label="Product ID"
+              type="generator"
+              [isReadOnly]="true"
+              placeholder=""
+              formControlName="productId"
+              [filteredOptions]="filteredOptions"
+              myClass="font-[500]"
+            />
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="flex items-center justify-between">
+        <div class="xl:w-[45%]">
+          <app-custom-input
+            id="inStock"
+            label="In Stock"
+            type="number"
+            placeholder="Enter quantity in stock"
+            formControlName="inStock"
+            myClass="font-[500]"
+          />
+        </div>
+        <div class="xl:w-[45%]">
+          <app-custom-input
+            id="price"
+            label="Price"
+            type="number"
+            placeholder="Enter amount"
+            formControlName="price"
+            myClass="font-[500]"
+          />
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="flex flex-col mt-4 h-[50%] xl:h-[60%]">
+        <p class="font-[500]">Cover Image</p>
+        <div
+          class="flex flex-col items-center justify-center border rounded-lg h-full"
+        >
+          <input id="coverImage" type="file" formControlName="coverImage" (change)="uploadDocument($event)" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+          <label
+            for="coverImage"
+            class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
+          >
+            <img src="/assets/upload.svg" alt="upload" />
+            <p>
+              <span class="text-figma-green">Click to upload</span> or drag and
+              drop
+            </p>
+            <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
+          </label>
+        </div>
+      </div>
+      <div class="mt-5">
+        <p class="font-[500]">Product Gallery</p>
+        <small class="text-gray-500"
+          >Enhance your product showcase. Add an image to your product
+          gallery.</small
+        >
+        <div class="flex mt-4 gap-10">
+          <div
+            class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+          >
+            <input id="image1" type="file" formControlName="image1" class="hidden"  accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+            <label
+              for="image1"
+              class="cursor-pointer flex flex-col items-center gap-1"
+            >
+              <img src="/assets/image-plus.svg" alt="add image" />
+              <small class="text-xs">Add image 1</small>
+            </label>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+          >
+            <input id="image2" type="file" formControlName="image2" class="hidden" (change)="uploadDocument($event)"  accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+            <label
+              for="image2"
+              class="cursor-pointer flex flex-col items-center gap-1"
+            >
+              <img src="/assets/image-plus.svg" alt="add image" />
+              <small class="text-xs">Add image 2</small>
+            </label>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+          >
+            <input id="image3" type="file" formControlName="image3" class="hidden" (change)="uploadDocument($event)" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+            <label
+              for="image3"
+              class="cursor-pointer flex flex-col items-center gap-1"
+            >
+              <img src="/assets/image-plus.svg" alt="add image" />
+              <small class="text-xs">Add image 3</small>
+            </label>
+          </div>
+        </div>
+      </div>
+      <section class="flex items-center justify-end mt-10 gap-6 text-sm">
+        <button type="button" class="text-figma-gray underline text-xs">Delete</button>
+        <button
+          class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
+        >
+          Save
+        </button>
+        <button
+        type="button"
+          class="border border-figma-green text-figma-green rounded w-32 py-1 tracking-wider"
+        >
+          Cancel
+        </button>
+      </section>
+    </section>
+  </form>
+  <section class="mt-14">
+    <p>Base Configuration</p>
+    <div class="max-w-lg h-fit p-3 rounded-lg mt-2 bg-[#fbfbfb]">
+      <ul class="grid grid-rows-3 grid-flow-col px-10 pt-3 list-disc">
+        <li class="leading-5">
+            <p class="font-[500]">Processor</p>
+            <p class="text-gray-400">2x Intel Xeon Silver</p>
+        </li>
+        <li class="leading-5">
+            <p class="font-[500]">PCI</p>
+            <p class="text-gray-400">NVIDIA HGX A100 80GB</p>
+        </li>
+        <li class="leading-5">
+            <p class="font-[500]">Power</p>
+            <p class="text-gray-400">Platinum Hot-swap 16A/100-250V,C19 to IEC 320-C20 Rack power cable</p>
+        </li>
+        <li class="leading-5">
+            <p class="font-[500]">Memory</p>
+            <p class="text-gray-400">2x ThinkSystem 16GB DDR4</p>
+        </li>
+        <li class="leading-5">
+            <p class="font-[500]">Operating System</p>
+            <p class="text-gray-400">Microsoft Windows</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>

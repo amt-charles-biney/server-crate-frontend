@@ -6,7 +6,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { saveChanges } from '../../../../core/utils/settings';
 import { passwordRegex } from '../../../../core/utils/constants/patterns';
 import { checkIfPasswordsMatch, formValidator } from '../../../../core/utils/validators';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 import { ChangePassword, LoadingStatus } from '../../../../types';
 import { Store } from '@ngrx/store';
 import { changePassword } from '../../../../store/profile/changePassword/changePassword.actions';

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { ChangePassword, OtpResend, ResendOtp, ResetPassword, SignIn, Success, UserSignUp, VerifiedUser, Verify, VerifyOtp } from '../../types';
+import { ChangePassword, OtpResend, ResendOtp, ResetPassword, SignIn, Success, UserSignUp, VerifiedUser, Verify, VerifyOtp } from '../../../types';
 
 @Injectable({
   providedIn: 'root'

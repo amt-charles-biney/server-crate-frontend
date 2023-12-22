@@ -114,3 +114,26 @@ export type OtpResend = {
   email: string;
   type: string;
 };
+
+
+export type Category = {
+  id: string;
+  name: string;
+}
+
+export type GeneralInfo = {
+  firstName: string,
+  lastName: string,
+  email: string,
+  contact: Contact
+}
+
+export type ChangeContact = {
+  firstName: string,
+  lastName: string,
+  contact: Contact
+}
+
+export type DummyCategory = {
+  name: string
+}

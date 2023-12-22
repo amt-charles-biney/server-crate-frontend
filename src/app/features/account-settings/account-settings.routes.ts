@@ -8,6 +8,9 @@ import { TermsAndConditionsComponent } from "../../shared/components/terms-and-c
 import { PrivacyPolicyComponent } from "../../shared/components/privacy-policy/privacy-policy.component";
 import { provideEffects } from "@ngrx/effects";
 import { ChangePasswordEffect } from "../../store/profile/changePassword/changePassword.effects";
+import { GeneralInfoEffect } from "../../store/account-settings/general-info/general-info.effects";
+import { provideState } from "@ngrx/store";
+import { generalInfoFeature } from "../../store/account-settings/general-info/general-info.reducers";
 
 export const route: Routes = [
     {
@@ -16,7 +19,11 @@ export const route: Routes = [
         children: [
             {
                 path: 'general',
-                component: GeneralInformationComponent
+                component: GeneralInformationComponent,
+                providers: [
+                    provideState(generalInfoFeature),
+                    provideEffects(GeneralInfoEffect)
+                ]
             },
             {
                 path: 'password',
