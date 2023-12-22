@@ -21,7 +21,6 @@ export class GeneralInfoEffect {
                 // }
                 return this.profileService.getGeneralInfo().pipe(
                     map((generalInfo: GeneralInfo) => {
-                        
                         cache.set(action, generalInfo)
                         this.store.dispatch(gotGeneralInfo(generalInfo))
                         return setLoadingSpinner({

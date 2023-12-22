@@ -9,6 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
+import { ProfileService } from '../../../core/services/user-profile/profile.service';
 
 @Injectable()
 export class SignUpEffect {
@@ -31,6 +32,7 @@ export class SignUpEffect {
             //     isError: false,
             //   })
             // );
+            this.profileService.setUser({ firstName: signUpData.firstName, lastName: signUpData.lastName})
             setTimeout(() => {
               this.router.navigateByUrl('/otp', { replaceUrl: true });
             }, 2000);
@@ -59,6 +61,7 @@ export class SignUpEffect {
     private action$: Actions,
     private signUpService: AuthService,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private profileService: ProfileService
   ) {}
 }

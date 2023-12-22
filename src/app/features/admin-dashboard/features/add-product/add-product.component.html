@@ -90,7 +90,7 @@
         <div
           class="flex flex-col items-center justify-center border rounded-lg h-full"
         >
-          <input id="coverImage" type="file" formControlName="coverImage" (change)="uploadDocument($event)" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+          <input id="coverImage" type="file" formControlName="coverImage" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
           <label
             for="coverImage"
             class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
@@ -114,7 +114,7 @@
           <div
             class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
           >
-            <input id="image1" type="file" formControlName="image1" class="hidden"  accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+            <input id="image1" type="file" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif" />
             <label
               for="image1"
               class="cursor-pointer flex flex-col items-center gap-1"
@@ -126,7 +126,7 @@
           <div
             class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
           >
-            <input id="image2" type="file" formControlName="image2" class="hidden" (change)="uploadDocument($event)"  accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+            <input id="image2" type="file" formControlName="image2" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
             <label
               for="image2"
               class="cursor-pointer flex flex-col items-center gap-1"
@@ -138,7 +138,7 @@
           <div
             class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
           >
-            <input id="image3" type="file" formControlName="image3" class="hidden" (change)="uploadDocument($event)" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+            <input id="image3" type="file" formControlName="image3" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
             <label
               for="image3"
               class="cursor-pointer flex flex-col items-center gap-1"

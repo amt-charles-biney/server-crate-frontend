@@ -28,6 +28,7 @@ export type VerifiedUser = {
   firstName: string;
   lastName: string;
   email: string;
+  role: string
 };
 
 export type Verify = {
@@ -125,7 +126,8 @@ export type GeneralInfo = {
   firstName: string,
   lastName: string,
   email: string,
-  contact: Contact
+  contact: Contact,
+  role: string
 }
 
 export type ChangeContact = {

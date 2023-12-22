@@ -9,6 +9,8 @@ import { LoginEffect } from './store/signin/effects/login.effects';
 import { ResetEffect } from './store/reset/effects/reset.effects';
 import { otpFeature } from './store/otp/otp.reducers';
 import { settingsGuard } from './core/guards/settings.guard';
+import { adminGuard } from './core/guards/admin.guard';
+import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
 
 export const routes: Routes = [
     {
@@ -23,7 +25,11 @@ export const routes: Routes = [
         path: 'admin',
         loadChildren: () => import('./features/admin-dashboard/admin-dashboard.routes').then(m => m.route),
         canActivate: [
-            settingsGuard
+            settingsGuard,
+            adminGuard
+        ],
+        providers: [
+            provideEffects(GeneralInfoEffect)
         ]
     },
     {
@@ -51,6 +57,7 @@ export const routes: Routes = [
     },
     {
         path: '',
-        loadChildren: () => import('./features/home/home.routes').then(m => m.route)
+        loadChildren: () => import('./features/home/home.routes').then(m => m.route),
+        
     }
 ];

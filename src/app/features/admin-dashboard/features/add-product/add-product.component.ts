@@ -35,7 +35,10 @@ export class AddProductComponent implements OnInit {
   addProductForm!: FormGroup;
   categories$!: Observable<DummyCategory[]>;
   filteredOptions!: Observable<DummyCategory[]>;
-
+  coverImaged = ''
+  image1 = ''
+  image2 = ''
+  image3 = ''
   constructor(private store: Store, private destroyRef: DestroyRef) {}
   ngOnInit(): void {
     this.store.dispatch(getCategories());
@@ -47,11 +50,8 @@ export class AddProductComponent implements OnInit {
       productId: new FormControl(`#${getUniqueId(2)}`, [Validators.required]),
       inStock: new FormControl('', [Validators.required]),
       price: new FormControl('', [Validators.required]),
-      coverImage: new FormControl(null, [Validators.required]),
-      image1: new FormControl('', [Validators.required]),
-      image2: new FormControl('', [Validators.required]),
-      image3: new FormControl('', [Validators.required]),
     });
+
 
     this.categories$ = this.store.select(selectCategoriesState).pipe(
       tap((categories) => {
@@ -81,10 +81,12 @@ export class AddProductComponent implements OnInit {
     console.log('Add product', this.addProductForm.value)
   }
 
-  uploadDocument(event: any) {
+  uploadDocument(event: any, controlName: AbstractControl) {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
-      this.addProductForm.patchValue({coverImage:event.target.files[0]});
+      reader.onload = () => {
+      controlName?.setValue(event.target.files[0]);
+      };
       reader.readAsDataURL(event.target.files[0]);
     }
   }
@@ -95,9 +97,5 @@ export class AddProductComponent implements OnInit {
   
   get brandName() {
     return this.addProductForm.get('brandName')!;
-  }
-
-  get coverImage() {
-    return this.addProductForm.get('coverImage')!
   }
 }

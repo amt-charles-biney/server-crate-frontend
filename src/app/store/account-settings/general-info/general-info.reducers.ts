@@ -12,16 +12,18 @@ const initialState: GeneralInfo = {
   },
   email: '',
   lastName: '',
+  role: ''
 };
 export const generalInfoFeature = createFeature({
   name: 'generalInfo',
   reducer: createReducer(
     initialState,
-    on(gotGeneralInfo, (state, { lastName, contact, email, firstName }) => ({
+    on(gotGeneralInfo, (state, { lastName, contact, email, firstName, role }) => ({
       firstName,
       lastName,
       email,
-      contact
+      contact,
+      role
     }))
   ),
 });

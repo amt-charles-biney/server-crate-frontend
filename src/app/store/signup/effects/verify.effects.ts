@@ -34,7 +34,8 @@ export class VerifyEffect {
                 isError: false,
               })
             );
-            this.profileService.setUser({ firstName: verifiedUser.firstName, lastName: verifiedUser.lastName})
+            console.log('after signup', verifiedUser)
+            localStorage.setItem('server-crate-role', 'USER')
             setTimeout(() => {
               this.router.navigateByUrl('/settings', { replaceUrl: true });
             }, 2000);

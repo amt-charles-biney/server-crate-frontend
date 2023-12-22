@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { ChangePassword, OtpResend, ResendOtp, ResetPassword, SignIn, Success, UserSignUp, VerifiedUser, Verify, VerifyOtp } from '../../../types';
+import { tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -72,6 +74,9 @@ export class AuthService {
   setToken(token: string) {
     localStorage.setItem('server-crate-token', token)
   }
+
+
+  
 
 
 }

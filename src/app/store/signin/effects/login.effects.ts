@@ -21,8 +21,13 @@ export class LoginEffect {
           map((response: VerifiedUser) => {
             this.authService.setToken(response.token);
             this.profileService.setUser({ firstName: response.firstName, lastName: response.lastName})
+            localStorage.setItem('server-crate-role', response.role)
             setTimeout(() => {
-              this.router.navigateByUrl('/settings', { replaceUrl: true });
+              if (response.role === 'ADMIN') {
+                this.router.navigateByUrl('/admin', { replaceUrl: true });
+              } else {
+                this.router.navigateByUrl('/settings', { replaceUrl: true });
+              }
             }, 1500);
             return setLoadingSpinner({
               status: false,
