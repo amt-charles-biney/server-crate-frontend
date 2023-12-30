@@ -54,4 +54,9 @@ export class AdminDashboardComponent implements OnInit {
       this.router.navigateByUrl('/admin/products');
     }
   }
+
+  logout() {
+    localStorage.clear()
+    this.router.navigateByUrl('/login')
+  }
 }

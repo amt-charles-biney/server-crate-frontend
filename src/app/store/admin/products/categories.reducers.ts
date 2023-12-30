@@ -1,8 +1,8 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { DummyCategory } from '../../../types';
+import { Category } from '../../../types';
 import { gotCategories } from './categories.actions';
 
-const initialState: DummyCategory[] = [];
+const initialState: Category[] = [];
 export const categoryFeature = createFeature({
   name: 'categories',
   reducer: createReducer(

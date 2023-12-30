@@ -61,9 +61,9 @@
             [formControl]="formControl"
             [matAutocomplete]="auto"
           />
-          <mat-autocomplete show autoActiveFirstOption #auto="matAutocomplete">
+          <mat-autocomplete (optionSelected)="optionSelected($event)" [displayWith]="displayFn" #auto="matAutocomplete">
             @for (option of filteredOptions | async; track option) {
-            <mat-option [value]="option.name">{{ option.name }}</mat-option>
+            <mat-option [value]="option">{{ option.categoryName }}</mat-option>
             }
           </mat-autocomplete>
     }

@@ -98,12 +98,19 @@ export type AdminLink = {
 };
 
 export type ProductItem = {
-  image: string;
-  name: string;
+  imageUrl: string;
+  productName: string;
   brand: string;
-  price: string;
+  productPrice: string;
   inStock: number;
   sales: number;
+  id: string;
+  productId: string;
+  productDescription: string;
+  category: {
+    id: string;
+    name: string;
+  }
 };
 
 export type ResendOtp = {
@@ -119,7 +126,7 @@ export type OtpResend = {
 
 export type Category = {
   id: string;
-  name: string;
+  categoryName: string;
 }
 
 export type GeneralInfo = {
@@ -138,4 +145,36 @@ export type ChangeContact = {
 
 export type DummyCategory = {
   name: string
+}
+
+export type ProductResponse = {
+  productName: string,
+  productDescription: string,
+  productPrice: string,
+  productId: string,
+  productCategory: string,
+  productAvailability: boolean,
+}
+
+export type Prop = {
+  id: string,
+  name: string,
+  type: string,
+  price: number,
+  media: string,
+  unit: string,
+  isCompatible: boolean,
+  isIncluded: boolean
+}
+export type Option = {
+  [key: string]: Prop[]
+}
+export type BasicConfig = {
+  options: Option,
+  id: string,
+  category: Category
+}
+
+export type Item = {
+  id: string
 }

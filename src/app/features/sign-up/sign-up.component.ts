@@ -42,7 +42,7 @@ import { setLoadingSpinner } from '../../store/loader/actions/loader.actions';
     FormsModule,
     ReactiveFormsModule,
     NgOptimizedImage,
-    AuthLoaderComponent
+    AuthLoaderComponent,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
@@ -50,9 +50,12 @@ import { setLoadingSpinner } from '../../store/loader/actions/loader.actions';
 })
 export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
-  loadingState$!: Observable<LoadingStatus>
-  constructor(public termsModal: MatDialog, private destroyRef: DestroyRef, private store: Store) {
-  }
+  loadingState$!: Observable<LoadingStatus>;
+  constructor(
+    public termsModal: MatDialog,
+    private destroyRef: DestroyRef,
+    private store: Store
+  ) {}
   ngOnInit(): void {
     this.signUpForm = new FormGroup(
       {
@@ -75,22 +78,25 @@ export class SignUpComponent implements OnInit {
       },
       formValidator('password', 'confirmPwd')
     );
-    this.loadingState$ = this.store.select(selectLoaderState)
+    this.loadingState$ = this.store.select(selectLoaderState);
   }
 
   submitRegistrationForm() {
     if (this.signUpForm.invalid) return;
-
-    const { firstName, lastName, email, password } = this.signUpForm.value
+    scrollTo({ top: 0, behavior: 'smooth' });
+    const { firstName, lastName, email, password } = this.signUpForm.value;
     const formData: UserSignUp = {
       firstName,
       lastName,
       email,
-      password
-    }
+      password,
+    };
     // this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
-    localStorage.setItem('server-crate-user', JSON.stringify({ firstName, lastName }))
-    this.store.dispatch(signUp(formData))
+    localStorage.setItem(
+      'server-crate-user',
+      JSON.stringify({ firstName, lastName })
+    );
+    this.store.dispatch(signUp(formData));
   }
 
   openTermsAndConditionsModal() {
@@ -115,7 +121,7 @@ export class SignUpComponent implements OnInit {
   }
 
   get lastName() {
-    return this.signUpForm.get('lastName')
+    return this.signUpForm.get('lastName');
   }
 
   get email() {

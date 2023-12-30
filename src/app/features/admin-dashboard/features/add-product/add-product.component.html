@@ -1,5 +1,6 @@
 <main class="flex flex-col min-h-screen">
   <h1 class="font-bold text-xl">Product Details</h1>
+  <app-auth-loader [loadingState]="loadingState$" />
   <form
     [formGroup]="addProductForm"
     (ngSubmit)="addProduct()"
@@ -31,6 +32,7 @@
           placeholder="Select an option"
           formControlName="category"
           [filteredOptions]="filteredOptions"
+          [optionSelected]="onOptionSelected"
           myClass="font-[500]"
         />
 
@@ -41,7 +43,6 @@
               label="Brand Name"
               type="async"
               placeholder="Select an option"
-              formControlName="brandName"
               [filteredOptions]="filteredOptions"
               myClass="font-[500]"
             />
@@ -78,7 +79,7 @@
             label="Price"
             type="number"
             placeholder="Enter amount"
-            formControlName="price"
+            formControlName="productPrice"
             myClass="font-[500]"
           />
         </div>
@@ -88,9 +89,19 @@
       <div class="flex flex-col mt-4 h-[50%] xl:h-[60%]">
         <p class="font-[500]">Cover Image</p>
         <div
-          class="flex flex-col items-center justify-center border rounded-lg h-full"
+          class="relative flex flex-col items-center justify-center border rounded-lg h-full"
         >
-          <input id="coverImage" type="file" formControlName="coverImage" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+          @if (!addProductForm.value.file && id === null) {
+          <p>Upload</p>
+          <input
+            id="coverImage"
+            type="file"
+            (change)="uploadDocument($event)"
+            [writeFile]="true"
+            formControlName="file"
+            class="hidden"
+            accept=".svg ,.png, .jpg, .jpeg, .gif"
+          />
           <label
             for="coverImage"
             class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
@@ -102,6 +113,16 @@
             </p>
             <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
           </label>
+          } @else {
+            
+          <img
+            class="w-full h-96 object-center"
+            #coverImagePreview
+          />
+          <button type="button" class="hover:bg-red-500 absolute bottom-5 right-5 py-1 px-3 text-white bg-red-400" (click)="removeImage()">
+            Remove
+          </button>
+          }
         </div>
       </div>
       <div class="mt-5">
@@ -114,7 +135,13 @@
           <div
             class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
           >
-            <input id="image1" type="file" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif" />
+            <input
+              id="image1"
+              [writeFile]="true"
+              type="file"
+              class="hidden"
+              accept=".svg ,.png, .jpg, .jpeg, .gif"
+            />
             <label
               for="image1"
               class="cursor-pointer flex flex-col items-center gap-1"
@@ -126,7 +153,13 @@
           <div
             class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
           >
-            <input id="image2" type="file" formControlName="image2" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+            <input
+              id="image2"
+              type="file"
+              [writeFile]="true"
+              class="hidden"
+              accept=".svg ,.png, .jpg, .jpeg, .gif"
+            />
             <label
               for="image2"
               class="cursor-pointer flex flex-col items-center gap-1"
@@ -138,7 +171,13 @@
           <div
             class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
           >
-            <input id="image3" type="file" formControlName="image3" class="hidden" accept=".svg ,.png, .jpg, .jpeg, .gif"/>
+            <input
+              id="image3"
+              type="file"
+              [writeFile]="true"
+              class="hidden"
+              accept=".svg ,.png, .jpg, .jpeg, .gif"
+            />
             <label
               for="image3"
               class="cursor-pointer flex flex-col items-center gap-1"
@@ -150,14 +189,17 @@
         </div>
       </div>
       <section class="flex items-center justify-end mt-10 gap-6 text-sm">
-        <button type="button" class="text-figma-gray underline text-xs">Delete</button>
+        <button (click)="deleteProduct('r')" type="button" class="hover:text-red-600 text-figma-gray underline text-xs">
+          Delete
+        </button>
         <button
           class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
         >
           Save
         </button>
         <button
-        type="button"
+        (click)="cancel()"
+          type="button"
           class="border border-figma-green text-figma-green rounded w-32 py-1 tracking-wider"
         >
           Cancel
@@ -167,28 +209,14 @@
   </form>
   <section class="mt-14">
     <p>Base Configuration</p>
-    <div class="max-w-lg h-fit p-3 rounded-lg mt-2 bg-[#fbfbfb]">
-      <ul class="grid grid-rows-3 grid-flow-col px-10 pt-3 list-disc">
-        <li class="leading-5">
-            <p class="font-[500]">Processor</p>
-            <p class="text-gray-400">2x Intel Xeon Silver</p>
-        </li>
-        <li class="leading-5">
-            <p class="font-[500]">PCI</p>
-            <p class="text-gray-400">NVIDIA HGX A100 80GB</p>
-        </li>
-        <li class="leading-5">
-            <p class="font-[500]">Power</p>
-            <p class="text-gray-400">Platinum Hot-swap 16A/100-250V,C19 to IEC 320-C20 Rack power cable</p>
-        </li>
-        <li class="leading-5">
-            <p class="font-[500]">Memory</p>
-            <p class="text-gray-400">2x ThinkSystem 16GB DDR4</p>
-        </li>
-        <li class="leading-5">
-            <p class="font-[500]">Operating System</p>
-            <p class="text-gray-400">Microsoft Windows</p>
-        </li>
+    <div class="h-max p-3 rounded-lg mt-2 bg-[#fbfbfb]">
+      <ul class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-3 list-disc">
+        <ng-container *ngIf="options | async as options">
+          <li class="leading-5" *ngFor="let option of options | keyvalue">
+            <p class="font-[500]">{{ option.key }}</p>
+            <p class="text-gray-400">{{ option.value[0].name }}</p>
+          </li>
+        </ng-container>
       </ul>
     </div>
   </section>

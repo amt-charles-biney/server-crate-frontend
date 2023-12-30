@@ -1,39 +1,54 @@
-<article class="flex flex-col w-max rounded-lg shadow-sm p-3 border">
-  <div class="flex">
-    <img class="w-[121px] h-[68px]" [ngSrc]="product.image" height="68" width="121"  priority [alt]="'image of ' + product.name" />
+<article class="flex flex-col gap-2 min-w-max rounded-lg shadow-sm p-3 border">
+  <div class="flex justify-around">
+    <img
+      class="w-[121px] h-[68px]"
+      [ngSrc]="product.imageUrl[0]"
+      height="68"
+      width="121"
+      priority
+      [alt]="'image of ' + product.productName"
+    />
     <div class="flex flex-col">
-      <h2 class="font-bold">{{ product.name }}</h2>
+      <h2 class="font-bold">{{ product.productName }}</h2>
       <p class="text-gray-500 text-sm">{{ product.brand }}</p>
-      <p class="text-sm font-[500]">{{ product.price | currency }}</p>
+      <p class="text-sm font-[500]">{{ product.productPrice | currency }}</p>
     </div>
   </div>
-  <div class="flex justify-between w-9/12 text-sm font-[500]">
+  <div class="flex justify-between mx-auto w-9/12 text-sm font-[500]">
     <div class="flex items-center gap-2 justify-between">
-        <p>Sales</p>
-        <div class="flex gap-1 items-center text-figma-green">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              data-slot="icon"
-              class="w-4 h-4 text-figma-green"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
-              />
-            </svg>
-            <p>{{ product.sales | percent }}</p>
-        </div>
+      <p>Sales</p>
+      <div class="flex gap-1 items-center text-figma-green">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          data-slot="icon"
+          class="w-4 h-4 text-figma-green"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
+          />
+        </svg>
+        <p>11.01</p>
+        <!-- <p>{{ product.sales | percent }}</p> -->
+      </div>
     </div>
-    <div class="h-6 border border-gray-100 bg-black">
-    </div>
+    <div class="h-6 border border-gray-100 bg-black"></div>
     <div class="flex items-center gap-2 justify-between">
-        <p>In stock</p>
-        <p class="text-figma-green">{{ product.inStock }}</p>
+      <p class="whitespace-nowrap">In stock</p>
+      <p class="text-figma-green">200</p>
+      <!-- <p class="text-figma-green">{{ product.inStock }}</p> -->
     </div>
   </div>
+  <button class="flex items-center px-3 gap-2 text-figma-green">
+    <a [routerLink]="['/admin/add-product', product.id]" class="text-sm font-[500]">View more</a>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+    </svg>
+    
+  </button>
 </article>

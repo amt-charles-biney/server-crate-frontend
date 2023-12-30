@@ -23,7 +23,9 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import intlTelInput from 'intl-tel-input';
 import 'intl-tel-input/build/css/intlTelInput.css';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { Category } from '../../../types';
+import { Store } from '@ngrx/store';
 type OnChange<T> = (value: T) => void;
 type OnTouch = () => void;
 @Component({
@@ -60,6 +62,8 @@ export class CustomInputComponent
   @Input() myClass!: string;
   @Input() isReadOnly = false;
   @Input() filteredOptions!: Observable<any>;
+  @Input() value!: string
+  @Input() optionSelected!: (event: MatAutocompleteSelectedEvent) => void
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;
 
   formControl!: FormControl;
@@ -67,7 +71,7 @@ export class CustomInputComponent
   onChange: OnChange<string> = () => {};
   onTouched: OnTouch = () => {};
 
-  constructor(private destroyRef: DestroyRef) {}
+  constructor(private destroyRef: DestroyRef, private store: Store) {}
 
   ngOnInit(): void {
     this.formControl = new FormControl({
@@ -89,6 +93,9 @@ export class CustomInputComponent
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
       });
     }
+  }
+  displayFn(category: Category): string {
+    return category && category.categoryName ? category.categoryName : ''
   }
   showPasswordHandler(event: Event) {
     event.stopPropagation();

@@ -14,6 +14,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { reducer } from './store/loader/reducers/loader.reducers';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { provideCloudinaryLoader } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([loadingInterceptor, authInterceptor])
     ),
+    // provideCloudinaryLoader('http://res.cloudinary.com/dqtxt1g06/image/upload/'),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
