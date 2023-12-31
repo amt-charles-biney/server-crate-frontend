@@ -178,3 +178,10 @@ export type BasicConfig = {
 export type Item = {
   id: string
 }
+
+export type TokenPayload = {
+  role: string;
+  sub: string;
+  iat: number;
+  exp: number
+}

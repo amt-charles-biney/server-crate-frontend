@@ -7,7 +7,7 @@ export const categoryFeature = createFeature({
   name: 'categories',
   reducer: createReducer(
     initialState,
-    on(gotCategories, (state, { categories }) => [...state, ...categories])
+    on(gotCategories, (state, { categories }) => [...categories])
   ),
 });
 

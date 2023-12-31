@@ -28,6 +28,7 @@
     "angular-uploader": "^8.41.1",
     "autoprefixer": "^10.4.16",
     "intl-tel-input": "^18.3.3",
+    "jwt-decode": "^4.0.0",
     "ng-angular-popup": "^0.5.2",
     "ng-otp-input": "^1.9.3",
     "postcss": "^8.4.32",

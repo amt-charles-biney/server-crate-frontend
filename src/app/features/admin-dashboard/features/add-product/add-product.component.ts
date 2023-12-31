@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
@@ -59,6 +60,7 @@ import { selectProduct } from '../../../../store/admin/products/products.reducer
   ],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddProductComponent implements OnInit {
   addProductForm!: RxFormGroup;
@@ -71,7 +73,7 @@ export class AddProductComponent implements OnInit {
   loadingState$!: Observable<LoadingStatus>;
   @ViewChild('coverImagePreview') coverImagePreview!: ElementRef;
   url: any = '';
-  id: string | null = null;
+  id: string = '';
   
   formGroup = {};
   constructor(
@@ -83,7 +85,7 @@ export class AddProductComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) {}
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.store.dispatch(getCategories());
 
     this.formGroup = {
@@ -98,17 +100,18 @@ export class AddProductComponent implements OnInit {
     this.addProductForm = <RxFormGroup>this.fb.group(this.formGroup);
     if (this.id) {
       console.log('id', this.id);
-
       this.store.dispatch(getProduct({ id: this.id }));
       this.store
-        .select(selectProduct)
-        .pipe(
-          tap((data: ProductItem) => {
-            console.log('Data', data);
+      .select(selectProduct)
+      .pipe(
+        tap((data: ProductItem) => {
+          if (data.category.id) {
             this.store.dispatch(getConfiguration({ categoryName: data.category.name , id: data.category.id}));
+          }
+            console.log('Data', data);
             this.formGroup = {
               file: null,
-              productName: [data.productName],
+              productName: [data.productName], 
               productDescription: [data.productDescription],
               productPrice: [data.productPrice],
               productId: [data.productId],
@@ -202,7 +205,7 @@ export class AddProductComponent implements OnInit {
           this.store.dispatch(
             setLoadingSpinner({
               status: false,
-              message: err.error?.detail || 'Internal Server Error',
+              message: err.error?.detail || 'Please enter all the required data',
               isError: true,
             })
           );
@@ -244,6 +247,7 @@ export class AddProductComponent implements OnInit {
   }
 
   deleteProduct(id: string) {
+    scrollTo({ top: 0, behavior: 'smooth' });
     this.store.dispatch(deleteProduct({ id }));
   }
 

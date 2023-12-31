@@ -189,9 +189,11 @@
         </div>
       </div>
       <section class="flex items-center justify-end mt-10 gap-6 text-sm">
-        <button (click)="deleteProduct('r')" type="button" class="hover:text-red-600 text-figma-gray underline text-xs">
-          Delete
-        </button>
+        @if (id) {
+          <button (click)="deleteProduct(id)" type="button" class="hover:text-red-600 text-figma-gray underline text-xs">
+            Delete
+          </button>
+        }
         <button
           class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
         >

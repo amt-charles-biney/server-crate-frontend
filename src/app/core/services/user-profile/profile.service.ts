@@ -28,9 +28,4 @@ export class ProfileService {
   setUser(user: { firstName: string, lastName: string}) {
     localStorage.setItem('server-crate-user', JSON.stringify(user))
   }
-
-  isAdmin() {
-    const userIsAdmin = localStorage.getItem('server-crate-role')
-    return userIsAdmin === 'ADMIN'
-  }
 }

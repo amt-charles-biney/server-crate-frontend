@@ -11,6 +11,7 @@ import { otpFeature } from './store/otp/otp.reducers';
 import { settingsGuard } from './core/guards/settings.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -26,7 +27,8 @@ export const routes: Routes = [
         loadChildren: () => import('./features/admin-dashboard/admin-dashboard.routes').then(m => m.route),
         canActivate: [
             settingsGuard,
-            adminGuard
+            adminGuard,
+            authGuard
         ],
         providers: [
             provideEffects(GeneralInfoEffect)

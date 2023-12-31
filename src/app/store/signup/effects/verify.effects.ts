@@ -35,7 +35,6 @@ export class VerifyEffect {
               })
             );
             console.log('after signup', verifiedUser)
-            localStorage.setItem('server-crate-role', 'USER')
             setTimeout(() => {
               this.router.navigateByUrl('/settings', { replaceUrl: true });
             }, 2000);

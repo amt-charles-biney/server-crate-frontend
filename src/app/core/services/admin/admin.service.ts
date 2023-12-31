@@ -31,7 +31,9 @@ export class AdminService {
   }
 
   getCategoryConfiguration(id: string) {
-    return this.http.get(`${this.categoriesUrl}/${id}/config`)
+    const url = `${this.categoriesUrl}/${id}/config`
+    console.log('URL', url);
+    return this.http.get(url)
   }
 
   deleteProduct(id: string) {
