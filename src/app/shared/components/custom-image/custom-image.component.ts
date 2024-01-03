@@ -24,7 +24,7 @@ import {
 } from '@angular/forms';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { OnChange, OnTouch } from '../../../types';
-import { Observable, fromEvent, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -48,10 +48,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomImageComponent
-  implements OnInit, ControlValueAccessor, AfterViewInit, OnChanges
+  implements OnInit, ControlValueAccessor, OnChanges
 {
-  @ViewChild('imagePreview') imagePreview!: ElementRef;
-  @ViewChild('editPreview') editPreview!: ElementRef;
   @ViewChild('remove') removeElementRef!: ElementRef;
   @Input() elementId!: string;
   @Input() label!: string;
@@ -63,8 +61,6 @@ export class CustomImageComponent
   localPreview: string | null | ArrayBuffer = null
   @Output() removeImageEmitter = new EventEmitter<string>()
   @Output() uploadImageEmitter = new EventEmitter<{imgSrc: string, imageToChange: string}>()
-  editMode!: boolean
-  noImageSelected!: boolean
   formControl!: FormControl;
   
   onChange: OnChange<string> = () => {};
@@ -75,16 +71,10 @@ export class CustomImageComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('Changes', changes, this.imagePreview)
     this.localPreview = changes['previewImage'].currentValue
-    if (this.imagePreview) {
-      this.imagePreview.nativeElement.src = this.localPreview
-    }
   }
 
   onInit() {
-    console.log(`Edit image of ${this.elementId}`, this.previewImage);
-    this.editMode = !!this.editId
     this.formControl = new FormControl({
       value: null,
       disabled: false,
@@ -92,56 +82,31 @@ export class CustomImageComponent
     this.formControl.valueChanges
       .pipe(
         tap((value) => {
-          this.onChange(value);  
-          this.editMode = false    
-          console.log('Chosen', value);
-          
+          this.onChange(value);            
         }),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
-  ngAfterViewInit(): void {
-    console.log('image preview', this.previewImage);
-    if (this.imagePreview) {
-      this.imagePreview.nativeElement.src = this.previewImage
-    }
-  }
-  uploadDocument(event: any) {
-    console.log('UPLOADING NEW DOC');
-    
+
+  uploadDocument(event: any) {    
     const file = event.target.files && event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
 
-      reader.onload = (event) => {        
-        if (this.imagePreview) {
-          this.imagePreview.nativeElement.src = '/assets/uploading.svg';
-        }
-        console.log('Loading image');
-      };
       reader.onloadend = (event) => {
-        console.log('image added');
-        if (this.imagePreview) {
-          console.log('Using template variable')
-          this.imagePreview.nativeElement.src = reader.result;          
-        } 
         this.uploadImageEmitter.emit({imgSrc: reader.result as string, imageToChange: this.elementId})
       };
     }
   }
   removeImage() {
-    // this.imagePreview.nativeElement.src = null;
     if (this.editId) {
-      // this.previewImage = null;
-      // this.formControl.setValue({ value: null, disabled: false });
+      this.localPreview = null;
       this.removeImageEmitter.emit(this.elementId)
     } else {
       this.onInit()
-    }
-    console.log('formcontrol value', this.formControl.value);
-    
+    }    
   }
 
   writeValue(value: string): void {

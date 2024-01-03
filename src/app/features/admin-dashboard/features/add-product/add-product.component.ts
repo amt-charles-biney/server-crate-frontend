@@ -58,11 +58,11 @@ import { CustomImageComponent } from '../../../../shared/components/custom-image
     MatAutocompleteModule,
     RxReactiveFormsModule,
     AuthLoaderComponent,
-    CustomImageComponent
+    CustomImageComponent,
   ],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddProductComponent implements OnInit {
   addProductForm!: RxFormGroup;
@@ -73,11 +73,12 @@ export class AddProductComponent implements OnInit {
   options = this.option$.asObservable();
   filteredOptions!: Observable<Category[]>;
   loadingState$!: Observable<LoadingStatus>;
-  @ViewChild('coverImagePreview') coverImagePreview!: ElementRef;
   url: any = '';
   id: string = '';
-  coverImage: string | null = ''
-  image1: string | null = ''
+  coverImage: string | null = '';
+  image1: string | null = '';
+  image2: string | null = '';
+  image3: string | null = '';
   formGroup = {};
   constructor(
     private store: Store,
@@ -85,7 +86,7 @@ export class AddProductComponent implements OnInit {
     private adminService: AdminService,
     private destroyRef: DestroyRef,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
@@ -94,52 +95,63 @@ export class AddProductComponent implements OnInit {
     this.formGroup = {
       file: null,
       coverImage: null,
-      productName: [''],
-      productDescription: [''],
-      productPrice: [''],
-      productId: [`${getUniqueId(2)}`],
-      category: [''],
+      productName: '',
+      productDescription: '',
+      productPrice: '',
+      productId: `${getUniqueId(2)}`,
+      category: '',
       inStock: 0,
-      image1: null
+      image1: null,
+      image2: null,
+      image3: null,
     };
     this.addProductForm = <RxFormGroup>this.fb.group(this.formGroup);
     if (this.id) {
       console.log('id', this.id);
       this.store.dispatch(getProduct({ id: this.id }));
       this.store
-      .select(selectProduct)
-      .pipe(
-        tap((data: ProductItem) => {
-          if (data.category.id) {
-            this.store.dispatch(getConfiguration({ categoryName: data.category.name , id: data.category.id}));
-          }
+        .select(selectProduct)
+        .pipe(
+          tap((data: ProductItem) => {
+            if (data.category.id) {
+              this.store.dispatch(
+                getConfiguration({
+                  categoryName: data.category.name,
+                  id: data.category.id,
+                })
+              );
+            }
             console.log('Data', data);
             this.formGroup = {
               file: null,
               coverImage: null,
-              productName: [data.productName], 
-              productDescription: [data.productDescription],
-              productPrice: [data.productPrice],
-              productId: [data.productId],
-              inStock: [data.inStock],
-              category: { categoryName: data.category.name , id: data.category.id},
+              productName: data.productName,
+              productDescription: data.productDescription,
+              productPrice: data.productPrice,
+              productId: data.productId,
+              inStock: data.inStock,
+              category: {
+                categoryName: data.category.name,
+                id: data.category.id,
+              },
               image1: null,
+              image2: null,
+              image3: null,
             };
-            if (this.coverImagePreview) {
-              this.coverImagePreview.nativeElement.src = data.imageUrl;
-              console.log('Parent', this.coverImagePreview.nativeElement.src)
-            }
-            this.coverImage = data.coverImage
-            this.image1 = data.imageUrl[0]
-            console.log('Setting editImage', this.coverImage);
-            
+
+            this.coverImage = data.coverImage;
+            this.image1 = data.imageUrl[0];
+            this.image2 = data.imageUrl[1];
+            this.image3 = data.imageUrl[2];
+
             this.addProductForm.setValue({ ...this.formGroup });
           }),
           takeUntilDestroyed(this.destroyRef),
           catchError((err) => {
-            return of(err)
-          }))
-        .subscribe()
+            return of(err);
+          })
+        )
+        .subscribe();
     }
     this.categories$ = this.store.select(selectCategoriesState).pipe(
       tap((categories) => {
@@ -157,7 +169,7 @@ export class AddProductComponent implements OnInit {
     // }
     // this.router.navigateByUrl('/admin/add-product');
   }
-  // learn and use generics later
+  // TODO: use generics
   private _filter(value: Category, filterFrom: any): any {
     const filterValue =
       value && value.categoryName ? value.categoryName.toLowerCase() : '';
@@ -165,13 +177,9 @@ export class AddProductComponent implements OnInit {
       option.categoryName.toLowerCase().includes(filterValue)
     );
   }
-  onFocus() {
-    console.log('focus');
-  }
 
   cancel() {
-    console.log('cancel');
-    this.router.navigateByUrl('/admin/products')
+    this.router.navigateByUrl('/admin/products');
   }
 
   onOptionSelected(event: MatAutocompleteSelectedEvent) {
@@ -179,6 +187,7 @@ export class AddProductComponent implements OnInit {
     const selectedCategory: Category = event.option.value;
     this.store.dispatch(getConfiguration(selectedCategory));
   }
+
   addProduct() {
     this.store.dispatch(
       setLoadingSpinner({
@@ -191,105 +200,114 @@ export class AddProductComponent implements OnInit {
     const formData: FormData = (<FormGroupExtension>(
       this.addProductForm
     )).toFormData();
-    formData.forEach((val: FormDataEntryValue, key: string) => {
-      console.log(`Val ${val} key ${key}`);
-    });
-    const file = formData.get('file[0]');
+    // formData.forEach((val: FormDataEntryValue, key: string) => {
+    //   console.log(`Val ${val} key ${key}`);
+    // });
     const coverImage = formData.get('coverImage[0]');
-    const category = formData.get('category[categoryName]');
     const image1 = formData.get('image1[0]');
-    formData.delete('file[0]');
+    const image2 = formData.get('image2[0]');
+    const image3 = formData.get('image3[0]');
+    const category = formData.get('category[categoryName]');
+
     formData.delete('coverImage[0]');
+    formData.delete('image1[0]');
+    formData.delete('image2[0]');
+    formData.delete('image3[0]');
     formData.delete('category[categoryName]');
-    formData.delete('image1[0]')
     formData.delete('category[id]');
-    formData.set('file', image1!);
-    formData.set('category', category!);
+    formData.delete('file[0]');
+
     formData.set('coverImage', coverImage!);
+    formData.set('category', category!);
+    formData.append('file', image1!);
+    formData.append('file', image2!);
+    formData.append('file', image3!);
+
     formData.forEach((val: FormDataEntryValue, key: string) => {
       console.log(`After Val ${val} key ${key}`);
     });
 
-    // this.adminService
-    //   .addProduct(formData)
-    //   .pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe({
-    //     next: (data) => {
-    //       console.log('Received', data);
-    //     },
-    //     error: (err) => {
-    //       console.log('err', err);
-    //       this.store.dispatch(
-    //         setLoadingSpinner({
-    //           status: false,
-    //           message: err.error?.detail || 'Please enter all the required data',
-    //           isError: true,
-    //         })
-    //       );
-    //     },
-    //     complete: () => {
-    //       this.store.dispatch(
-    //         setLoadingSpinner({
-    //           status: false,
-    //           message: 'Added Product',
-    //           isError: false,
-    //         })
-    //       );
-    //       setTimeout(() => {
-    //         this.router.navigateByUrl('/admin/products');
-    //       }, 1500);
-    //     },
-    //   });
+    this.adminService
+      .addProduct(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          console.log('Received', data);
+        },
+        error: (err) => {
+          console.log('err', err);
+          this.store.dispatch(
+            setLoadingSpinner({
+              status: false,
+              message:
+                err.error?.detail || 'Please enter all the required data',
+              isError: true,
+            })
+          );
+        },
+        complete: () => {
+          this.store.dispatch(
+            setLoadingSpinner({
+              status: false,
+              message: 'Added Product',
+              isError: false,
+            })
+          );
+          setTimeout(() => {
+            this.router.navigateByUrl('/admin/products');
+          }, 1500);
+        },
+      });
   }
 
-  uploadDocument(event: any) {
-    const file = event.target.files && event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+  replaceImage(obj: { imgSrc: string; imageToChange: string }) {
+    const setterFunctions: Record<string, (src: string) => void> = {
+      coverImage: (src: string) => {
+        this.coverImage = src;
+      },
+      image1: (src: string) => {
+        this.image1 = src;
+      },
+      image2: (src: string) => {
+        this.image2 = src;
+      },
+      image3: (src: string) => {
+        this.image3 = src;
+      },
+    };
 
-      reader.onload = (event) => {
-        this.coverImagePreview.nativeElement.src = '/assets/uploading.svg';
-        console.log('Loading imagesss');
-      };
-      reader.onloadend = (event) => {
-        console.log('image added');
-        this.coverImagePreview.nativeElement.src = reader.result;
-      };
+    const setter = setterFunctions[obj.imageToChange];
+    if (setter) {
+      setter(obj.imgSrc);
     }
-  }
-
-  replaceImage(obj: {imgSrc: string, imageToChange: string}) {
-    if (obj.imageToChange === 'coverImage') {
-      this.replaceCoverImage(obj.imgSrc)
-    }
-    else if (obj.imageToChange === 'image1') {
-      this.replaceImage1(obj.imgSrc)
-    }
-  }
-
-  replaceCoverImage(imgSrc: string) {    
-    this.coverImage = imgSrc
-  }
-  replaceImage1(imgSrc: string) {    
-    this.image1 = imgSrc
   }
   removeImage(imageToRemove: string) {
-    console.log("Removing image")
+    console.log('Removing image');
     if (imageToRemove === 'coverImage') {
-      this.removeCoverImage()
-    }
-    else if (imageToRemove === 'image1') {
-
+      this.removeCoverImage();
+    } else if (imageToRemove === 'image1') {
+      this.removeImage1();
+    } else if (imageToRemove === 'image2') {
+      this.removeImage2();
+    } else {
+      this.removeImage3();
     }
   }
   removeCoverImage() {
     this.addProductForm.patchValue({ coverImage: null });
-    this.coverImage = null
+    this.coverImage = null;
   }
   removeImage1() {
-    this.addProductForm.patchValue({ file: null });
-    this.image1 = null
+    this.addProductForm.patchValue({ image1: null });
+    this.image1 = null;
+  }
+  removeImage2() {
+    this.addProductForm.patchValue({ image2: null });
+    this.image2 = null;
+  }
+  removeImage3() {
+    this.addProductForm.patchValue({ image3: null });
+    this.image3 = null;
   }
 
   deleteProduct(id: string) {
@@ -301,11 +319,4 @@ export class AddProductComponent implements OnInit {
     return this.addProductForm.get('category')!;
   }
 
-  get brandName() {
-    return this.addProductForm.get('brandName')!;
-  }
-  
-  get file() {
-    return this.addProductForm.get('file')!;
-  }
 }

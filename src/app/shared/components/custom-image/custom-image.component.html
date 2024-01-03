@@ -15,7 +15,6 @@
     } @else {
     <img [ngClass]="previewClass" [src]="localPreview" />
     <button
-      #remove
       class="group-hover:flex justify-center items-center hidden absolute top-1/2 -translate-y-1/2 h-full w-full bg-gray-100 bg-opacity-50"
       type="button"
       (click)="removeImage()"
