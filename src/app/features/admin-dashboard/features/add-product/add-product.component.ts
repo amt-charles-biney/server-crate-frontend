@@ -45,6 +45,7 @@ import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/a
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 import { selectOptions } from '../../../../store/admin/products/configuration.reducers';
 import { selectProduct } from '../../../../store/admin/products/products.reducers';
+import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
 
 @Component({
   selector: 'app-add-product',
@@ -57,6 +58,7 @@ import { selectProduct } from '../../../../store/admin/products/products.reducer
     MatAutocompleteModule,
     RxReactiveFormsModule,
     AuthLoaderComponent,
+    CustomImageComponent
   ],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.scss',
@@ -74,7 +76,8 @@ export class AddProductComponent implements OnInit {
   @ViewChild('coverImagePreview') coverImagePreview!: ElementRef;
   url: any = '';
   id: string = '';
-  
+  coverImage: string = ''
+  image1: string = ''
   formGroup = {};
   constructor(
     private store: Store,
@@ -90,12 +93,14 @@ export class AddProductComponent implements OnInit {
 
     this.formGroup = {
       file: null,
+      coverImage: null,
       productName: [''],
       productDescription: [''],
       productPrice: [''],
       productId: [`${getUniqueId(2)}`],
       category: [''],
       inStock: 0,
+      image1: null
     };
     this.addProductForm = <RxFormGroup>this.fb.group(this.formGroup);
     if (this.id) {
@@ -111,16 +116,23 @@ export class AddProductComponent implements OnInit {
             console.log('Data', data);
             this.formGroup = {
               file: null,
+              coverImage: null,
               productName: [data.productName], 
               productDescription: [data.productDescription],
               productPrice: [data.productPrice],
               productId: [data.productId],
               inStock: [data.inStock],
               category: { categoryName: data.category.name , id: data.category.id},
+              image1: null,
             };
             if (this.coverImagePreview) {
               this.coverImagePreview.nativeElement.src = data.imageUrl;
+              console.log('Parent', this.coverImagePreview.nativeElement.src)
             }
+            this.coverImage = data.coverImage
+            this.image1 = data.imageUrl[0]
+            console.log('Setting editImage', this.coverImage);
+            
             this.addProductForm.setValue({ ...this.formGroup });
           }),
           takeUntilDestroyed(this.destroyRef),
@@ -183,12 +195,15 @@ export class AddProductComponent implements OnInit {
       console.log(`Val ${val} key ${key}`);
     });
     const file = formData.get('file[0]');
+    const coverImage = formData.get('coverImage[0]');
     const category = formData.get('category[categoryName]');
     formData.delete('file[0]');
+    formData.delete('coverImage[0]');
     formData.delete('category[categoryName]');
     formData.delete('category[id]');
     formData.set('file', file!);
     formData.set('category', category!);
+    formData.set('coverImage', coverImage!);
     formData.forEach((val: FormDataEntryValue, key: string) => {
       console.log(`After Val ${val} key ${key}`);
     });
@@ -257,5 +272,9 @@ export class AddProductComponent implements OnInit {
 
   get brandName() {
     return this.addProductForm.get('brandName')!;
+  }
+  
+  get file() {
+    return this.addProductForm.get('file')!;
   }
 }

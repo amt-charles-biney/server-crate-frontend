@@ -24,10 +24,9 @@ import { MatSelectModule } from '@angular/material/select';
 import intlTelInput from 'intl-tel-input';
 import 'intl-tel-input/build/css/intlTelInput.css';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { Category } from '../../../types';
+import { Category, OnChange, OnTouch } from '../../../types';
 import { Store } from '@ngrx/store';
-type OnChange<T> = (value: T) => void;
-type OnTouch = () => void;
+
 @Component({
   selector: 'app-custom-input',
   standalone: true,

@@ -1,5 +1,8 @@
 <main class="flex flex-col min-h-screen">
   <h1 class="font-bold text-xl">Product Details</h1>
+  <ng-container *ngIf="product | async as product">
+    {{ product | json }}
+  </ng-container>
   <app-auth-loader [loadingState]="loadingState$" />
   <form
     [formGroup]="addProductForm"
@@ -86,45 +89,27 @@
       </div>
     </section>
     <section>
-      <div class="flex flex-col mt-4 h-[50%] xl:h-[60%]">
-        <p class="font-[500]">Cover Image</p>
-        <div
-          class="relative flex flex-col items-center justify-center border rounded-lg h-full"
+      <app-custom-image
+        formControlName="coverImage"
+        elementId="coverImage"
+        containerClass="relative flex flex-col items-center justify-center border rounded-lg h-full"
+        customClass="flex flex-col mt-4 h-[50%] xl:h-[60%]"
+        previewClass="w-full h-96 object-center"
+        [previewImage]="coverImage"
+        [editId]="id"
+      >
+        <label
+          for="#coverImage"
+          class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
         >
-          @if (!addProductForm.value.file && id === null) {
-          <p>Upload</p>
-          <input
-            id="coverImage"
-            type="file"
-            (change)="uploadDocument($event)"
-            [writeFile]="true"
-            formControlName="file"
-            class="hidden"
-            accept=".svg ,.png, .jpg, .jpeg, .gif"
-          />
-          <label
-            for="coverImage"
-            class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
-          >
-            <img src="/assets/upload.svg" alt="upload" />
-            <p>
-              <span class="text-figma-green">Click to upload</span> or drag and
-              drop
-            </p>
-            <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
-          </label>
-          } @else {
-            
-          <img
-            class="w-full h-96 object-center"
-            #coverImagePreview
-          />
-          <button type="button" class="hover:bg-red-500 absolute bottom-5 right-5 py-1 px-3 text-white bg-red-400" (click)="removeImage()">
-            Remove
-          </button>
-          }
-        </div>
-      </div>
+          <img src="/assets/upload.svg" alt="upload" />
+          <p>
+            <span class="text-figma-green">Click to upload</span> or drag and
+            drop
+          </p>
+          <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
+        </label>
+      </app-custom-image>
       <div class="mt-5">
         <p class="font-[500]">Product Gallery</p>
         <small class="text-gray-500"
@@ -132,24 +117,21 @@
           gallery.</small
         >
         <div class="flex mt-4 gap-10">
-          <div
-            class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
-          >
-            <input
-              id="image1"
-              [writeFile]="true"
-              type="file"
-              class="hidden"
-              accept=".svg ,.png, .jpg, .jpeg, .gif"
-            />
+          <app-custom-image
+            formControlName="image1"
+            elementId="image1"
+            containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+            [previewImage]="image1"
+            [editId]="id"
+            >
             <label
-              for="image1"
+              for="#image1"
               class="cursor-pointer flex flex-col items-center gap-1"
             >
               <img src="/assets/image-plus.svg" alt="add image" />
               <small class="text-xs">Add image 1</small>
             </label>
-          </div>
+          </app-custom-image>
           <div
             class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
           >
@@ -190,9 +172,13 @@
       </div>
       <section class="flex items-center justify-end mt-10 gap-6 text-sm">
         @if (id) {
-          <button (click)="deleteProduct(id)" type="button" class="hover:text-red-600 text-figma-gray underline text-xs">
-            Delete
-          </button>
+        <button
+          (click)="deleteProduct(id)"
+          type="button"
+          class="hover:text-red-600 text-figma-gray underline text-xs"
+        >
+          Delete
+        </button>
         }
         <button
           class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
@@ -200,7 +186,7 @@
           Save
         </button>
         <button
-        (click)="cancel()"
+          (click)="cancel()"
           type="button"
           class="border border-figma-green text-figma-green rounded w-32 py-1 tracking-wider"
         >

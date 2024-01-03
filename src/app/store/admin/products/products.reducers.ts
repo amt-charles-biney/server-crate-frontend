@@ -12,6 +12,7 @@ const initialState: { products: ProductItem[]; product: ProductItem } = {
     brand: '',
     id: '',
     imageUrl: '',
+    coverImage: '',
     inStock: 0,
     sales: 0,
     category: {

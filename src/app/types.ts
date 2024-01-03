@@ -99,6 +99,7 @@ export type AdminLink = {
 
 export type ProductItem = {
   imageUrl: string;
+  coverImage: string;
   productName: string;
   brand: string;
   productPrice: string;
@@ -185,3 +186,6 @@ export type TokenPayload = {
   iat: number;
   exp: number
 }
+
+export type OnChange<T> = (value: T) => void;
+export type OnTouch = () => void;

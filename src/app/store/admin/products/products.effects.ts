@@ -13,6 +13,8 @@ export class ProductsEffect {
       exhaustMap(() => {
         return this.adminService.getProducts().pipe(
           map((products: ProductItem[]) => {
+            console.log('Products', products);
+            
             return gotProducts({ products });
           }),
           shareReplay(1),
