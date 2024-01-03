@@ -8,8 +8,10 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
   forwardRef,
 } from '@angular/core';
@@ -46,7 +48,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomImageComponent
-  implements OnInit, ControlValueAccessor, AfterViewInit
+  implements OnInit, ControlValueAccessor, AfterViewInit, OnChanges
 {
   @ViewChild('imagePreview') imagePreview!: ElementRef;
   @ViewChild('editPreview') editPreview!: ElementRef;
@@ -58,8 +60,9 @@ export class CustomImageComponent
   @Input() containerClass!: string;
   @Input() previewImage: string | null | ArrayBuffer = null;
   @Input() editId!: string | null;
-
-  @Output() removeImageEmitter = new EventEmitter<null>()
+  localPreview: string | null | ArrayBuffer = null
+  @Output() removeImageEmitter = new EventEmitter<string>()
+  @Output() uploadImageEmitter = new EventEmitter<{imgSrc: string, imageToChange: string}>()
   editMode!: boolean
   noImageSelected!: boolean
   formControl!: FormControl;
@@ -69,6 +72,14 @@ export class CustomImageComponent
   constructor(private destroyRef: DestroyRef) {}
   ngOnInit(): void {
     this.onInit()
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('Changes', changes, this.imagePreview)
+    this.localPreview = changes['previewImage'].currentValue
+    if (this.imagePreview) {
+      this.imagePreview.nativeElement.src = this.localPreview
+    }
   }
 
   onInit() {
@@ -115,10 +126,8 @@ export class CustomImageComponent
         if (this.imagePreview) {
           console.log('Using template variable')
           this.imagePreview.nativeElement.src = reader.result;          
-        } else {
-          console.log('Using previewImage')
-          this.previewImage = reader.result
-        }
+        } 
+        this.uploadImageEmitter.emit({imgSrc: reader.result as string, imageToChange: this.elementId})
       };
     }
   }
@@ -127,7 +136,7 @@ export class CustomImageComponent
     if (this.editId) {
       // this.previewImage = null;
       // this.formControl.setValue({ value: null, disabled: false });
-      this.removeImageEmitter.emit(null)
+      this.removeImageEmitter.emit(this.elementId)
     } else {
       this.onInit()
     }

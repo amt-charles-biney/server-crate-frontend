@@ -1,7 +1,7 @@
 <div [ngClass]="customClass">
   <p class="font-[500]">{{ label }}</p>
   <div [ngClass]="containerClass" class="group">
-     @if ((!formControl.value && editId === null) || (previewImage === null)) {
+    @if ((!formControl.value && editId === null) || (previewImage === null)) {
     <ng-content></ng-content>
     <input
       [id]="'#' + elementId"
@@ -12,13 +12,8 @@
       class="hidden"
       accept=".svg ,.png, .jpg, .jpeg, .gif"
     />
-    } @else { @if (editId) {
-      <p>Is Editing</p>
-    <img [ngClass]="previewClass" [src]="previewImage" />
     } @else {
-      <p>Is new</p>
-    <img [ngClass]="previewClass" #imagePreview />
-    }
+    <img [ngClass]="previewClass" [src]="localPreview" />
     <button
       #remove
       class="group-hover:flex justify-center items-center hidden absolute top-1/2 -translate-y-1/2 h-full w-full bg-gray-100 bg-opacity-50"

@@ -77,7 +77,7 @@ export class AddProductComponent implements OnInit {
   url: any = '';
   id: string = '';
   coverImage: string | null = ''
-  image1: string = ''
+  image1: string | null = ''
   formGroup = {};
   constructor(
     private store: Store,
@@ -258,10 +258,38 @@ export class AddProductComponent implements OnInit {
       };
     }
   }
-  removeImage(value: null) {
+
+  replaceImage(obj: {imgSrc: string, imageToChange: string}) {
+    if (obj.imageToChange === 'coverImage') {
+      this.replaceCoverImage(obj.imgSrc)
+    }
+    else if (obj.imageToChange === 'image1') {
+      this.replaceImage1(obj.imgSrc)
+    }
+  }
+
+  replaceCoverImage(imgSrc: string) {    
+    this.coverImage = imgSrc
+  }
+  replaceImage1(imgSrc: string) {    
+    this.image1 = imgSrc
+  }
+  removeImage(imageToRemove: string) {
     console.log("Removing image")
-    this.addProductForm.patchValue({ file: value });
-    this.coverImage = null;
+    if (imageToRemove === 'coverImage') {
+      this.removeCoverImage()
+    }
+    else if (imageToRemove === 'image1') {
+
+    }
+  }
+  removeCoverImage() {
+    this.addProductForm.patchValue({ coverImage: null });
+    this.coverImage = null
+  }
+  removeImage1() {
+    this.addProductForm.patchValue({ file: null });
+    this.image1 = null
   }
 
   deleteProduct(id: string) {

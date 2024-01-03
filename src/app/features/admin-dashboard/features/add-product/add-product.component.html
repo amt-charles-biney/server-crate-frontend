@@ -98,6 +98,7 @@
         [previewImage]="coverImage"
         [editId]="id"
         (removeImageEmitter)="removeImage($event)"
+        (uploadImageEmitter)="replaceImage($event)"
       >
         <label
           for="#coverImage"
@@ -124,6 +125,8 @@
             containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
             [previewImage]="image1"
             [editId]="id"
+            (removeImageEmitter)="removeImage($event)"
+            (uploadImageEmitter)="replaceImage($event)"
             >
             <label
               for="#image1"
