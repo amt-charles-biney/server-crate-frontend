@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --configuration=development",
+    "build": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -29,7 +29,6 @@
     "autoprefixer": "^10.4.16",
     "intl-tel-input": "^18.3.3",
     "jwt-decode": "^4.0.0",
-    "ng-angular-popup": "^0.5.2",
     "ng-otp-input": "^1.9.3",
     "postcss": "^8.4.32",
     "rxjs": "~7.8.0",
