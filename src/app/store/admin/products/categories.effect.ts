@@ -75,8 +75,11 @@ export class CategoryEffect {
               return gotConfiguration(data);
             }),
             catchError(error => {
-              console.log(error)
-              return of()
+              return of(setLoadingSpinner({
+                status: false,
+                message: error.error.detail,
+                isError: true,
+              }))
             })
           );
       }),

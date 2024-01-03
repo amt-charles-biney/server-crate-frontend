@@ -76,7 +76,7 @@ export class AddProductComponent implements OnInit {
   @ViewChild('coverImagePreview') coverImagePreview!: ElementRef;
   url: any = '';
   id: string = '';
-  coverImage: string = ''
+  coverImage: string | null = ''
   image1: string = ''
   formGroup = {};
   constructor(
@@ -197,47 +197,49 @@ export class AddProductComponent implements OnInit {
     const file = formData.get('file[0]');
     const coverImage = formData.get('coverImage[0]');
     const category = formData.get('category[categoryName]');
+    const image1 = formData.get('image1[0]');
     formData.delete('file[0]');
     formData.delete('coverImage[0]');
     formData.delete('category[categoryName]');
+    formData.delete('image1[0]')
     formData.delete('category[id]');
-    formData.set('file', file!);
+    formData.set('file', image1!);
     formData.set('category', category!);
     formData.set('coverImage', coverImage!);
     formData.forEach((val: FormDataEntryValue, key: string) => {
       console.log(`After Val ${val} key ${key}`);
     });
 
-    this.adminService
-      .addProduct(formData)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (data) => {
-          console.log('Received', data);
-        },
-        error: (err) => {
-          console.log('err', err);
-          this.store.dispatch(
-            setLoadingSpinner({
-              status: false,
-              message: err.error?.detail || 'Please enter all the required data',
-              isError: true,
-            })
-          );
-        },
-        complete: () => {
-          this.store.dispatch(
-            setLoadingSpinner({
-              status: false,
-              message: 'Added Product',
-              isError: false,
-            })
-          );
-          setTimeout(() => {
-            this.router.navigateByUrl('/admin/products');
-          }, 1500);
-        },
-      });
+    // this.adminService
+    //   .addProduct(formData)
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe({
+    //     next: (data) => {
+    //       console.log('Received', data);
+    //     },
+    //     error: (err) => {
+    //       console.log('err', err);
+    //       this.store.dispatch(
+    //         setLoadingSpinner({
+    //           status: false,
+    //           message: err.error?.detail || 'Please enter all the required data',
+    //           isError: true,
+    //         })
+    //       );
+    //     },
+    //     complete: () => {
+    //       this.store.dispatch(
+    //         setLoadingSpinner({
+    //           status: false,
+    //           message: 'Added Product',
+    //           isError: false,
+    //         })
+    //       );
+    //       setTimeout(() => {
+    //         this.router.navigateByUrl('/admin/products');
+    //       }, 1500);
+    //     },
+    //   });
   }
 
   uploadDocument(event: any) {
@@ -248,7 +250,7 @@ export class AddProductComponent implements OnInit {
 
       reader.onload = (event) => {
         this.coverImagePreview.nativeElement.src = '/assets/uploading.svg';
-        console.log('Loading image');
+        console.log('Loading imagesss');
       };
       reader.onloadend = (event) => {
         console.log('image added');
@@ -256,9 +258,10 @@ export class AddProductComponent implements OnInit {
       };
     }
   }
-  removeImage() {
-    this.coverImagePreview.nativeElement.src = '';
-    this.addProductForm.patchValue({ file: null });
+  removeImage(value: null) {
+    console.log("Removing image")
+    this.addProductForm.patchValue({ file: value });
+    this.coverImage = null;
   }
 
   deleteProduct(id: string) {

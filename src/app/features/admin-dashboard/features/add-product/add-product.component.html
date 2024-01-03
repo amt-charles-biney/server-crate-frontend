@@ -97,6 +97,7 @@
         previewClass="w-full h-96 object-center"
         [previewImage]="coverImage"
         [editId]="id"
+        (removeImageEmitter)="removeImage($event)"
       >
         <label
           for="#coverImage"

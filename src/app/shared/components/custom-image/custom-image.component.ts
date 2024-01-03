@@ -5,9 +5,11 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   OnInit,
+  Output,
   ViewChild,
   forwardRef,
 } from '@angular/core';
@@ -47,6 +49,7 @@ export class CustomImageComponent
   implements OnInit, ControlValueAccessor, AfterViewInit
 {
   @ViewChild('imagePreview') imagePreview!: ElementRef;
+  @ViewChild('editPreview') editPreview!: ElementRef;
   @ViewChild('remove') removeElementRef!: ElementRef;
   @Input() elementId!: string;
   @Input() label!: string;
@@ -55,13 +58,20 @@ export class CustomImageComponent
   @Input() containerClass!: string;
   @Input() previewImage: string | null | ArrayBuffer = null;
   @Input() editId!: string | null;
+
+  @Output() removeImageEmitter = new EventEmitter<null>()
   editMode!: boolean
   noImageSelected!: boolean
   formControl!: FormControl;
+  
   onChange: OnChange<string> = () => {};
   onTouched: OnTouch = () => {};
   constructor(private destroyRef: DestroyRef) {}
   ngOnInit(): void {
+    this.onInit()
+  }
+
+  onInit() {
     console.log(`Edit image of ${this.elementId}`, this.previewImage);
     this.editMode = !!this.editId
     this.formControl = new FormControl({
@@ -73,7 +83,7 @@ export class CustomImageComponent
         tap((value) => {
           this.onChange(value);  
           this.editMode = false    
-          console.log(this.imagePreview);
+          console.log('Chosen', value);
           
         }),
         takeUntilDestroyed(this.destroyRef)
@@ -87,6 +97,8 @@ export class CustomImageComponent
     }
   }
   uploadDocument(event: any) {
+    console.log('UPLOADING NEW DOC');
+    
     const file = event.target.files && event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -101,8 +113,10 @@ export class CustomImageComponent
       reader.onloadend = (event) => {
         console.log('image added');
         if (this.imagePreview) {
+          console.log('Using template variable')
           this.imagePreview.nativeElement.src = reader.result;          
         } else {
+          console.log('Using previewImage')
           this.previewImage = reader.result
         }
       };
@@ -110,8 +124,13 @@ export class CustomImageComponent
   }
   removeImage() {
     // this.imagePreview.nativeElement.src = null;
-    this.previewImage = null;
-    this.formControl.patchValue({ value: null });
+    if (this.editId) {
+      // this.previewImage = null;
+      // this.formControl.setValue({ value: null, disabled: false });
+      this.removeImageEmitter.emit(null)
+    } else {
+      this.onInit()
+    }
     console.log('formcontrol value', this.formControl.value);
     
   }
