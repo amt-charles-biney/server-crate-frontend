@@ -4,7 +4,6 @@ import { CustomInputComponent } from '../../../../shared/components/custom-input
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
-import intlTelInput from 'intl-tel-input';
 import { Contact, LoadingStatus } from '../../../../types';
 import { Store } from '@ngrx/store';
 import { changeNumber, getGeneralInfo } from '../../../../store/account-settings/general-info/general-info.actions';
@@ -12,7 +11,6 @@ import { selectContact, selectEmail, selectFirstName, selectLastName } from '../
 import { Observable, Subject, combineLatest, map } from 'rxjs';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
-
 
 @Component({
   selector: 'app-general-information',
@@ -59,7 +57,7 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.telInput) {      
-      this.intl = intlTelInput(this.telInput.nativeElement, {
+      this.intl = (<any>window).intlTelInput(this.telInput.nativeElement, {
         nationalMode: true,
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',

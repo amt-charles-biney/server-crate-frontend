@@ -21,8 +21,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
-import intlTelInput from 'intl-tel-input';
-import 'intl-tel-input/build/css/intlTelInput.css';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Select, OnChange, OnTouch } from '../../../types';
 import { Store } from '@ngrx/store';
@@ -86,7 +84,7 @@ export class CustomInputComponent
   }
   ngAfterViewInit(): void {
     if (this.telInput) {
-      intlTelInput(this.telInput.nativeElement, {
+      (<any>window).intlTelInput(this.telInput.nativeElement, {
         initialCountry: '',
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
