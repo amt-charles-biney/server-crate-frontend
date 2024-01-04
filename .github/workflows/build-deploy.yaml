@@ -2,7 +2,7 @@ name: Server Create
 
 on:
   push:
-    branches: [devops]
+    branches: [Presentation]
   pull_request:
     branches: [Presentation]
 
@@ -28,8 +28,7 @@ jobs:
       - name: NPM Install Angular
         run: npm install -g @angular/cli > /dev/null
       - name: NPM build Angular Production
-        run: npm start #npm run build for prod
-
+        run: npm run build
   deploy:
     runs-on: ubuntu-latest
     needs: build
