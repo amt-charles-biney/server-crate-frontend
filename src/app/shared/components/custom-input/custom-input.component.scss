@@ -2,9 +2,15 @@
   input {
     border: 1px solid red;
   }
+  textarea {
+    border: 1px solid red;
+  }
 }
 :host.ng-dirty.ng-invalid {
   input {
+    border: 1px solid red;
+  }
+  textarea {
     border: 1px solid red;
   }
 }

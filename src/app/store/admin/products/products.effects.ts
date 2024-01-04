@@ -3,16 +3,16 @@ import { getProducts, gotProducts } from './categories.actions';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map, of, shareReplay } from 'rxjs';
-import { ProductItem } from '../../../types';
+import { AllProducts, ProductItem } from '../../../types';
 
 @Injectable()
 export class ProductsEffect {
   loadProduct$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getProducts),
-      exhaustMap(() => {
-        return this.adminService.getProducts().pipe(
-          map((products: ProductItem[]) => {
+      exhaustMap((props) => {
+        return this.adminService.getProducts(props.page).pipe(
+          map((products: AllProducts) => {
             console.log('Products', products);
             
             return gotProducts({ products });

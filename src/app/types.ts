@@ -101,7 +101,7 @@ export type ProductItem = {
   imageUrl: string;
   coverImage: string;
   productName: string;
-  brand: string;
+  productBrand: string;
   productPrice: string;
   inStock: number;
   sales: number;
@@ -123,12 +123,6 @@ export type OtpResend = {
   email: string;
   type: string;
 };
-
-
-export type Category = {
-  id: string;
-  categoryName: string;
-}
 
 export type GeneralInfo = {
   firstName: string,
@@ -173,7 +167,7 @@ export type Option = {
 export type BasicConfig = {
   options: Option,
   id: string,
-  category: Category
+  category: Select
 }
 
 export type Item = {
@@ -185,6 +179,21 @@ export type TokenPayload = {
   sub: string;
   iat: number;
   exp: number
+}
+
+export type AllProducts = {
+  total: number;
+  products: ProductItem[]
+}
+
+export type Select = {
+  id: string,
+  name: string
+}
+
+export type Category = {
+  id: string;
+  categoryName: string;
 }
 
 export type OnChange<T> = (value: T) => void;

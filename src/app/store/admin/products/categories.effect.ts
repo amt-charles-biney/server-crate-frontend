@@ -4,10 +4,12 @@ import {
   addProduct,
   categoryFailure,
   deleteProduct,
+  getBrands,
   getCategories,
   getConfiguration,
   getProduct,
   getProducts,
+  gotBrands,
   gotCategories,
   gotConfiguration,
   gotProduct,
@@ -24,7 +26,7 @@ import {
   timeout,
 } from 'rxjs';
 import { AdminService } from '../../../core/services/admin/admin.service';
-import { Category, Item, ProductItem } from '../../../types';
+import { Select, Item, ProductItem, Category } from '../../../types';
 import { Store } from '@ngrx/store';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { Router } from '@angular/router';
@@ -37,7 +39,7 @@ export class CategoryEffect {
       tap((x) => console.log('Fetch categories', x)),
       exhaustMap(() => {
         return this.adminService.getCategories().pipe(
-          map((data: Category[]) => {
+          map((data: Select[]) => {
             this.store.dispatch(
               setLoadingSpinner({
                 status: false,
@@ -45,7 +47,32 @@ export class CategoryEffect {
                 isError: false,
               })
             );
+            console.log('categories', data)
             return gotCategories({ categories: data });
+          }),
+          catchError((err) => {
+            console.log('Error occured', err);
+            return of(categoryFailure());
+          })
+        );
+      })
+    );
+  });
+  getBrands$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(getBrands),
+      tap((x) => console.log('Fetch categories', x)),
+      exhaustMap(() => {
+        return this.adminService.getBrands().pipe(
+          map((data: Select[]) => {
+            this.store.dispatch(
+              setLoadingSpinner({
+                status: false,
+                message: '',
+                isError: false,
+              })
+            );
+            return gotBrands({ brands: data });
           }),
           catchError((err) => {
             console.log('Error occured', err);
@@ -59,7 +86,7 @@ export class CategoryEffect {
   gotCategory$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getConfiguration),
-      switchMap((selectedCategory: Category) => {
+      switchMap((selectedCategory: Select) => {
         return this.adminService
           .getCategoryConfiguration(selectedCategory.id)
           .pipe(
@@ -85,6 +112,16 @@ export class CategoryEffect {
       }),
     );
   });
+
+  // transformToSelect(obj: Category): any {
+  //   // Perform key renaming logic here
+  //   const newObj:any = { ...obj }; // Create a new object to avoid mutating the original
+  //   if (newObj.categoryName) {
+  //     newObj.name = newObj.categoryName;
+  //     delete newObj.categoryName;
+  //   }
+  //   return newObj;
+  // }
 
   // addProduct$ = createEffect(() => {
   //   return this.action$.pipe(
@@ -133,7 +170,7 @@ export class CategoryEffect {
             setTimeout(() => {
               this.router.navigateByUrl('/admin/products', { replaceUrl: true })
             }, 1500);
-            return getProducts();
+            return getProducts({page: 0});
           }),
           timeout(5000),
           catchError((err) => {
