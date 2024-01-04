@@ -18,6 +18,12 @@
         formControlName="productName"
         myClass="font-[500]"
       />
+      @if (productName.invalid && (productName.touched || productName.dirty)) {
+      <span
+        class="text-red-600"
+        >{{addProductForm.controls["productName"].errors?.['required'].message }}</span
+      >
+      }
       <app-custom-input
         id="productDescription"
         label="Product Description"
@@ -26,7 +32,12 @@
         formControlName="productDescription"
         myClass="font-[500]"
       />
-
+      @if (productDescription.invalid && (productDescription.touched || productDescription.dirty)) {
+        <span
+          class="text-red-600"
+          >{{addProductForm.controls["productDescription"].errors?.['required'].message }}</span
+        >
+        }
       <ng-container *ngIf="categories$ | async as categories">
         <app-custom-input
           id="category"
@@ -41,7 +52,7 @@
 
         <div class="flex justify-between">
           <div class="w-[45%]">
-              <ng-container *ngIf="brands$ | async as brands">
+            <ng-container *ngIf="brands$ | async as brands">
               <app-custom-input
                 id="brandName"
                 label="Brand Name"
@@ -53,7 +64,7 @@
                 myClass="font-[500]"
               />
             </ng-container>
-            </div>
+          </div>
           <div class="w-[45%]">
             <app-custom-input
               id="productId"
@@ -79,6 +90,12 @@
             formControlName="inStock"
             myClass="font-[500]"
           />
+          <!-- @if (inStock.invalid && (inStock.touched || inStock.dirty)) {
+            <small
+              class="text-red-600"
+              >{{addProductForm.controls["inStock"].errors?.['required'].message }}</small
+            >
+            } -->
         </div>
         <div class="xl:w-[45%]">
           <app-custom-input
@@ -189,7 +206,7 @@
         <button
           class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
         >
-          {{ id ? 'Edit' : 'Save'}}
+          {{ id ? "Edit" : "Save" }}
         </button>
         <button
           (click)="cancel()"

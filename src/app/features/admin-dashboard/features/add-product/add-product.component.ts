@@ -2,10 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  ElementRef,
-  OnDestroy,
   OnInit,
-  ViewChild,
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,7 +14,6 @@ import { Store } from '@ngrx/store';
 import {
   selectBrands,
   selectCategories,
-  selectCategoriesState,
 } from '../../../../store/admin/products/categories.reducers';
 import {
   deleteProduct,
@@ -36,6 +32,7 @@ import {
   RxFormBuilder,
   RxFormGroup,
   RxReactiveFormsModule,
+  RxwebValidators,
 } from '@rxweb/reactive-form-validators';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -98,13 +95,13 @@ export class AddProductComponent implements OnInit {
     this.formGroup = {
       file: null,
       coverImage: null,
-      productName: '',
-      productDescription: '',
-      productPrice: '',
+      productName: ['', RxwebValidators.required({message: "Please enter a product name"})],
+      productDescription: ['', RxwebValidators.required({message: "Please enter a product description"})],
+      productPrice: ['', RxwebValidators.required({message: "Please enter a price"})],
       productId: `${getUniqueId(2)}`,
       productBrand: '',
       category: '',
-      inStock: 0,
+      inStock: [0, RxwebValidators.required({message: "Please enter total products available"})],
       image1: null,
       image2: null,
       image3: null,
@@ -186,7 +183,7 @@ export class AddProductComponent implements OnInit {
     this.options = this.store.select(selectOptions);
     // if (this.router.url !== '/settings') {
     // }
-    // this.router.navigateByUrl('/admin/add-product');
+    this.router.navigateByUrl('/admin/add-product');
   }
   private _filter(value: Select, filterFrom: Select[]) {
     const filterValue = value && value.name ? value.name.toLowerCase() : '';
@@ -377,5 +374,14 @@ export class AddProductComponent implements OnInit {
   }
   get productBrand() {
     return this.addProductForm.get('productBrand')!;
+  }
+  get productName() {
+    return this.addProductForm.get('productName')!;
+  }
+  get productDescription() {
+    return this.addProductForm.get('productDescription')!;
+  }
+  get inStock() {
+    return this.addProductForm.get('inStock')!;
   }
 }
