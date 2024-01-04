@@ -97,6 +97,8 @@
         previewClass="w-full h-96 object-center"
         [previewImage]="coverImage"
         [editId]="id"
+        (removeImageEmitter)="removeImage($event)"
+        (uploadImageEmitter)="replaceImage($event)"
       >
         <label
           for="#coverImage"
@@ -123,7 +125,9 @@
             containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
             [previewImage]="image1"
             [editId]="id"
-            >
+            (removeImageEmitter)="removeImage($event)"
+            (uploadImageEmitter)="replaceImage($event)"
+          >
             <label
               for="#image1"
               class="cursor-pointer flex flex-col items-center gap-1"
@@ -132,42 +136,40 @@
               <small class="text-xs">Add image 1</small>
             </label>
           </app-custom-image>
-          <div
-            class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+          <app-custom-image
+            formControlName="image2"
+            elementId="image2"
+            containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+            [previewImage]="image2"
+            [editId]="id"
+            (removeImageEmitter)="removeImage($event)"
+            (uploadImageEmitter)="replaceImage($event)"
           >
-            <input
-              id="image2"
-              type="file"
-              [writeFile]="true"
-              class="hidden"
-              accept=".svg ,.png, .jpg, .jpeg, .gif"
-            />
             <label
-              for="image2"
+              for="#image2"
               class="cursor-pointer flex flex-col items-center gap-1"
             >
               <img src="/assets/image-plus.svg" alt="add image" />
               <small class="text-xs">Add image 2</small>
             </label>
-          </div>
-          <div
-            class="flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+          </app-custom-image>
+          <app-custom-image
+            formControlName="image3"
+            elementId="image3"
+            containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+            [previewImage]="image3"
+            [editId]="id"
+            (removeImageEmitter)="removeImage($event)"
+            (uploadImageEmitter)="replaceImage($event)"
           >
-            <input
-              id="image3"
-              type="file"
-              [writeFile]="true"
-              class="hidden"
-              accept=".svg ,.png, .jpg, .jpeg, .gif"
-            />
             <label
-              for="image3"
+              for="#image3"
               class="cursor-pointer flex flex-col items-center gap-1"
             >
               <img src="/assets/image-plus.svg" alt="add image" />
               <small class="text-xs">Add image 3</small>
             </label>
-          </div>
+          </app-custom-image>
         </div>
       </div>
       <section class="flex items-center justify-end mt-10 gap-6 text-sm">
