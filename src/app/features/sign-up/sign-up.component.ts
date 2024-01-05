@@ -24,6 +24,13 @@ import { passwordRegex } from '../../core/utils/constants/patterns';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsModalComponent } from '../../shared/components/terms-modal/terms-modal.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
+import { signUp } from '../../store/signup/actions/signup.actions';
+import { LoadingStatus, UserSignUp } from '../../types';
+import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-loader.component';
+import { Observable } from 'rxjs';
+import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
+import { setLoadingSpinner } from '../../store/loader/actions/loader.actions';
 @Component({
   selector: 'app-sign-up',
   standalone: true,
@@ -35,6 +42,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     FormsModule,
     ReactiveFormsModule,
     NgOptimizedImage,
+    AuthLoaderComponent,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
@@ -42,12 +50,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
-
-  constructor(public termsModal: MatDialog, private destroyRef: DestroyRef) {}
+  loadingState$!: Observable<LoadingStatus>;
+  constructor(
+    public termsModal: MatDialog,
+    private destroyRef: DestroyRef,
+    private store: Store
+  ) {}
   ngOnInit(): void {
     this.signUpForm = new FormGroup(
       {
-        name: new FormControl('', [Validators.required]),
+        firstName: new FormControl('', [Validators.required]),
+        lastName: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', [
           Validators.required,
@@ -65,16 +78,25 @@ export class SignUpComponent implements OnInit {
       },
       formValidator('password', 'confirmPwd')
     );
+    this.loadingState$ = this.store.select(selectLoaderState);
   }
 
   submitRegistrationForm() {
-    console.log('Form Data', this.signUpForm.value, this.acceptTerms?.value);
     if (this.signUpForm.invalid) return;
-    console.log(
-      'Form Data Submitted',
-      this.signUpForm.value,
-      this.acceptTerms?.value
+    scrollTo({ top: 0, behavior: 'smooth' });
+    const { firstName, lastName, email, password } = this.signUpForm.value;
+    const formData: UserSignUp = {
+      firstName,
+      lastName,
+      email,
+      password,
+    };
+    // this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
+    localStorage.setItem(
+      'server-crate-user',
+      JSON.stringify({ firstName, lastName })
     );
+    this.store.dispatch(signUp(formData));
   }
 
   openTermsAndConditionsModal() {
@@ -94,8 +116,12 @@ export class SignUpComponent implements OnInit {
       });
   }
 
-  get name() {
-    return this.signUpForm.get('name');
+  get firstName() {
+    return this.signUpForm.get('firstName');
+  }
+
+  get lastName() {
+    return this.signUpForm.get('lastName');
   }
 
   get email() {

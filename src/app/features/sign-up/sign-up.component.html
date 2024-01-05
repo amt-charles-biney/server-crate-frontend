@@ -10,93 +10,115 @@
       alt="Company logo"
     />
     <h1 class="text-3xl mt-6 md:m-0 font-bold">Create your account</h1>
+    <div class="w-full">
+      <app-auth-loader [loadingState]="loadingState$" />
+    </div>
     <form
       novalidate
       [formGroup]="signUpForm"
       (ngSubmit)="submitRegistrationForm()"
-      class="md:p-0 px-4 md:w-[500px] mx-auto"
+      class="md:p-0 px-4 md:max-w-[500px] mx-auto"
     >
-        <app-custom-input
-          id="name"
-          label="Name"
-          type="text"
-          placeholder="Enter your name"
-          formControlName="name"
-        />
-        @if (name?.invalid && (name?.touched || name?.dirty)) {
-        <span class="text-red-600">A name is required</span>
-        }
-        <app-custom-input
-          id="email"
-          label="Email"
-          type="email"
-          placeholder="Enter your email"
-          formControlName="email"
-        />
-        @if (email?.invalid && (email?.touched || email?.dirty)) {
-        <span class="text-red-600">Please enter a valid email</span>
-        }
-        <app-custom-input
-          id="password"
-          label="Password"
-          type="password"
-          placeholder="Enter password"
-          formControlName="password"
-        />
-        @if (password?.invalid && (password?.touched || password?.dirty)) {
-        <div *ngIf="password?.errors?.['required']">
-          <span class="text-red-600">Please enter a password</span>
-        </div>
-        <div *ngIf="password?.errors?.['minlength']">
-          <span class="text-red-600"
-            >Password must be at least 8 characters long.</span
-          >
-        </div>
-        <div *ngIf="password?.errors?.['pattern']">
-          <span class="text-red-600">Please enter a valid password</span>
-        </div>
-        }
-        <p class="leading-tight text-sm text-gray-500">
-          Use a minimum of 8 characters (case sensitive) with at least one
-          number and special character.
-        </p>
-        <app-custom-input
-          id="confirmPwd"
-          label="Confirm Password"
-          type="password"
-          placeholder="Confirm password"
-          formControlName="confirmPwd"
-        />
-        @if (confirmPwd?.invalid && (confirmPwd?.touched || confirmPwd?.dirty))
-        {
-        <div *ngIf="password?.errors?.['required']">
-          <span class="text-red-600">Please enter a password</span>
-        </div>
-        <div *ngIf="confirmPwd?.errors?.['confirmPwd']">
-          <span
-            class="text-red-600"
-            >{{confirmPwd?.errors?.['confirmPwd']?.value}}</span
-          >
-        </div>
-        }
+      <app-custom-input
+        id="firstName"
+        label="First Name"
+        type="text"
+        placeholder="Enter your first name"
+        formControlName="firstName"
+      />
+      @if (firstName?.invalid && (firstName?.touched || firstName?.dirty)) {
 
-        <label
-          class="flex items-stretch mt-1 gap-1 text-sm"
-          for="termsAndConditions"
+      <div *ngIf="firstName?.errors?.['required']">
+        <span class="text-red-600">A first name is required</span>
+      </div>
+      }
+      <app-custom-input
+        id="lastName"
+        label="Last Name"
+        type="text"
+        placeholder="Enter your last name"
+        formControlName="lastName"
+      />
+      @if (lastName?.invalid && (lastName?.touched || lastName?.dirty)) {
+
+      <div *ngIf="lastName?.errors?.['required']">
+        <span class="text-red-600">A last name is required</span>
+      </div>
+      }
+      <app-custom-input
+        id="email"
+        label="Email"
+        type="email"
+        placeholder="Enter your email"
+        formControlName="email"
+      />
+      @if (email?.invalid && (email?.touched || email?.dirty)) {
+      <span class="text-red-600">Please enter a valid email</span>
+      }
+      <app-custom-input
+        id="password"
+        label="Password"
+        type="password"
+        placeholder="Enter password"
+        formControlName="password"
+      />
+      @if (password?.invalid && (password?.touched || password?.dirty)) {
+      <div *ngIf="password?.errors?.['required']">
+        <span class="text-red-600">Please enter a password</span>
+      </div>
+      <div *ngIf="password?.errors?.['minlength']">
+        <span class="text-red-600"
+          >Password must be at least 8 characters long.</span
         >
-          <input
-            type="checkbox"
-            name="termsAndConditions"
-            id="termsAndConditions"
-            formControlName="acceptTerms"
-          />
-          <p>
-            I agree to the
-            <button type="button" (click)="openTermsAndConditionsModal()" class="font-semibold underline outline-none" 
-              >Terms and Conditions</button
-            >
-          </p>
-        </label>
+      </div>
+      <div *ngIf="password?.errors?.['pattern']">
+        <span class="text-red-600">Please enter a valid password</span>
+      </div>
+      }
+      <p class="leading-tight text-sm text-gray-500">
+        Use a minimum of 8 characters (case sensitive) with at least one number
+        and special character.
+      </p>
+      <app-custom-input
+        id="confirmPwd"
+        label="Confirm Password"
+        type="password"
+        placeholder="Confirm password"
+        formControlName="confirmPwd"
+      />
+      @if (confirmPwd?.invalid && (confirmPwd?.touched || confirmPwd?.dirty)) {
+      <div *ngIf="password?.errors?.['required']">
+        <span class="text-red-600">Please enter a password</span>
+      </div>
+      <div *ngIf="confirmPwd?.errors?.['confirmPwd']">
+        <span
+          class="text-red-600"
+          >{{confirmPwd?.errors?.['confirmPwd']?.value}}</span
+        >
+      </div>
+      }
+
+      <label
+        class="flex items-stretch mt-1 gap-1 text-sm"
+        for="termsAndConditions"
+      >
+        <input
+          type="checkbox"
+          name="termsAndConditions"
+          id="termsAndConditions"
+          formControlName="acceptTerms"
+        />
+        <p>
+          I agree to the
+          <button
+            type="button"
+            (click)="openTermsAndConditionsModal()"
+            class="font-semibold underline outline-none"
+          >
+            Terms and Conditions
+          </button>
+        </p>
+      </label>
       <app-custom-button
         buttonText="Sign up"
         [disableButton]="this.signUpForm.invalid"
