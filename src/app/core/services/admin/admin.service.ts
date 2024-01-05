@@ -51,4 +51,8 @@ export class AdminService {
   addBrand(name: string) {
     return this.http.post(`${this.brandsUrl}`, { name })
   }
+  
+  deleteBrand(id: string) {
+    return this.http.delete(`${this.brandsUrl}/${id}`)
+  }
 }

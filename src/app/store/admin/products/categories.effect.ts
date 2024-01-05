@@ -4,6 +4,7 @@ import {
   addBrand,
   addProduct,
   categoryFailure,
+  deleteBrand,
   deleteProduct,
   getBrands,
   getCategories,
@@ -224,6 +225,37 @@ export class CategoryEffect {
       })
     );
   });
+
+  deleteBrand$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(deleteBrand),
+      exhaustMap(({ id }) => {
+        return this.adminService.deleteBrand(id).pipe(
+          map(() => {
+            setTimeout(() => {
+              this.store.dispatch(getBrands())
+            }, 2000);
+            return setLoadingSpinner({
+                status: false,
+                message: 'Deleted brand name successfully',
+                isError: false,
+              })
+          }),
+          timeout(5000),
+          catchError((err) => {
+            throwError(() => 'Request timed out');
+            return of(
+              setLoadingSpinner({
+                isError: true,
+                message: err.error.detail,
+                status: false,
+              })
+            );
+          })
+        )
+      })
+    )
+  })
   constructor(
     private action$: Actions,
     private adminService: AdminService,

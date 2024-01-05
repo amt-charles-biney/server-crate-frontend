@@ -61,6 +61,7 @@ export class CustomInputComponent
   @Input() filteredOptions!: Observable<any>;
   @Input() value!: string
   @Input() optionSelected!: (event: MatAutocompleteSelectedEvent) => void
+  @Input() deleteFn!: (event: Event, option: Select) => void
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;
 
   formControl!: FormControl;

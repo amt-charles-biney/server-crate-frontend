@@ -18,6 +18,7 @@ import {
 } from '../../../../store/admin/products/categories.reducers';
 import {
   addBrand,
+  deleteBrand,
   deleteProduct,
   getBrands,
   getCategories,
@@ -182,7 +183,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
         this.filteredOptions = this.category.valueChanges.pipe(
           startWith(''),
-          map((value) => this._filter(value, categories))
+          map((value) => {
+            return this._filter(value, categories)
+          })
         );
       })
     );
@@ -208,10 +211,22 @@ export class AddProductComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.store.dispatch(resetConfiguration())
   }
-  private _filter(value: Select, filterFrom: Select[]) {
-    const filterValue = value && value.name ? value.name.toLowerCase() : '';
-    return filterFrom.filter((option: Select) => {
-      return option.name.toLowerCase().includes(filterValue);
+
+  deleteBrand(event:Event, option: Select) {
+    event.stopPropagation()
+    this.store.dispatch(deleteBrand({ id: option.id }))
+  }
+  
+  deleteCategory(event:Event, option: Select) {
+    event.stopPropagation()
+    console.log('Delete category', option)
+  }
+
+  private _filter(value: string, filterFrom: Select[]) {
+    console.log('Value', typeof(value));
+     
+    return filterFrom.filter((option: Select) => {      
+      return option.name.toLowerCase().includes(value.toLowerCase());
     });
   }
 

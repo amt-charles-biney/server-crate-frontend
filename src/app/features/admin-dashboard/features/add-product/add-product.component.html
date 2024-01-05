@@ -47,6 +47,7 @@
           formControlName="category"
           [filteredOptions]="filteredOptions"
           [optionSelected]="onCategorySelected"
+          [deleteFn]="deleteCategory"
           myClass="font-[500]"
         />
 
@@ -62,6 +63,7 @@
                   formControlName="productBrand"
                   [filteredOptions]="filteredBrandNames"
                   [optionSelected]="onBrandSelected"
+                  [deleteFn]="deleteBrand"
                   myClass="font-[500]"
                 />
               </ng-container>
