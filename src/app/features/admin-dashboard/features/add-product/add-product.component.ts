@@ -223,7 +223,11 @@ export class AddProductComponent implements OnInit, OnDestroy {
     console.log('ProductBrand', this.productBrand.value);
     const brandName = this.productBrand.value
     if (brandName) {
-      this.store.dispatch(addBrand({ name:  brandName }))
+      if (this.id) {
+        this.store.dispatch(addBrand({ name:  brandName.name }))
+      } else {
+        this.store.dispatch(addBrand({ name:  brandName }))
+      }
     }
   }
 
