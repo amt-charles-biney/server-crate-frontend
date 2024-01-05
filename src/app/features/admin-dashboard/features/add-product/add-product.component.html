@@ -118,6 +118,7 @@
         previewClass="w-full h-96 object-center"
         [previewImage]="coverImage"
         [editId]="id"
+        label="Cover Image"
         (removeImageEmitter)="removeImage($event)"
         (uploadImageEmitter)="replaceImage($event)"
       >
@@ -127,8 +128,7 @@
         >
           <img src="/assets/upload.svg" alt="upload" />
           <p>
-            <span class="text-figma-green">Click to upload</span> or drag and
-            drop
+            <span class="text-figma-green">Click to upload an image</span>
           </p>
           <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
         </label>
@@ -228,6 +228,7 @@
             <p class="text-gray-400">{{ option.value[0].name }}</p>
           </li>
         </ng-container>
+        
       </ul>
     </div>
   </section>

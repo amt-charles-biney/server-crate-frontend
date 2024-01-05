@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
@@ -21,6 +22,7 @@ import {
   getCategories,
   getConfiguration,
   getProduct,
+  resetConfiguration,
 } from '../../../../store/admin/products/categories.actions';
 import {
   MatAutocompleteModule,
@@ -61,7 +63,7 @@ import { CustomImageComponent } from '../../../../shared/components/custom-image
   styleUrl: './add-product.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddProductComponent implements OnInit {
+export class AddProductComponent implements OnInit, OnDestroy {
   addProductForm!: RxFormGroup;
   categories$!: Observable<Select[]>;
   brands$!: Observable<Select[]>;
@@ -95,13 +97,29 @@ export class AddProductComponent implements OnInit {
     this.formGroup = {
       file: null,
       coverImage: null,
-      productName: ['', RxwebValidators.required({message: "Please enter a product name"})],
-      productDescription: ['', RxwebValidators.required({message: "Please enter a product description"})],
-      productPrice: ['', RxwebValidators.required({message: "Please enter a price"})],
+      productName: [
+        '',
+        RxwebValidators.required({ message: 'Please enter a product name' }),
+      ],
+      productDescription: [
+        '',
+        RxwebValidators.required({
+          message: 'Please enter a product description',
+        }),
+      ],
+      productPrice: [
+        '',
+        RxwebValidators.required({ message: 'Please enter a price' }),
+      ],
       productId: `${getUniqueId(2)}`,
       productBrand: '',
       category: '',
-      inStock: [0, RxwebValidators.required({message: "Please enter total products available"})],
+      inStock: [
+        0,
+        RxwebValidators.required({
+          message: 'Please enter total products available',
+        }),
+      ],
       image1: null,
       image2: null,
       image3: null,
@@ -130,7 +148,7 @@ export class AddProductComponent implements OnInit {
               productDescription: data.productDescription,
               productPrice: data.productPrice,
               productBrand: {
-                name: data.productBrand
+                name: data.productBrand,
               },
               productId: data.productId,
               inStock: data.inStock,
@@ -183,7 +201,11 @@ export class AddProductComponent implements OnInit {
     this.options = this.store.select(selectOptions);
     // if (this.router.url !== '/settings') {
     // }
-    this.router.navigateByUrl('/admin/add-product');
+    // this.router.navigateByUrl('/admin/add-product');
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(resetConfiguration())
   }
   private _filter(value: Select, filterFrom: Select[]) {
     const filterValue = value && value.name ? value.name.toLowerCase() : '';
@@ -200,6 +222,7 @@ export class AddProductComponent implements OnInit {
     console.log('event', event.option);
     const selectedCategory: Select = event.option.value;
     this.store.dispatch(getConfiguration(selectedCategory));
+    this.options = this.store.select(selectOptions);
   }
   onBrandSelected(event: MatAutocompleteSelectedEvent) {
     console.log('event', event.option);
@@ -226,7 +249,7 @@ export class AddProductComponent implements OnInit {
     const image2 = formData.get('image2[0]');
     const image3 = formData.get('image3[0]');
     const category = formData.get('category[name]');
-    const productBrand = formData.get('productBrand[name]')
+    const productBrand = formData.get('productBrand[name]');
 
     formData.delete('coverImage[0]');
     formData.delete('image1[0]');
@@ -249,36 +272,38 @@ export class AddProductComponent implements OnInit {
     //   console.log(`After Val ${val} key ${key}`);
     // });
 
-    if (this.id) {      
-      this.adminService.updateProduct(this.id, formData).pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (data) => {
-          console.log('Received', data);
-        },
-        error: (err) => {
-          console.log('err', err);
-          this.store.dispatch(
-            setLoadingSpinner({
-              status: false,
-              message:
-                err.error?.detail || 'Please enter all the required data',
-              isError: true,
-            })
-          );
-        },
-        complete: () => {
-          this.store.dispatch(
-            setLoadingSpinner({
-              status: false,
-              message: 'Edited product successfully',
-              isError: false,
-            })
-          );
-          setTimeout(() => {
-            this.router.navigateByUrl('/admin/products');
-          }, 1500);
-        },
-      });
+    if (this.id) {
+      this.adminService
+        .updateProduct(this.id, formData)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (data) => {
+            console.log('Received', data);
+          },
+          error: (err) => {
+            console.log('err', err);
+            this.store.dispatch(
+              setLoadingSpinner({
+                status: false,
+                message:
+                  err.error?.detail || 'Please enter all the required data',
+                isError: true,
+              })
+            );
+          },
+          complete: () => {
+            this.store.dispatch(
+              setLoadingSpinner({
+                status: false,
+                message: 'Edited product successfully',
+                isError: false,
+              })
+            );
+            setTimeout(() => {
+              this.router.navigateByUrl('/admin/products');
+            }, 1500);
+          },
+        });
     } else {
       this.adminService
         .addProduct(formData)

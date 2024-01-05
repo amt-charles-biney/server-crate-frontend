@@ -50,7 +50,14 @@ export class GeneralInfoEffect {
                 return this.profileService.updateGeneralInfo(data).pipe(
                     map((response: Success) => {
                         console.log('Loading');
-                        
+                        setTimeout(() => {
+                            this.store.dispatch(
+                                setLoadingSpinner({
+                                status: false,
+                                message: '',
+                                isError: false,
+                            }))
+                        }, 2000);
                         return setLoadingSpinner({
                             status: false,
                             message: 'Successfully changed your contact',

@@ -23,4 +23,6 @@ export const getConfiguration = createAction('[products] get category config', p
 
 export const gotConfiguration = createAction('[products] got category config', props<any>())
 
+export const resetConfiguration = createAction('[products] reset config')
+
 export const deleteProduct = createAction('[products] delete product', props<Item>())

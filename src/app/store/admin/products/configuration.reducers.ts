@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { BasicConfig } from '../../../types';
-import { gotConfiguration } from './categories.actions';
+import { gotConfiguration, resetConfiguration } from './categories.actions';
 
 const initialState: BasicConfig = {
     category: {
@@ -14,7 +14,7 @@ export const configurationFeature = createFeature({
   name: 'configuration',
   reducer: createReducer(
     initialState,
-    on(gotConfiguration, (state, data) => {
+    on(gotConfiguration, (_, data) => {
         console.log('reducer config', data);
         
         return {
@@ -22,7 +22,15 @@ export const configurationFeature = createFeature({
             id: data.id,
             options: data.options,
         }
-    })
+    }),
+    on(resetConfiguration, () => ({
+        category: {
+            name: '',
+            id: ''
+        },
+        id: '',
+        options: {}
+    }))
   ),
 });
 

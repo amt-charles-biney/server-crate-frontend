@@ -1,4 +1,4 @@
-<main class="flex flex-col gap-4">
+<main class="flex flex-col gap-4 h-screen">
   <section class="flex w-full justify-between">
     <h2 class="font-bold text-xl">All Products</h2>
     <button
@@ -24,7 +24,7 @@
     </button>
   </section>
   <section
-    class="grid gap-4 grid-flow-row lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1"
+    class="grid gap-4 grid-flow-row lg:grid-cols-3 2xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 h-[90%] 2xl:h-[60%]"
   >
     <ng-container
       *ngIf="{ products: products | async, total: total | async } as products"
