@@ -17,6 +17,7 @@ import {
   selectCategories,
 } from '../../../../store/admin/products/categories.reducers';
 import {
+  addBrand,
   deleteProduct,
   getBrands,
   getCategories,
@@ -216,6 +217,14 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
   cancel() {
     this.router.navigateByUrl('/admin/products');
+  }
+
+  addNewBrand() {
+    console.log('ProductBrand', this.productBrand.value);
+    const brandName = this.productBrand.value
+    if (brandName) {
+      this.store.dispatch(addBrand({ name:  brandName }))
+    }
   }
 
   onCategorySelected(event: MatAutocompleteSelectedEvent) {

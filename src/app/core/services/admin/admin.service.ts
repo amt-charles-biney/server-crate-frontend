@@ -47,4 +47,8 @@ export class AdminService {
   updateProduct(id: string, formData: FormData) {
     return this.http.patch(`${this.productsUrl}/${id}`,formData) 
   }
+
+  addBrand(name: string) {
+    return this.http.post(`${this.brandsUrl}`, { name })
+  }
 }

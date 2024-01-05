@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
+  addBrand,
   addProduct,
   categoryFailure,
   deleteProduct,
@@ -47,7 +48,7 @@ export class CategoryEffect {
                 isError: false,
               })
             );
-            console.log('categories', data)
+            console.log('categories', data);
             return gotCategories({ categories: data });
           }),
           catchError((err) => {
@@ -101,15 +102,17 @@ export class CategoryEffect {
               console.log('data from config', data);
               return gotConfiguration(data);
             }),
-            catchError(error => {
-              return of(setLoadingSpinner({
-                status: false,
-                message: error.error.detail,
-                isError: true,
-              }))
+            catchError((error) => {
+              return of(
+                setLoadingSpinner({
+                  status: false,
+                  message: error.error.detail,
+                  isError: true,
+                })
+              );
             })
           );
-      }),
+      })
     );
   });
 
@@ -153,9 +156,9 @@ export class CategoryEffect {
           map((data: ProductItem) => {
             return gotProduct(data);
           }),
-          catchError(error => {
-            console.log('Doesnt exist')
-            return of()
+          catchError((error) => {
+            console.log('Doesnt exist');
+            return of();
           })
         );
       })
@@ -168,26 +171,59 @@ export class CategoryEffect {
         return this.adminService.deleteProduct(props.id).pipe(
           map(() => {
             setTimeout(() => {
-              this.router.navigateByUrl('/admin/products', { replaceUrl: true })
+              this.router.navigateByUrl('/admin/products', {
+                replaceUrl: true,
+              });
             }, 1500);
-            return getProducts({page: 0});
+            return getProducts({ page: 0 });
           }),
           timeout(5000),
           catchError((err) => {
-            throwError(() => 'Request timed out')
+            throwError(() => 'Request timed out');
             return of(
               setLoadingSpinner({
                 isError: true,
-                message: err.error.detail || 'Cannot delete non existent product',
+                message:
+                  err.error.detail || 'Cannot delete non existent product',
                 status: false,
               })
             );
           })
         );
-      }),      
+      })
     );
   });
 
+  addBrand$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(addBrand),
+      exhaustMap(({ name }) => {
+        return this.adminService.addBrand(name).pipe(
+          map(() => {
+            setTimeout(() => {
+              this.store.dispatch(getBrands())
+            }, 2000);
+            return setLoadingSpinner({
+                status: false,
+                message: 'Added brand name successfully',
+                isError: false,
+              })
+          }),
+          timeout(5000),
+          catchError((err) => {
+            throwError(() => 'Request timed out');
+            return of(
+              setLoadingSpinner({
+                isError: true,
+                message: err.error.detail,
+                status: false,
+              })
+            );
+          })
+        );
+      })
+    );
+  });
   constructor(
     private action$: Actions,
     private adminService: AdminService,
