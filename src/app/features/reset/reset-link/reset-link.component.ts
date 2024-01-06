@@ -10,6 +10,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { sendingResetLink } from '../../../store/reset/actions/reset.actions';
+import { setLoadingSpinner } from '../../../store/loader/actions/loader.actions';
+import { Observable } from 'rxjs';
+import { selectLoaderState, selectStatus } from '../../../store/loader/reducers/loader.reducers';
+import { AuthLoaderComponent } from '../../../shared/components/auth-loader/auth-loader.component';
+import { LoadingStatus } from '../../../types';
 @Component({
   selector: 'app-reset-link',
   standalone: true,
@@ -21,6 +28,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     NgOptimizedImage,
+    AuthLoaderComponent
   ],
   templateUrl: './reset-link.component.html',
   styleUrl: './reset-link.component.scss',
@@ -28,14 +36,23 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 })
 export class ResetLinkComponent {
   resetForm !: FormGroup
+  loadingState$!: Observable<LoadingStatus>;
 
   ngOnInit(): void {
     this.resetForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email])
     })
+    this.loadingState$ = this.store.select(selectLoaderState)
   }
 
+  constructor(private store: Store) {}
+  
   get email() {
     return this.resetForm.get('email')
   }
+  sendResetLink() {
+    // this.store.dispatch(setLoadingSpinner({ status: true, message: '', isError: false }))
+    return this.store.dispatch(sendingResetLink({email: this.email?.value }))
+  }
+  
 }

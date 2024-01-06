@@ -6,6 +6,8 @@ import { SignUpEffect } from './store/signup/effects/signup.effects';
 import { VerifyEffect } from './store/signup/effects/verify.effects';
 import { loginFeature } from './store/signin/reducers/login.reducers';
 import { LoginEffect } from './store/signin/effects/login.effects';
+import { ResetEffect } from './store/reset/effects/reset.effects';
+import { otpFeature } from './store/otp/otp.reducers';
 
 export const routes: Routes = [
     {
@@ -33,6 +35,10 @@ export const routes: Routes = [
     },
     {
         path: 'forgot-password',
-        loadChildren: () => import('./features/reset/reset.routes').then(m => m.route)
-    }
+        loadChildren: () => import('./features/reset/reset.routes').then(m => m.route),
+        providers: [
+            provideEffects(ResetEffect),
+            provideState(otpFeature)
+        ]
+    },
 ];
