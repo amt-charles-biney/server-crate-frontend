@@ -4,6 +4,8 @@ import { provideState } from '@ngrx/store';
 import { signUpFeature } from './store/signup/reducers/signup.reducers';
 import { SignUpEffect } from './store/signup/effects/signup.effects';
 import { VerifyEffect } from './store/signup/effects/verify.effects';
+import { loginFeature } from './store/signin/reducers/login.reducers';
+import { LoginEffect } from './store/signin/effects/login.effects';
 
 export const routes: Routes = [
     {
@@ -23,7 +25,11 @@ export const routes: Routes = [
     },
     {
         path: 'login',
-        loadChildren: () => import('./features/login/login.routes').then(m => m.route)
+        loadComponent: () => import('./features/login/login.component').then(m => m.LoginComponent),
+        providers: [
+            provideState(loginFeature),
+            provideEffects(LoginEffect)
+        ]
     },
     {
         path: 'forgot-password',

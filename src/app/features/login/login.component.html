@@ -10,22 +10,25 @@
       alt="Company logo"
     />
     <h1 class="text-3xl mt-6 md:m-0 font-bold">Sign in to your account</h1>
+    <div class="w-full">
+      <app-auth-loader [loadingState]="loadingState$"/>
+    </div>
     <form
       novalidate
       [formGroup]="loginForm"
       (ngSubmit)="submitRegistrationForm()"
-      class="md:p-0 px-4 md:w-[500px] mx-auto w-full"
+      class="md:p-0 px-4 md:max-w-[500px] mx-auto w-full"
     >
-        <app-custom-input
-          id="email"
-          label="Email"
-          type="email"
-          placeholder="Enter your email"
-          formControlName="email"
-        />
-        @if (email?.invalid && (email?.touched || email?.dirty)) {
-        <span class="text-red-600">Please enter a valid email</span>
-        }
+      <app-custom-input
+        id="email"
+        label="Email"
+        type="email"
+        placeholder="Enter your email"
+        formControlName="email"
+      />
+      @if (email?.invalid && (email?.touched || email?.dirty)) {
+      <span class="text-red-600">Please enter a valid email</span>
+      }
       <app-custom-input
         id="password"
         label="Password"
@@ -35,14 +38,12 @@
       />
       <div class="flex w-full justify-between">
         <label class="flex items-stretch mt-1 gap-1 text-sm" for="rememberMe">
-          <input
-            type="checkbox"
-            name="rememberMe"
-            id="rememberMe"
-          />
+          <input type="checkbox" name="rememberMe" id="rememberMe" />
           <p>Remember me</p>
         </label>
-        <a class="underline" routerLink="/forgot-password/reset-link">Forgot Password?</a>
+        <a class="underline" routerLink="/forgot-password/reset-link"
+          >Forgot Password?</a
+        >
       </div>
 
       <app-custom-button
@@ -55,11 +56,14 @@
       </p>
     </form>
   </section>
-  <img
+  <!-- <img
     class="hidden md:flex w-full !h-screen !relative"
     ngSrc="/assets/login-image.jpg"
     fill
     priority
     alt="Side image of signup form"
-  />
+  /> -->
+  <div class="loginImage">
+
+  </div>
 </main>

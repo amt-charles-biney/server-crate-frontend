@@ -4,6 +4,6 @@ import { LoginComponent } from "./login.component";
 export const route: Routes = [
     {
         path: '',
-        component: LoginComponent
+        component: LoginComponent,
     }
 ]
