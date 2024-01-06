@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+
+ frontend:
+    restart: always
+    command: npm start
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    stdin_open: true
+    volumes:
+  
+      - node_modules:/server-create-frontend/node_modules
+
+volumes:
+  node_modules:

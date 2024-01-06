@@ -3,10 +3,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TermsAndConditionsComponent } from '../../shared/components/terms-and-conditions/terms-and-conditions.component';
 import { ResetPasswordComponent } from '../reset/reset-password/reset-password.component';
 import { GeneralInformationComponent } from './features/general-information/general-information.component';
+import { PasswordInformationComponent } from './features/password-information/password-information.component';
 import { Router, RouterModule } from '@angular/router';
+import { ShippingInformationComponent } from './features/shipping-information/shipping-information.component';
+import { PaymentDetailsComponent } from './features/payment-details/payment-details.component';
+import { PrivacyPolicyComponent } from '../../shared/components/privacy-policy/privacy-policy.component';
 import { Link } from '../../types';
-import { ProfileService } from '../../core/services/user-profile/profile.service';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
+import { ProfileService } from '../../core/services/user-profile/profile.service';
 @Component({
   selector: 'app-account-settings',
   standalone: true,
@@ -15,6 +19,10 @@ import { UserProfileImageComponent } from '../../shared/components/user-profile-
     TermsAndConditionsComponent,
     ResetPasswordComponent,
     GeneralInformationComponent,
+    PasswordInformationComponent,
+    ShippingInformationComponent,
+    PaymentDetailsComponent,
+    PrivacyPolicyComponent,
     RouterModule,
     UserProfileImageComponent
   ],
