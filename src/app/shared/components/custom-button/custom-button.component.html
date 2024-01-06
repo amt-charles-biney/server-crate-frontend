@@ -1,0 +1,8 @@
+<button
+  [disabled]="disableButton"
+  [ngClass]="disableButton ? 'bg-opacity-50 cursor-not-allowed' : ''"
+  [ngStyle]="currentStyles"
+  class="w-full py-2.5 font-semibold mt-6 bg-figma-green text-white rounded-lg"
+>
+  {{ buttonText }}
+</button>
