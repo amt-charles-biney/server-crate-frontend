@@ -1,13 +1,17 @@
 import { Routes } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
-import { provideState } from '@ngrx/store';
-import { signUpFeature } from './store/signup/reducers/signup.reducers';
 import { SignUpEffect } from './store/signup/effects/signup.effects';
+import { signUpFeature } from './store/signup/reducers/signup.reducers';
+import { provideState } from '@ngrx/store';
 import { VerifyEffect } from './store/signup/effects/verify.effects';
 import { loginFeature } from './store/signin/reducers/login.reducers';
 import { LoginEffect } from './store/signin/effects/login.effects';
 import { ResetEffect } from './store/reset/effects/reset.effects';
 import { otpFeature } from './store/otp/otp.reducers';
+import { settingsGuard } from './core/guards/settings.guard';
+import { adminGuard } from './core/guards/admin.guard';
+import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -17,6 +21,18 @@ export const routes: Routes = [
             provideState(signUpFeature),
             provideEffects(SignUpEffect),
         ],
+    },
+    {
+        path: 'admin',
+        loadChildren: () => import('./features/admin-dashboard/admin-dashboard.routes').then(m => m.route),
+        canActivate: [
+            settingsGuard,
+            adminGuard,
+            authGuard
+        ],
+        providers: [
+            provideEffects(GeneralInfoEffect)
+        ]
     },
     {
         path: 'otp',
