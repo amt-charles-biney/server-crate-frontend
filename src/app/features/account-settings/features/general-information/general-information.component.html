@@ -1,0 +1,70 @@
+<ng-container *ngIf="generalForm | async as generalForm"> </ng-container>
+<form
+  class="mt-4 md:mt-0"
+  (ngSubmit)="saveGeneralInfoChanges()"
+  [formGroup]="generalInfoForm"
+>
+  <h2 class="font-bold text-center md:text-start">Basic Information</h2>
+  <app-auth-loader [loadingState]="loadingState$"/>
+  <app-custom-input
+    id="firstName"
+    label="First Name"
+    type="text"
+    placeholder="Enter your first name"
+    formControlName="firstName"
+    [isReadOnly]="true"
+  />
+  @if (firstName?.invalid && (firstName?.touched || firstName?.dirty)) {
+
+  <div *ngIf="firstName?.errors?.['required']">
+    <span class="text-red-600">A first name is required</span>
+  </div>
+  }
+  <app-custom-input
+    id="lastName"
+    label="Last Name"
+    type="text"
+    placeholder="Enter your last name"
+    formControlName="lastName"
+    [isReadOnly]="true"
+  />
+  @if (lastName?.invalid && (lastName?.touched || lastName?.dirty)) {
+
+  <div *ngIf="lastName?.errors?.['required']">
+    <span class="text-red-600">A last name is required</span>
+  </div>
+  }
+  <app-custom-input
+    id="email"
+    label="Email"
+    type="email"
+    placeholder="Enter your email"
+    formControlName="email"
+    [isReadOnly]="true"
+  />
+  @if (email?.invalid && (email?.touched || email?.dirty)) {
+  <div *ngIf="email?.errors?.['required']">
+    <span class="text-red-600">A email is required</span>
+  </div>
+  <div *ngIf="email?.errors?.['email']">
+    <span class="text-red-600">Please enter a valid email</span>
+  </div>
+  }
+<div>
+
+  <label class="flex flex-col gap-0.5 mt-4" for="contact">
+    <span class="">Contact</span>
+    <input
+      id="contact"
+      [ngClass]="showWarning ? 'border-red-600' : ''"
+      type="tel"
+      class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
+      #telInput
+    />
+  </label>
+  @if (showWarning !== '') {
+  <span class="text-red-600 text-sm">{{ showWarning }}</span>
+  }
+</div>
+  <app-custom-button buttonText="Save Changes" [isPrimaryButton]="true" />
+</form>
