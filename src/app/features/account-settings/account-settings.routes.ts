@@ -9,6 +9,8 @@ import { PasswordInformationComponent } from "./features/password-information/pa
 import { ChangePasswordEffect } from "../../store/profile/changePassword/changePassword.effects";
 import { ShippingInformationComponent } from "./features/shipping-information/shipping-information.component";
 import { PaymentDetailsComponent } from "./features/payment-details/payment-details.component";
+import { TermsAndConditionsComponent } from "../../shared/components/terms-and-conditions/terms-and-conditions.component";
+import { PrivacyPolicyComponent } from "../../shared/components/privacy-policy/privacy-policy.component";
 
 export const route: Routes = [
     {
@@ -37,6 +39,14 @@ export const route: Routes = [
             {
                 path: 'payment',
                 component: PaymentDetailsComponent
+            },
+            {
+                path: 'terms-conditions',
+                component: TermsAndConditionsComponent
+            },
+            {
+                path: 'privacy-policy',
+                component: PrivacyPolicyComponent
             },
         ]
     },
