@@ -1,0 +1,102 @@
+<main class="flex">
+  <!-- sidebar -->
+  <aside class="flex min-h-screen w-72 flex-col p-6 border bg-[#fdfdfd]">
+    <a routerLink="/">
+      <img
+        ngSrc="/assets/logo.svg"
+        width="179"
+        height="48"
+        priority
+        alt="logo at header"
+      />
+    </a>
+    <section class="my-10">
+      <p class="text-sm mb-5 font-semibold text-gray-600 tracking-wide">
+        Main Menu
+      </p>
+      <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+        @for (link of navLinks; track link) {
+        <a
+          mat-tab-link
+          (click)="activeLink = link"
+          [active]="activeLink == link"
+          [routerLink]="link.link"
+        >
+          <div class="flex items-center gap-3">
+            <img class="h-5 w-5" [src]="link.svg" [alt]="link.label" />
+            <p class="mt-0.5">{{ link.label }}</p>
+          </div>
+        </a>
+        }
+        <section class="my-10">
+          <p class="text-sm mb-5 font-semibold text-gray-600 tracking-wide">
+            General
+          </p>
+          <a
+            mat-tab-link
+            (click)="activeLink = settings"
+            [active]="activeLink == settings"
+            routerLink="settings"
+          >
+            <div class="flex items-center gap-3">
+              <img
+                class="h-5 w-5"
+                [src]="settings.svg"
+                [alt]="settings.label"
+              />
+              <p class="mt-0.5">{{ settings.label }}</p>
+            </div>
+          </a>
+        </section>
+      </nav>
+    </section>
+    <article class="flex items-center gap-3">
+      <img class="h-5 w-5" src="/assets/logout.svg" alt="logout" />
+      <button (click)="logout()" class="mt-0.5 text-sm font-bold">Logout</button>
+    </article>
+  </aside>
+  <div class="flex-1">
+    <mat-tab-nav-panel #tabPanel>
+      <nav class="flex border-b px-6 w-full justify-between items-center bg-[#fdfdfd]">
+        <h2 class="font-bold tracking-wide">{{ activeLink.label }}</h2>
+        <div class="flex items-center py-6 justify-around w-[30%]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            data-slot="icon"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+            />
+          </svg>
+          <app-user-profile-image [smaller]="true" />
+        </div>
+      </nav>
+      <section class="p-5">
+        <div class="p-3">
+          <router-outlet />
+        </div>
+      </section>
+    </mat-tab-nav-panel>
+  </div>
+</main>
