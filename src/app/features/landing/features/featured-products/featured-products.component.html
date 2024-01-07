@@ -1,1 +1,24 @@
-<p>featured-products works!</p>
+<main class="mt-10">
+    <section class="flex flex-col gap-4">
+        <h2 class="font-bold text-center text-xl py-6">Featured Products</h2>
+
+        @if(featuredProducts.length <= 0) {
+            <div class="text-center">No featured products yet !!!</div>
+        }
+
+        @else {
+            <div class="flex flex-row items-center gap-2 flex-wrap">
+                @for(product of featuredProducts; let idx = $index; track idx) {
+                    <app-product-item [product]="product"></app-product-item>
+                }
+            </div>
+        }
+
+        <div class="flex items-center justify-center w-full">
+            <button class="bg-[#3CB043] max-w-[235px] w-full text-white p-4 rounded-lg hover:bg-green-500">
+              Show More
+            </button>
+          </div>
+          
+    </section>
+</main>
