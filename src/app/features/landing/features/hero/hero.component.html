@@ -1,1 +1,78 @@
-<p>hero works!</p>
+<main class="w-full h-auto">
+  <section
+    class="px-10 flex p-6 max-h-28 h-full flex-row items-center justify-between"
+  >
+    <div class="sm:flex hidden"></div>
+    <div class="flex gap-2">
+      <span
+        (click)="slider.moveToIdx(idx)"
+        *ngFor="let slide of sliders; let idx = index"
+        class="{{
+          idx === currentSlide ? 'border-green-400' : 'border-white'
+        }} border-2 p-1 flex items-center justify-center bg-white rounded-full w-4 h-4"
+      >
+        <span
+          class="{{
+            idx === currentSlide ? ' bg-green-400' : 'bg-gray-400'
+          }} hover:bg-green-400 rounded-full w-2 h-2 p-1"
+        ></span>
+      </span>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      <button
+        (click)="slider.prev()"
+        [disabled]="currentSlide === 0"
+        class="p-2 rounded-full w-[48px] h-[48px] bg-green-200 {{
+          currentSlide === 0 ? '' : 'hover:bg-green-100 '
+        }} flex items-center justify-center"
+      >
+        <img
+          alt="chevron-left"
+          src="/assets/chevronleft.svg"
+          width="10"
+          height="10"
+        />
+      </button>
+
+      <button
+        (click)="slider.next()"
+        class="p-2 rounded-full w-[48px] h-[48px] bg-green-600 hover:bg-green-500 flex items-center justify-center"
+      >
+        <img
+          alt="chevron-left"
+          src="/assets/chevronright.svg"
+          width="10"
+          height="10"
+        />
+      </button>
+    </div>
+  </section>
+  <section
+    class="w-[99vw] relative left-1/2 transform -translate-x-1/2 overflow-x-hidden z-10"
+  >
+    <div
+      class="absolute max-w-sm w-full bg-white backdrop-blur-md backdrop-opacity-50 bg-opacity-70 -mt-10 pt-20 p-8 z-20 left-28 shadow-lg flex flex-col gap-10"
+    >
+      <h4 class="text-5xl font-bold leading-[3.5rem] tracking-wide">
+        High-Quality <span class="text-green-600">Servers</span> Just For you
+      </h4>
+      <p class="font-light tracking-wider text-sm">
+        Top-Tier Materials Tailored To Meet The Demands Of Your Digital
+        Infrastructure
+      </p>
+      <button class="p-4 rounded-md bg-green-600 text-white hover:bg-green-500">
+        shop now
+      </button>
+    </div>
+    <div class="keen-slider w-full" #sliderRef>
+      @for (slider of sliders; let i = $index; track i) {
+      <div
+        class="keen-slider__slide number-slide1 w-screen h-[70vh] bg-cover bg-center bg-no-repeat"
+        [style.backgroundImage]="'url(' + slider.img + ')'"
+      >
+        1
+      </div>
+      }
+    </div>
+  </section>
+</main>
