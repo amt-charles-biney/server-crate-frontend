@@ -24,10 +24,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Linting ...
-        script: |
-          npm install eslint --save-dev
-          npm run lint:fix
+      - name: Install Eslint ...
+        run: npm install eslint --save-dev
+        
+      - name: Lint and Fix code
+        run: npm run lint:fix
 
       - name: NPM Install
         run: npm install
