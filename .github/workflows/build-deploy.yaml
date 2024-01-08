@@ -47,7 +47,7 @@ jobs:
       - name: SSH into Instance 
         run: |
           
-          ssh -i ~/.ssh/id_ed25519 ${{secrets.USERNAME}}@{{secrets.HOST_IP_ADDRESS}} "cd server-crate-frontend &&
+          ssh -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST_IP_ADDRESS }} "cd server-crate-frontend &&
           git checkout Presentation &&
           git fetch --all &&
           git reset --hard origin/Presentation &&
