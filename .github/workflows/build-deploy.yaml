@@ -39,14 +39,19 @@ jobs:
             PRIVATE_KEY: ${{ secrets.SSH_KEY }}
             HOSTNAME: ${{secrets.HOST_IP_ADDRESS}}
             USER_NAME: ${{secrets.USERNAME}}
+            
+      - name: Login to EC2 
         run: |
           echo "$SSH_KEY" > gpuconfigurator.pem  && chmod 400 "gpuconfigurator.pem"
           ssh -o StrictHostKeyChecking=no -i "gpuconfigurator.pem" ${{secrets.USERNAME}}@${{secrets.HOST_IP_ADDRESS}} '
-
-              # Now we have got the access of EC2 and we will start the deploy .
+             # Now we have got the access of EC2 and we will start the deploy .
               cd server-crate-frontend &&
               git checkout Presentation &&
               git fetch --all &&
               git reset --hard origin/Presentation &&
               git pull origin Presentation &&
               sudo docker compose up -d --build
+          '
+
+             
+              
