@@ -23,10 +23,11 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-            
+
       - name: Linting ...
-        run: npm install eslint --save-dev
-        run: npm run lint:fix
+        script: |
+          npm install eslint --save-dev
+          npm run lint:fix
 
       - name: NPM Install
         run: npm install
