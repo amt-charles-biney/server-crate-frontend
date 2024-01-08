@@ -30,14 +30,14 @@ jobs:
       - name: Lint and Fix code
         run: npm run lint:fix
 
-      - name: Run Tests  
-        run: npm test
-
       - name: NPM Install
         run: npm install
 
       - name: NPM Install Angular
         run: npm install -g @angular/cli > /dev/null
+      
+      - name: Run Tests  
+        run: npm test
 
       - name: NPM build Angular Production
         run: npm run build
