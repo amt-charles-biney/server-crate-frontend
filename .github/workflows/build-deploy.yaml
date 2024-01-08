@@ -2,7 +2,7 @@ name: Server Create
 
 on:
   push:
-    branches: [Presentation]
+    branches: [Presentation, devops]
   pull_request:
     branches: [Presentation]
 
@@ -39,7 +39,7 @@ jobs:
             PRIVATE_KEY: ${{ secrets.SSH_KEY }}
             HOSTNAME: ${{secrets.HOST_IP_ADDRESS}}
             USER_NAME: ${{secrets.USERNAME}}
-            
+
       - name: Login to EC2 
         run: |
           echo "$SSH_KEY" > gpuconfigurator.pem  && chmod 400 "gpuconfigurator.pem"
