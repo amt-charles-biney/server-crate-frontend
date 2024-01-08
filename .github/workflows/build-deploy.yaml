@@ -47,7 +47,7 @@ jobs:
       - name: SSH into Instance 
         run: |
           
-          ssh -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST_IP_ADDRESS }} "cd server-crate-frontend &&
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST_IP_ADDRESS }} uptime "cd server-crate-frontend &&
           git checkout Presentation &&
           git fetch --all &&
           git reset --hard origin/Presentation &&
