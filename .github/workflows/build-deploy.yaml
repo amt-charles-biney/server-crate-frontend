@@ -1,4 +1,4 @@
-name: Server Create
+name: Server Crate Frontend CI/CD
 
 on:
   push:
