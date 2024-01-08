@@ -76,7 +76,7 @@ export class PreferenceSelectionComponent implements OnInit {
       this.queryParams[selected.name].delete(selected.value);
     }
     const params = this.buildParams(this.queryParams)
-    this.store.dispatch(filter({params, page: this.page}))
+    this.store.dispatch(filter({params, page: this.page - 1}))
     console.log(this.buildParams(this.queryParams));
   }
 
