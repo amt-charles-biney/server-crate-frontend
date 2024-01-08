@@ -6,7 +6,7 @@
     "start": "ng serve --configuration=development --host 0.0.0.0",
     "build": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
