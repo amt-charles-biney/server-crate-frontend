@@ -2,7 +2,7 @@ name: Server Create
 
 on:
   push:
-    branches: [Presentation, devops]
+    branches: [Presentation]
   pull_request:
     branches: [Presentation]
 
