@@ -50,6 +50,10 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'product/configure/:id',
+        loadChildren: () => import('./features/product-configure/product-configure.routes').then(m => m.route),
+    },
+    {
         path: 'forgot-password',
         loadChildren: () => import('./features/reset/reset.routes').then(m => m.route),
         providers: [
@@ -60,6 +64,5 @@ export const routes: Routes = [
     {
         path: '',
         loadChildren: () => import('./features/home/home.routes').then(m => m.route),
-        
     }
 ];
