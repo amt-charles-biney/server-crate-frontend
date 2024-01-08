@@ -23,10 +23,17 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+            
+      - name: Linting ...
+        run: npm install eslint --save-dev
+        run: npm run lint:fix
+
       - name: NPM Install
         run: npm install
+
       - name: NPM Install Angular
         run: npm install -g @angular/cli > /dev/null
+
       - name: NPM build Angular Production
         run: npm run build
   deploy:

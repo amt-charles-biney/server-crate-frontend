@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{html,ts}"
+    './src/**/*.{html,ts}'
   ],
   theme: {
     extend: {
@@ -9,8 +9,7 @@ module.exports = {
         'figma-gray': '#bdbdbd',
         'figma-green': '#3cb043'
       }
-    },
+    }
   },
-  plugins: [],
+  plugins: []
 }
-
