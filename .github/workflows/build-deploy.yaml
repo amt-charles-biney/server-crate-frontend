@@ -40,10 +40,12 @@ jobs:
             HOSTNAME: ${{secrets.HOST_IP_ADDRESS}}
             USER_NAME: ${{secrets.USERNAME}}
 
+      - name: Install SSH Key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+
       - name: SSH into Instance 
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOST_IP_ADDRESS} "cd server-crate-frontend &&
+          ssh -i ~/.ssh/id_ed25519 ${{secrets.USERNAME}}@{{secrets.HOST_IP_ADDRESS}} "cd server-crate-frontend &&
           git checkout Presentation &&
           git fetch --all &&
           git reset --hard origin/Presentation &&
