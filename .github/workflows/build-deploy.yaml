@@ -26,7 +26,7 @@ jobs:
 
       - name: Install Eslint ...
         run: npm install eslint --save-dev
-        
+
       - name: Lint and Fix code
         run: npm run lint:fix
 
@@ -38,6 +38,7 @@ jobs:
 
       - name: NPM build Angular Production
         run: npm run build
+        
   deploy:
     runs-on: ubuntu-latest
     needs: build
