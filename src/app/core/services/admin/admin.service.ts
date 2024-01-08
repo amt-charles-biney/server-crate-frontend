@@ -9,7 +9,7 @@ import { AllProducts, Select, DummyCategory, ProductItem } from '../../../types'
 })
 export class AdminService {
   categoriesUrl = environment.categories
-  productsUrl = environment.products
+  productsUrl = environment.adminProducts
   brandsUrl = environment.brands
   constructor(private http: HttpClient) {
 

@@ -23,8 +23,8 @@ input[type="checkbox"] {
   appearance: none;
   border: 1px solid #c5c5c5;
   border-radius: 2px;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   transform: translateY(-0.075em);
   background-color: white;
   margin: 0;
@@ -177,6 +177,10 @@ app-admin-dashboard .mdc-tab-indicator {
 }
 .iti__country-list {
   width: 410px;
+}
+
+app-preference-selection .mat-expansion-indicator:after {
+  border-color: black;
 }
 
 @media only screen and (max-width: 768px) {

@@ -3,5 +3,6 @@ export const environment = {
     profile: 'http://localhost:8080/api/v1/profile',
     categories: 'http://localhost:8080/api/v1/admin/category',
     brands: 'http://localhost:8080/api/v1/admin/brand',
-    products: 'http://localhost:8080/api/v1/admin/product', 
+    adminProducts: 'http://localhost:8080/api/v1/admin/product', 
+    userProducts: 'http://localhost:8080/api/v1/product', 
 };

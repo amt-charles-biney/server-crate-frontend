@@ -15,6 +15,8 @@ export const getProduct = createAction('[products] get single product', props<It
 
 export const getProducts = createAction('[products] get products', props<{page: number}>())
 
+export const getUserProducts = createAction('[products] get user products', props<{page: number, params: string}>())
+
 export const gotProduct = createAction('[products] got product', props<ProductItem>())
 
 export const gotProducts = createAction('[products] got products', props<{products: AllProducts}>())

@@ -142,15 +142,6 @@ export type DummyCategory = {
   name: string
 }
 
-export type ProductResponse = {
-  productName: string,
-  productDescription: string,
-  productPrice: string,
-  productId: string,
-  productCategory: string,
-  productAvailability: boolean,
-}
-
 export type Prop = {
   id: string,
   name: string,
