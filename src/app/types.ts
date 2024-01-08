@@ -111,7 +111,8 @@ export type ProductItem = {
   category: {
     id: string;
     name: string;
-  }
+  },
+  isFeatured: boolean
 };
 
 export type ResendOtp = {

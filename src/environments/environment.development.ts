@@ -4,5 +4,6 @@ export const environment = {
     categories: 'http://localhost:8080/api/v1/admin/category',
     brands: 'http://localhost:8080/api/v1/admin/brand',
     adminProducts: 'http://localhost:8080/api/v1/admin/product', 
-    userProducts: 'http://localhost:8080/api/v1/product', 
+    userProducts: 'http://localhost:8080/api/v1/product',
+    featured: 'http://localhost:8080/api/v1/admin/featured',
 };

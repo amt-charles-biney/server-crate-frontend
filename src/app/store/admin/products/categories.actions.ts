@@ -32,3 +32,7 @@ export const deleteProduct = createAction('[products] delete product', props<Ite
 export const addBrand = createAction('[products] add brand', props<{name: string }>())
 
 export const deleteBrand = createAction('[products] delete brand', props<{ id : string }>())
+
+export const addToFeature = createAction('[products] add to feature', props<{ id: string }>())
+
+export const removeFromFeature = createAction('[products] remove from feature', props<{ id: string }>())

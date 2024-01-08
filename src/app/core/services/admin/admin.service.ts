@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { getCategories } from './../../../store/admin/products/categories.actions';
+import { getCategories, removeFromFeature } from './../../../store/admin/products/categories.actions';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { AllProducts, Select, DummyCategory, ProductItem } from '../../../types';
@@ -11,6 +11,7 @@ export class AdminService {
   categoriesUrl = environment.categories
   productsUrl = environment.adminProducts
   brandsUrl = environment.brands
+  featuresUrl = environment.featured
   constructor(private http: HttpClient) {
 
    }
@@ -54,5 +55,13 @@ export class AdminService {
   
   deleteBrand(id: string) {
     return this.http.delete(`${this.brandsUrl}/${id}`)
+  }
+
+  addToFeature(id: string) {
+    return this.http.post(`${this.featuresUrl}/${id}`, {})
+  }
+
+  removeFromFeature(id: string) {
+    return this.http.put(`${this.featuresUrl}/${id}`, {})
   }
 }

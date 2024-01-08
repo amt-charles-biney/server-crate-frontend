@@ -20,6 +20,7 @@ const initialState: { products: ProductItem[]; product: ProductItem; total: numb
       name: '',
       id: '',
     },
+    isFeatured: false
   },
 };
 
