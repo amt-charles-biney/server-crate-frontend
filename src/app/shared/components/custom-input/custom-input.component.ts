@@ -21,10 +21,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
-import intlTelInput from 'intl-tel-input';
-import 'intl-tel-input/build/css/intlTelInput.css';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { Category, OnChange, OnTouch } from '../../../types';
+import { Select, OnChange, OnTouch } from '../../../types';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -63,6 +61,7 @@ export class CustomInputComponent
   @Input() filteredOptions!: Observable<any>;
   @Input() value!: string
   @Input() optionSelected!: (event: MatAutocompleteSelectedEvent) => void
+  @Input() deleteFn!: (event: Event, option: Select) => void
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;
 
   formControl!: FormControl;
@@ -86,15 +85,17 @@ export class CustomInputComponent
   }
   ngAfterViewInit(): void {
     if (this.telInput) {
-      intlTelInput(this.telInput.nativeElement, {
+      (<any>window).intlTelInput(this.telInput.nativeElement, {
         initialCountry: '',
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
       });
     }
   }
-  displayFn(category: Category): string {
-    return category && category.categoryName ? category.categoryName : ''
+  displayFn(option: Select): string {
+    console.log('displayed', option.name);
+    
+    return option && option.name ? option.name : ''
   }
   showPasswordHandler(event: Event) {
     event.stopPropagation();

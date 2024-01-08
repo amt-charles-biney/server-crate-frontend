@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { getCategories } from './../../../store/admin/products/categories.actions';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
-import { Category, DummyCategory, ProductItem } from '../../../types';
+import { AllProducts, Select, DummyCategory, ProductItem } from '../../../types';
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +10,24 @@ import { Category, DummyCategory, ProductItem } from '../../../types';
 export class AdminService {
   categoriesUrl = environment.categories
   productsUrl = environment.products
+  brandsUrl = environment.brands
   constructor(private http: HttpClient) {
 
    }
 
   getCategories() {
-    return this.http.get<Category[]>(this.categoriesUrl)
+    return this.http.get<Select[]>(this.categoriesUrl)
+  }
+  getBrands() {
+    return this.http.get<Select[]>(this.brandsUrl)
   }
 
   addProduct(formData: FormData) {
     return this.http.post(this.productsUrl, formData)
   }
 
-  getProducts() {
-    return this.http.get<ProductItem[]>(this.productsUrl)
+  getProducts(page:number) {
+    return this.http.get<AllProducts>(`${this.productsUrl}?page=${page}&size=9`)
   }
 
   getProduct(id: string) {
@@ -38,5 +42,17 @@ export class AdminService {
 
   deleteProduct(id: string) {
     return this.http.delete(`${this.productsUrl}/${id}`)
+  }
+
+  updateProduct(id: string, formData: FormData) {
+    return this.http.patch(`${this.productsUrl}/${id}`,formData) 
+  }
+
+  addBrand(name: string) {
+    return this.http.post(`${this.brandsUrl}`, { name })
+  }
+  
+  deleteBrand(id: string) {
+    return this.http.delete(`${this.brandsUrl}/${id}`)
   }
 }

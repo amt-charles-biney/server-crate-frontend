@@ -1,4 +1,4 @@
-<main class="flex flex-col gap-4">
+<main class="flex flex-col gap-4 h-screen">
   <section class="flex w-full justify-between">
     <h2 class="font-bold text-xl">All Products</h2>
     <button
@@ -24,12 +24,92 @@
     </button>
   </section>
   <section
-    class="grid gap-4 grid-flow-row lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1"
+    class="grid gap-4 grid-flow-row lg:grid-cols-3 2xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 h-[90%] 2xl:h-[60%]"
   >
-    <ng-container *ngIf="products | async as products">
-      @for (product of products; track product) {
-      <app-product-item [product]="product" />
-      }
+    <ng-container
+      *ngIf="{ products: products | async, total: total | async } as products"
+    >
+      <ng-container *ngIf="products.products && products.total">
+        @for (product of products.products| paginate: { id: 'server',
+        itemsPerPage: 9, currentPage: page, totalItems: products.total}; track
+        product) {
+        <app-product-item [product]="product" />
+        }
+      </ng-container>
     </ng-container>
   </section>
+  <pagination-template
+    #p="paginationApi"
+    class="flex gap-3"
+    (pageChange)="getPage($event)"
+    id="server"
+    rounded-md
+    (pageBoundsCorrection)="getPage($event)"
+  >
+    <button
+      [ngClass]="p.isFirstPage() ? 'pointer-events-none text-gray-200' : ''"
+      class="flex flex-col justify-center items-center w-10 h-10 border rounded-md"
+      (click)="p.previous()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-5 h-5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15.75 19.5 8.25 12l7.5-7.5"
+        />
+      </svg>
+    </button>
+
+    <div
+      *ngFor="let page of p.pages"
+      [class.current]="p.getCurrent() === page.value"
+    >
+      <button
+        class="w-10 h-10 font-bold border rounded-md"
+        (click)="p.setCurrent(page.value)"
+        *ngIf="p.getCurrent() !== page.value"
+      >
+        <span>{{ page.label }}</span>
+      </button>
+      <button
+        class="w-10 h-10 font-bold border rounded-md"
+        [ngClass]="
+          p.getCurrent() === page.value
+            ? 'text-figma-green bg-figma-green bg-opacity-5 border-figma-green'
+            : ''
+        "
+        *ngIf="p.getCurrent() === page.value"
+      >
+        <span>{{ page.label }}</span>
+      </button>
+    </div>
+
+    <button
+      class="flex flex-col justify-center items-center w-10 h-10 border rounded-md"
+      [ngClass]="p.isLastPage() ? 'pointer-events-none text-gray-200' : ''"
+      (click)="p.next()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-5 h-5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+        />
+      </svg>
+    </button>
+  </pagination-template>
 </main>

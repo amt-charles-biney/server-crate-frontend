@@ -18,6 +18,12 @@
         formControlName="productName"
         myClass="font-[500]"
       />
+      @if (productName.invalid && (productName.touched || productName.dirty)) {
+      <span
+        class="text-red-600"
+        >{{addProductForm.controls["productName"].errors?.['required'].message }}</span
+      >
+      }
       <app-custom-input
         id="productDescription"
         label="Product Description"
@@ -26,7 +32,12 @@
         formControlName="productDescription"
         myClass="font-[500]"
       />
-
+      @if (productDescription.invalid && (productDescription.touched || productDescription.dirty)) {
+        <span
+          class="text-red-600"
+          >{{addProductForm.controls["productDescription"].errors?.['required'].message }}</span
+        >
+        }
       <ng-container *ngIf="categories$ | async as categories">
         <app-custom-input
           id="category"
@@ -35,20 +46,33 @@
           placeholder="Select an option"
           formControlName="category"
           [filteredOptions]="filteredOptions"
-          [optionSelected]="onOptionSelected"
+          [optionSelected]="onCategorySelected"
+          [deleteFn]="deleteCategory"
           myClass="font-[500]"
         />
 
         <div class="flex justify-between">
-          <div class="w-[45%]">
-            <app-custom-input
-              id="brandName"
-              label="Brand Name"
-              type="async"
-              placeholder="Select an option"
-              [filteredOptions]="filteredOptions"
-              myClass="font-[500]"
-            />
+          <div class="flex items-center w-[45%] ">
+            <div class="w-[80%]">
+              <ng-container *ngIf="brands$ | async as brands">
+                <app-custom-input
+                  id="brandName"
+                  label="Brand Name"
+                  type="async"
+                  placeholder="Select an option"
+                  formControlName="productBrand"
+                  [filteredOptions]="filteredBrandNames"
+                  [optionSelected]="onBrandSelected"
+                  [deleteFn]="deleteBrand"
+                  myClass="font-[500]"
+                />
+              </ng-container>
+            </div>
+            <button type="button" (click)="addNewBrand()" class="flex justify-center items-center w-[20%] h-[41px] bg-gray-100 mt-10">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
           </div>
           <div class="w-[45%]">
             <app-custom-input
@@ -75,6 +99,12 @@
             formControlName="inStock"
             myClass="font-[500]"
           />
+          <!-- @if (inStock.invalid && (inStock.touched || inStock.dirty)) {
+            <small
+              class="text-red-600"
+              >{{addProductForm.controls["inStock"].errors?.['required'].message }}</small
+            >
+            } -->
         </div>
         <div class="xl:w-[45%]">
           <app-custom-input
@@ -97,6 +127,7 @@
         previewClass="w-full h-96 object-center"
         [previewImage]="coverImage"
         [editId]="id"
+        label="Cover Image"
         (removeImageEmitter)="removeImage($event)"
         (uploadImageEmitter)="replaceImage($event)"
       >
@@ -106,8 +137,7 @@
         >
           <img src="/assets/upload.svg" alt="upload" />
           <p>
-            <span class="text-figma-green">Click to upload</span> or drag and
-            drop
+            <span class="text-figma-green">Click to upload an image</span>
           </p>
           <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
         </label>
@@ -185,7 +215,7 @@
         <button
           class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
         >
-          Save
+          {{ id ? "Edit" : "Save" }}
         </button>
         <button
           (click)="cancel()"
@@ -207,6 +237,7 @@
             <p class="text-gray-400">{{ option.value[0].name }}</p>
           </li>
         </ng-container>
+        
       </ul>
     </div>
   </section>

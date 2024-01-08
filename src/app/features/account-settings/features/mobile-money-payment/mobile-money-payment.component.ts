@@ -4,7 +4,6 @@ import { CustomInputComponent } from '../../../../shared/components/custom-input
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { saveChanges } from '../../../../core/utils/settings';
-import intlTelInput from 'intl-tel-input';
 import { Contact } from '../../../../types';
 
 @Component({
@@ -28,7 +27,7 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.telInput) {
-      this.intl = intlTelInput(this.telInput.nativeElement, {
+      this.intl = (<any>window).intlTelInput(this.telInput.nativeElement, {
         initialCountry: '',
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
