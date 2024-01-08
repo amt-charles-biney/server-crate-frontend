@@ -49,4 +49,4 @@ jobs:
               git fetch --all &&
               git reset --hard origin/Presentation &&
               git pull origin Presentation &&
-              
+              sudo docker compose up -d --build

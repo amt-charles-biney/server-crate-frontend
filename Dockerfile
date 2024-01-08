@@ -1,6 +1,5 @@
 FROM node:alpine
 WORKDIR /server-create-frontend
-COPY package.json package-lock.json ./
-RUN npm install
 COPY . ./
+RUN npm install
 EXPOSE 4200
