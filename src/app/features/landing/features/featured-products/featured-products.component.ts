@@ -6,11 +6,12 @@ import { Store } from '@ngrx/store';
 import { selectFeaturedProducts, selectLoading } from '../../../../store/product/featured-product/featured-product.reducer';
 import { loadFeaturedProducts } from '../../../../store/product/featured-product/featured-product.action';
 import { Observable } from 'rxjs';
+import { HomepageProductItemComponent } from '../../../../shared/components/homepage-product-item/homepage-product-item.component';
 
 @Component({
   selector: 'app-featured-products',
   standalone: true,
-  imports: [CommonModule, ProductItemComponent],
+  imports: [CommonModule, HomepageProductItemComponent],
   templateUrl: './featured-products.component.html',
 })
 export class FeaturedProductsComponent {
