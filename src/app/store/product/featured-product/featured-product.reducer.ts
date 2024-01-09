@@ -1,15 +1,17 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { loadFeaturedProducts, loadFeaturedProductsFailure, loadFeaturedProductsSuccess } from './featured-product.action';
+import { loadFeaturedProducts, loadFeaturedProductsFailure, loadFeaturedProductsSuccess, loadNewProducts, loadNewProductsFailure, loadNewProductsSuccess } from './featured-product.action';
 import { ProductItem } from '../../../types';
 
 interface FeatureState {
-    featuredProducts: ProductItem[] | []
+    featuredProducts: ProductItem[] | [],
+    newProducts: ProductItem[] | []
     loading: boolean,
     error: any
 }
 
 const initialState : FeatureState  = {
     featuredProducts: [],
+    newProducts: [],
     loading: false,
     error: null
 }
@@ -31,6 +33,20 @@ export const FeaturedProductFeature = createFeature({
             ...state,
             loading: false,
             error
+        })),
+        on(loadNewProducts, (state) => ({
+            ...state,
+            loading: true
+        })),
+        on(loadNewProductsSuccess, (state, { newProducts }) => ({
+            ...state,
+            loading: false,
+            newProducts
+        })),
+        on(loadNewProductsFailure, (state, { error }) => ({
+            ...state,
+            loading: false,
+            error
         }))
 
     )
@@ -38,6 +54,7 @@ export const FeaturedProductFeature = createFeature({
 
 export const {
      selectFeaturedProducts,
+     selectNewProducts,
      selectLoading,
      selectError,
      reducer,
