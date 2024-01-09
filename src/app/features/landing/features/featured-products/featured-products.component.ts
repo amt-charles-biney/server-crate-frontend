@@ -16,20 +16,14 @@ import { Observable } from 'rxjs';
 export class FeaturedProductsComponent {
 
   featuredProducts$!: Observable<ProductItem[] | []>;
-  featuredProducts: ProductItem[] | [] = [];
   loading$!: Observable<boolean>;
-  loading: boolean = false;
 
+    ngOnInit() {
+      this.featuredProducts$ = this.store.select(selectFeaturedProducts);
+      this.loading$ = this.store.select(selectLoading);
 
-  ngOnInit() {
-      this.featuredProducts$ = this.store.select(selectFeaturedProducts)
-      this.loading$ = this.store.select(selectLoading)
-
-      this.store.dispatch(loadFeaturedProducts())
-
-      this.featuredProducts$.subscribe(v => this.featuredProducts = v)
-      this.loading$.subscribe(v => this.loading = v)
-  }
+      this.store.dispatch(loadFeaturedProducts());
+    }
 
   constructor(private store: Store) {}
 

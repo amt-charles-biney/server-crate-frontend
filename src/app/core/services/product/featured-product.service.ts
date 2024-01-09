@@ -9,12 +9,17 @@ import { Observable } from 'rxjs';
 })
 export class FeaturedProductService {
 
-  featuredProductUrl: string = `${environment.base_url}/featured`
+  featuredProductUrl: string = `${environment.base_url}`
 
   constructor(private http: HttpClient) { }
 
   getFeaturedProducts(): Observable<ProductItem[]> {
-     return this.http.get<ProductItem[]>(this.featuredProductUrl) 
+     return this.http.get<ProductItem[]>(`${this.featuredProductUrl}/featured`) 
   }
+
+  getNewProducts(): Observable<ProductItem[]> {
+    return this.http.get<ProductItem[]>(`${this.featuredProductUrl}/new`) 
+ }
+
 }
 
