@@ -19,7 +19,7 @@ export class HeroComponent {
   
   currentSlide: number = 0
   dotHelper: Array<Number> = []
-  slider: any;
+  slider: KeenSliderInstance | any;
 
   sliders: heroSlider[] = [{
     img: "/assets/hero1.jpg",
