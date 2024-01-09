@@ -8,10 +8,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ProductItem } from '../../types';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
-import { getProducts, getUserProducts } from '../../store/admin/products/categories.actions';
-import { selectProducts, selectTotal } from '../../store/admin/products/products.reducers';
+import { getUserProducts } from '../../store/admin/products/categories.actions';
+import {
+  selectProducts,
+  selectTotal,
+} from '../../store/admin/products/products.reducers';
 import { UserProductItemComponent } from '../../shared/components/user-product-item/user-product-item.component';
 import { filter } from '../../store/users/users.actions';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { CompareDialogComponent } from '../../shared/components/compare-dialog/compare-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-preference-selection',
@@ -23,7 +29,7 @@ import { filter } from '../../store/users/users.actions';
     ReactiveFormsModule,
     CustomButtonComponent,
     NgxPaginationModule,
-    UserProductItemComponent
+    UserProductItemComponent,
   ],
   templateUrl: './preference-selection.component.html',
 })
@@ -35,27 +41,32 @@ export class PreferenceSelectionComponent implements OnInit {
     new EventEmitter<number>();
   filterForm!: FormGroup;
   queryParams!: Record<string, Set<string>>;
+  selectedProducts: ProductItem[] = [];
 
   private products$ = new BehaviorSubject<ProductItem[]>([]);
   products: Observable<ProductItem[]> = this.products$.asObservable();
-  total!: Observable<number>
+  total!: Observable<number>;
   page: number = 0;
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    public dialog: MatDialog,
+    private router: Router
+  ) {}
   ngOnInit(): void {
     this.onLoad();
     this.getPage(1);
   }
   getPage(pageNumber: number) {
     this.page = pageNumber;
-    const params = this.buildParams(this.queryParams)
+    const params = this.buildParams(this.queryParams);
     this.store.dispatch(getUserProducts({ page: this.page - 1, params }));
     this.products = this.store.select(selectProducts);
     this.total = this.store.select(selectTotal);
   }
   onLoad() {
     this.queryParams = {
-      producttype: new Set(),
+      productType: new Set(),
       processor: new Set(),
       price: new Set(),
       brand: new Set(),
@@ -75,27 +86,47 @@ export class PreferenceSelectionComponent implements OnInit {
     } else {
       this.queryParams[selected.name].delete(selected.value);
     }
-    const params = this.buildParams(this.queryParams)
-    this.store.dispatch(filter({params, page: this.page - 1}))
+    const params = this.buildParams(this.queryParams);
+    this.store.dispatch(filter({ params, page: this.page - 1 }));
     console.log(this.buildParams(this.queryParams));
   }
 
+  compareEvent() {
+    console.log('Open');
+    if (this.selectedProducts.length < 2) {
+      this.dialog.open(CompareDialogComponent);
+    }
+  }
+
+  onSelect(product: ProductItem) {
+    this.selectedProducts = this.selectedProducts.filter((pdt) => product.id !== pdt.id)
+    this.selectedProducts.push(product);
+    if (this.selectedProducts.length === 2) {
+      this.router.navigateByUrl('/compare', {
+        state: {
+          firstProduct: this.selectedProducts[0],
+          secondProduct: this.selectedProducts[1],
+        },
+      });
+    }
+  }
+
   buildParams(params: Record<string, Set<string>>) {
-    const keys = ['producttype', 'processor', 'price', 'brand', 'mounting'];
+    const keys = ['productType', 'processor', 'price', 'brand', 'mounting'];
     let paramArray = [];
     for (let key of keys) {
       const keyValues = Array.from(params[key]);
       if (keyValues.length !== 0) {
-        paramArray.push(`${key}=${keyValues.join(', ')}`);
+        paramArray.push(`${key}=${keyValues.join(',')}`);
       }
     }
     return paramArray.join('&');
   }
 
   clearFilters() {
-    this.onLoad()
-    const params = this.buildParams(this.queryParams)
-    this.store.dispatch(filter({params, page: this.page}))
+    this.onLoad();
+    const params = this.buildParams(this.queryParams);
+    this.store.dispatch(filter({ params, page: this.page }));
   }
 
   get productType() {

@@ -6,6 +6,8 @@ import { Routes } from "@angular/router";
 import { ProductsEffect } from '../../store/admin/products/products.effects';
 import { provideState } from '@ngrx/store';
 import { productsFeature } from '../../store/admin/products/products.reducers';
+import { CategoryEffect } from '../../store/admin/products/categories.effect';
+import { configurationFeature } from '../../store/admin/products/configuration.reducers';
 
 export const route: Routes = [
     {
@@ -25,6 +27,14 @@ export const route: Routes = [
                 providers: [
                     provideEffects(ProductsEffect),
                     provideState(productsFeature)
+                ]
+            },
+            {
+                path: 'compare',
+                loadComponent: () => import('../compare/compare.component').then(m => m.CompareComponent),
+                providers: [
+                    provideEffects(CategoryEffect),
+                    provideState(configurationFeature)
                 ]
             }
         ],

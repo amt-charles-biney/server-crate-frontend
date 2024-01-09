@@ -52,8 +52,18 @@ export class CategoryEffect {
             console.log('categories', data);
             return gotCategories({ categories: data });
           }),
+          timeout(8000),
           catchError((err) => {
+            throwError(() => 'Request timed out');
             console.log('Error occured', err);
+            this.store.dispatch(
+              setLoadingSpinner({
+                status: false,
+                message:
+                  err.error.detail || 'Cannot fetch categories from server',
+                isError: true,
+              })
+            );
             return of(categoryFailure());
           })
         );
@@ -76,7 +86,9 @@ export class CategoryEffect {
             );
             return gotBrands({ brands: data });
           }),
+          timeout(5000),
           catchError((err) => {
+            throwError(() => 'Request timed out');
             console.log('Error occured', err);
             return of(categoryFailure());
           })
@@ -100,14 +112,16 @@ export class CategoryEffect {
                   isError: false,
                 })
               );
-              console.log('data from config', data);
               return gotConfiguration(data);
             }),
+            timeout(5000),
             catchError((error) => {
+              throwError(() => 'Request timed out');
               return of(
                 setLoadingSpinner({
                   status: false,
-                  message: error.error.detail,
+                  message:
+                  error.error.detail || 'Cannot get category configuration',
                   isError: true,
                 })
               );

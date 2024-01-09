@@ -1,5 +1,7 @@
 <article
-  class="flex flex-col gap-2 max-w-xs min-w-max rounded-lg shadow-lg hover:scale-105 transition-transform duration-500 p-3 border"
+  (click)="onSelect()"
+  [ngClass]="isSelected ? 'border-4 border-figma-green' : 'border'"
+  class="flex flex-col gap-2 max-w-xs min-w-max rounded-lg shadow-lg hover:scale-105 transition-transform duration-500 p-3"
 >
   <img
     class="w-full h-[136px]"

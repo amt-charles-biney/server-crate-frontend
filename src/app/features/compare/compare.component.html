@@ -1,0 +1,77 @@
+<header class="flex justify-between mb-6">
+  <h2 class="text-xl font-bold">Compare Servers</h2>
+  <button class="text-red-600 underline">
+    Clear selections
+  </button>
+</header>
+<main class="grid grid-rows-20">
+    <section class="grid grid-cols-7 border row-span-9">
+        <section class=" border-r flex flex-col justify-center items-center">
+            <p>Products</p>
+        </section>
+        <section class="col-span-3 border-r flex flex-col gap-2 px-3 py-2">
+          <p class="py-1.5 px-3 text-lg font-bold border rounded-lg">{{ firstProduct.productName }}</p>
+          <div class="self-center">
+            <img [src]="firstProduct.coverImage" class="h-[250px]"  alt=""> 
+          </div>
+        </section>
+        <section class="col-span-3 border-r flex flex-col gap-3 px-3 py-2">
+          <p class="py-1.5 px-3 text-lg font-bold border rounded-lg">{{ secondProduct.productName }}</p>
+          <div class="self-center">
+            <img [src]="secondProduct.coverImage" class="h-[250px]"  alt="">
+          </div>
+        </section>
+    </section>
+    <section class="grid grid-cols-7 border row-span-2">
+        <section class=" border-r flex flex-col justify-center items-center">
+            Price
+        </section>
+        <section class="col-span-3 border-r flex flex-col justify-center items-center">
+          {{ firstProduct.productPrice | currency }}
+        </section>
+        <section class="col-span-3 self-center text-center">
+          {{ secondProduct.productPrice | currency }}
+        </section>
+    </section>
+    <section class="grid grid-cols-7 border row-span-2">
+        <section class=" border-r flex flex-col justify-center items-center">
+            Type
+        </section>
+        <section class="col-span-3 border-r flex flex-col justify-center items-center">
+          {{ firstProduct.productName }}
+        </section>
+        <section class="col-span-3 self-center text-center">
+          {{ secondProduct.productName }}
+        </section>
+    </section>
+    <section class="grid grid-cols-7 border row-span-1">
+        <section class=" border-r flex flex-col justify-center items-center">
+            Processor
+        </section>
+        <section class="col-span-3 border-r self-center text-center">
+          <div *ngIf="firstProductAttr | async as attr">
+            <span *ngFor="let option of attr.options | keyvalue">
+              {{ option.key }},
+            </span>
+          </div>
+        </section>
+        <section class="col-span-3 border-r self-center text-center">
+          <div *ngIf="secondProductAttr | async as attr">
+            <span *ngFor="let option of attr.options | keyvalue">
+              {{ option.key }},
+            </span>
+          </div>
+        </section>
+    </section>
+    <section class="grid grid-cols-7 border row-span-5">
+        <section class=" border-r flex flex-col justify-center items-center">
+            Description
+        </section>
+        <section class="col-span-3 border-r flex flex-col justify-center items-center">
+          {{ firstProduct.productDescription }}
+        </section>
+        <section class="col-span-3 self-center">
+          {{ secondProduct.productDescription }}
+        </section>
+    </section>
+</main>
