@@ -2,9 +2,9 @@ name: Server Crate Frontend CI/CD
 
 on:
   push:
-    branches: [Presentation]
+    branches: [dev, main, devops]
   pull_request:
-    branches: [Presentation]
+    branches: [dev, main, ]
 
 jobs:
   build:
