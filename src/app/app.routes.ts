@@ -1,21 +1,17 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './features/home/home.component';
+import { provideEffects } from '@ngrx/effects';
+import { provideState, provideStore } from '@ngrx/store';
+import { FeaturedProductFeature } from './store/product/featured-product/featured-product.reducer';
+import { FeaturedProductEffect } from './store/product/featured-product/featured-product.effect';
 
 export const routes: Routes = [
     {
-        path: 'signup',
-        loadChildren: () => import('./features/sign-up/sign-up.routes').then(m => m.route)
-    },
-    {
-        path: 'login',
-        loadChildren: () => import('./features/login/login.routes').then(m => m.route)
-    },
-    {
-        path: 'forgot-password',
-        loadChildren: () => import('./features/reset/reset.routes').then(m => m.route)
-    },
-    {
         path: '',
-        loadChildren: () => import('./features/home/home.routes').then(m => m.route)
+        loadChildren: () => import('./features/home/home.routes').then(m => m.route),
+        providers: [
+            provideState(FeaturedProductFeature),
+            provideEffects(FeaturedProductEffect)
+        ]
+        
     }
 ];

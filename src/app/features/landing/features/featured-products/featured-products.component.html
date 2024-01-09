@@ -1,13 +1,20 @@
 <main class="mt-10">
-    <section class="flex flex-col gap-4">
+    <section class="flex flex-col gap-3">
         <h2 class="font-bold text-center text-xl py-6">Featured Products</h2>
+          @if(loading) {
+             <img 
+            alt="spinner"
+            src="/assets/spinner.svg"
+             />
+          }
+
 
         @if(featuredProducts.length <= 0) {
             <div class="text-center">No featured products yet !!!</div>
         }
 
         @else {
-            <div class="flex flex-row items-center gap-2 flex-wrap">
+            <div class="flex flex-row items-center gap-4 justify-center mx-auto flex-wrap">
                 @for(product of featuredProducts; let idx = $index; track idx) {
                     <app-product-item [product]="product"></app-product-item>
                 }
