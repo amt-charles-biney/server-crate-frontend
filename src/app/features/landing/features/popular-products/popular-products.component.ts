@@ -7,11 +7,12 @@ import { loadNewProducts } from '../../../../store/product/featured-product/feat
 import { Observable } from 'rxjs';
 import { selectNewProducts } from '../../../../store/product/featured-product/featured-product.reducer';
 import { CommonModule } from '@angular/common';
+import { HomepageProductItemComponent } from '../../../../shared/components/homepage-product-item/homepage-product-item.component';
 
 @Component({
   selector: 'app-popular-products',
   standalone: true,
-  imports: [ProductItemComponent, CommonModule],
+  imports: [HomepageProductItemComponent, CommonModule],
   templateUrl: './popular-products.component.html',
   styleUrls: [
     "../../../../../../node_modules/keen-slider/keen-slider.min.css"
