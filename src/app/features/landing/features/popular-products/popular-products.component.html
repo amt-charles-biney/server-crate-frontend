@@ -1,66 +1,64 @@
 <section class="mt-10">
   <h2 class="font-bold text-xl py-8">Most Popular</h2>
 
-  
-    <ng-container *ngIf="popularProducts$ | async as popularProducts">
-       @if(popularProducts.length <= 0) {
-        <div> no new products available!! </div>
-       }
-      <div class="keen-slider w-full" #popularSliderRef>
-        @for (product of popularProducts; let i = $index; track i) {
-        <div
-          class="keen-slider__slide p-4"
-        >
-        <app-homepage-product-item [product]="product"></app-homepage-product-item>
-        </div>
-        }
+  <ng-container *ngIf="popularProducts$ | async as popularProducts">
+    @if(popularProducts.length <= 0) {
+    <div>no new products available!!</div>
+    }
+    <div class="keen-slider w-full" #popularSliderRef>
+      @for (product of popularProducts; let i = $index; track i) {
+      <div class="keen-slider__slide p-4">
+        <app-homepage-product-item
+          [product]="product"
+        ></app-homepage-product-item>
+      </div>
+      }
     </div>
     <div class="flex flex-row mt-8 items-center justify-between w-full">
       <div class="flex flex-row items-center gap-2">
         <span
-        (click)="popularProductSlider.moveToIdx(idx)"
-        *ngFor="let slide of popularProducts; let idx = index"
-        class="{{
-          idx === currentPopularSlide ? 'border-green-400' : 'border-white'
-        }} border-2 p-1 flex items-center justify-center bg-white rounded-full w-4 h-4"
-      >
-        <span
+          (click)="popularProductSlider.moveToIdx(idx)"
+          *ngFor="let slide of popularProducts; let idx = index"
           class="{{
-            idx === currentPopularSlide ? ' bg-green-400' : 'bg-gray-400'
-          }} hover:bg-green-400 rounded-full w-2 h-2 p-1"
-        ></span>
-      </span>
+            idx === currentPopularSlide ? 'border-green-400' : 'border-white'
+          }} border-2 p-1 flex items-center justify-center bg-white rounded-full w-4 h-4"
+        >
+          <span
+            class="{{
+              idx === currentPopularSlide ? ' bg-green-400' : 'bg-gray-400'
+            }} hover:bg-green-400 rounded-full w-2 h-2 p-1"
+          ></span>
+        </span>
       </div>
 
-    <div class="flex flex-row gap-2 items-center">
-      <button
-        (click)="popularProductSlider.prev()"
-        [disabled]="currentPopularSlide === 0"
-        class="p-2 rounded-full w-[48px] h-[48px] bg-green-200 {{
-          currentPopularSlide === 0 ? '' : 'hover:bg-green-100 '
-        }} flex items-center justify-center"
-      >
-        <img
-          alt="chevron-left"
-          src="/assets/chevronleft.svg"
-          width="10"
-          height="10"
-        />
-      </button>
+      <div class="flex flex-row gap-2 items-center">
+        <button
+          (click)="popularProductSlider.prev()"
+          [disabled]="currentPopularSlide === 0"
+          class="p-2 rounded-full w-[48px] h-[48px] bg-green-200 {{
+            currentPopularSlide === 0 ? '' : 'hover:bg-green-100 '
+          }} flex items-center justify-center"
+        >
+          <img
+            alt="chevron-left"
+            src="/assets/chevronleft.svg"
+            width="10"
+            height="10"
+          />
+        </button>
 
-      <button
-        (click)="popularProductSlider.next()"
-        class="p-2 rounded-full w-[48px] h-[48px] bg-green-600 hover:bg-green-500 flex items-center justify-center"
-      >
-        <img
-          alt="chevron-left"
-          src="/assets/chevronright.svg"
-          width="10"
-          height="10"
-        />
-      </button>
+        <button
+          (click)="popularProductSlider.next()"
+          class="p-2 rounded-full w-[48px] h-[48px] bg-green-600 hover:bg-green-500 flex items-center justify-center"
+        >
+          <img
+            alt="chevron-left"
+            src="/assets/chevronright.svg"
+            width="10"
+            height="10"
+          />
+        </button>
+      </div>
     </div>
-    </div>
-    </ng-container>
-
+  </ng-container>
 </section>
