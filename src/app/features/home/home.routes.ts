@@ -12,6 +12,10 @@ export const route: Routes = [
             {
                 path: 'settings',
                 loadChildren: () => import('../account-settings/account-settings.routes').then(m => m.route)
+            },
+            {
+                path: '',
+                loadChildren: () => import('../landing/landing.routes').then(m => m.route)
             }
         ],
         component: HomeComponent
