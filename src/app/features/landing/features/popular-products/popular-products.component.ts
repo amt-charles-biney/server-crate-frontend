@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { ProductItem } from '../../../../types';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
 import { ProductItemComponent } from '../../../../shared/components/product-item/product-item.component';
@@ -19,21 +19,57 @@ import { HomepageProductItemComponent } from '../../../../shared/components/home
   ],
 })
 export class PopularProductsComponent {
+  @ViewChild('popularSliderRef') popularSliderRef!: ElementRef<HTMLElement>
 
-  popularProducts$!: Observable<ProductItem[] | []>;
-  popularProducts: ProductItem[] = []
+  popularProductSlider!: KeenSliderInstance
+  popularProducts$ = this.store.select(selectNewProducts)
+  currentPopularSlide = 0
+  
+  constructor(private store: Store, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-
-    this.popularProducts$ = this.store.select(selectNewProducts)
     this.store.dispatch(loadNewProducts())
+  }
 
-    this.popularProducts$.subscribe(v => this.popularProducts = v)
+  
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if(this.popularSliderRef) {
+        this.popularProductSlider = new KeenSlider(this.popularSliderRef.nativeElement, {
+          initial: this.currentPopularSlide,
+          loop: true,
+          slideChanged: (s) => {
+            this.currentPopularSlide = s.track.details.rel
+          },
+          mode: "free",
+          breakpoints: {
+            "(min-width: 400px)": {  
+              slides: { perView: 2, spacing: 20 },  
+            },
+            "(min-width: 640px)": {  
+              slides: { perView: 2, spacing: 20 }, 
+            },
+            "(min-width: 1024px)": { 
+              slides: { perView: 3, spacing: 30 }, 
+            },
+            "(min-width: 1280px)": {
+              slides: { perView: 3, spacing: 40 },  
+            },
+          },
+          slides: {
+            perView: 1, 
+            spacing: 10, 
+          },
+        })
+      }
+
+      this.cdr.detectChanges();
+    }, 2000)
   }
 
 
-  constructor(private store: Store) {}
-
-
+  ngOnDestroy() {
+    if (this.popularProductSlider) this.popularProductSlider.destroy()
+  }
 
 }
