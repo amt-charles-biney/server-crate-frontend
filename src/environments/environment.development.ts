@@ -5,4 +5,5 @@ export const environment = {
     brands: 'http://localhost:8080/api/v1/admin/brand',
     adminProducts: 'http://localhost:8080/api/v1/admin/product', 
     userProducts: 'http://localhost:8080/api/v1/product', 
+    base_url: 'http://localhost:8080/api/v1', 
 };

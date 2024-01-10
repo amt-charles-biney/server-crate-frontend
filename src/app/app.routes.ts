@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { SignUpEffect } from './store/signup/effects/signup.effects';
 import { signUpFeature } from './store/signup/reducers/signup.reducers';
-import { provideState } from '@ngrx/store';
+import { provideState, provideStore } from '@ngrx/store';
 import { VerifyEffect } from './store/signup/effects/verify.effects';
 import { loginFeature } from './store/signin/reducers/login.reducers';
 import { LoginEffect } from './store/signin/effects/login.effects';
@@ -12,6 +12,9 @@ import { settingsGuard } from './core/guards/settings.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
 import { authGuard } from './core/guards/auth.guard';
+import { FeaturedProductService } from './core/services/product/featured-product.service';
+import { FeaturedProductFeature } from './store/product/featured-product/featured-product.reducer';
+import { FeaturedProductEffect } from './store/product/featured-product/featured-product.effect';
 
 export const routes: Routes = [
     {
@@ -60,6 +63,10 @@ export const routes: Routes = [
     {
         path: '',
         loadChildren: () => import('./features/home/home.routes').then(m => m.route),
+        providers: [
+            provideState(FeaturedProductFeature),
+            provideEffects(FeaturedProductEffect)
+        ]
         
     }
 ];

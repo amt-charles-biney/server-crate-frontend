@@ -1,0 +1,77 @@
+<section class="mt-16">
+  <h2 class="font-semibold text-xl py-12 text-center">Our Customer feedback</h2>
+  <div
+    class="bg-white keen-slider flex items-center w-full h-auto"
+    #feedbackSliderRef
+  >
+    <div
+      *ngFor="let feedback of feedbacks"
+      class="flex flex-col items-center gap-6 keen-slider__slide justify-center max-w-2xl w-full h-full p-8"
+    >
+      <h2 class="text-3xl text-center">{{ feedback.message }}</h2>
+      <img [src]="feedback.image" alt="user1" class="w-24 h-24" />
+
+      <div class="flex flex-col gap-2 text-center">
+        <h2 class="font-semibold">{{ feedback.name }}</h2>
+        <p class="font-medium text-xs text-[#667085]">
+          {{ feedback.position }}
+        </p>
+      </div>
+
+      <div class="flex flex-row items-center justify-center gap-1">
+        <div *ngFor="let index of createStarArray(feedback.star)">
+          <img [alt]="'star' + index" src="/assets/star.svg" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row w-full items-center justify-center">
+    <div class="flex gap-2">
+      <span
+        (click)="feedbackSlider.moveToIdx(idx)"
+        *ngFor="let slide of feedbacks; let idx = index"
+        class="{{
+          idx === currentFeedbackSlide ? 'border-green-400' : 'border-white'
+        }} border-2 p-1 flex items-center justify-center bg-white rounded-full w-4 h-4"
+      >
+        <span
+          class="{{
+            idx === currentFeedbackSlide ? ' bg-green-400' : 'bg-gray-400'
+          }} hover:bg-green-400 rounded-full w-2 h-2 p-1"
+        ></span>
+      </span>
+    </div>
+  </div>
+  <div class="flex flex-row items-center justify-between">
+    <span></span>
+
+    <div class="flex flex-row gap-2 items-center">
+      <button
+        (click)="feedbackSlider.prev()"
+        [disabled]="currentFeedbackSlide === 0"
+        class="p-2 rounded-full w-[48px] h-[48px] bg-green-200 {{
+          currentFeedbackSlide === 0 ? '' : 'hover:bg-green-100 '
+        }} flex items-center justify-center"
+      >
+        <img
+          alt="chevron-left"
+          src="/assets/chevronleft.svg"
+          width="10"
+          height="10"
+        />
+      </button>
+
+      <button
+        (click)="feedbackSlider.next()"
+        class="p-2 rounded-full w-[48px] h-[48px] bg-green-600 hover:bg-green-500 flex items-center justify-center"
+      >
+        <img
+          alt="chevron-left"
+          src="/assets/chevronright.svg"
+          width="10"
+          height="10"
+        />
+      </button>
+    </div>
+  </div>
+</section>
