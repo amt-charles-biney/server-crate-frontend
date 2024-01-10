@@ -3,16 +3,14 @@ import { provideEffects } from '@ngrx/effects';
 import { authGuard } from '../../core/guards/auth.guard';
 import { settingsGuard } from '../../core/guards/settings.guard';
 import { HomeComponent } from './home.component';
-import { Routes } from "@angular/router";
-import { provideEffects } from '@ngrx/effects';
 import { FeaturedProductEffect } from '../../store/product/featured-product/featured-product.effect';
 import { FeaturedProductFeature } from '../../store/product/featured-product/featured-product.reducer';
 import { ProductsEffect } from '../../store/admin/products/products.effects';
-import { provideState } from '@ngrx/store';
 import { productsFeature } from '../../store/admin/products/products.reducers';
 import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { configurationFeature } from '../../store/admin/products/configuration.reducers';
 import { categoryFeature } from '../../store/admin/products/categories.reducers';
+import { Routes } from '@angular/router';
 
 export const route: Routes = [
     {
