@@ -1,6 +1,9 @@
 import { AccountSettingsComponent } from '../account-settings/account-settings.component';
 import { HomeComponent } from './home.component';
 import { Routes } from "@angular/router";
+import { provideEffects } from '@ngrx/effects';
+import { FeaturedProductEffect } from '../../store/product/featured-product/featured-product.effect';
+import { FeaturedProductFeature } from '../../store/product/featured-product/featured-product.reducer';
 
 export const route: Routes = [
     {
@@ -12,5 +15,5 @@ export const route: Routes = [
             }
         ],
         component: HomeComponent
-    }
+    },
 ]

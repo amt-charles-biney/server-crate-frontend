@@ -7,11 +7,7 @@ import { FeaturedProductEffect } from './store/product/featured-product/featured
 export const routes: Routes = [
     {
         path: '',
-        loadChildren: () => import('./features/home/home.routes').then(m => m.route),
-        providers: [
-            provideState(FeaturedProductFeature),
-            provideEffects(FeaturedProductEffect)
-        ]
+        loadChildren: () => import('./features/home/home.routes').then(m => m.route)
         
     }
 ];
