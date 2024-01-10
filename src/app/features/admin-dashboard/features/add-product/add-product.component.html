@@ -1,0 +1,247 @@
+<main class="flex flex-col min-h-screen">
+  <h1 class="font-bold text-xl">Product Details</h1>
+  <ng-container *ngIf="product | async as product">
+    {{ product | json }}
+  </ng-container>
+  <app-auth-loader [loadingState]="loadingState$" />
+  <form
+    [formGroup]="addProductForm"
+    (ngSubmit)="addProduct()"
+    class="grid grid-cols-2 gap-6 min-h-fit"
+  >
+    <section>
+      <app-custom-input
+        id="productName"
+        label="Product Name"
+        type="text"
+        placeholder="Enter product name"
+        formControlName="productName"
+        myClass="font-[500]"
+      />
+      @if (productName.invalid && (productName.touched || productName.dirty)) {
+      <span
+        class="text-red-600"
+        >{{addProductForm.controls["productName"].errors?.['required'].message }}</span
+      >
+      }
+      <app-custom-input
+        id="productDescription"
+        label="Product Description"
+        type="textarea"
+        placeholder="Enter a description"
+        formControlName="productDescription"
+        myClass="font-[500]"
+      />
+      @if (productDescription.invalid && (productDescription.touched || productDescription.dirty)) {
+        <span
+          class="text-red-600"
+          >{{addProductForm.controls["productDescription"].errors?.['required'].message }}</span
+        >
+        }
+      <ng-container *ngIf="categories$ | async as categories">
+        <app-custom-input
+          id="category"
+          label="Category"
+          type="async"
+          placeholder="Select an option"
+          formControlName="category"
+          [filteredOptions]="filteredOptions"
+          [optionSelected]="onCategorySelected"
+          [deleteFn]="deleteCategory"
+          myClass="font-[500]"
+        />
+
+        <div class="flex justify-between">
+          <div class="flex items-center w-[45%] ">
+            <div class="w-[80%]">
+              <ng-container *ngIf="brands$ | async as brands">
+                <app-custom-input
+                  id="brandName"
+                  label="Brand Name"
+                  type="async"
+                  placeholder="Select an option"
+                  formControlName="productBrand"
+                  [filteredOptions]="filteredBrandNames"
+                  [optionSelected]="onBrandSelected"
+                  [deleteFn]="deleteBrand"
+                  myClass="font-[500]"
+                />
+              </ng-container>
+            </div>
+            <button type="button" (click)="addNewBrand()" class="flex justify-center items-center w-[20%] h-[41px] bg-gray-100 mt-10">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+          </div>
+          <div class="w-[45%]">
+            <app-custom-input
+              id="productId"
+              label="Product ID"
+              type="generator"
+              [isReadOnly]="true"
+              placeholder=""
+              formControlName="productId"
+              [filteredOptions]="filteredOptions"
+              myClass="font-[500]"
+            />
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="flex items-center justify-between">
+        <div class="xl:w-[45%]">
+          <app-custom-input
+            id="inStock"
+            label="In Stock"
+            type="number"
+            placeholder="Enter quantity in stock"
+            formControlName="inStock"
+            myClass="font-[500]"
+          />
+          <!-- @if (inStock.invalid && (inStock.touched || inStock.dirty)) {
+            <small
+              class="text-red-600"
+              >{{addProductForm.controls["inStock"].errors?.['required'].message }}</small
+            >
+            } -->
+        </div>
+        <div class="xl:w-[45%]">
+          <app-custom-input
+            id="price"
+            label="Price"
+            type="number"
+            placeholder="Enter amount"
+            formControlName="productPrice"
+            myClass="font-[500]"
+          />
+        </div>
+      </div>
+    </section>
+    <section>
+      <app-custom-image
+        formControlName="coverImage"
+        elementId="coverImage"
+        containerClass="relative flex flex-col items-center justify-center border rounded-lg h-full"
+        customClass="flex flex-col mt-4 h-[50%] xl:h-[60%]"
+        previewClass="w-full h-96 object-center"
+        [previewImage]="coverImage"
+        [editId]="id"
+        label="Cover Image"
+        (removeImageEmitter)="removeImage($event)"
+        (uploadImageEmitter)="replaceImage($event)"
+      >
+        <label
+          for="#coverImage"
+          class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
+        >
+          <img src="/assets/upload.svg" alt="upload" />
+          <p>
+            <span class="text-figma-green">Click to upload an image</span>
+          </p>
+          <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
+        </label>
+      </app-custom-image>
+      <div class="mt-5">
+        <p class="font-[500]">Product Gallery</p>
+        <small class="text-gray-500"
+          >Enhance your product showcase. Add an image to your product
+          gallery.</small
+        >
+        <div class="flex mt-4 gap-10">
+          <app-custom-image
+            formControlName="image1"
+            elementId="image1"
+            containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+            [previewImage]="image1"
+            [editId]="id"
+            (removeImageEmitter)="removeImage($event)"
+            (uploadImageEmitter)="replaceImage($event)"
+          >
+            <label
+              for="#image1"
+              class="cursor-pointer flex flex-col items-center gap-1"
+            >
+              <img src="/assets/image-plus.svg" alt="add image" />
+              <small class="text-xs">Add image 1</small>
+            </label>
+          </app-custom-image>
+          <app-custom-image
+            formControlName="image2"
+            elementId="image2"
+            containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+            [previewImage]="image2"
+            [editId]="id"
+            (removeImageEmitter)="removeImage($event)"
+            (uploadImageEmitter)="replaceImage($event)"
+          >
+            <label
+              for="#image2"
+              class="cursor-pointer flex flex-col items-center gap-1"
+            >
+              <img src="/assets/image-plus.svg" alt="add image" />
+              <small class="text-xs">Add image 2</small>
+            </label>
+          </app-custom-image>
+          <app-custom-image
+            formControlName="image3"
+            elementId="image3"
+            containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+            [previewImage]="image3"
+            [editId]="id"
+            (removeImageEmitter)="removeImage($event)"
+            (uploadImageEmitter)="replaceImage($event)"
+          >
+            <label
+              for="#image3"
+              class="cursor-pointer flex flex-col items-center gap-1"
+            >
+              <img src="/assets/image-plus.svg" alt="add image" />
+              <small class="text-xs">Add image 3</small>
+            </label>
+          </app-custom-image>
+        </div>
+      </div>
+      <section class="flex items-center justify-end mt-10 gap-6 text-sm">
+        @if (id) {
+        <button
+          (click)="deleteProduct(id)"
+          type="button"
+          class="hover:text-red-600 text-figma-gray underline text-xs"
+        >
+          Delete
+        </button>
+        }
+        <button
+          class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
+        >
+          {{ id ? "Edit" : "Save" }}
+        </button>
+        <button
+          (click)="cancel()"
+          type="button"
+          class="border border-figma-green text-figma-green rounded w-32 py-1 tracking-wider"
+        >
+          Cancel
+        </button>
+      </section>
+    </section>
+  </form>
+  <section class="mt-14">
+    <p>Base Configuration</p>
+    <div class="h-max p-3 rounded-lg mt-2 bg-[#fbfbfb]">
+      <ul class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-3 list-disc">
+        <ng-container *ngIf="options | async as options">
+          <ng-container *ngIf="options[0]">
+
+            <li class="leading-5" *ngFor="let option of options[0].options| keyvalue ">
+              <p class="font-[500]">{{ option.key }}</p>
+              <p class="text-gray-400">{{ option.value[0].name }}</p>
+            </li>
+          </ng-container>
+        </ng-container>
+        
+      </ul>
+    </div>
+  </section>
+</main>
