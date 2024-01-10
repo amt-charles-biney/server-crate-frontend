@@ -8,7 +8,6 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CurrencyPipe, NgOptimizedImage, PercentPipe, RouterModule],
   templateUrl: './homepage-product-item.component.html',
-  styleUrl: './homepage-product-item.component.scss'
 })
 export class HomepageProductItemComponent {
   @Input() product!: ProductItem

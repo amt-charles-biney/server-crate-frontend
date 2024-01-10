@@ -10,7 +10,6 @@ import { FeedbackComponent } from './features/feedback/feedback.component';
   standalone: true,
   imports: [HeroComponent, BannerComponent, FeaturedProductsComponent, AboutComponent, PopularProductsComponent, FeedbackComponent],
   templateUrl: './landing.component.html',
-  styleUrl: './landing.component.scss'
 })
 export class LandingComponent {
 

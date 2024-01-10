@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { heroSlider } from './hero.interface';
+import { heroSlider } from '../../../../types';
 import { CommonModule } from '@angular/common';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
 
@@ -9,8 +9,7 @@ import KeenSlider, { KeenSliderInstance } from 'keen-slider'
   imports: [CommonModule],
   templateUrl: './hero.component.html',
   styleUrls: [
-    "../../../../../../node_modules/keen-slider/keen-slider.min.css",
-    "./hero.component.scss",
+    "../../../../../../node_modules/keen-slider/keen-slider.min.css"
   ],
 })
 export class HeroComponent {

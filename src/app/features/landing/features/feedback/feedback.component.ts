@@ -8,8 +8,7 @@ import KeenSlider, { KeenSliderInstance } from 'keen-slider';
   imports: [CommonModule],
   templateUrl: './feedback.component.html',
   styleUrls: [
-    "../../../../../../node_modules/keen-slider/keen-slider.min.css",
-    './feedback.component.scss',
+    "../../../../../../node_modules/keen-slider/keen-slider.min.css"
   ],
 })
 export class FeedbackComponent {
