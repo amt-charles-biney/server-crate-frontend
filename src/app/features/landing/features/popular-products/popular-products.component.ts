@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { ProductItem } from '../../../../types';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
-import { ProductItemComponent } from '../../../../shared/components/product-item/product-item.component';
 import { Store } from '@ngrx/store';
 import { loadNewProducts } from '../../../../store/product/featured-product/featured-product.action';
 import { Observable } from 'rxjs';
