@@ -151,68 +151,14 @@
           <mat-expansion-panel-header>
             <mat-panel-title> Brand </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul>
-            <li>
+          <ul *ngIf="brands$ | async as brands">
+            <li *ngFor="let brand of brands">
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
                 formControlName="brand"
                 name="brand"
-                value="Asus"
-                label="Asus"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Fujitsu"
-                label="Fujitsu"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Nectar"
-                label="Nectar"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Ergo"
-                label="Ergo"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Pool"
-                label="Pool"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Oracle"
-                label="Oracle"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Hewlett-Packard"
-                label="Hewlett-Packard"
+                [value]="brand.name"
+                [label]="brand.name"
               />
             </li>
           </ul>

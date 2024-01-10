@@ -232,10 +232,13 @@
     <div class="h-max p-3 rounded-lg mt-2 bg-[#fbfbfb]">
       <ul class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-3 list-disc">
         <ng-container *ngIf="options | async as options">
-          <li class="leading-5" *ngFor="let option of options | keyvalue">
-            <p class="font-[500]">{{ option.key }}</p>
-            <p class="text-gray-400">{{ option.value[0].name }}</p>
-          </li>
+          <ng-container *ngIf="options[0]">
+
+            <li class="leading-5" *ngFor="let option of options[0].options| keyvalue ">
+              <p class="font-[500]">{{ option.key }}</p>
+              <p class="text-gray-400">{{ option.value[0].name }}</p>
+            </li>
+          </ng-container>
         </ng-container>
         
       </ul>

@@ -2,35 +2,21 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 import { BasicConfig } from '../../../types';
 import { gotConfiguration, resetConfiguration } from './categories.actions';
 
-const initialState: BasicConfig = {
-    category: {
-        name: '',
-        id: ''
-    },
-    id: '',
-    options: {}
-}
+const initialState: BasicConfig[] = []
 export const configurationFeature = createFeature({
   name: 'configuration',
   reducer: createReducer(
     initialState,
-    on(gotConfiguration, (_, data) => {
-        console.log('reducer config', data);
-        
-        return {
+    on(gotConfiguration, (state, data) => {        
+        return [...state, {
             category: data.category,
             id: data.id,
             options: data.options,
-        }
+        }]
     }),
-    on(resetConfiguration, () => ({
-        category: {
-            name: '',
-            id: ''
-        },
-        id: '',
-        options: {}
-    }))
+    on(resetConfiguration, () => {        
+        return []
+    }),
   ),
 });
 
@@ -38,7 +24,4 @@ export const {
     name,
     reducer,
     selectConfigurationState,
-    selectOptions,
-    selectCategory,
-    selectId,
 } = configurationFeature

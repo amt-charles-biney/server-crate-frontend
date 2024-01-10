@@ -8,6 +8,7 @@ import { provideState } from '@ngrx/store';
 import { productsFeature } from '../../store/admin/products/products.reducers';
 import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { configurationFeature } from '../../store/admin/products/configuration.reducers';
+import { categoryFeature } from '../../store/admin/products/categories.reducers';
 
 export const route: Routes = [
     {
@@ -26,7 +27,9 @@ export const route: Routes = [
                 loadComponent: () => import('../preference-selection/preference-selection.component').then(m => m.PreferenceSelectionComponent),
                 providers: [
                     provideEffects(ProductsEffect),
-                    provideState(productsFeature)
+                    provideEffects(CategoryEffect),
+                    provideState(productsFeature),
+                    provideState(categoryFeature),
                 ]
             },
             {

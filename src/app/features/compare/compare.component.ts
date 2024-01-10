@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  getUserConfiguration,
+  resetConfiguration,
+} from './../../store/admin/products/categories.actions';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BasicConfig, ProductItem } from '../../types';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, concatMap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { getConfiguration } from '../../store/admin/products/categories.actions';
 import { selectConfigurationState } from '../../store/admin/products/configuration.reducers';
 
 @Component({
@@ -13,21 +16,30 @@ import { selectConfigurationState } from '../../store/admin/products/configurati
   imports: [CommonModule],
   templateUrl: './compare.component.html',
 })
-export class CompareComponent implements OnInit {
-  firstProduct!: ProductItem
-  secondProduct!: ProductItem
-  firstProductAttr!: Observable<BasicConfig>
-  secondProductAttr!: Observable<any>
+export class CompareComponent implements OnInit, OnDestroy {
+  firstProduct!: ProductItem;
+  secondProduct!: ProductItem;
+  productAttr!: Observable<BasicConfig[]>;
   constructor(private router: Router, private store: Store) {}
   ngOnInit(): void {
-    const lastNavigation = this.router.lastSuccessfulNavigation
+    const lastNavigation = this.router.lastSuccessfulNavigation;
     if (lastNavigation && lastNavigation.extras.state) {
-      this.firstProduct = lastNavigation.extras.state['firstProduct']
-      this.secondProduct = lastNavigation.extras.state['secondProduct']
+      this.firstProduct = lastNavigation.extras.state['firstProduct'];
+      this.secondProduct = lastNavigation.extras.state['secondProduct'];
+
+      this.store.dispatch(getUserConfiguration({id: this.firstProduct.category.id, name: this.firstProduct.category.name }))
+      this.store.dispatch(getUserConfiguration({id: this.secondProduct.category.id, name: this.secondProduct.category.name }))
       
-      
+      this.productAttr = this.store.select(selectConfigurationState)
     } else {
-      console.log('');
+      this.clearSelections()
     }
+  }
+  ngOnDestroy(): void {    
+    this.store.dispatch(resetConfiguration());
+  }
+
+  clearSelections() {
+    this.router.navigateByUrl('/servers')
   }
 }
