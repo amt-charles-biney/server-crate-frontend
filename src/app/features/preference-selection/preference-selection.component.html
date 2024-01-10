@@ -21,7 +21,7 @@
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
                 formControlName="productType"
-                name="producttype"
+                name="productType"
                 label="Network"
                 value="Network"
               />
@@ -30,7 +30,7 @@
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
                 formControlName="productType"
-                name="producttype"
+                name="productType"
                 label="GPU"
                 value="GPU"
               />
@@ -39,7 +39,7 @@
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
                 formControlName="productType"
-                name="producttype"
+                name="productType"
                 label="Storage"
                 value="Storage"
               />
@@ -48,7 +48,7 @@
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
                 formControlName="productType"
-                name="producttype"
+                name="productType"
                 label="Console"
                 value="Console"
               />
@@ -151,68 +151,14 @@
           <mat-expansion-panel-header>
             <mat-panel-title> Brand </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul>
-            <li>
+          <ul *ngIf="brands$ | async as brands">
+            <li *ngFor="let brand of brands">
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
                 formControlName="brand"
                 name="brand"
-                value="Asus"
-                label="Asus"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Fujitsu"
-                label="Fujitsu"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Nectar"
-                label="Nectar"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Ergo"
-                label="Ergo"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Pool"
-                label="Pool"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Oracle"
-                label="Oracle"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                value="Hewlett-Packard"
-                label="Hewlett-Packard"
+                [value]="brand.name"
+                [label]="brand.name"
               />
             </li>
           </ul>
@@ -270,7 +216,7 @@
       <p *ngIf="total | async as total">
         {{ total }} {{ total === 1 ? "Server" : "Servers" }}
       </p>
-      <button
+      <button (click)="compareEvent()"
         class="w-fit flex items-center gap-3 py-1 px-3 font-semibold bg-figma-green text-white rounded-lg"
       >
         <img src="/assets/compare-btn-icon.svg" alt="compare" />
@@ -288,7 +234,7 @@
             @for (product of products.products| paginate: { id: 'server',
             itemsPerPage: 9, currentPage: page, totalItems: products.total};
             track product) {
-            <app-user-product-item [product]="product" />
+            <app-user-product-item [product]="product" (selectorEmitter)="onSelect($event)"/>
             }
           </ng-container>
         </ng-container>

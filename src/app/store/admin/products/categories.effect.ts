@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
   addBrand,
-  addProduct,
   categoryFailure,
   deleteBrand,
   deleteProduct,
@@ -11,6 +10,8 @@ import {
   getConfiguration,
   getProduct,
   getProducts,
+  getUserBrands,
+  getUserConfiguration,
   gotBrands,
   gotCategories,
   gotConfiguration,
@@ -18,11 +19,10 @@ import {
 } from './categories.actions';
 import {
   catchError,
+  concatMap,
   exhaustMap,
   map,
   of,
-  shareReplay,
-  switchMap,
   tap,
   throwError,
   timeout,
@@ -32,6 +32,7 @@ import { Select, Item, ProductItem, Category } from '../../../types';
 import { Store } from '@ngrx/store';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { Router } from '@angular/router';
+import { UserService } from '../../../core/services/user/user.service';
 
 @Injectable()
 export class CategoryEffect {
@@ -52,8 +53,53 @@ export class CategoryEffect {
             console.log('categories', data);
             return gotCategories({ categories: data });
           }),
+          timeout(8000),
           catchError((err) => {
+            throwError(() => 'Request timed out');
             console.log('Error occured', err);
+            this.store.dispatch(
+              setLoadingSpinner({
+                status: false,
+                message:
+                  err.error.detail || 'Cannot fetch categories from server',
+                isError: true,
+              })
+            );
+            return of(categoryFailure());
+          })
+        );
+      })
+    );
+  });
+  getUserCategories$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(getCategories),
+      tap((x) => console.log('Fetch categories', x)),
+      exhaustMap(() => {
+        return this.userService.getCategories().pipe(
+          map((data: Select[]) => {
+            this.store.dispatch(
+              setLoadingSpinner({
+                status: false,
+                message: '',
+                isError: false,
+              })
+            );
+            console.log('categories', data);
+            return gotCategories({ categories: data });
+          }),
+          timeout(8000),
+          catchError((err) => {
+            throwError(() => 'Request timed out');
+            console.log('Error occured', err);
+            this.store.dispatch(
+              setLoadingSpinner({
+                status: false,
+                message:
+                  err.error.detail || 'Cannot fetch categories from server',
+                isError: true,
+              })
+            );
             return of(categoryFailure());
           })
         );
@@ -76,7 +122,35 @@ export class CategoryEffect {
             );
             return gotBrands({ brands: data });
           }),
+          timeout(5000),
           catchError((err) => {
+            throwError(() => 'Request timed out');
+            console.log('Error occured', err);
+            return of(categoryFailure());
+          })
+        );
+      })
+    );
+  });
+  getUserBrands$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(getUserBrands),
+      tap((x) => console.log('Fetch categories', x)),
+      exhaustMap(() => {
+        return this.userService.getBrands().pipe(
+          map((data: Select[]) => {
+            this.store.dispatch(
+              setLoadingSpinner({
+                status: false,
+                message: '',
+                isError: false,
+              })
+            );
+            return gotBrands({ brands: data });
+          }),
+          timeout(5000),
+          catchError((err) => {
+            throwError(() => 'Request timed out');
             console.log('Error occured', err);
             return of(categoryFailure());
           })
@@ -85,10 +159,10 @@ export class CategoryEffect {
     );
   });
 
-  gotCategory$ = createEffect(() => {
+  getCategoryConfig$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getConfiguration),
-      switchMap((selectedCategory: Select) => {
+      concatMap((selectedCategory: Select) => {
         return this.adminService
           .getCategoryConfiguration(selectedCategory.id)
           .pipe(
@@ -100,14 +174,50 @@ export class CategoryEffect {
                   isError: false,
                 })
               );
-              console.log('data from config', data);
               return gotConfiguration(data);
             }),
+            timeout(5000),
             catchError((error) => {
+              throwError(() => 'Request timed out');
               return of(
                 setLoadingSpinner({
                   status: false,
-                  message: error.error.detail,
+                  message:
+                  error.error.detail || 'Cannot get category configuration',
+                  isError: true,
+                })
+              );
+            })
+          );
+      })
+    );
+  });
+  
+  getUserCategoryConfig$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(getUserConfiguration),
+      concatMap((selectedCategory: Select) => {
+        return this.userService
+          .getCategoryConfiguration(selectedCategory.id)
+          .pipe(
+            map((data) => {
+              this.store.dispatch(
+                setLoadingSpinner({
+                  status: false,
+                  message: '',
+                  isError: false,
+                })
+              );
+              return gotConfiguration(data);
+            }),
+            timeout(5000),
+            catchError((error) => {
+              throwError(() => 'Request timed out');
+              return of(
+                setLoadingSpinner({
+                  status: false,
+                  message:
+                  error.error.detail || 'Cannot get category configuration',
                   isError: true,
                 })
               );
@@ -117,37 +227,6 @@ export class CategoryEffect {
     );
   });
 
-  // transformToSelect(obj: Category): any {
-  //   // Perform key renaming logic here
-  //   const newObj:any = { ...obj }; // Create a new object to avoid mutating the original
-  //   if (newObj.categoryName) {
-  //     newObj.name = newObj.categoryName;
-  //     delete newObj.categoryName;
-  //   }
-  //   return newObj;
-  // }
-
-  // addProduct$ = createEffect(() => {
-  //   return this.action$.pipe(
-  //     ofType(addProduct),
-  //     exhaustMap((formData: FormData) => {
-  //       // console.log(
-  //       //     formData.get('productId')
-  //       //   );
-  //       return this.adminService.addProduct(formData).pipe(
-  //         map((data) => {
-  //           console.log('Added products', data);
-
-  //           return getProducts;
-  //         }),
-  //         catchError((err) => {
-  //           console.log('Error occured', err);
-  //           return of(categoryFailure());
-  //         })
-  //       );
-  //     })
-  //   );
-  // });
 
   getProduct$ = createEffect(() => {
     return this.action$.pipe(
@@ -259,6 +338,7 @@ export class CategoryEffect {
   constructor(
     private action$: Actions,
     private adminService: AdminService,
+    private userService: UserService,
     private store: Store,
     private router: Router
   ) {}

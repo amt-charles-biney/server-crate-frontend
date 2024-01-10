@@ -1,13 +1,24 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProductItem } from '../../../types';
-import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
+import { CommonModule, CurrencyPipe, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-user-product-item',
   standalone: true,
-  imports: [CurrencyPipe, NgOptimizedImage],
+  imports: [CurrencyPipe, NgOptimizedImage, CommonModule],
   templateUrl: './user-product-item.component.html',
 })
 export class UserProductItemComponent {
   @Input() product!: ProductItem
+  @Output() selectorEmitter = new EventEmitter<ProductItem>()
+  isSelected: boolean = false
+
+  onSelect() {
+    if (this.isSelected) {
+      this.isSelected = false
+    } else {
+      this.isSelected = true
+      this.selectorEmitter.emit(this.product)
+    }
+  }
 }

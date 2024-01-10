@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Observable, Subject, catchError, map, of, startWith, tap } from 'rxjs';
-import { Select, LoadingStatus, Option, ProductItem } from '../../../../types';
+import { Select, LoadingStatus, Option, ProductItem, BasicConfig } from '../../../../types';
 import { Store } from '@ngrx/store';
 import {
   selectBrands,
@@ -44,7 +44,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actions';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
-import { selectOptions } from '../../../../store/admin/products/configuration.reducers';
+import { selectConfigurationState } from '../../../../store/admin/products/configuration.reducers';
 import { selectProduct } from '../../../../store/admin/products/products.reducers';
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
 
@@ -69,7 +69,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   addProductForm!: RxFormGroup;
   categories$!: Observable<Select[]>;
   brands$!: Observable<Select[]>;
-  private option$ = new Subject<Option>();
+  private option$ = new Subject<BasicConfig[]>();
   private product$ = new Subject<ProductItem>();
   product = this.product$.asObservable();
   options = this.option$.asObservable();
@@ -128,7 +128,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
     };
     this.addProductForm = <RxFormGroup>this.fb.group(this.formGroup);
     if (this.id) {
-      console.log('id', this.id);
       this.store.dispatch(getProduct({ id: this.id }));
       this.store
         .select(selectProduct)
@@ -142,7 +141,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
                 })
               );
             }
-            console.log('Data', data);
             this.formGroup = {
               file: null,
               coverImage: null,
@@ -179,7 +177,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
     }
     this.categories$ = this.store.select(selectCategories).pipe(
       tap((categories) => {
-        console.log('Categories', categories);
 
         this.filteredOptions = this.category.valueChanges.pipe(
           startWith(''),
@@ -192,7 +189,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
     this.brands$ = this.store.select(selectBrands).pipe(
       tap((brands) => {
-        console.log('Brands', brands);
 
         this.filteredBrandNames = this.productBrand.valueChanges.pipe(
           startWith(''),
@@ -202,7 +198,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
     );
 
     this.loadingState$ = this.store.select(selectLoaderState);
-    this.options = this.store.select(selectOptions);
+    this.options = this.store.select(selectConfigurationState);
     // if (this.router.url !== '/settings') {
     // }
     // this.router.navigateByUrl('/admin/add-product');
@@ -219,7 +215,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
   
   deleteCategory(event:Event, option: Select) {
     event.stopPropagation()
-    console.log('Delete category', option)
   }
 
   private _filter(value: string, filterFrom: Select[]) {
@@ -235,7 +230,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
 
   addNewBrand() {
-    console.log('ProductBrand', this.productBrand.value);
     const brandName = this.productBrand.value
     if (brandName) {
       if (this.id) {
@@ -247,13 +241,11 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
 
   onCategorySelected(event: MatAutocompleteSelectedEvent) {
-    console.log('event', event.option);
     const selectedCategory: Select = event.option.value;
     this.store.dispatch(getConfiguration(selectedCategory));
-    this.options = this.store.select(selectOptions);
+    this.options = this.store.select(selectConfigurationState);
   }
   onBrandSelected(event: MatAutocompleteSelectedEvent) {
-    console.log('event', event.option);
     const selectedCategory: Select = event.option.value;
   }
 
@@ -305,11 +297,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
         .updateProduct(this.id, formData)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: (data) => {
-            console.log('Received', data);
-          },
           error: (err) => {
-            console.log('err', err);
             this.store.dispatch(
               setLoadingSpinner({
                 status: false,
@@ -337,11 +325,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
         .addProduct(formData)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: (data) => {
-            console.log('Received', data);
-          },
           error: (err) => {
-            console.log('err', err);
             this.store.dispatch(
               setLoadingSpinner({
                 status: false,
@@ -389,7 +373,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
     }
   }
   removeImage(imageToRemove: string) {
-    console.log('Removing image');
     if (imageToRemove === 'coverImage') {
       this.removeCoverImage();
     } else if (imageToRemove === 'image1') {
