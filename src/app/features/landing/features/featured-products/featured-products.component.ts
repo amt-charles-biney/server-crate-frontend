@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ProductItem } from '../../../../types';
 import { CommonModule } from '@angular/common';
-import { ProductItemComponent } from '../../../../shared/components/product-item/product-item.component';
 import { Store } from '@ngrx/store';
 import { selectFeaturedProducts, selectLoading } from '../../../../store/product/featured-product/featured-product.reducer';
 import { loadFeaturedProducts } from '../../../../store/product/featured-product/featured-product.action';
