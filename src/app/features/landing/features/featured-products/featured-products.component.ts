@@ -7,6 +7,7 @@ import { selectFeaturedProducts, selectLoading } from '../../../../store/product
 import { loadFeaturedProducts } from '../../../../store/product/featured-product/featured-product.action';
 import { Observable } from 'rxjs';
 import { HomepageProductItemComponent } from '../../../../shared/components/homepage-product-item/homepage-product-item.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-featured-products',
@@ -26,6 +27,10 @@ export class FeaturedProductsComponent {
       this.store.dispatch(loadFeaturedProducts());
     }
 
-  constructor(private store: Store) {}
+    navigateToProduct = () => {
+      this.router.navigate(['/product'], { replaceUrl: true })
+    }
+
+  constructor(private store: Store, private router: Router) {}
 
 }
