@@ -4,4 +4,5 @@ export const environment = {
     categories: 'http://54.247.220.188:8081/api/v1/admin/category',
     brands: 'http://54.247.220.188:8081/api/v1/admin/brand',
     products: 'http://54.247.220.188:8081/api/v1/admin/product',
+    base_url: 'http://54.247.220.188:8081/api/v1', 
 };

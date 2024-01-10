@@ -6,4 +6,5 @@ export const environment = {
     adminProducts: 'http://localhost:8080/api/v1/admin/product', 
     userProducts: 'http://localhost:8080/api/v1/product',
     featured: 'http://localhost:8080/api/v1/admin/featured',
+    base_url: 'http://localhost:8080/api/v1', 
 };
