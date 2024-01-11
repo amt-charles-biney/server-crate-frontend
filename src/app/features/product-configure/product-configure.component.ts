@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HeaderComponent } from '../../core/components/header/header.component';
 import { FooterComponent } from '../../core/components/footer/footer.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductItem } from '../../types';
+import { ICategoryConfig, ICategoryOption, ICompatibleOption, IProductConfiguration, IProductConfigureOptionType, ProductItem } from '../../types';
 import { Store } from '@ngrx/store';
 import {
   selectLoading,
@@ -26,16 +26,19 @@ import cloneDeep from 'lodash.clonedeep';
   styleUrl: './product-configure.component.scss',
 })
 export class ProductConfigureComponent {
-  productId: string = '';
+
   product$!: Observable<ProductItem | null>;
-  productLoading!: Observable<boolean>;
   productConfig!: Observable<any>;
+  
+  productConfigInstance!: ICategoryConfig | any;
+  product!: ProductItem;
+  productConfigItem!: IProductConfiguration;
+  
+  productId: string = '';
+  warranty: boolean = false
+  activeLink: string = "";
+  
   configKeys: string[] = [];
-
-  productConfigInstance: any = {};
-  product: ProductItem | any;
-
-  activeLink: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -44,9 +47,9 @@ export class ProductConfigureComponent {
   ) {}
 
   ngOnInit(): void {
+
     this.productId = this.route.snapshot.paramMap.get('id')?.toString() || '';
     this.product$ = this.store.select(selectProduct);
-    this.productLoading = this.store.select(selectLoading);
     this.productConfig = this.store.select(selectProductConfig);
 
     this.store.dispatch(loadProduct({ id: this.productId }));
@@ -57,21 +60,64 @@ export class ProductConfigureComponent {
     });
 
     this.product$.subscribe((prod) => {
-      this.product = cloneDeep(prod);
+      if(prod) {
+        this.product = cloneDeep(prod);
+        this.productConfigItem = this.transformToProductConfiguration(prod);
+      }
     });
 
     this.productConfig.subscribe((product) => {
-      this.productConfigInstance = cloneDeep(product);
+      if(product) {
+        this.productConfigInstance = cloneDeep(product);
+        this.productConfigItem = {...this.productConfigItem, configurations: this.transformToDefaultCategoryConfigOptions(product)}
+      } 
     });
   }
 
-  gotoProducts = (): void => {
-    this.router.navigate(['/product'], { replaceUrl: true });
-  };
 
-  gotoHome = (): void => {
-    this.router.navigate(['/'], { replaceUrl: true });
-  };
+  transformToProductConfiguration(product: ProductItem) : IProductConfiguration {
+    const configuration: IProductConfiguration = {
+      productId: product.productId,
+      configurations: [],
+      productPrice: parseFloat(product.productPrice),
+      configurationPrice: 0,
+      totalPrice: parseFloat(product.productPrice),
+      warrantyType: this.warranty, 
+      vatIncluded: 0,
+    }
+
+    return configuration;
+  }
+ 
+
+  transformToDefaultCategoryConfigOptions(productConfig: ICategoryConfig): IProductConfigureOptionType[] {    
+    const defaultConfigOptions: IProductConfigureOptionType[] = [];
+  
+    for (const key in productConfig.options) {
+      if (productConfig.options.hasOwnProperty(key)) {
+        const optionsArray: ICompatibleOption[] = productConfig.options[key];
+  
+        optionsArray.forEach((option) => {
+          if (option.isIncluded) { 
+            const configOption: IProductConfigureOptionType = {
+              name: option.name,
+              attribute: option.type, 
+              price: option.price,
+            };
+            defaultConfigOptions.push(configOption);
+          }
+        });
+      }
+    }
+  
+    return defaultConfigOptions;
+  }
+
+
+  gotoProducts = () => { this.router.navigate(['/product'], { replaceUrl: true }) }
+  gotoHome = (): void => { this.router.navigate(['/'], { replaceUrl: true }) }
+  setActiveLink = (active: string) => { this.activeLink = active };
+
 
   getConfigKeys = (): Observable<string[]> => {
     return this.productConfig.pipe(
@@ -79,9 +125,6 @@ export class ProductConfigureComponent {
     );
   };
 
-  setActiveLink = (active: string) => {
-    this.activeLink = active;
-  };
 
   filterProductOptionIncluded = (key: string): string => {
     const options = this.productConfigInstance?.options[key];
@@ -101,4 +144,9 @@ export class ProductConfigureComponent {
 
     this.product = { ...updatedProduct };
   };
+
+  onOptionChange(check: boolean) {
+    this.warranty = check
+  }
 }
+

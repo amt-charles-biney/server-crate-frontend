@@ -198,3 +198,47 @@ export type Category = {
 
 export type OnChange<T> = (value: T) => void;
 export type OnTouch = () => void;
+
+
+
+export interface IProductConfigureOptionType {
+    name: string,
+    attribute: string,
+    price: number
+}
+
+export interface IProductConfiguration { 
+  productId: string,
+  configurations: IProductConfigureOptionType[],
+  productPrice: number,
+  configurationPrice: number
+  totalPrice: number,
+  warrantyType: boolean,
+  vatIncluded: number
+}
+
+
+export interface ICompatibleOption {
+  id: string;
+  name: string;
+  type: string;
+  price: number;
+  media: string;
+  unit: string;
+  isCompatible: boolean;
+  isIncluded: boolean;
+}
+
+export interface ICategoryOption {
+   [key: string] : ICompatibleOption[]
+}
+
+
+export interface ICategoryConfig {
+  id: string,
+  category: {
+    id: string,
+    name: string
+  }
+  options: ICategoryOption
+}
