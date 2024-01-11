@@ -114,7 +114,7 @@ export class ProductConfigureComponent {
   }
 
 
-  gotoProducts = () => { this.router.navigate(['/product'], { replaceUrl: true }) }
+  gotoProducts = () => { this.router.navigate(['/servers'], { replaceUrl: true }) }
   gotoHome = (): void => { this.router.navigate(['/'], { replaceUrl: true }) }
   setActiveLink = (active: string) => { this.activeLink = active };
 
