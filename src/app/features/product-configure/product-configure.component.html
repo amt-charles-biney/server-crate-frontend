@@ -6,19 +6,16 @@
          <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
          <span (click)="gotoProducts()" class="hover:underline cursor-pointer hover:text-green-600">Product</span>
          <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
-         <span class="text-xs md:text-sm">{{ productId }}</span>
+         <span class="text-xs md:text-sm">{{ product.productName || '...' }}</span>
          <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
          <span class="text-green-600">Configure</span>
       </div>
 
-      <ng-container *ngIf="productLoading | async as productLoading">
-         <div>loading...{{ productLoading }}</div>
-      </ng-container>
-
+      <ng-container *ngIf="product$">
       <div class="w-full mt-10 flex gap-4 flex-row flex-wrap mx-auto justify-between items-start">
          <div class="flex flex-col lg:flex-row items-start gap-4 flex-1 w-full">
             <div class="flex flex-row lg:flex-col gap-8 items-center">
-               <div *ngFor="let image of product.imageUrl; let i = index" (click)="swapImage(image, i)"
+               <div *ngFor="let image of product?.imageUrl; let i = index" (click)="swapImage(image, i)"
                   class="border-[2px] hover:border-[#3CB043] border-[#E6E6E6] rounded-lg w-full max-w-[130px] p-4">
                   <img [src]="image" alt="Product Image {{ i + 1 }}" class="w-full" />
                </div>
@@ -39,12 +36,12 @@
                      <h1 class="text-xs font-light text-[#737373]">Brand</h1>
                      <p class="text-xs font-normals">{{ product.productBrand }}</p>
                   </div>
-                  <div *ngFor="let keys of configKeys; let i = index"
-                     class="flex flex-row items-center w-full justify-between {{ i > 3 ? 'hidden' : ''}}">
+                  <div *ngFor="let options of productConfigItem.configurations"
+                     class="flex flex-row items-center w-full justify-between">
 
-                     <h1 class="text-xs font-light text-[#737373]">{{ keys }} :</h1>
+                     <h1 class="text-xs font-light text-[#737373]">{{ options.attribute }} :</h1>
                      <p class="text-xs font-normal text-left">
-                        {{ filterProductOptionIncluded(keys) || "not Included" }}
+                        {{ options.name }}
                      </p>
                   </div>
                </div>
@@ -52,15 +49,23 @@
                <div class="w-full flex-row items-center flex-wrap mx-auto justify-start gap-8 mt-5 flex">
                   <div class="font-medium text-sm">
                      <label class="flex flex-row gap-3">
-                        <input class="text-[#3CB043] border-[1px] border-[#3CB043]" type="radio" name="warranty"
-                           [value]="true" />
+                        <input
+                        name="bring-in-warranty"
+                        [checked]="warranty"
+                        (change)="onOptionChange(true)"
+                        class="text-[#3CB043] border-[1px] border-[#3CB043]" type="checkbox" name="warranty"
+                        />
                         <span>Bring-in warranty for 36 months</span>
                      </label>
                   </div>
 
                   <div class="font-medium text-sm">
                      <label class="flex flex-row gap-3">
-                        <input type="radio" name="warranty" [value]="true" />
+                        <input
+                        [checked]="!warranty"
+                        (change)="onOptionChange(false)"
+                        name="pick-up-warranty"
+                        type="checkbox"/>
                         <span>Pick Up warranty</span>
                      </label>
                   </div>
@@ -77,6 +82,8 @@
             </div>
          </div>
       </div>
+               
+   </ng-container>
 
       
       
@@ -98,12 +105,12 @@
                <mat-tab-nav-panel #tabPanel>
                   <div class="flex flex-row flex-wrap items-center gap-4 mt-10">
                      <div
-                        class="border-[2px] hover:border-[#3CB043] flex flex-col justify-between gap-2 border-[#E6E6E6] rounded-lg w-[150px] h-[150px] p-4"
+                        class="border-[2px] hover:border-[#3CB043] flex flex-col justify-between gap-2 border-[#E6E6E6] rounded-lg w-[150px] h-[180px] p-4"
                         *ngFor="
                  let attributeProduct of productConfigInstance.options[activeLink];
                  let i = index
                ">
-                        <img [src]="attributeProduct.media" [alt]="attributeProduct.media" class="w-24 h-24" />
+                        <img [src]="attributeProduct.media" [alt]="attributeProduct.media" class="w-20 h-20" />
                         <div>
                            <div class="font-bold text-xs">{{ attributeProduct.name }}</div>
                            <div class="font-bold text-sm">
@@ -122,22 +129,22 @@
                <h2 class="font-semibold text-lg">Order Summary</h2>
                <span class="flex flex-row justify-between w-full items-center">
                   <span class="text-xs font-normal">{{product.productName}}</span>
-                  <span class="font-medium text-xs">$ {{product.productPrice}}</span>
+                  <span class="font-medium text-xs">$ {{productConfigItem.productPrice}}</span>
                </span>
                <span class="flex flex-row justify-between w-full items-center">
                   <span class="text-xs font-normal">Configurations</span>
-                  <span class="font-medium text-xs">$ {{product.productPrice}}</span>
+                  <span class="font-medium text-xs">$ {{productConfigItem.configurationPrice}}</span>
                </span>
             </div>
 
             <div class="w-full gap-4 flex flex-col">
                <span class="flex flex-row justify-between w-full items-center">
                   <span class="text-xs font-normal">Total(2)</span>
-                  <span class="font-medium text-xs">$ {{product.productPrice}}</span>
+                  <span class="font-medium text-xs">$ {{productConfigItem.totalPrice}}</span>
                </span>
                <span class="flex flex-row justify-between w-full items-center">
                   <span class="text-xs font-normal">(Incl. VAT)</span>
-                  <span class="font-medium text-xs"></span>
+                  <span class="font-medium text-xs">{{productConfigItem.vatIncluded}}</span>
                </span>
                <button class="bg-[#3CB043] hover:bg-green-500 w-full p-2 rounded-md text-white font-semibold">
                   Add to cart

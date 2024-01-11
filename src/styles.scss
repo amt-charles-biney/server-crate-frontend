@@ -63,11 +63,15 @@ app-account-settings .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
   color: #3cb043
 }
 
-app-account-settings .mat-mdc-tab .mdc-tab-indicator__content--underline {
+app-account-settings, app-product-configure .mat-mdc-tab .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
 
 app-account-settings .mat-mdc-tab.mdc-tab--active:focus .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+
+app-product-configure .mdc-tab-indicator__content .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
 
@@ -79,7 +83,7 @@ app-account-settings .mat-mdc-tab-header{
   background-color: #fbfbfb;
 }
 
-app-account-settings .mdc-tab-indicator {
+app-account-settings, app-product-configure .mdc-tab-indicator {
   display: none;
 }
 
