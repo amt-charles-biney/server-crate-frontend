@@ -32,7 +32,7 @@
     <p class="text-gray-500 font-[500] text-sm">{{ product.productBrand }}</p>
     <div class="flex items-center justify-between">
       <p class="text-sm font-[500]">{{ product.productPrice | currency }}</p>
-      <button class="flex items-center w-fit px-3 gap-2 text-figma-green">
+      <button (click)="onNavigateToProduct(product.id)" class="flex items-center w-fit px-3 gap-2 text-figma-green">
         <a class="text-sm font-[500]">Configure</a>
       </button>
     </div>

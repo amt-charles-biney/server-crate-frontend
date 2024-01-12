@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProductItem } from '../../../types';
 import { CommonModule, CurrencyPipe, NgOptimizedImage } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-product-item',
@@ -21,4 +22,9 @@ export class UserProductItemComponent {
       this.selectorEmitter.emit(this.product)
     }
   }
+
+  onNavigateToProduct(id: string) { this.router.navigate(['/product/configure', id], { replaceUrl: true })}
+
+  constructor(private router: Router) {}
+
 }
