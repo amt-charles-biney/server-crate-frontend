@@ -8,9 +8,9 @@
     <div class="keen-slider w-full" #popularSliderRef>
       @for (product of popularProducts; let i = $index; track i) {
       <div class="keen-slider__slide p-4">
-        <app-homepage-product-item
+        <app-user-product-item
           [product]="product"
-        ></app-homepage-product-item>
+        ></app-user-product-item>
       </div>
       }
     </div>
