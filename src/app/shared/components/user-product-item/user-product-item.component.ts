@@ -10,21 +10,23 @@ import { Router } from '@angular/router';
   templateUrl: './user-product-item.component.html',
 })
 export class UserProductItemComponent {
-  @Input() product!: ProductItem
-  @Output() selectorEmitter = new EventEmitter<ProductItem>()
-  isSelected: boolean = false
+  @Input() product!: ProductItem;
+  @Output() selectorEmitter = new EventEmitter<ProductItem>();
+  isSelected: boolean = false;
 
   onSelect() {
     if (this.isSelected) {
-      this.isSelected = false
+      this.isSelected = false;
     } else {
-      this.isSelected = true
-      this.selectorEmitter.emit(this.product)
+      this.isSelected = true;
+      this.selectorEmitter.emit(this.product);
     }
   }
 
-  onNavigateToProduct(id: string) { this.router.navigate(['/product/configure', id], { replaceUrl: true })}
+  onNavigateToProduct(event: Event, id: string) {
+    event.stopPropagation()
+    this.router.navigate(['/product/configure', id], { replaceUrl: true });
+  }
 
   constructor(private router: Router) {}
-
 }
