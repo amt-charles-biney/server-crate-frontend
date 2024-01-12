@@ -216,12 +216,17 @@
       <p *ngIf="total | async as total">
         {{ total }} {{ total === 1 ? "Server" : "Servers" }}
       </p>
-      <button (click)="compareEvent()"
-        class="w-fit flex items-center gap-3 py-1 px-3 font-semibold bg-figma-green text-white rounded-lg"
-      >
-        <img src="/assets/compare-btn-icon.svg" alt="compare" />
-        <p>Compare</p>
-      </button>
+      <div class="flex items-center gap-3">
+        <button (click)="getAllProducts()" class="underline hover:text-gray-700">
+          All Products
+        </button>
+        <button (click)="compareEvent()"
+          class="w-fit flex items-center gap-3 py-1 px-3 font-semibold bg-figma-green text-white rounded-lg"
+        >
+          <img src="/assets/compare-btn-icon.svg" alt="compare" />
+          <p>Compare</p>
+        </button>
+      </div>
     </div>
     <section
       class="grid gap-4 mt-6 grid-flow-row lg:grid-cols-3 2xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1"

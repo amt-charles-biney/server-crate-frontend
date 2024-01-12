@@ -111,6 +111,11 @@ export class PreferenceSelectionComponent implements OnInit {
     }
   }
 
+  getAllProducts() {
+    this,this.router.navigateByUrl('/servers')
+    this.store.dispatch(getUserProducts({ page: 0, params: '' }));
+  }
+
   onSelect(product: ProductItem) {
     this.selectedProducts = this.selectedProducts.filter((pdt) => product.id !== pdt.id)
     this.selectedProducts.push(product);
@@ -140,7 +145,7 @@ export class PreferenceSelectionComponent implements OnInit {
     this.onLoad();
     this.router.navigateByUrl('/servers')
     const params = this.buildParams(this.queryParams);
-    this.store.dispatch(filter({ params, page: this.page }));
+    this.store.dispatch(filter({ params, page: 0 }));
   }
 
   get productType() {
