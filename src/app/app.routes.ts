@@ -12,6 +12,7 @@ import { settingsGuard } from './core/guards/settings.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
 import { authGuard } from './core/guards/auth.guard';
+import { UserEffect } from './store/users/users.effects';
 
 export const routes: Routes = [
     {
@@ -59,6 +60,9 @@ export const routes: Routes = [
     },
     {
         path: '',
-        loadChildren: () => import('./features/home/home.routes').then(m => m.route)
+        loadChildren: () => import('./features/home/home.routes').then(m => m.route),
+        providers: [
+            provideEffects(UserEffect)
+        ]
     }
 ];

@@ -1,4 +1,4 @@
-<main class="relative grid grid-cols-4 gap-10 min-h-screen mt-12">
+<main class="relative grid grid-cols-4 gap-10  mt-12">
   <aside class="col-span-1 flex flex-col gap-3">
     <h1 class="text-xl font-bold">GPU Servers</h1>
     <button
@@ -245,11 +245,11 @@
     </section>
     <pagination-template
       #p="paginationApi"
-      class="flex gap-3 absolute right-10 bottom-10"
-      (pageChange)="getPage($event)"
+      class="flex gap-3 mt-6 self-end"
+      (pageChange)="getPage($event, search)"
       id="server"
       rounded-md
-      (pageBoundsCorrection)="getPage($event)"
+      (pageBoundsCorrection)="getPage($event, search)"
     >
       <button
         [ngClass]="p.isFirstPage() ? 'pointer-events-none text-gray-200' : ''"

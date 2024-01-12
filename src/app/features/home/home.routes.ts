@@ -11,6 +11,7 @@ import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { configurationFeature } from '../../store/admin/products/configuration.reducers';
 import { categoryFeature } from '../../store/admin/products/categories.reducers';
 import { Routes } from '@angular/router';
+import { UserEffect } from '../../store/users/users.effects';
 
 export const route: Routes = [
     {
@@ -29,11 +30,22 @@ export const route: Routes = [
                 loadChildren: () => import('../landing/landing.routes').then(m => m.route),
                 providers: [
                     provideState(FeaturedProductFeature),
-                    provideEffects(FeaturedProductEffect)
+                    provideEffects(FeaturedProductEffect),
                 ]
             },
             {
                 path: 'servers',
+                loadComponent: () => import('../preference-selection/preference-selection.component').then(m => m.PreferenceSelectionComponent),
+                providers: [
+                    provideEffects(ProductsEffect),
+                    provideEffects(CategoryEffect),
+                    provideEffects(UserEffect),
+                    provideState(productsFeature),
+                    provideState(categoryFeature),
+                ]
+            },
+            {
+                path: 'servers/:search',
                 loadComponent: () => import('../preference-selection/preference-selection.component').then(m => m.PreferenceSelectionComponent),
                 providers: [
                     provideEffects(ProductsEffect),

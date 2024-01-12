@@ -52,25 +52,6 @@ export class ProductsEffect {
     );
   });
 
-  filter$ = createEffect(() => {
-    return this.action$.pipe(
-      ofType(filter),
-      switchMap((props) => {
-        return this.userService.getProducts(props.page, props.params).pipe(
-          map((products: AllProducts) => {
-            console.log('Products', products);
-
-            return gotProducts({ products });
-          }),
-          shareReplay(1),
-          catchError((err) => {
-            return of();
-          })
-        );
-      })
-    );
-  });
-
   addFeatured$ = createEffect(() => {
     return this.action$.pipe(
       ofType(addToFeature),

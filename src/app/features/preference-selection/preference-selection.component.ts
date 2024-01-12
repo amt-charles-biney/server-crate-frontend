@@ -1,3 +1,4 @@
+import { search } from './../../store/users/users.actions';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -17,7 +18,7 @@ import { UserProductItemComponent } from '../../shared/components/user-product-i
 import { filter } from '../../store/users/users.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { CompareDialogComponent } from '../../shared/components/compare-dialog/compare-dialog.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { selectBrands } from '../../store/admin/products/categories.reducers';
 
 @Component({
@@ -49,22 +50,29 @@ export class PreferenceSelectionComponent implements OnInit {
   total!: Observable<number>;
   page: number = 0;
   brands$!: Observable<Select[]>;
-
+  search: string = ''
   constructor(
     private store: Store,
     public dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {
+    this.search = this.activatedRoute.snapshot.paramMap.get('search')!;
     this.store.dispatch(getUserBrands());
     this.onLoad();
-    this.getPage(1);
+    this.queryParams['query'].add(this.search)
+    this.getPage(1, this.search);
     this.brands$ = this.store.select(selectBrands)
   }
-  getPage(pageNumber: number) {
+  getPage(pageNumber: number, search: string) {
     this.page = pageNumber;
     const params = this.buildParams(this.queryParams);
-    this.store.dispatch(getUserProducts({ page: this.page - 1, params }));
+    if (!search) {
+      this.store.dispatch(getUserProducts({ page: this.page - 1, params }));
+    } else {
+      this.store.dispatch(filter({ page: 0, params: search }))
+    }
     this.products = this.store.select(selectProducts);
     this.total = this.store.select(selectTotal);
   }
@@ -75,6 +83,7 @@ export class PreferenceSelectionComponent implements OnInit {
       price: new Set(),
       brand: new Set(),
       mounting: new Set(),
+      query: new Set()
     };
     this.filterForm = new FormGroup({
       productType: new FormControl(''),
@@ -116,7 +125,7 @@ export class PreferenceSelectionComponent implements OnInit {
   }
 
   buildParams(params: Record<string, Set<string>>) {
-    const keys = ['productType', 'processor', 'price', 'brand', 'mounting'];
+    const keys = ['productType', 'processor', 'price', 'brand', 'mounting', 'query'];
     let paramArray = [];
     for (let key of keys) {
       const keyValues = Array.from(params[key]);
@@ -129,6 +138,7 @@ export class PreferenceSelectionComponent implements OnInit {
 
   clearFilters() {
     this.onLoad();
+    this.router.navigateByUrl('/servers')
     const params = this.buildParams(this.queryParams);
     this.store.dispatch(filter({ params, page: this.page }));
   }

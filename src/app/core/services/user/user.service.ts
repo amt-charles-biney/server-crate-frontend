@@ -9,6 +9,7 @@ export class UserService {
   userProducts = environment.userProducts
   categoriesUrl = environment.userCategories
   brandsUrl = environment.userBrands
+  baseUrl = environment.base_url
   constructor(private http: HttpClient) { }
 
   getProducts(page: number, filterParams: string) {
@@ -25,5 +26,9 @@ export class UserService {
   
   getCategoryConfiguration(id: string) {
     return this.http.get(`${this.categoriesUrl}/${id}/config`)
+  }
+
+  getSearchResults(searchValue: string) {
+    return this.http.get<AllProducts>(`${this.baseUrl}/search/products?query=${searchValue}`)
   }
 }
