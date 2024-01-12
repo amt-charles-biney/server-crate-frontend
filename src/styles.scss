@@ -53,17 +53,35 @@ app-account-settings .mdc-tab--active {
   transition: all 1s
 }
 
-app-account-settings, app-product-configure .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-  color: #3cb043
-}
-app-account-settings, app-product-configure .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
-  color: #3cb043
-}
-app-account-settings, app-product-configure .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
+app-account-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: #3cb043
 }
 
-app-account-settings, app-product-configure .mat-mdc-tab .mdc-tab-indicator__content--underline {
+app-product-configure  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043
+}
+
+app-account-settings .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
+  color: #3cb043
+}
+
+app-product-configure .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
+  color: #3cb043
+}
+
+app-account-settings .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
+  color: #3cb043
+}
+
+app-product-configure .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
+  color: #3cb043
+}
+
+app-account-settings .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+
+app-product-configure .mat-mdc-tab .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
 
@@ -79,11 +97,20 @@ app-account-settings .mat-mdc-tab-body {
   background-color: white
 }
 
-app-account-settings, app-product-configure .mat-mdc-tab-header{
+app-account-settings .mat-mdc-tab-header{
   background-color: #fbfbfb;
 }
 
-app-account-settings, app-product-configure .mdc-tab-indicator {
+app-product-configure .mat-mdc-tab-header{
+  background-color: #fbfbfb;
+}
+
+
+app-account-settings .mdc-tab-indicator {
+  display: none;
+}
+
+app-product-configure .mdc-tab-indicator {
   display: none;
 }
 
@@ -142,7 +169,13 @@ app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
   color: #3cb043;
 }
 
-app-admin-dashboard, app-product-configure  .mdc-tab--active {
+app-admin-dashboard  .mdc-tab--active {
+  background-color: #f7fcf7;
+  transition: all 1s;
+  border-radius: 12px;
+}
+
+app-product-configure  .mdc-tab--active {
   background-color: #f7fcf7;
   transition: all 1s;
   border-radius: 12px;
