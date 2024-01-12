@@ -28,7 +28,7 @@ export class FeaturedProductsComponent {
     }
 
     navigateToProduct = () => {
-      this.router.navigate(['/product'], { replaceUrl: true })
+      this.router.navigate(['/servers'], { replaceUrl: true })
     }
 
   constructor(private store: Store, private router: Router) {}

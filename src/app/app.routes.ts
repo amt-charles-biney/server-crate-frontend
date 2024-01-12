@@ -12,7 +12,8 @@ import { settingsGuard } from './core/guards/settings.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
 import { authGuard } from './core/guards/auth.guard';
-import { UserEffect } from './store/users/users.effects';
+import { productConfigFeature } from './store/product-spec/product-spec.reducer';
+import { ProductSpecEffects } from './store/product-spec/product-spec.effect';
 
 export const routes: Routes = [
     {
@@ -51,6 +52,14 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'product/configure/:id',
+        loadChildren: () => import('./features/product-configure/product-configure.routes').then(m => m.route),
+        providers: [
+            provideState(productConfigFeature),
+            provideEffects(ProductSpecEffects)
+        ]
+    },
+    {
         path: 'forgot-password',
         loadChildren: () => import('./features/reset/reset.routes').then(m => m.route),
         providers: [
@@ -61,8 +70,5 @@ export const routes: Routes = [
     {
         path: '',
         loadChildren: () => import('./features/home/home.routes').then(m => m.route),
-        providers: [
-            provideEffects(UserEffect)
-        ]
     }
 ];
