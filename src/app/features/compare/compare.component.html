@@ -107,4 +107,22 @@
       {{ secondProduct.productDescription }}
     </section>
   </section>
+  <section class="grid grid-cols-7 row-span-5">
+    <section class="">
+      
+    </section>
+    
+    <button
+    (click)="navigateToConfigure(firstProduct.id)"
+      class="col-span-3 bg-figma-green rounded-md  text-white w-96 mx-auto py-2 my-2"
+    >
+      Configure
+  </button>
+    <button
+      (click)="navigateToConfigure(secondProduct.id)"
+      class="col-span-3 bg-figma-green rounded-md  text-white w-96 mx-auto py-2 my-2"
+    >
+      Configure
+  </button>
+  </section>
 </main>
