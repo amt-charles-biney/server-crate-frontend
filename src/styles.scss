@@ -50,11 +50,32 @@ app-account-settings .mdc-tab--active {
 app-account-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: #3cb043
 }
-app-account-settings .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
+
+app-product-configure  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043
+}
+
+app-account-settings .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
+  color: #3cb043
+}
+
+app-product-configure .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
+  color: #3cb043
+}
+
+app-account-settings .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
+  color: #3cb043
+}
+
+app-product-configure .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
   color: #3cb043
 }
 
 app-account-settings .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+
+app-product-configure .mat-mdc-tab .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
 
@@ -70,6 +91,127 @@ app-account-settings .mat-mdc-tab-header{
   background-color: #fbfbfb;
 }
 
+app-product-configure .mat-mdc-tab-header{
+  background-color: #fbfbfb;
+}
+
+
+app-account-settings .mdc-tab-indicator {
+  display: none;
+}
+
+app-product-configure .mdc-tab-indicator {
+  display: none;
+}
+
+app-payment-details .mat-mdc-tab:not(.mdc-tab--stacked) {
+  height: 40px;
+  border-radius: 8px;
+}
+
+app-payment-details .mat-mdc-tab-header {
+  border-radius: 8px;
+}
+
+app-payment-details  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: white;
+}
+
+app-payment-details .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
+  color: white;
+}
+
+app-payment-details  .mdc-tab--active {
+  background-color: #3cb043;
+  transition: all 1s
+}
+app-payment-details .mdc-tab {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+app-payment-details .mat-mdc-tab-label-container {
+  padding: 8px;
+  background-color: #f6f8f8;
+}
+
+app-payment-details .mat-mdc-tab-group {
+  width: 500px;
+  max-width: 120%;
+}
+
+app-admin-dashboard .mat-mdc-tab-links {
+  flex-direction: column;
+  gap: 5px;
+}
+
+app-admin-dashboard .mdc-tab {
+  justify-content: start;
+}
+
+app-admin-dashboard .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043;
+}
+app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
+  color: #3cb043;
+}
+app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
+  color: #3cb043;
+}
+
+app-admin-dashboard  .mdc-tab--active {
+  background-color: #f7fcf7;
+  transition: all 1s;
+  border-radius: 12px;
+}
+
+app-product-configure  .mdc-tab--active {
+  background-color: #f7fcf7;
+  transition: all 1s;
+  border-radius: 12px;
+}
+
+
+app-admin-dashboard  .mdc-tab:hover {
+  border-radius: 12px;
+  background-color: #f7fcf7;
+}
+
+app-admin-dashboard .mdc-tab-indicator {
+  display: none;
+}
+
+
+// .iti {
+//   width: 100%;
+// }
+
+// app-custom-input .cdk-overlay-pane {
+//   width: 53px;
+// }
+.custom-panel {
+  width: fit-content;
+}
+
+.otp-input[_ngcontent-ng-c3470639301] {
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-bottom: 2px solid #dddfe1 !important;
+  outline: none;
+}
+
+.iti {
+  width: 100%;
+}
+.iti__country-list {
+  width: 410px;
+}
+
+@media only screen and (max-width: 768px) {
+  app-payment-details .mat-mdc-tab-group {
+    max-width: 100%;
+  }
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
