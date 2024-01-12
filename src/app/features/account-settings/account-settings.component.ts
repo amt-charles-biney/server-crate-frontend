@@ -13,6 +13,7 @@ import { UserProfileImageComponent } from '../../shared/components/user-profile-
 import { ProfileService } from '../../core/services/user-profile/profile.service';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { logout } from '../../core/utils/helpers';
 @Component({
   selector: 'app-account-settings',
   standalone: true,
@@ -38,6 +39,7 @@ export class AccountSettingsComponent implements OnInit {
   firstName!: string
   lastName!: string
   isAdmin: boolean = false
+
   constructor(private router: Router, private profileService: ProfileService, private authService: AuthService) {}
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin()
@@ -81,4 +83,7 @@ export class AccountSettingsComponent implements OnInit {
     this.firstName = firstName
     this.lastName = lastName
   }
+
+  accountLogout = () => logout()
+
 }

@@ -21,9 +21,12 @@
           <app-user-profile-image />
           <div>
             <p class="text-lg font-bold text-center">{{firstName}} {{lastName}}</p>
-            @if (isAdmin) {
-              <button class="text-sm underline" routerLink="/admin">Go to Admin Dashboard</button>
-            }
+            <div class="flex flex-col gap-2">
+              <button (click)="accountLogout()" class="text-sm underline"> logout </button>
+              @if (isAdmin) {
+                <button class="text-sm underline" routerLink="/admin">Go to Admin Dashboard</button>
+              }
+            </div>
           </div>
           <button class="underline text-red-600">Delete Account</button>
         </div>
