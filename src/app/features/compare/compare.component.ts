@@ -42,4 +42,8 @@ export class CompareComponent implements OnInit, OnDestroy {
   clearSelections() {
     this.router.navigateByUrl('/servers', { replaceUrl: true })
   }
+
+  navigateToConfigure(id: string) {
+    this.router.navigateByUrl(`/product/configure/${id}`)
+  }
 }
