@@ -14,7 +14,8 @@ import {
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { filter, search } from '../../../store/users/users.actions';
-
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -25,7 +26,9 @@ import { filter, search } from '../../../store/users/users.actions';
     UserProfileImageComponent,
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatButtonModule,
+    MatMenuModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
