@@ -111,11 +111,6 @@ export class PreferenceSelectionComponent implements OnInit {
     }
   }
 
-  getAllProducts() {
-    this,this.router.navigateByUrl('/servers')
-    this.store.dispatch(getUserProducts({ page: 0, params: '' }));
-  }
-
   onSelect(product: ProductItem) {
     this.selectedProducts = this.selectedProducts.filter((pdt) => product.id !== pdt.id)
     this.selectedProducts.push(product);

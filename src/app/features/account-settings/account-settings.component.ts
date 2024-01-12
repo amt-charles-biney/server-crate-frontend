@@ -11,6 +11,8 @@ import { PrivacyPolicyComponent } from '../../shared/components/privacy-policy/p
 import { Link } from '../../types';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 import { ProfileService } from '../../core/services/user-profile/profile.service';
+import { AuthService } from '../../core/services/auth/auth.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-account-settings',
   standalone: true,
@@ -24,7 +26,8 @@ import { ProfileService } from '../../core/services/user-profile/profile.service
     PaymentDetailsComponent,
     PrivacyPolicyComponent,
     RouterModule,
-    UserProfileImageComponent
+    UserProfileImageComponent,
+    CommonModule
   ],
   templateUrl: './account-settings.component.html',
   styleUrl: './account-settings.component.scss',
@@ -34,8 +37,10 @@ export class AccountSettingsComponent implements OnInit {
   activeLink!: Link;
   firstName!: string
   lastName!: string
-  constructor(private router: Router, private profileService: ProfileService) {}
+  isAdmin: boolean = false
+  constructor(private router: Router, private profileService: ProfileService, private authService: AuthService) {}
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin()
     this.navLinks = [
       {
         label: 'General',
