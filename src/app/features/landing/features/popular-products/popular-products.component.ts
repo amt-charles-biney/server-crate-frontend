@@ -6,11 +6,12 @@ import { loadNewProducts } from '../../../../store/product/featured-product/feat
 import { selectNewProducts } from '../../../../store/product/featured-product/featured-product.reducer';
 import { CommonModule } from '@angular/common';
 import { HomepageProductItemComponent } from '../../../../shared/components/homepage-product-item/homepage-product-item.component';
+import { UserProductItemComponent } from '../../../../shared/components/user-product-item/user-product-item.component';
 
 @Component({
   selector: 'app-popular-products',
   standalone: true,
-  imports: [HomepageProductItemComponent, CommonModule],
+  imports: [HomepageProductItemComponent, CommonModule, UserProductItemComponent],
   templateUrl: './popular-products.component.html',
   styleUrls: [
     "../../../../../../node_modules/keen-slider/keen-slider.min.css"
