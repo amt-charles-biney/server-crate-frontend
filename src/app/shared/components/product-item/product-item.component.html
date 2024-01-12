@@ -1,7 +1,7 @@
 <article
-  class="flex flex-col gap-2 max-w-xs min-w-max rounded-lg shadow-lg p-3 border"
+  class="flex flex-col gap-2 max-w-xs rounded-lg shadow-lg p-3 border"
 >
-  <div class="flex justify-around">
+  <div class="flex justify-around gap-3">
     <img
       class="w-[142px] h-[68px]"
       [ngSrc]="product.coverImage"
@@ -10,10 +10,10 @@
       priority
       [alt]="'image of ' + product.productName"
     />
-    <div class="flex flex-col">
-      <h2 class="font-bold">{{ product.productName }}</h2>
-      <p class="text-gray-500 text-sm">{{ product.productBrand }}</p>
-      <p class="text-sm font-[500]">{{ product.productPrice | currency }}</p>
+    <div class="flex flex-col w-32">
+      <h2 class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productName }}</h2>
+      <p class="text-gray-500 text-sm text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productBrand }}</p>
+      <p class="text-sm font-[500] text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productPrice | currency }}</p>
     </div>
   </div>
   <div class="flex justify-between mx-auto w-9/12 text-sm font-[500]">
