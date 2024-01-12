@@ -8,11 +8,12 @@ import { loadFeaturedProducts } from '../../../../store/product/featured-product
 import { Observable } from 'rxjs';
 import { HomepageProductItemComponent } from '../../../../shared/components/homepage-product-item/homepage-product-item.component';
 import { Router } from '@angular/router';
+import { UserProductItemComponent } from '../../../../shared/components/user-product-item/user-product-item.component';
 
 @Component({
   selector: 'app-featured-products',
   standalone: true,
-  imports: [CommonModule, HomepageProductItemComponent],
+  imports: [CommonModule, HomepageProductItemComponent, UserProductItemComponent],
   templateUrl: './featured-products.component.html',
 })
 export class FeaturedProductsComponent {
