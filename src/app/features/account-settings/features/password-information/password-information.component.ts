@@ -51,6 +51,11 @@ export class PasswordInformationComponent implements OnInit {
       newPassword: newPwd
     }
     this.store.dispatch(changePassword(password))
+    this.passwordForm.reset({
+      currentPwd: '',
+      newPwd: '',
+      confirmPwd: ''
+    })
     saveChanges(this.passwordForm)
   }
 
