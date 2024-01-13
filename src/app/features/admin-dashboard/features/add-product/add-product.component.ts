@@ -217,10 +217,13 @@ export class AddProductComponent implements OnInit, OnDestroy {
     event.stopPropagation()
   }
 
-  private _filter(value: Select, filterFrom: Select[]) {     
+  private _filter(value: Select | string, filterFrom: Select[]) {     
     return filterFrom.filter((option: Select) => {      
-      return option.name.toLowerCase().includes(value.name.toLowerCase());
-    });
+        if (typeof(value) !== 'string'){
+        return option.name.toLowerCase().includes(value.name.toLowerCase());
+      }
+      return option.name.toLowerCase().includes(value.toLowerCase());
+      });
   }
 
   cancel() {
@@ -267,8 +270,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
     const image2 = formData.get('image2[0]');
     const image3 = formData.get('image3[0]');
     const category = formData.get('category[name]');
-    const productBrand = formData.get('productBrand[name]');
-
+    const productBrand = formData.get('productBrand[name]') || formData.get('productBrand');
+    
     formData.delete('coverImage[0]');
     formData.delete('image1[0]');
     formData.delete('image2[0]');

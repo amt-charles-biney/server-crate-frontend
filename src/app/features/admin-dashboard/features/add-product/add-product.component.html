@@ -229,12 +229,11 @@
   </form>
   <section class="mt-14">
     <p>Base Configuration</p>
-    <div class="h-max p-3 rounded-lg mt-2 bg-[#fbfbfb]">
-      <ul class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-3 list-disc">
+    <div class="w-[488px] overflow-auto p-3 rounded-lg mt-2 bg-[#fbfbfb]">
+      <ul class="grid grid-rows-2 grid-flow-col gap-5 px-10 pt-3 list-disc">
         <ng-container *ngIf="options | async as options">
           <ng-container *ngIf="options[0]">
-
-            <li class="leading-5" *ngFor="let option of options[0].options| keyvalue ">
+            <li class="leading-5 w-max px-3" *ngFor="let option of options[0].options| keyvalue ">
               <p class="font-[500]">{{ option.key }}</p>
               <p class="text-gray-400">{{ option.value[0].name }}</p>
             </li>
