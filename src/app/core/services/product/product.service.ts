@@ -8,16 +8,14 @@ import { environment } from '../../../../environments/environment.development';
 })
 export class ProductService {
 
-  productUserUrl: string = environment.products_user
-  categoryUserUrl: string = environment.category_user
-
+  baseUrl = environment.base_url
   constructor(private http: HttpClient) { }
 
   getProduct(id: string) {
-    return this.http.get<ProductItem>(`${this.productUserUrl}/${id}`)
+    return this.http.get<ProductItem>(`${this.baseUrl}/product/${id}`)
   }
 
   getProductConfiguration(categoryId: string) {
-    return this.http.get<any>(`${this.categoryUserUrl}/${categoryId}/config`)
+    return this.http.get<any>(`${this.baseUrl}/category/${categoryId}/config`)
   }
 }

@@ -1,8 +1,3 @@
 export const environment = {
-    base: 'http://54.247.220.188:8081/api/v1/auth',
-    profile: 'http://54.247.220.188:8081/api/v1/profile',
-    categories: 'http://54.247.220.188:8081/api/v1/admin/category',
-    brands: 'http://54.247.220.188:8081/api/v1/admin/brand',
-    products: 'http://54.247.220.188:8081/api/v1/admin/product',
-    base_url: 'http://54.247.220.188:8081/api/v1', 
+    base_url: 'http://99.81.103.204:8080/api/v1', 
 };

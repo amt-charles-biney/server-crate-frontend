@@ -6,26 +6,23 @@ import { AllProducts, Select } from '../../../types';
   providedIn: 'root'
 })
 export class UserService {
-  userProducts = environment.userProducts
-  categoriesUrl = environment.userCategories
-  brandsUrl = environment.userBrands
   baseUrl = environment.base_url
   constructor(private http: HttpClient) { }
 
   getProducts(page: number, filterParams: string) {
-    return this.http.get<AllProducts>(`${this.userProducts}?page=${page}&size=9&${filterParams}`)
+    return this.http.get<AllProducts>(`${this.baseUrl}/product?page=${page}&size=9&${filterParams}`)
   }
 
   getCategories() {
-    return this.http.get<Select[]>(this.categoriesUrl)
+    return this.http.get<Select[]>(`${this.baseUrl}/category`)
   }
 
   getBrands() {
-    return this.http.get<Select[]>(this.brandsUrl)
+    return this.http.get<Select[]>(`${this.baseUrl}/brand`)
   }
   
   getCategoryConfiguration(id: string) {
-    return this.http.get(`${this.categoriesUrl}/${id}/config`)
+    return this.http.get(`${this.baseUrl}/category/${id}/config`)
   }
 
   getSearchResults(searchValue: string) {

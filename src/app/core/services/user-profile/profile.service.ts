@@ -7,15 +7,15 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class ProfileService {
-  private profileUrl = environment.profile
+  baseUrl = environment.base_url
   constructor(private http: HttpClient) { }
 
   getGeneralInfo() {
-    return this.http.get<GeneralInfo>(`${this.profileUrl}/basic-info`)
+    return this.http.get<GeneralInfo>(`${this.baseUrl}/profile/basic-info`)
   }
 
   updateGeneralInfo(form: ChangeContact) {
-    return this.http.put<Success>(`${this.profileUrl}/basic-info`, form)
+    return this.http.put<Success>(`${this.baseUrl}/profile/basic-info`, form)
   }
 
   getUsername() {

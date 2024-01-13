@@ -1,10 +1,9 @@
-import { DestroyRef, Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import {
   ChangePassword,
   OtpResend,
-  ResendOtp,
   ResetPassword,
   SignIn,
   Success,
@@ -14,53 +13,50 @@ import {
   Verify,
   VerifyOtp,
 } from '../../../types';
-import { tap } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  backendUrl = environment.base;
-  profileUrl = environment.profile;
+  baseUrl = environment.base_url
   constructor(private http: HttpClient) {}
 
   signUp(formData: UserSignUp) {
-    return this.http.post<Success>(`${this.backendUrl}/signup`, formData);
+    return this.http.post<Success>(`${this.baseUrl}/auth/signup`, formData);
   }
 
   verifyEmail(user: Verify) {
-    return this.http.post<VerifiedUser>(`${this.backendUrl}/verify`, user);
+    return this.http.post<VerifiedUser>(`${this.baseUrl}/auth/verify`, user);
   }
 
   verifyOtp(user: VerifyOtp) {
-    return this.http.post<Success>(`${this.backendUrl}/verify-otp`, user);
+    return this.http.post<Success>(`${this.baseUrl}/auth/verify-otp`, user);
   }
 
   login(formData: SignIn) {
-    return this.http.post<VerifiedUser>(`${this.backendUrl}/login`, formData);
+    return this.http.post<VerifiedUser>(`${this.baseUrl}/auth/login`, formData);
   }
 
   resetPassword(email: string) {
-    return this.http.post<Success>(`${this.backendUrl}/reset-password`, {
+    return this.http.post<Success>(`${this.baseUrl}/auth/reset-password`, {
       email,
     });
   }
 
   resendOtp(otpRequest: OtpResend) {
-    return this.http.post<Success>(`${this.backendUrl}/resend-otp`, otpRequest);
+    return this.http.post<Success>(`${this.baseUrl}/auth/resend-otp`, otpRequest);
   }
 
   changePassword(newPassword: ResetPassword) {
     return this.http.post<Success>(
-      `${this.backendUrl}/change-password`,
+      `${this.baseUrl}/auth/change-password`,
       newPassword
     );
   }
 
   changePasswordInProfile(password: ChangePassword) {
-    return this.http.post<Success>(`${this.profileUrl}/password`, password);
+    return this.http.post<Success>(`${this.baseUrl}/profile/password`, password);
   }
 
   isAuthenticated() {
