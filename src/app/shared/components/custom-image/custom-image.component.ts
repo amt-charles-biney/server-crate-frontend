@@ -101,9 +101,9 @@ export class CustomImageComponent
     }
   }
   removeImage() {
+    this.removeImageEmitter.emit(this.elementId)
     if (this.editId) {
       this.localPreview = null;
-      this.removeImageEmitter.emit(this.elementId)
     } else {
       this.onInit()
     }    

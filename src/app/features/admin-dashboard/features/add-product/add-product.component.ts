@@ -162,9 +162,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
             };
 
             this.coverImage = data.coverImage;
-            this.image1 = data.imageUrl[0];
-            this.image2 = data.imageUrl[1];
-            this.image3 = data.imageUrl[2];
+            this.image1 = data.imageUrl[0] || null;
+            this.image2 = data.imageUrl[1] || null;
+            this.image3 = data.imageUrl[2] || null;
 
             this.addProductForm.setValue({ ...this.formGroup });
           }),
@@ -372,7 +372,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       setter(obj.imgSrc);
     }
   }
-  removeImage(imageToRemove: string) {
+  removeImage(imageToRemove: string) {    
     if (imageToRemove === 'coverImage') {
       this.removeCoverImage();
     } else if (imageToRemove === 'image1') {
