@@ -13,7 +13,7 @@
         
 
         <ng-container *ngIf="featuredProducts$ | async as featuredProducts">
-          <div class="flex flex-row items-center gap-4 justify-center mx-auto flex-wrap">
+          <div class="grid gap-4 grid-flow-row lg:grid-cols-4 2xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
               @for(product of featuredProducts; let idx = $index; track idx) {
                   <app-user-product-item [product]="product"></app-user-product-item>
               }
