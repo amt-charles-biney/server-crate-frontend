@@ -12,8 +12,6 @@ import { resetLoader } from './store/loader/actions/loader.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  title = 'server-crate-frontend';
-
   constructor(private router: Router, private store: Store) {
     this.router.events.subscribe((ev) => {
       if (ev instanceof NavigationEnd) { 

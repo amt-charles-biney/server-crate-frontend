@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ResetLinkComponent } from './reset-link.component';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('ResetLinkComponent', () => {
   let component: ResetLinkComponent;
@@ -8,7 +9,8 @@ describe('ResetLinkComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ResetLinkComponent]
+      imports: [ResetLinkComponent],
+      providers: [provideMockStore({})]
     })
     .compileComponents();
     

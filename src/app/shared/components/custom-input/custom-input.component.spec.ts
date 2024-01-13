@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomInputComponent } from './custom-input.component';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('CustomInputComponent', () => {
   let component: CustomInputComponent;
@@ -8,7 +9,8 @@ describe('CustomInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomInputComponent]
+      imports: [CustomInputComponent],
+      providers: [provideMockStore({})]
     })
     .compileComponents();
     

@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OTPSignupComponent } from './otpsignup.component';
+import { provideMockStore } from '@ngrx/store/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('OTPSignupComponent', () => {
   let component: OTPSignupComponent;
@@ -8,7 +10,8 @@ describe('OTPSignupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OTPSignupComponent]
+      imports: [OTPSignupComponent, HttpClientTestingModule],
+      providers: [provideMockStore({})]
     })
     .compileComponents();
     

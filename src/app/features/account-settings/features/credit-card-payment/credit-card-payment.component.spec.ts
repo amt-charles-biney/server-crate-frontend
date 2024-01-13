@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreditCardPaymentComponent } from './credit-card-payment.component';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('CreditCardPaymentComponent', () => {
   let component: CreditCardPaymentComponent;
@@ -8,7 +9,8 @@ describe('CreditCardPaymentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreditCardPaymentComponent]
+      imports: [CreditCardPaymentComponent],
+      providers: [provideMockStore({})]
     })
     .compileComponents();
     

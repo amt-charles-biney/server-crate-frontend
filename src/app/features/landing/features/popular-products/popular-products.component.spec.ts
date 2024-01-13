@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 
 import { PopularProductsComponent } from './popular-products.component';
 
@@ -8,7 +9,8 @@ describe('PopularProductsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PopularProductsComponent]
+      imports: [PopularProductsComponent],
+      providers: [provideMockStore({})]
     })
     .compileComponents();
     

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeaturedProductsComponent } from './featured-products.component';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('FeaturedProductsComponent', () => {
   let component: FeaturedProductsComponent;
@@ -8,7 +9,8 @@ describe('FeaturedProductsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FeaturedProductsComponent]
+      imports: [FeaturedProductsComponent],
+      providers: [provideMockStore({})]
     })
     .compileComponents();
     

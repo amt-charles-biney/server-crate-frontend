@@ -14,6 +14,20 @@ describe('UserProductItemComponent', () => {
     
     fixture = TestBed.createComponent(UserProductItemComponent);
     component = fixture.componentInstance;
+    component.product = {
+      category: { id: '', name: ''},
+      coverImage: 'ss',
+      id: '',
+      imageUrl: '',
+      inStock: 0,
+      isFeatured: false,
+      productBrand: '',
+      productDescription: '',
+      productId: '',
+      productName: '',
+      productPrice: '',
+      sales: 20,
+    };
     fixture.detectChanges();
   });
 

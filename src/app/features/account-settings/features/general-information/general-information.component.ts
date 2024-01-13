@@ -3,7 +3,6 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
-import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 import { Contact, LoadingStatus } from '../../../../types';
 import { Store } from '@ngrx/store';
 import { changeNumber, getGeneralInfo } from '../../../../store/account-settings/general-info/general-info.actions';
@@ -17,7 +16,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-general-information',
   standalone: true,
-  imports: [AuthLoaderComponent, CommonModule, CustomInputComponent, ReactiveFormsModule, CustomButtonComponent, CustomSelectComponent],
+  imports: [AuthLoaderComponent, CommonModule, CustomInputComponent, ReactiveFormsModule, CustomButtonComponent],
   templateUrl: './general-information.component.html',
   styleUrl: './general-information.component.scss'
 })
@@ -29,7 +28,7 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;
   intl!: any
   loadingState$!: Observable<LoadingStatus>
-  constructor(private store: Store, private profileService: ProfileService, private router: Router) {
+  constructor(private store: Store, private profileService: ProfileService) {
     this.store.dispatch(getGeneralInfo())
   }
 
