@@ -12,7 +12,6 @@
     type="text"
     placeholder="Enter your first name"
     formControlName="firstName"
-    [isReadOnly]="true"
   />
   @if (firstName?.invalid && (firstName?.touched || firstName?.dirty)) {
 
@@ -26,7 +25,6 @@
     type="text"
     placeholder="Enter your last name"
     formControlName="lastName"
-    [isReadOnly]="true"
   />
   @if (lastName?.invalid && (lastName?.touched || lastName?.dirty)) {
 

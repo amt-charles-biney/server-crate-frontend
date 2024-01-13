@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ProfileService } from '../../../core/services/user-profile/profile.service';
+import { Observable } from 'rxjs';
+import { Username } from '../../../types';
 
 @Component({
   selector: 'app-user-profile-image',
@@ -11,9 +14,10 @@ import { RouterModule } from '@angular/router';
 })
 export class UserProfileImageComponent implements OnInit {
   @Input() smaller!: boolean
-  initials!: string
+  initials$!: Observable<Username>
+  constructor(private profileService: ProfileService) {}
+  
   ngOnInit(): void {
-    const { firstName, lastName } = JSON.parse(localStorage.getItem('server-crate-user') ?? '')
-    this.initials = `${firstName[0]}${lastName[0]}`
+    this.initials$ = this.profileService.getUser()
   }
 }

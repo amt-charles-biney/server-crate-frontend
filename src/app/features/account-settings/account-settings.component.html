@@ -20,7 +20,9 @@
         <div class="flex flex-col gap-4 items-center">
           <app-user-profile-image />
           <div>
-            <p class="text-lg font-bold text-center">{{firstName}} {{lastName}}</p>
+            <ng-container *ngIf="name$ | async as name">
+              <p class="text-lg font-bold text-center">{{name.firstName}} {{name.lastName}}</p>
+            </ng-container>
             <div class="flex flex-col gap-2">
               <button (click)="accountLogout()" class="text-sm underline"> logout </button>
               @if (isAdmin) {

@@ -11,6 +11,8 @@ import { selectContact, selectEmail, selectFirstName, selectLastName } from '../
 import { Observable, Subject, combineLatest, map } from 'rxjs';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
+import { ProfileService } from '../../../../core/services/user-profile/profile.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-general-information',
@@ -27,7 +29,7 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;
   intl!: any
   loadingState$!: Observable<LoadingStatus>
-  constructor(private store: Store) {
+  constructor(private store: Store, private profileService: ProfileService, private router: Router) {
     this.store.dispatch(getGeneralInfo())
   }
 
@@ -82,6 +84,7 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
       return
     }
     const { firstName, lastName } = this.generalInfoForm.value
+    this.profileService.setUser({ firstName, lastName })
     this.store.dispatch(changeNumber({ contact: contactValue, firstName, lastName }))
   }
 

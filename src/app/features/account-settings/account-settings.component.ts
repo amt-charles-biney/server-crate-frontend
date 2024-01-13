@@ -8,12 +8,13 @@ import { Router, RouterModule } from '@angular/router';
 import { ShippingInformationComponent } from './features/shipping-information/shipping-information.component';
 import { PaymentDetailsComponent } from './features/payment-details/payment-details.component';
 import { PrivacyPolicyComponent } from '../../shared/components/privacy-policy/privacy-policy.component';
-import { Link } from '../../types';
+import { Link, Username } from '../../types';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 import { ProfileService } from '../../core/services/user-profile/profile.service';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { logout } from '../../core/utils/helpers';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-account-settings',
   standalone: true,
@@ -36,8 +37,7 @@ import { logout } from '../../core/utils/helpers';
 export class AccountSettingsComponent implements OnInit {
   navLinks: Link[] = [];
   activeLink!: Link;
-  firstName!: string
-  lastName!: string
+  name$!: Observable<Username>
   isAdmin: boolean = false
 
   constructor(private router: Router, private profileService: ProfileService, private authService: AuthService) {}
@@ -79,9 +79,7 @@ export class AccountSettingsComponent implements OnInit {
     if (this.router.url !== '/settings/general') {
       this.router.navigateByUrl('/settings/general');
     }
-    const { firstName, lastName } = this.profileService.getUsername()
-    this.firstName = firstName
-    this.lastName = lastName
+    this.name$ = this.profileService.getUser()
   }
 
   accountLogout = () => logout()

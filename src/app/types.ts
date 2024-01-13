@@ -4,7 +4,7 @@ export type UserSignUp = {
   email: string;
   password: string;
 };
-
+export type Username = { firstName: string, lastName: string }
 export type AppState = {
   user: Omit<UserSignUp, 'password'>;
   token: string;
