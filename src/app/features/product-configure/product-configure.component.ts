@@ -125,15 +125,6 @@ export class ProductConfigureComponent {
     );
   };
 
-
-  filterProductOptionIncluded = (key: string): string => {
-    const options = this.productConfigInstance?.options[key];
-    return options.reduce((accum: string, option: any) => {
-      return option.isIncluded ? accum + option.name : accum;
-    }, '');
-  };
-  
-
   swapImage = (imgtoSwap: string, imageIdx: number) => {
     let updatedProduct: any = { ...this.product };
     let previousCoverImage = updatedProduct.coverImage;
