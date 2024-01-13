@@ -179,7 +179,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       tap((categories) => {
 
         this.filteredOptions = this.category.valueChanges.pipe(
-          startWith(''),
+          startWith({ id: '', name: ''}),
           map((value) => {
             return this._filter(value, categories)
           })
@@ -191,7 +191,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       tap((brands) => {
 
         this.filteredBrandNames = this.productBrand.valueChanges.pipe(
-          startWith(''),
+          startWith({ id: '', name: ''}),
           map((value) => this._filter(value, brands))
         );
       })
@@ -217,11 +217,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
     event.stopPropagation()
   }
 
-  private _filter(value: string, filterFrom: Select[]) {
-    console.log('Value', typeof(value));
-     
+  private _filter(value: Select, filterFrom: Select[]) {     
     return filterFrom.filter((option: Select) => {      
-      return option.name.toLowerCase().includes(value.toLowerCase());
+      return option.name.toLowerCase().includes(value.name.toLowerCase());
     });
   }
 

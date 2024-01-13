@@ -11,6 +11,7 @@ import {
   getProduct,
   getProducts,
   getUserBrands,
+  getUserCategories,
   getUserConfiguration,
   gotBrands,
   gotCategories,
@@ -73,7 +74,7 @@ export class CategoryEffect {
   });
   getUserCategories$ = createEffect(() => {
     return this.action$.pipe(
-      ofType(getCategories),
+      ofType(getUserCategories),
       tap((x) => console.log('Fetch categories', x)),
       exhaustMap(() => {
         return this.userService.getCategories().pipe(
