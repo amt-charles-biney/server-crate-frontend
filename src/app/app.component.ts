@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { resetLoader } from './store/loader/actions/loader.actions';
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -18,5 +19,7 @@ export class AppComponent {
         this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
       }
     });
+    console.log(environment.base_url, environment.production);
+    
   }
 }
