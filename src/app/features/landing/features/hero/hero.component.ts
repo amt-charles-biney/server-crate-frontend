@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { heroSlider } from '../../../../types';
 import { CommonModule } from '@angular/common';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
