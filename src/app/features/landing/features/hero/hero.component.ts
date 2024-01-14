@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { heroSlider } from './hero.interface';
 import { CommonModule } from '@angular/common';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
@@ -46,12 +46,14 @@ export class HeroComponent {
         slides: { perView: 1.15, spacing: 25 },
         slideChanged: (s) => {
           this.currentSlide = s.track.details.rel
+          this.cdr.detectChanges()
         },
       })
 
       this.dotHelper = [
         ...Array(this.slider.track.details.slides.length).keys(),
       ]
+
     })
   }
 
@@ -60,5 +62,5 @@ export class HeroComponent {
   }
 
 
-
+  constructor(private cdr: ChangeDetectorRef) {}
 }
