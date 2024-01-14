@@ -45,12 +45,14 @@ export class HeroComponent {
         slides: { perView: 1.15, spacing: 25 },
         slideChanged: (s) => {
           this.currentSlide = s.track.details.rel
+          this.cdr.detectChanges()
         },
       })
 
       this.dotHelper = [
         ...Array(this.slider.track.details.slides.length).keys(),
       ]
+
     })
   }
 
@@ -59,5 +61,5 @@ export class HeroComponent {
   }
 
 
-
+  constructor(private cdr: ChangeDetectorRef) {}
 }
