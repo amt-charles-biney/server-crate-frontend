@@ -41,10 +41,13 @@ export class HeroComponent {
     setTimeout(() => {
       this.slider = new KeenSlider(this.sliderRef.nativeElement, {
         initial: this.currentSlide,
+        mode: "free",
+        slides: { perView: 1.15, spacing: 25 },
         slideChanged: (s) => {
           this.currentSlide = s.track.details.rel
         },
       })
+
       this.dotHelper = [
         ...Array(this.slider.track.details.slides.length).keys(),
       ]

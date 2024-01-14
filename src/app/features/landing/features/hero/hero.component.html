@@ -65,14 +65,13 @@
       </button>
     </div>
     <div class="keen-slider w-full" #sliderRef>
-      @for (slider of sliders; let i = $index; track i) {
       <div
-        class="keen-slider__slide number-slide1 w-screen h-[70vh] bg-cover bg-center bg-no-repeat"
+        *ngFor="let slider of sliders; let idx = index"
+        class="keen-slider__slide h-[70vh] w-screen bg-cover bg-center bg-no-repeat"
         [style.backgroundImage]="'url(' + slider.img + ')'"
       >
-      
+      <div class="absolute inset-0 bg-gradient-to-r from-black via-black to-transparent opacity-30"></div>
       </div>
-      }
     </div>
   </section>
 </main>
