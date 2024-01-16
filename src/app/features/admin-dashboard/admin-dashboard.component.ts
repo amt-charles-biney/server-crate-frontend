@@ -24,14 +24,24 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.navLinks = [
       {
-        label: 'Products',
-        link: 'products',
-        svg: '/assets/products.svg',
+        label: 'Category Management',
+        link: 'category-management',
+        svg: '/assets/category.svg'
+      },
+      {
+        label: 'Attributes',
+        link: 'attributes',
+        svg: '/assets/attributes.svg'
       },
       {
         label: 'Dashboard',
         link: 'dashboard',
         svg: '/assets/dashboard.svg',
+      },
+      {
+        label: 'Products',
+        link: 'products',
+        svg: '/assets/products.svg',
       },
       {
         label: 'Orders',
@@ -50,9 +60,9 @@ export class AdminDashboardComponent implements OnInit {
       }
     ];
     this.activeLink = this.navLinks[0];
-    if (this.router.url !== '/settings/products') {
-      this.router.navigateByUrl('/admin/products');
-    }
+    // if (this.router.url !== '/admin/category-management') {
+    //   this.router.navigateByUrl('/admin/category-management');
+    // }
   }
 
   logout() {

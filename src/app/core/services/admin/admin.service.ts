@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Attribute, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import {
   AllProducts,
@@ -61,5 +61,9 @@ export class AdminService {
 
   removeFromFeature(id: string) {
     return this.http.put(`${this.baseUrl}/admin/featured/${id}`, {});
+  }
+
+  getAttributes() {
+    return this.http.get<Attribute[]>(`${this.baseUrl}/admin/attributes`)
   }
 }

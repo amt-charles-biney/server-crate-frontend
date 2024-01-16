@@ -234,3 +234,24 @@ export interface ICategoryConfig {
   }
   options: ICategoryOption
 }
+
+export type CategoryMgt = {
+  headers: string[],
+  categoryConfigs: BasicConfig[]
+}
+
+export type AttributeOption = {
+  name: string;
+  price: number;
+}
+export type Attribute = {
+  id: string;
+  attributeName: string;
+  attributeType: string;
+  attributeOptions: AttributeOption[]
+}
+
+export type Attr = {
+  attributeName: string;
+  attributeType: string[];
+}

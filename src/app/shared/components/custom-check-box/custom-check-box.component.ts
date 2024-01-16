@@ -1,9 +1,11 @@
 import {
   Component,
   DestroyRef,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
+  ViewChild,
   forwardRef,
 } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +33,7 @@ export class CustomCheckBoxComponent {
   @Input() value!: string;
   @Input() name!: string;
   @Output() changeHandler = new EventEmitter<{ name: string, value: string, isAdded: boolean }>();
+  @ViewChild('inputState') inputState!: ElementRef<HTMLInputElement>
   onChange: OnChange<string> = () => {};
   onTouched: OnTouch = () => {};
   formControl!: FormControl;
