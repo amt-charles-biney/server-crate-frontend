@@ -218,6 +218,26 @@ export interface IProductConfiguration {
   vatIncluded: number
 }
 
+// new and improved configurations
+export interface IConfiguredOption {
+  id: string;
+  optionId: string;
+  optionName: string;
+  optionType: string;
+  optionPrice: number;
+}
+
+export interface IConfiguredProduct {
+  id: string;
+  totalPrice: number;
+  productId: string;
+  productPrice: number;
+  configuredPrice: number;
+  configured: IConfiguredOption[];
+  warrantyType: boolean;
+  vatIncluded: number
+}
+
 
 export interface ICompatibleOption {
   id: string;
