@@ -1,11 +1,11 @@
 <main class="px-5 py-4">
   <header class="flex items-center justify-between w-full">
     <h1 class="text-2xl font-[600] font-inter">Create Attribute</h1>
-    <button mat-dialog-close>
+    <button mat-dialog-close type="button">
       <img src="/assets/close.svg" alt="close button" />
     </button>
   </header>
-  <form [formGroup]="modalForm" class="flex flex-col">
+  <form [formGroup]="attributeForm" (ngSubmit)="addAttribute()" class="flex flex-col">
     <div class="flex justify-between items-baseline">
       <div class="w-[60%]">
         <app-custom-input
@@ -20,8 +20,8 @@
         <app-custom-check-box
           name="productType"
           class="font-[500]"
-          label="Has measurement"
-          formControlName="measurement"
+          label="Has isMeasured"
+          formControlName="isMeasured"
         />
         <app-custom-input
           type="select"
@@ -40,7 +40,7 @@
         formControlName="description"
       />
     </div>
-    <button class="flex text-figma-green gap-3 self-end">
+    <button (click)="addAttributeForm()" type="button" class="flex text-figma-green gap-3 self-end">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -58,85 +58,142 @@
       </svg>
       <p class="text-sm underline">Add new variant</p>
     </button>
-    <section>
+  <section>
+    
       <table class="flex flex-col w-full mt-6">
         <tr class="flex items-center bg-[#fcfcfd] h-10">
-          <th class="text-gray-500 font-[500] text-sm flex-[2_2_0%] bg-black">
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-[2_2_0%] bg-black">
             Variant
           </th>
-          @if (measurement.value) {
-          <th class="text-gray-500 font-[500] text-sm flex-1">Base Amount</th>
-          } @if (measurement.value) {
-          <th class="text-gray-500 font-[500] text-sm flex-1">Max Amount</th>
+          @if (isMeasured.value) {
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-red-600">
+            Base Amount
+          </th>
+          } @if (isMeasured.value) {
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-yellow-600">
+            Max Amount
+          </th>
           }
-          <th class="text-gray-500 font-[500] text-sm flex-1">Price</th>
-          @if (measurement.value) {
-          <th class="text-gray-500 font-[500] text-sm flex-1">Price Factor</th>
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-green-600">
+            Price
+          </th>
+          @if (isMeasured.value) {
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-blue-600">
+            Price Factor
+          </th>
           }
-          <th class="text-gray-500 font-[500] text-sm flex-1">Action</th>
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-purple-600">
+            Action
+          </th>
         </tr>
-        <tr class="flex items-center bg-[#fcfcfd] h-10">
-          <td class="text-gray-500 font-[500] text-sm flex-[2_2_0%]">
-            <div class="flex items-center gap-2">
-              <button>
-                <app-custom-image
-                  formControlName="coverImage"
-                  elementId="coverImage"
-                  containerClass="relative flex flex-col items-center justify-center h-full"
-                  customClass="flex flex-col h-[50%] xl:h-[60%]"
-                  previewClass="w-7 h-7"
-                  [previewImage]="coverImage"
-                  (removeImageEmitter)="removeImage($event)"
-                  (uploadImageEmitter)="replaceImage($event)"
-                >
-                  <label
-                    for="#coverImage"
-                    class="flex items-center gap-3 text-figma-green"
-                  >
-                    <img src="/assets/upload-cloud.svg" alt="upload" />
-                    Upload cover
-                  </label>
-                </app-custom-image>
-              </button>
-              <input type="text" placeholder="Enter variant name" />
-            </div>
-          </td>
-          @if (measurement.value) {
-          <td class="text-gray-500 font-[500] text-sm flex-1">Base Amount</td>
-          } @if (measurement.value) {
-          <td class="text-gray-500 font-[500] text-sm flex-1">Max Amount</td>
-          }
-          <td class="text-gray-500 font-[500] text-sm flex-1">Price</td>
-          @if (measurement.value) {
-          <td class="text-gray-500 font-[500] text-sm flex-1">Price Factor</td>
-          }
-          <td class="text-gray-500 font-[500] text-sm flex-1">Action</td>
-        </tr>
-        <!-- <tr
-              class="flex items-center bg-[#FCFCFD] h-10"
-              *ngFor="let attribute of attributes"
-            >
-              <td class="flex justify-center font-[500] text-sm flex-none w-14">
-                <app-custom-check-box (changeHandler)="itemSelected($event)" [formControlName]="attribute.attributeName" [name]="attribute.attributeName" [value]="attribute.attributeName" />
-              </td>
-              <td class="font-[500] text-sm w-64 text-start pl-4">
-                {{ attribute.attributeName }}
-              </td>
-              <td class="flex gap-4 font-[500] text-sm flex-[2_2_0%] text-start pl-4">
-                <p
-                  class="bg-[#ecf7ec] text-[#3cb043] px-2 py-0.5 rounded-md"
-                  *ngFor="let attrType of attribute.attributeType"
-                >
-                  {{ attrType }}
-                </p>
-              </td>
-              <td class="text-center text-gray-500 font-[500] text-sm flex-none px-4 pr-7">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                </svg>            
-              </td>
-            </tr> -->
+        <div formArrayName="attributes" *ngFor="let attrs of attributes.controls; let i = index">
+            <ng-container [formGroupName]="i">
+                {{attrs.value.id}}
+                <tr class="flex items-center bg-[#fcfcfd] h-10">
+                  <td class="text-gray-500 font-[500] text-sm flex-[2_2_0%]">
+                    <div class="flex items-center gap-2">
+                      <button type="button">
+                        <app-custom-image
+                          formControlName="media"
+                          [elementId]="attrs.value.id + ' coverImage'"
+                          containerClass="relative flex flex-col items-center justify-center h-full"
+                          customClass="flex flex-col h-[50%] xl:h-[60%]"
+                          previewClass="w-7 h-7"
+                          [previewImage]="coverImage[i]"
+                          (removeImageEmitter)="removeImage($event, i)"
+                          (uploadImageEmitter)="replaceImage($event, attrs.value.id, attributes.at(i), i)"
+                        >
+                          <label
+                            [for]="'#' + attrs.value.id + ' coverImage'"
+                            class="flex items-center gap-3 text-figma-green"
+                          >
+                            <img src="/assets/upload-cloud.svg" alt="upload" />
+                            <p class="text-ellipsis overflow-hidden whitespace-nowrap">
+                              Upload cover
+                            </p>
+                          </label>
+                        </app-custom-image>
+                      </button>
+                      <input
+                        class="w-full outline-none"
+                        type="text"
+                        placeholder="Enter variant name"
+                        formControlName="name"
+                      />
+                    </div>
+                  </td>
+                  @if (isMeasured.value) {
+                  <td class="text-gray-500 font-[500] text-sm flex-1">
+                    <input
+                      class="w-full outline-none"
+                      type="text"
+                      placeholder="Enter amount"
+                      formControlName="baseAmount"
+                    />
+                  </td>
+                  } @if (isMeasured.value) {
+                  <td class="text-gray-500 font-[500] text-sm flex-1">
+                    <input
+                      class="w-full outline-none"
+                      type="text"
+                      placeholder="Max Amt"
+                      formControlName="maxAmount"
+                    />
+                  </td>
+                  }
+                  <td class="text-gray-500 font-[500] text-sm flex-1">
+                    <input
+                      class="w-full outline-none"
+                      type="text"
+                      placeholder="Enter price"
+                      formControlName="price"
+                    />
+                  </td>
+                  @if (isMeasured.value) {
+                  <td class="text-gray-500 font-[500] text-sm flex-1">
+                    <input
+                      class="w-full outline-none"
+                      type="text"
+                      placeholder="Price factor"
+                      formControlName="priceIncrement"
+                    />
+                  </td>
+                  }
+                  <td class="text-gray-500 font-[500] text-sm flex-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-6 h-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                      />
+                    </svg>
+                  </td>
+                </tr>
+            </ng-container>
+        </div>
       </table>
-    </section>
+  </section>
+  <section class="flex items-center justify-end mt-10 gap-6 text-sm">
+    <button
+    type="submit"
+      class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
+    >
+      Save
+    </button>
+    <button
+      type="button"
+      (click)="dialogRef.close()"
+      class="border border-figma-green text-figma-green rounded w-32 py-1 tracking-wider"
+    >
+      Cancel
+    </button>
+  </section>
   </form>
 </main>

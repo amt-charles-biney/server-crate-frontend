@@ -55,7 +55,7 @@ export class AttributesComponent implements OnInit, AfterViewInit {
       },
     ];
     this.selectForm = this.attrService.toSelectFormGroup(this.attributes);
-    this.openDialog()
+    // this.openDialog()
   }
   removeCheck() {
     const someValuesSelected = Object.values(this.selectForm.value).some(

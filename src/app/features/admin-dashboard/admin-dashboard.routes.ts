@@ -17,8 +17,10 @@ import { configurationFeature } from '../../store/admin/products/configuration.r
 import { CategoryManagementComponent } from './features/category-management/category-management.component';
 import { AttributesComponent } from './features/attributes/attributes.component';
 import { AddCategoryComponent } from './features/add-category/add-category.component';
-import { attributeFeature } from '../../store/category-management/category.reducers';
-import { CategoryManagementEffect } from '../../store/category-management/category.effects';
+import { attributeFeature } from '../../store/category-management/category/category.reducers';
+import { CategoryManagementEffect } from '../../store/category-management/category/category.effects';
+import { AttributeEffect } from '../../store/category-management/attributes/attributes.effects';
+import { attributeCreationFeature } from '../../store/category-management/attributes/attributes.reducers';
 
 export const route: Routes = [
   {
@@ -69,7 +71,11 @@ export const route: Routes = [
       },
       {
         path: 'attributes',
-        component: AttributesComponent
+        component: AttributesComponent,
+        providers: [
+          provideEffects(AttributeEffect),
+          provideState(attributeCreationFeature)
+        ]
       },
       {
         path: 'orders',

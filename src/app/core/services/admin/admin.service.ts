@@ -1,11 +1,16 @@
-import { HttpClient } from '@angular/common/http';
+import { addAttribute } from './../../../store/category-management/attributes/attributes.actions';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Attribute, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import {
   AllProducts,
   Select,
   ProductItem,
+  UploadResponse,
+  BulkAttribute,
+  AddAttributeResponse,
 } from '../../../types';
+import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -64,6 +69,19 @@ export class AdminService {
   }
 
   getAttributes() {
-    return this.http.get<Attribute[]>(`${this.baseUrl}/admin/attributes`)
+    return this.http.get<Attribute[]>(`${this.baseUrl}/admin/attributes`);
+  }
+
+  uploadImage(params: FormData) {
+    return this.http
+      .post<UploadResponse>(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`,
+        params,
+        { context: new HttpContext().set(NO_AUTH, true) }
+      )
+  }
+
+  addAttribute(attribute: BulkAttribute) {
+    return this.http.post<AddAttributeResponse>(`${this.baseUrl}/admin/attributes/bulk`, attribute)
   }
 }

@@ -60,7 +60,7 @@ export class CustomImageComponent
   @Input() editId!: string | null;
   localPreview: string | null | ArrayBuffer = null
   @Output() removeImageEmitter = new EventEmitter<string>()
-  @Output() uploadImageEmitter = new EventEmitter<{imgSrc: string, imageToChange: string}>()
+  @Output() uploadImageEmitter = new EventEmitter<{imgSrc: string, imageToChange: string, file?: File}>()
   formControl!: FormControl;
   
   onChange: OnChange<string> = () => {};
@@ -96,7 +96,7 @@ export class CustomImageComponent
       reader.readAsDataURL(file);
 
       reader.onloadend = (event) => {
-        this.uploadImageEmitter.emit({imgSrc: reader.result as string, imageToChange: this.elementId})
+        this.uploadImageEmitter.emit({imgSrc: reader.result as string, imageToChange: this.elementId, file })
       };
     }
   }
@@ -104,7 +104,8 @@ export class CustomImageComponent
     this.removeImageEmitter.emit(this.elementId)
     if (this.editId) {
       this.localPreview = null;
-    } else {
+    } 
+    else {
       this.onInit()
     }    
   }

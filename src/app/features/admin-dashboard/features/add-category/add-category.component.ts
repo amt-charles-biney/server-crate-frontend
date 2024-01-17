@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { Store } from '@ngrx/store';
-import { getAttributes } from '../../../../store/category-management/category.actions';
+import { getAttributes } from '../../../../store/category-management/category/category.actions';
 
 @Component({
   selector: 'app-add-category',
