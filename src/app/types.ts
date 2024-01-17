@@ -112,6 +112,7 @@ export type ProductItem = {
     id: string;
     name: string;
   }
+  isFeatured: boolean
 };
 
 export type ResendOtp = {
