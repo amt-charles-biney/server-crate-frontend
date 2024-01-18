@@ -44,6 +44,7 @@ export class AttributesComponent implements OnInit, AfterViewInit {
   private attributes$ = new BehaviorSubject<Attribute[]>([]);
   attributes = this.attributes$.asObservable();
   attributesTodelete: Set<string> = new Set();
+  localAttributes!: Attribute[]
   indeterminateCheckbox!: HTMLInputElement;
   selectForm!: FormGroup;
   @ViewChild(CustomCheckBoxComponent) check!: CustomCheckBoxComponent;
@@ -59,6 +60,7 @@ export class AttributesComponent implements OnInit, AfterViewInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((attrs) => {
         this.selectForm = this.attrService.toSelectFormGroup(attrs);
+        this.localAttributes = attrs
       });
   }
 
@@ -75,9 +77,13 @@ export class AttributesComponent implements OnInit, AfterViewInit {
       this.clearSelected();
     } else {
       Object.keys(this.selectForm.value).forEach((value) => {
-        this.selectForm.patchValue({ [value]: true });        
+        this.selectForm.patchValue({ [value]: true });
       });
-      
+      this.localAttributes.map((attr) => {
+        console.log('Attr', attr);
+
+        this.itemSelected({ name: '', isAdded: false, value: '' }, attr.id);
+      });
       this.indeterminateCheckbox.indeterminate = true;
     }
     this.indeterminateCheckbox.checked = false;
@@ -86,32 +92,32 @@ export class AttributesComponent implements OnInit, AfterViewInit {
     Object.keys(this.selectForm.value).forEach((value) => {
       this.selectForm.patchValue({ [value]: false });
     });
+    this.attributesTodelete.clear();
   }
   itemSelected(
     selected: { name: string; value: string; isAdded: boolean },
     id: string
   ) {
+    console.log('selected', selected, id);
+
     if (this.attributesTodelete.has(id)) {
       this.attributesTodelete.delete(id);
     } else {
       this.attributesTodelete.add(id);
-    }    
+    }
     this.indeterminateCheckbox.indeterminate = Object.values(
       this.selectForm.value
     ).some((value) => value);
   }
 
   deleteAttributes() {
-    if (Object.values(this.selectForm.value).every((value) => value)) {      
-      this.store.dispatch(deleteAll())
-      return
-    }
     const deleteList = Array.from(this.attributesTodelete);
-    this.clearSelected();
-    this.store.dispatch(deleteMultipleAttributes({ deleteList }));
-    for (let item of deleteList) {
-      this.store.dispatch(deleteAttribute({attributeId: item}))      
-    }
+    console.log('DeleteList', deleteList);
+
+    console.log('Delete all');
+    this.store.dispatch(deleteAll({ deleteList }));
+
+    this.attributesTodelete.clear();
     this.indeterminateCheckbox.indeterminate = false;
   }
 

@@ -96,7 +96,11 @@ export class AdminService {
     return this.http.put(`${this.baseUrl}/admin/attributes/bulk`, attribute)
   }
 
-  deleteAll() {
-    return this.http.delete(`${this.baseUrl}/admin/attributes/all`)
+  deleteAll(deleteList: string[]) {
+    console.log('deleteList', deleteList);
+    
+    return this.http.delete(`${this.baseUrl}/admin/attributes/all`, {
+      body: deleteList
+    })
   }
 }

@@ -168,7 +168,6 @@ export class AttributeModalComponent implements OnInit {
         };
       }
     );
-    console.log(validAttributes);
 
     this.store.dispatch(
       updateAttributesInStore({ attributes: validAttributes })

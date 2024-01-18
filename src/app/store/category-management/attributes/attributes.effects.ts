@@ -142,8 +142,11 @@ export class AttributeEffect {
   deleteAll$ = createEffect(() => {
     return this.action$.pipe(
         ofType(deleteAll),
-        exhaustMap(() => {
-          return this.adminService.deleteAll().pipe(
+        exhaustMap((props) => {
+          return this.adminService.deleteAll(props.deleteList).pipe(
+            map(() => {
+              return getAttributes();
+            }),
             catchError((err) => {
               return of(
                 setLoadingSpinner({
@@ -156,7 +159,7 @@ export class AttributeEffect {
           );
         })
       );
-  }, { dispatch: false })
+  })
 
   constructor(private action$: Actions, private adminService: AdminService) {}
 }
