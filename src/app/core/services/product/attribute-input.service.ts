@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Attr, Attribute } from '../../../types';
+import { Attribute } from '../../../types';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class AttributeInputService {
     });
     return new FormGroup(group);
   }
-  toSelectFormGroup(attributes: Attr[] ) {
+  toSelectFormGroup(attributes: Attribute[] ) {
     const group: any = {};
     attributes.forEach(attribute => {
       group[attribute.attributeName] = new FormControl(null)

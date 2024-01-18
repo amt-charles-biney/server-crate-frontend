@@ -1,6 +1,5 @@
-import { addAttribute } from './../../../store/category-management/attributes/attributes.actions';
 import { HttpClient, HttpContext } from '@angular/common/http';
-import { Attribute, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import {
   AllProducts,
@@ -8,7 +7,8 @@ import {
   ProductItem,
   UploadResponse,
   BulkAttribute,
-  AddAttributeResponse,
+  GetAttribute,
+  UpdateAttribute,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -69,7 +69,7 @@ export class AdminService {
   }
 
   getAttributes() {
-    return this.http.get<Attribute[]>(`${this.baseUrl}/admin/attributes`);
+    return this.http.get<GetAttribute>(`${this.baseUrl}/admin/attributes`);
   }
 
   uploadImage(params: FormData) {
@@ -82,6 +82,21 @@ export class AdminService {
   }
 
   addAttribute(attribute: BulkAttribute) {
-    return this.http.post<AddAttributeResponse>(`${this.baseUrl}/admin/attributes/bulk`, attribute)
+    return this.http.post<GetAttribute>(`${this.baseUrl}/admin/attributes/bulk`, attribute)
+  }
+
+  deleteAttributeOption(optionId: string) {
+    return this.http.delete(`${this.baseUrl}/admin/attributes/options/${optionId}`)
+  }
+  deleteAttribute(attributeId: string) {
+    return this.http.delete(`${this.baseUrl}/admin/attributes/${attributeId}`)
+  }
+
+  updateAttribute(attribute: UpdateAttribute) {
+    return this.http.put(`${this.baseUrl}/admin/attributes/bulk`, attribute)
+  }
+
+  deleteAll() {
+    return this.http.delete(`${this.baseUrl}/admin/attributes/all`)
   }
 }

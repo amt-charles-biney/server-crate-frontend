@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { BulkAttribute, StoreVariant, UploadResponse } from '../../../types';
-import { addAttributeToStore, gotImage, updateAttributesInStore } from './attributes.actions';
+import { Attribute, StoreVariant } from '../../../types';
+import { addAttributeToStore, deleteAll, deleteMultipleAttributes, gotAttributes, gotImage, resetAttributeCreation, updateAttributesInStore } from './attributes.actions';
 
 const initialState: StoreVariant[] = []
 
@@ -44,8 +44,30 @@ export const attributeCreationFeature = createFeature({
             }
         )
         return newState
-    })
+    }),
+    on(resetAttributeCreation, () => {
+        return []
+    }),
   ),
 });
 
+const initialAttributes: Attribute[] = []
+export const attributesFeature = createFeature({
+    name: 'attributes',
+    reducer: createReducer(
+        initialAttributes,
+        on(gotAttributes, (_, { attributes }) => {
+            return attributes
+        }),
+        on(deleteMultipleAttributes, (state, { deleteList }) => {
+            const newState = state.filter((attribute) => !deleteList.includes(attribute.id))            
+            return newState
+        }),
+        on(deleteAll, () => {
+            return []
+        })
+    )
+})
+
 export const { selectAttributeCreationState } = attributeCreationFeature;
+export const { selectAttributesState } = attributesFeature

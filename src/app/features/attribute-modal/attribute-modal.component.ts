@@ -1,5 +1,15 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  Inject,
+  OnInit,
+} from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
 import { CustomCheckBoxComponent } from '../../shared/components/custom-check-box/custom-check-box.component';
 import {
@@ -18,15 +28,16 @@ import { Store } from '@ngrx/store';
 import {
   addAttribute,
   addAttributeToStore,
+  deleteAttributeOption,
+  updateAttribute,
   updateAttributesInStore,
   uploadImage,
 } from '../../store/category-management/attributes/attributes.actions';
 import { CLOUD_NAME, UPLOAD_PRESET } from '../../core/utils/constants';
 import { AdminService } from '../../core/services/admin/admin.service';
-import { BulkAttribute } from '../../types';
+import { Attribute, AttributeOption, BulkAttribute } from '../../types';
 import { getUniqueId } from '../../core/utils/settings';
 import { selectAttributeCreationState } from '../../store/category-management/attributes/attributes.reducers';
-import { tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -50,25 +61,89 @@ export class AttributeModalComponent implements OnInit {
   attributeForm!: FormGroup;
   coverImage: Array<string | null> = [];
   id = '';
+  editId: string | null = null;
   constructor(
     public dialogRef: MatDialogRef<AttributeModalComponent>,
     private store: Store,
     private adminService: AdminService,
     private fb: FormBuilder,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
+    @Inject(MAT_DIALOG_DATA) public data: { attribute: Attribute }
   ) {}
   ngOnInit(): void {
-
-    this.attributeForm = this.fb.group({
-      attributeName: ['', Validators.required],
-      description: [''],
-      isMeasured: [false],
-      unit: ['', Validators.required],
-      attributes: this.fb.array([]),
+    if (this.data && this.data.attribute) {
+      const {
+        attributeName,
+        attributeOptions,
+        description,
+        id,
+        isMeasured,
+        unit,
+      } = this.data.attribute;
+      console.log('Attribute', this.data.attribute);
+      this.editId = id;
+      for (let attr of attributeOptions) {
+        this.store.dispatch(
+          addAttributeToStore({
+            baseAmount: attr.additionalInfo.baseAmount.toString(),
+            id: attr.id,
+            maxAmount: attr.additionalInfo.maxAmount.toString(),
+            media: attr.optionMedia,
+            name: attr.optionName,
+            price: attr.optionPrice.toString(),
+            priceIncrement: attr.additionalInfo.priceIncrement.toString(),
+          })
+        );
+      }
+      this.attributeForm = this.fb.group({
+        attributeName: [attributeName, Validators.required],
+        description: [description],
+        isMeasured: [isMeasured],
+        unit: [unit, Validators.required],
+        attributes: this.fb.array(
+          attributeOptions.map((attributeOption) =>
+            this.createAttr(attributeOption)
+          )
+        ),
+      });
+    } else {
+      this.attributeForm = this.fb.group({
+        attributeName: ['', Validators.required],
+        description: [''],
+        isMeasured: [false],
+        unit: ['', Validators.required],
+        attributes: this.fb.array([]),
+      });
+    }
+  }
+  createAttr(attributeOption: AttributeOption): FormGroup {
+    const {
+      additionalInfo,
+      attribute,
+      id,
+      optionMedia,
+      optionName,
+      optionPrice,
+    } = attributeOption;
+    console.log('attributeOption', attributeOption);
+    this.coverImage.push(optionMedia);
+    return this.fb.group({
+      name: [optionName],
+      price: optionPrice,
+      media: optionMedia,
+      baseAmount: additionalInfo.baseAmount,
+      maxAmount: additionalInfo.maxAmount,
+      priceIncrement: additionalInfo.priceIncrement,
+      id,
+      coverImage: optionMedia,
     });
   }
-
-  replaceImage(obj: { imgSrc: string; imageToChange: string; file?: File }, id: number, attrs: AbstractControl, index: number) {
+  replaceImage(
+    obj: { imgSrc: string; imageToChange: string; file?: File },
+    id: number,
+    attrs: AbstractControl,
+    index: number
+  ) {
     const data = new FormData();
     this.coverImage[index] = obj.imgSrc;
     if (obj.file) {
@@ -77,37 +152,63 @@ export class AttributeModalComponent implements OnInit {
       data.append('cloud_name', CLOUD_NAME);
       this.store.dispatch(uploadImage({ form: data, id: id.toString() }));
     }
-    
   }
-  removeImage(imageToRemove: string, index: number) {    
+  removeImage(imageToRemove: string, index: number) {
     this.attributes.at(index).patchValue({ media: null });
     this.coverImage[index] = null;
   }
 
   addAttribute() {
-    const validAttributes = this.attributeForm.value.attributes.map((attr:any) => {
-      return {
-        ...attr,
-        media: null
-      }
-    })
-    console.log(validAttributes);
     
-    this.store.dispatch(updateAttributesInStore({attributes: validAttributes}))
-    this.store.select(selectAttributeCreationState).pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe((options) => {
-      let attribute = {
-        attributeName: this.attributeForm.value.attributeName,
-        description: this.attributeForm.value.description,
-        isMeasured: this.attributeForm.value.isMeasured,
-        unit: this.attributeForm.value.unit,
-        variantOptions: options
+    const validAttributes = this.attributeForm.value.attributes.map(
+      (attr: any) => {
+        return {
+          ...attr,
+          media: null,
+        };
       }
-      this.store.dispatch(addAttribute(attribute))
-      console.log('Sending', attribute)
-      this.dialogRef.close()
-    })
+    );
+    console.log(validAttributes);
+
+    this.store.dispatch(
+      updateAttributesInStore({ attributes: validAttributes })
+    );
+    if (this.editId) {
+      console.log('Is Editing', this.editId);
+      
+      this.store
+        .select(selectAttributeCreationState)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((options) => {
+          let attribute = {
+            id: this.editId!,
+            attributeName: this.attributeForm.value.attributeName,
+            description: this.attributeForm.value.description,
+            isMeasured: this.attributeForm.value.isMeasured,
+            unit: this.attributeForm.value.unit,
+            variantOptions: options,
+          };
+          console.log('Sending', attribute);
+          this.store.dispatch(updateAttribute(attribute))
+        });
+        this.dialogRef.close();
+      return;
+    }
+    this.store
+      .select(selectAttributeCreationState)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((options) => {
+        let attribute = {
+          attributeName: this.attributeForm.value.attributeName,
+          description: this.attributeForm.value.description,
+          isMeasured: this.attributeForm.value.isMeasured,
+          unit: this.attributeForm.value.unit,
+          variantOptions: options,
+        };
+        this.store.dispatch(addAttribute(attribute));
+        console.log('Sending', attribute);
+        this.dialogRef.close();
+      });
   }
 
   addAttributeForm() {
@@ -122,13 +223,13 @@ export class AttributeModalComponent implements OnInit {
         maxAmount: '',
         priceIncrement: '',
         id,
-        coverImage: ''
+        coverImage: '',
       })
     );
     // console.log('fomr values', ...this.attributeForm.value.attributes);
     // const primitiveFileList: FileList = this.attributeForm.value.media;
     // console.log('filelist', primitiveFileList);
-    
+
     this.store.dispatch(
       addAttributeToStore({
         name: '',
@@ -140,7 +241,15 @@ export class AttributeModalComponent implements OnInit {
         id,
       })
     );
-    this.id = id
+    this.id = id;
+  }
+
+  deleteOption(index: number, optionId: string) {
+    if (this.editId) {
+      this.store.dispatch(deleteAttributeOption({ optionId }))
+    } else {
+      this.attributes.removeAt(index)
+    }
   }
 
   get attributes() {
@@ -148,11 +257,10 @@ export class AttributeModalComponent implements OnInit {
   }
 
   get attributeName() {
-    return this.attributeForm.get('attributeName')!
+    return this.attributeForm.get('attributeName')!;
   }
 
   get isMeasured() {
     return this.attributeForm.get('isMeasured')!;
   }
-  
 }

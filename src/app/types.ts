@@ -236,22 +236,6 @@ export type CategoryMgt = {
   categoryConfigs: BasicConfig[];
 };
 
-export type AttributeOption = {
-  name: string;
-  price: number;
-};
-export type Attribute = {
-  id: string;
-  attributeName: string;
-  attributeType: string;
-  attributeOptions: AttributeOption[];
-};
-
-export type Attr = {
-  attributeName: string;
-  attributeType: string[];
-};
-
 export type UploadResponse = {
   url: string;
 };
@@ -262,6 +246,14 @@ export type BulkAttribute = {
   description: string;
   variantOptions: StoreVariant[];
 };
+
+export type UpdateAttribute = {
+  id: string;
+  attributeName: string;
+  isMeasured: boolean;
+  description: string;
+  variantOptions: StoreVariant[];
+}
 
 export type VariantOption = {
   name: string;
@@ -288,6 +280,37 @@ export type AddAttributeResponse = {
   message: string;
   status: string;
 };
+export type Attribute = {
+  id: string;
+  attributeName: string;
+  isMeasured: boolean;
+  unit: string;
+  description: string;
+  attributeOptions: AttributeOption[]
+}
+export type AttributeOption = {
+  id: string;
+  optionName: string;
+  additionalInfo: AdditionalInfo;
+  optionPrice: number;
+  optionMedia: string;
+  attribute: {
+    name: string;
+    id: string;
+    isMeasured: boolean
+  }
+}
+
+export type AdditionalInfo = {
+  baseAmount: number;
+  maxAmount: number;
+  priceIncrement: number;
+}
+export type GetAttribute = {
+  data: Attribute[];
+  message: string;
+  status: string;
+}
 
 export type AttributeDataResponse = {
   id: string;

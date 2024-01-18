@@ -48,44 +48,91 @@
   <section>
     <form [formGroup]="selectForm">
       <table class="flex flex-col w-full mt-6">
-        <tr class="flex items-center bg-[#EAECF0] h-10">
-          <th class="flex justify-center font-[500] text-sm flex-none w-14">
-            <app-custom-check-box (changeHandler)="removeCheck()"/>
-          </th>
-          <th class="text-gray-500 font-[500] text-sm w-64 text-start pl-4">
-            Attribute Name
-          </th>
-          <th
-            class="text-gray-500 font-[500] text-sm flex-[2_2_0%] text-start pl-4"
-          >
-            Attribute Types
-          </th>
-          <th class="text-gray-500 font-[500] text-sm flex-none px-4">Actions</th>
-        </tr>
-        <tr
-          class="flex items-center bg-[#FCFCFD] h-10"
-          *ngFor="let attribute of attributes"
-        >
-          <td class="flex justify-center font-[500] text-sm flex-none w-14">
-            <app-custom-check-box (changeHandler)="itemSelected($event)" [formControlName]="attribute.attributeName" [name]="attribute.attributeName" [value]="attribute.attributeName" />
-          </td>
-          <td class="font-[500] text-sm w-64 text-start pl-4">
-            {{ attribute.attributeName }}
-          </td>
-          <td class="flex gap-4 font-[500] text-sm flex-[2_2_0%] text-start pl-4">
-            <p
-              class="bg-[#ecf7ec] text-[#3cb043] px-2 py-0.5 rounded-md"
-              *ngFor="let attrType of attribute.attributeType"
-            >
-              {{ attrType }}
-            </p>
-          </td>
-          <td class="text-center text-gray-500 font-[500] text-sm flex-none px-4 pr-7">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-            </svg>            
-          </td>
-        </tr>
+        <mat-accordion class="border-b">
+          <mat-expansion-panel class="mat-elevation-z0" disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="flex items-center gap-5 mt-1">
+                <app-custom-check-box (changeHandler)="removeCheck()" />
+
+                <p>Attribute Name</p>
+              </mat-panel-title>
+              <mat-panel-description class="flex items-center justify-between">
+                <p
+                  class="overflow-hidden whitespace-nowrap text-ellipsis w-64 flex-1"
+                >
+                  Description
+                </p>
+
+                <p class="flex-1">Measurement Type</p>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <ng-container *ngIf="attributes | async as attributes">
+          @for (attribute of attributes; track $index) {
+
+          <mat-accordion class="border-b">
+            <mat-expansion-panel class="mat-elevation-z0">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="flex items-center gap-5">
+                  <app-custom-check-box
+                    (changeHandler)="itemSelected($event, attribute.id)"
+                    [formControl]="$any(selectForm.controls[attribute.attributeName])"
+                    [name]="attribute.attributeName"
+                    [value]="attribute.attributeName"
+                  />
+                  <p>{{ attribute.attributeName }}</p>
+                </mat-panel-title>
+                <mat-panel-description
+                  class="flex items-center justify-between gap-24"
+                >
+                  <p
+                    class="overflow-hidden whitespace-nowrap text-ellipsis w-64 flex-1"
+                  >
+                    {{ attribute.description }}
+                  </p>
+                  <div class="flex-auto">
+                    @if (attribute.isMeasured) {
+                    <div
+                      class="flex items-center w-fit gap-1 bg-[#ecf8f1] rounded-2xl px-3 py-1"
+                    >
+                      <div
+                        class="rounded-full bg-figma-green w-1.5 h-1.5"
+                      ></div>
+                      <p
+                        class="overflow-hidden whitespace-nowrap text-ellipsis text-xs text-[#2f8f57]"
+                      >
+                        Measured
+                      </p>
+                    </div>
+                    } @else {
+                    <div
+                      class="flex items-center w-fit gap-1 bg-[#fdf0f1] rounded-2xl px-3 py-1"
+                    >
+                      <div class="rounded-full bg-[#d20202] w-1.5 h-1.5"></div>
+                      <p
+                        class="overflow-hidden whitespace-nowrap text-ellipsis text-xs text-[#b84545]"
+                      >
+                        Not measured
+                      </p>
+                    </div>
+                    }
+                  </div>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <section class="w-[96%] ml-auto">
+                <app-variant-options
+                  [attributeOptions]="attribute.attributeOptions"
+                  [isMeasured]="attribute.isMeasured"
+                  [attribute]="attribute"
+                  (editOption)="editOption($event)"
+                />
+              </section>
+            </mat-expansion-panel>
+          </mat-accordion>
+          }
+        </ng-container>
       </table>
     </form>
   </section>

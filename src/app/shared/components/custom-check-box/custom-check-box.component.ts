@@ -3,6 +3,7 @@ import {
   DestroyRef,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   Output,
   ViewChild,
@@ -47,7 +48,7 @@ export class CustomCheckBoxComponent {
     });
     this.formControl.valueChanges
       .pipe(
-        tap((value) => {
+        tap((value) => {           
           this.onChange(value);          
           this.changeHandler.emit({name: this.name, value: this.value, isAdded: value })           
         }),
@@ -65,5 +66,11 @@ export class CustomCheckBoxComponent {
   }
   registerOnTouched(fn: OnTouch): void {
     this.onTouched = fn;
+  }
+
+  @HostListener('click', ['$event'])
+  onClick(e: Event) {
+    e.stopPropagation()
+    return
   }
 }

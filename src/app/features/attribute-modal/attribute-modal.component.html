@@ -61,36 +61,35 @@
   <section>
     
       <table class="flex flex-col w-full mt-6">
-        <tr class="flex items-center bg-[#fcfcfd] h-10">
-          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-[2_2_0%] bg-black">
+        <tr class="flex items-center bg-[#fcfcfd] border-b h-10">
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[30%] text-start">
             Variant
           </th>
           @if (isMeasured.value) {
-          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-red-600">
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[15%] text-start">
             Base Amount
           </th>
           } @if (isMeasured.value) {
-          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-yellow-600">
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm  w-[15%] text-start">
             Max Amount
           </th>
           }
-          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-green-600">
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm  w-[15%] text-start">
             Price
           </th>
           @if (isMeasured.value) {
-          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-blue-600">
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm  w-[15%] text-start">
             Price Factor
           </th>
           }
-          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm flex-1 bg-purple-600">
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[10%] flex justify-center text-start">
             Action
           </th>
         </tr>
         <div formArrayName="attributes" *ngFor="let attrs of attributes.controls; let i = index">
             <ng-container [formGroupName]="i">
-                {{attrs.value.id}}
-                <tr class="flex items-center bg-[#fcfcfd] h-10">
-                  <td class="text-gray-500 font-[500] text-sm flex-[2_2_0%]">
+                <tr class="flex items-center border-b h-10">
+                  <td class="text-gray-500 font-[500] text-sm  w-[30%] text-start">
                     <div class="flex items-center gap-2">
                       <button type="button">
                         <app-custom-image
@@ -99,6 +98,7 @@
                           containerClass="relative flex flex-col items-center justify-center h-full"
                           customClass="flex flex-col h-[50%] xl:h-[60%]"
                           previewClass="w-7 h-7"
+                          [editId]="editId"
                           [previewImage]="coverImage[i]"
                           (removeImageEmitter)="removeImage($event, i)"
                           (uploadImageEmitter)="replaceImage($event, attrs.value.id, attributes.at(i), i)"
@@ -123,7 +123,7 @@
                     </div>
                   </td>
                   @if (isMeasured.value) {
-                  <td class="text-gray-500 font-[500] text-sm flex-1">
+                  <td class="text-gray-500 font-[500] text-sm  w-[15%] text-start">
                     <input
                       class="w-full outline-none"
                       type="text"
@@ -132,7 +132,7 @@
                     />
                   </td>
                   } @if (isMeasured.value) {
-                  <td class="text-gray-500 font-[500] text-sm flex-1">
+                  <td class="text-gray-500 font-[500] text-sm  w-[15%] text-start">
                     <input
                       class="w-full outline-none"
                       type="text"
@@ -141,7 +141,7 @@
                     />
                   </td>
                   }
-                  <td class="text-gray-500 font-[500] text-sm flex-1">
+                  <td class="text-gray-500 font-[500] text-sm  w-[15%] text-start">
                     <input
                       class="w-full outline-none"
                       type="text"
@@ -150,7 +150,7 @@
                     />
                   </td>
                   @if (isMeasured.value) {
-                  <td class="text-gray-500 font-[500] text-sm flex-1">
+                  <td class="text-gray-500 font-[500] text-sm  w-[15%] text-start">
                     <input
                       class="w-full outline-none"
                       type="text"
@@ -159,21 +159,13 @@
                     />
                   </td>
                   }
-                  <td class="text-gray-500 font-[500] text-sm flex-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
-                      />
-                    </svg>
+                  <td class="text-gray-500 font-[500] text-sm w-[10%] flex justify-center items-center">
+                    <button type="button" (click)="deleteOption(i, attrs.value.id)">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-red-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                      </svg>
+                    </button>
+                    
                   </td>
                 </tr>
             </ng-container>

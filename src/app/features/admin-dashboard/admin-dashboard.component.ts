@@ -4,6 +4,8 @@ import { AdminLink } from '../../types';
 import { Router, RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
+import { Store } from '@ngrx/store';
+import { getAttributes } from '../../store/category-management/attributes/attributes.actions';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -20,18 +22,19 @@ export class AdminDashboardComponent implements OnInit {
     link: 'settings',
     svg: '/assets/settings.svg'
   }
-  constructor(private router: Router) {}
+  constructor(private router: Router, private store: Store) {}
   ngOnInit(): void {
+    this.store.dispatch(getAttributes());
     this.navLinks = [
-      {
-        label: 'Category Management',
-        link: 'category-management',
-        svg: '/assets/category.svg'
-      },
       {
         label: 'Attributes',
         link: 'attributes',
         svg: '/assets/attributes.svg'
+      },
+      {
+        label: 'Category Management',
+        link: 'category-management',
+        svg: '/assets/category.svg'
       },
       {
         label: 'Dashboard',
@@ -60,9 +63,9 @@ export class AdminDashboardComponent implements OnInit {
       }
     ];
     this.activeLink = this.navLinks[0];
-    // if (this.router.url !== '/admin/category-management') {
-    //   this.router.navigateByUrl('/admin/category-management');
-    // }
+    if (this.router.url !== '/admin/attributes') {
+      this.router.navigateByUrl('/admin/attributes');
+    }
   }
 
   logout() {
