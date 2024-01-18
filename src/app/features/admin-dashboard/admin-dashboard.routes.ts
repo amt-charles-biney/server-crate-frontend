@@ -14,6 +14,11 @@ import { provideState } from '@ngrx/store';
 import { categoryFeature } from '../../store/admin/products/categories.reducers';
 import { productsFeature } from '../../store/admin/products/products.reducers';
 import { configurationFeature } from '../../store/admin/products/configuration.reducers';
+import { CategoryManagementComponent } from './features/category-management/category-management.component';
+import { AttributesComponent } from './features/attributes/attributes.component';
+import { AddCategoryComponent } from './features/add-category/add-category.component';
+import { AttributeEffect } from '../../store/category-management/attributes/attributes.effects';
+import { attributeCreationFeature, attributesFeature } from '../../store/category-management/attributes/attributes.reducers';
 
 export const route: Routes = [
   {
@@ -47,8 +52,25 @@ export const route: Routes = [
         ]
       },
       {
+        path: 'add-category',
+        component: AddCategoryComponent,
+      },
+      {
         path: 'dashboard',
         component: DashboardComponent
+      },
+      {
+        path: 'category-management',
+        component: CategoryManagementComponent
+      },
+      {
+        path: 'attributes',
+        component: AttributesComponent,
+        providers: [
+          provideEffects(AttributeEffect),
+          provideState(attributeCreationFeature),
+          provideState(attributesFeature)
+        ]
       },
       {
         path: 'orders',

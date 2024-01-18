@@ -1,11 +1,16 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import {
   AllProducts,
   Select,
   ProductItem,
+  UploadResponse,
+  BulkAttribute,
+  GetAttribute,
+  UpdateAttribute,
 } from '../../../types';
+import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -61,5 +66,37 @@ export class AdminService {
 
   removeFromFeature(id: string) {
     return this.http.put(`${this.baseUrl}/admin/featured/${id}`, {});
+  }
+
+  getAttributes() {
+    return this.http.get<GetAttribute>(`${this.baseUrl}/admin/attributes`);
+  }
+
+  uploadImage(params: FormData) {
+    return this.http
+      .post<UploadResponse>(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`,
+        params,
+        { context: new HttpContext().set(NO_AUTH, true) }
+      )
+  }
+
+  addAttribute(attribute: BulkAttribute) {
+    return this.http.post<GetAttribute>(`${this.baseUrl}/admin/attributes/bulk`, attribute)
+  }
+
+  deleteAttributeOption(optionId: string) {
+    return this.http.delete(`${this.baseUrl}/admin/attributes/options/${optionId}`)
+  }
+  deleteAttribute(attributeId: string) {
+    return this.http.delete(`${this.baseUrl}/admin/attributes/${attributeId}`)
+  }
+
+  updateAttribute(attribute: UpdateAttribute) {
+    return this.http.put(`${this.baseUrl}/admin/attributes/bulk`, attribute)
+  }
+
+  deleteAll() {
+    return this.http.delete(`${this.baseUrl}/admin/attributes/all`)
   }
 }

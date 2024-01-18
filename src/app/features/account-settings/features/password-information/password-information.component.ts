@@ -4,7 +4,7 @@ import { CustomInputComponent } from '../../../../shared/components/custom-input
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { saveChanges } from '../../../../core/utils/settings';
-import { passwordRegex } from '../../../../core/utils/constants/patterns';
+import { passwordRegex } from '../../../../core/utils/constants';
 import { checkIfPasswordsMatch, formValidator } from '../../../../core/utils/validators';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { ChangePassword, LoadingStatus } from '../../../../types';
