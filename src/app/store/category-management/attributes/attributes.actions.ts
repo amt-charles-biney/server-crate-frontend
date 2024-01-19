@@ -19,8 +19,8 @@ export const deleteAttribute = createAction('[attribute] delete attribute', prop
 
 export const resetAttributeCreation = createAction('[attribute] reset attribute')
 
-export const updateAttribute = createAction('[attribute] update attribute', props<UpdateAttribute>())
+export const updateAttribute = createAction('[attribute] update attribute', props<BulkAttribute>())
 
 export const deleteMultipleAttributes = createAction('[attribute] delete multiple attributes', props<{ deleteList: string[] }>())
 
-export const deleteAll = createAction('[attribute] delete all')
+export const deleteAll = createAction('[attribute] delete all', props<{ deleteList: string[] }>())

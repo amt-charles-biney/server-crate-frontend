@@ -80,7 +80,7 @@
                     (changeHandler)="itemSelected($event, attribute.id)"
                     [formControl]="$any(selectForm.controls[attribute.attributeName])"
                     [name]="attribute.attributeName"
-                    [value]="attribute.attributeName"
+                    [value]="attribute.id"
                   />
                   <p>{{ attribute.attributeName }}</p>
                 </mat-panel-title>
