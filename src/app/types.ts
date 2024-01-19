@@ -218,23 +218,32 @@ export interface IProductConfiguration {
   vatIncluded: number
 }
 
+export interface IParamConfigOptions {
+  warranty: boolean,
+  components: string,
+}
+
 // new and improved configurations
 export interface IConfiguredOption {
-  id: string;
+  id: string | null;
   optionId: string;
   optionName: string;
   optionType: string;
   optionPrice: number;
+  isMeasured: boolean,
+  baseAmount: 1.00,
+  size: string,
+  included: true
 }
 
 export interface IConfiguredProduct {
-  id: string;
+  id: string | null;
   totalPrice: number;
   productId: string;
   productPrice: number;
   configuredPrice: number;
   configured: IConfiguredOption[];
-  warrantyType: boolean;
+  warranty: boolean;
   vatIncluded: number
 }
 
@@ -248,6 +257,10 @@ export interface ICompatibleOption {
   unit: string;
   isCompatible: boolean;
   isIncluded: boolean;
+  isMeasured: boolean;
+  baseAmount: number;
+  maxAmount: number; 
+  priceIncrement: number
 }
 
 export interface ICategoryOption {
