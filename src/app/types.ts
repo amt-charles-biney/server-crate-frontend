@@ -295,7 +295,7 @@ export type VariantOption = {
   media: string;
   baseAmount: number;
   maxAmount: number;
-  priceIncrement: number;
+  priceFactor: number;
   unit: string;
 };
 
@@ -305,7 +305,7 @@ export type StoreVariant = {
   media: string;
   baseAmount: string;
   maxAmount: string;
-  priceIncrement: string;
+  priceFactor: string;
   id: string;
 };
 
@@ -338,7 +338,7 @@ export type AttributeOption = {
 export type AdditionalInfo = {
   baseAmount: number;
   maxAmount: number;
-  priceIncrement: number;
+  priceFactor: number;
 }
 export type GetAttribute = {
   data: Attribute[];
@@ -352,7 +352,7 @@ export type AttributeDataResponse = {
   additionalInfo: {
     baseAmount: number;
     maxAmount: number;
-    priceIncrement: number;
+    priceFactor: number;
   };
   optionPrice: number;
   optionMedia: string;
