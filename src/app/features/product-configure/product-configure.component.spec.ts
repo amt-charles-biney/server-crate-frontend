@@ -19,29 +19,6 @@ describe('ProductConfigureComponent', () => {
     
     fixture = TestBed.createComponent(ProductConfigureComponent);
     component = fixture.componentInstance;
-    component.product = {
-      category: { id: '', name: ''},
-      coverImage: '',
-      id: '',
-      imageUrl: '',
-      inStock: 0,
-      isFeatured: false,
-      productBrand: '',
-      productDescription: '',
-      productId: '',
-      productName: '',
-      productPrice: '',
-      sales: 20,
-    };
-    component.productConfigItem = {
-      configurationPrice: 0,
-      configurations: [],
-      productPrice: 0,
-      productId: '',
-      totalPrice: 0,
-      vatIncluded: 0,
-      warrantyType: false
-    };
     fixture.detectChanges();
   });
 
