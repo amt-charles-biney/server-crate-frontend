@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VariantOptionsComponent } from './variant-options.component';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('VariantOptionsComponent', () => {
   let component: VariantOptionsComponent;
@@ -8,7 +9,8 @@ describe('VariantOptionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VariantOptionsComponent]
+      imports: [VariantOptionsComponent],
+      providers: [provideMockStore({})]
     })
     .compileComponents();
     

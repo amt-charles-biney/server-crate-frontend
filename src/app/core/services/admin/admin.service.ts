@@ -85,8 +85,8 @@ export class AdminService {
     return this.http.post<GetAttribute>(`${this.baseUrl}/admin/attributes/bulk`, attribute)
   }
 
-  deleteAttributeOption(optionId: string) {
-    return this.http.delete(`${this.baseUrl}/admin/attributes/options/${optionId}`)
+  deleteAttributeOption(optionId: string, attributeId: string) {
+    return this.http.delete(`${this.baseUrl}/admin/attributes/${attributeId}/options/${optionId}`)
   }
   deleteAttribute(attributeId: string) {
     return this.http.delete(`${this.baseUrl}/admin/attributes/${attributeId}`)

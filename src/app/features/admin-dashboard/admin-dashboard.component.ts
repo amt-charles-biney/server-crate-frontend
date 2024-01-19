@@ -27,16 +27,6 @@ export class AdminDashboardComponent implements OnInit {
     this.store.dispatch(getAttributes());
     this.navLinks = [
       {
-        label: 'Category Management',
-        link: 'category-management',
-        svg: '/assets/category.svg'
-      },
-      {
-        label: 'Attributes',
-        link: 'attributes',
-        svg: '/assets/attributes.svg'
-      },
-      {
         label: 'Dashboard',
         link: 'dashboard',
         svg: '/assets/dashboard.svg',
@@ -45,6 +35,16 @@ export class AdminDashboardComponent implements OnInit {
         label: 'Products',
         link: 'products',
         svg: '/assets/products.svg',
+      },
+      {
+        label: 'Category Management',
+        link: 'category-management',
+        svg: '/assets/category.svg'
+      },
+      {
+        label: 'Attributes',
+        link: 'attributes',
+        svg: '/assets/attributes.svg'
       },
       {
         label: 'Orders',
@@ -63,7 +63,7 @@ export class AdminDashboardComponent implements OnInit {
       }
     ];
     this.activeLink = this.navLinks[0];
-    // if (this.router.url !== '/admin/category-management') {
+    // if (this.router.url !== '/admin/dashboard') {
     //   this.router.navigateByUrl('/admin/category-management');
     // }
   }

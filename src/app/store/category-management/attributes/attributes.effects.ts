@@ -111,7 +111,7 @@ export class AttributeEffect {
     return this.action$.pipe(
         ofType(deleteAttributeOption),
         switchMap((props) => {
-          return this.adminService.deleteAttributeOption(props.optionId).pipe(
+          return this.adminService.deleteAttributeOption(props.optionId, props.attributeId).pipe(
             map(() => {
               this.store.dispatch(setLoadingSpinner({
                 isError: false,
