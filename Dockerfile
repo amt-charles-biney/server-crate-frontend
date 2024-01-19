@@ -5,4 +5,4 @@ RUN npm install
 COPY . ./
 RUN npm run build --omit=dev
 
-COPY --from=build /app/dist/server-create-frontend /usr/share/nginx/html/server-create-frontend
+COPY --from=build /app/dist/server-create-frontend/browser /usr/share/nginx/html/server-create-frontend
