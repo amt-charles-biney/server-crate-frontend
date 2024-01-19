@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ProductItem } from '../../types';
+import { IConfiguredProduct, IParamConfigOptions, ProductItem } from '../../types';
 
 export const loadProduct = createAction('[ProductConfig Component] Get Product', props<{ id: string }>());
 
@@ -22,5 +22,12 @@ export const loadProductConfigSuccess = createAction(
 
 export const loadProductConfigFailure = createAction(
   '[ProductConfig Component] Get Product Config Failure',
+  props<{ error: any }>()
+);
+
+
+export const loadProductConfigItem = createAction('[ProductConfigItem Component] Get product Config Item', props<{productId: string, configOptions: IParamConfigOptions}>());
+export const loadProductConfigItemSuccess = createAction('[ProductConfigItem Component] Get product Config Item Success', props<{ productConfigItem: IConfiguredProduct }>());
+export const loadProductConfigItemFailure = createAction('[ProductConfig Component] Get Product Config Item Failure',
   props<{ error: any }>()
 );
