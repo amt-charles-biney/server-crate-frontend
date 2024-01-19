@@ -10,7 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { passwordRegex } from '../../../core/utils/constants/patterns';
+import { passwordRegex } from '../../../core/utils/constants';
 import { checkIfPasswordsMatch, formValidator } from '../../../core/utils/validators';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';

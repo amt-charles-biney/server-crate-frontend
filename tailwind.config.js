@@ -14,6 +14,9 @@ module.exports = {
       },
       gridRow: {
         'span-9': 'span 9 / span 9',
+      },
+      fontFamily: {
+        'inter': ['inter', 'sans-serif'],
       }
     }
   },

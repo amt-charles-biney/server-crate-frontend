@@ -20,7 +20,7 @@ import {
   checkIfTermsAreAccepted,
   formValidator,
 } from '../../core/utils/validators';
-import { passwordRegex } from '../../core/utils/constants/patterns';
+import { passwordRegex } from '../../core/utils/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { TermsModalComponent } from '../../shared/components/terms-modal/terms-modal.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

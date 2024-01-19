@@ -1,7 +1,5 @@
 import { ApplicationConfig, isDevMode } from '@angular/core';
-import {
-  provideRouter,
-} from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -12,6 +10,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { reducer } from './store/loader/reducers/loader.reducers';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,10 +19,9 @@ export const appConfig: ApplicationConfig = {
     provideStore(),
     provideState('loader', reducer),
     provideEffects(),
-    provideHttpClient(
-      withInterceptors([loadingInterceptor, authInterceptor])
-    ),
+    provideHttpClient(withInterceptors([loadingInterceptor, authInterceptor])),
     // provideCloudinaryLoader('http://res.cloudinary.com/dqtxt1g06/image/upload/'),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { disableClose: true } },
   ],
 };

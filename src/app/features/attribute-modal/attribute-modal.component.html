@@ -1,0 +1,191 @@
+<main class="px-5 py-4">
+  <header class="flex items-center justify-between w-full">
+    <h1 class="text-2xl font-[600] font-inter">Create Attribute</h1>
+    <button mat-dialog-close type="button">
+      <img src="/assets/close.svg" alt="close button" />
+    </button>
+  </header>
+  <form [formGroup]="attributeForm" (ngSubmit)="addAttribute()" class="flex flex-col">
+    <div class="flex justify-between items-baseline">
+      <div class="w-[60%]">
+        <app-custom-input
+          id="attributeName"
+          label="Attribute Name"
+          type="text"
+          placeholder="Enter attribute name"
+          formControlName="attributeName"
+        />
+      </div>
+      <div class="">
+        <app-custom-check-box
+          name="productType"
+          class="font-[500]"
+          label="Has isMeasured"
+          formControlName="isMeasured"
+        />
+        <app-custom-input
+          type="select"
+          id="unit"
+          formControlName="unit"
+          [options]="['KB', 'GB', 'TB']"
+        />
+      </div>
+    </div>
+    <div class="w-[60%]">
+      <app-custom-input
+        id="description"
+        label="Description"
+        type="textarea"
+        placeholder="Enter description"
+        formControlName="description"
+      />
+    </div>
+    <button (click)="addAttributeForm()" type="button" class="flex text-figma-green gap-3 self-end">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        data-slot="icon"
+        class="w-5 h-5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 4.5v15m7.5-7.5h-15"
+        />
+      </svg>
+      <p class="text-sm underline">Add new variant</p>
+    </button>
+  <section>
+    
+      <table class="flex flex-col w-full mt-6">
+        <tr class="flex items-center bg-[#fcfcfd] border-b h-10">
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[30%] text-start">
+            Variant
+          </th>
+          @if (isMeasured.value) {
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[15%] text-start">
+            Base Amount
+          </th>
+          } @if (isMeasured.value) {
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm  w-[15%] text-start">
+            Max Amount
+          </th>
+          }
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm  w-[15%] text-start">
+            Price
+          </th>
+          @if (isMeasured.value) {
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm  w-[15%] text-start">
+            Price Factor
+          </th>
+          }
+          <th class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[10%] flex justify-center text-start">
+            Action
+          </th>
+        </tr>
+        <div formArrayName="attributes" *ngFor="let attrs of attributes.controls; let i = index">
+            <ng-container [formGroupName]="i">
+                <tr class="flex items-center border-b h-10">
+                  <td class="text-gray-500 font-[500] text-sm  w-[30%] text-start">
+                    <div class="flex items-center gap-2">
+                      <button type="button">
+                        <app-custom-image
+                          formControlName="media"
+                          [elementId]="attrs.value.id + ' coverImage'"
+                          containerClass="relative flex flex-col items-center justify-center h-full"
+                          customClass="flex flex-col h-[50%] xl:h-[60%]"
+                          previewClass="w-7 h-7"
+                          [editId]="editId"
+                          [previewImage]="coverImage[i]"
+                          (removeImageEmitter)="removeImage($event, i)"
+                          (uploadImageEmitter)="replaceImage($event, attrs.value.id, attributes.at(i), i)"
+                        >
+                          <label
+                            [for]="'#' + attrs.value.id + ' coverImage'"
+                            class="flex items-center gap-3 text-figma-green"
+                          >
+                            <img src="/assets/upload-cloud.svg" alt="upload" />
+                            <p class="text-ellipsis overflow-hidden whitespace-nowrap">
+                              Upload cover
+                            </p>
+                          </label>
+                        </app-custom-image>
+                      </button>
+                      <input
+                        class="w-full outline-none"
+                        type="text"
+                        placeholder="Enter variant name"
+                        formControlName="name"
+                      />
+                    </div>
+                  </td>
+                  @if (isMeasured.value) {
+                  <td class="text-gray-500 font-[500] text-sm  w-[15%] text-start">
+                    <input
+                      class="w-full outline-none"
+                      type="text"
+                      placeholder="Enter amount"
+                      formControlName="baseAmount"
+                    />
+                  </td>
+                  } @if (isMeasured.value) {
+                  <td class="text-gray-500 font-[500] text-sm  w-[15%] text-start">
+                    <input
+                      class="w-full outline-none"
+                      type="text"
+                      placeholder="Max Amt"
+                      formControlName="maxAmount"
+                    />
+                  </td>
+                  }
+                  <td class="text-gray-500 font-[500] text-sm  w-[15%] text-start">
+                    <input
+                      class="w-full outline-none"
+                      type="text"
+                      placeholder="Enter price"
+                      formControlName="price"
+                    />
+                  </td>
+                  @if (isMeasured.value) {
+                  <td class="text-gray-500 font-[500] text-sm  w-[15%] text-start">
+                    <input
+                      class="w-full outline-none"
+                      type="text"
+                      placeholder="Price factor"
+                      formControlName="priceIncrement"
+                    />
+                  </td>
+                  }
+                  <td class="text-gray-500 font-[500] text-sm w-[10%] flex justify-center items-center">
+                    <button type="button" (click)="deleteOption(i, attrs.value.id)">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-red-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                      </svg>
+                    </button>
+                    
+                  </td>
+                </tr>
+            </ng-container>
+        </div>
+      </table>
+  </section>
+  <section class="flex items-center justify-end mt-10 gap-6 text-sm">
+    <button
+    type="submit"
+      class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
+    >
+      Save
+    </button>
+    <button
+      type="button"
+      (click)="dialogRef.close()"
+      class="border border-figma-green text-figma-green rounded w-32 py-1 tracking-wider"
+    >
+      Cancel
+    </button>
+  </section>
+  </form>
+</main>
