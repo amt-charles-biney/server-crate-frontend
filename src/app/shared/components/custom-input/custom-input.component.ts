@@ -60,6 +60,7 @@ export class CustomInputComponent
   @Input() isReadOnly = false;
   @Input() filteredOptions!: Observable<any>;
   @Input() value!: string
+  @Input() isRequired!: boolean
   @Input() optionSelected!: (event: MatAutocompleteSelectedEvent) => void
   @Input() deleteFn!: (event: Event, option: Select) => void
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;

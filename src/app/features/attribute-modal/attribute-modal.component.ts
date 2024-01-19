@@ -35,10 +35,13 @@ import {
 } from '../../store/category-management/attributes/attributes.actions';
 import { CLOUD_NAME, UPLOAD_PRESET } from '../../core/utils/constants';
 import { AdminService } from '../../core/services/admin/admin.service';
-import { Attribute, AttributeOption, BulkAttribute } from '../../types';
+import { Attribute, AttributeOption, BulkAttribute, LoadingStatus } from '../../types';
 import { getUniqueId } from '../../core/utils/settings';
 import { selectAttributeCreationState } from '../../store/category-management/attributes/attributes.reducers';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-loader.component';
+import { Observable } from 'rxjs';
+import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
 
 @Component({
   selector: 'app-attribute-modal',
@@ -51,6 +54,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     FormsModule,
     ReactiveFormsModule,
     CustomImageComponent,
+    AuthLoaderComponent
   ],
   templateUrl: './attribute-modal.component.html',
   styleUrl: './attribute-modal.component.scss',
@@ -60,6 +64,8 @@ export class AttributeModalComponent implements OnInit {
   modalForm!: FormGroup;
   attributeForm!: FormGroup;
   coverImage: Array<string | null> = [];
+  loadingStatus$!: Observable<LoadingStatus>
+  submitted = false
   id = '';
   editId: string | null = null;
   constructor(
@@ -71,6 +77,7 @@ export class AttributeModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { attribute: Attribute }
   ) {}
   ngOnInit(): void {
+    this.loadingStatus$ = this.store.select(selectLoaderState)
     if (this.data && this.data.attribute) {
       const {
         attributeName,
@@ -83,15 +90,19 @@ export class AttributeModalComponent implements OnInit {
       console.log('Attribute', this.data.attribute);
       this.editId = id;
       for (let attr of attributeOptions) {
+        const baseAmount = attr.additionalInfo.baseAmount ? attr.additionalInfo.baseAmount.toString() : ''
+        const maxAmount = attr.additionalInfo.maxAmount ? attr.additionalInfo.maxAmount.toString() : ''
+        const priceFactor = attr.additionalInfo.priceFactor ? attr.additionalInfo.priceFactor.toString() : ''
+        const price = attr.optionPrice ? attr.optionPrice.toString() : ''
         this.store.dispatch(
           addAttributeToStore({
-            baseAmount: attr.additionalInfo.baseAmount.toString(),
+            baseAmount,
             id: attr.id,
-            maxAmount: attr.additionalInfo.maxAmount.toString(),
-            media: attr.optionMedia,
-            name: attr.optionName,
-            price: attr.optionPrice.toString(),
-            priceIncrement: attr.additionalInfo.priceIncrement.toString(),
+            maxAmount,
+            media: attr.optionMedia ? attr.optionMedia : '',
+            name: attr.optionName ? attr.optionName : '',
+            price,
+            priceFactor
           })
         );
       }
@@ -99,7 +110,7 @@ export class AttributeModalComponent implements OnInit {
         attributeName: [attributeName, Validators.required],
         description: [description],
         isMeasured: [isMeasured],
-        unit: [unit, Validators.required],
+        unit: [unit],
         attributes: this.fb.array(
           attributeOptions.map((attributeOption) =>
             this.createAttr(attributeOption)
@@ -111,7 +122,7 @@ export class AttributeModalComponent implements OnInit {
         attributeName: ['', Validators.required],
         description: [''],
         isMeasured: [false],
-        unit: ['', Validators.required],
+        unit: [''],
         attributes: this.fb.array([]),
       });
     }
@@ -133,7 +144,7 @@ export class AttributeModalComponent implements OnInit {
       media: optionMedia,
       baseAmount: additionalInfo.baseAmount,
       maxAmount: additionalInfo.maxAmount,
-      priceIncrement: additionalInfo.priceIncrement,
+      priceFactor: additionalInfo.priceFactor,
       id,
       coverImage: optionMedia,
     });
@@ -159,7 +170,12 @@ export class AttributeModalComponent implements OnInit {
   }
 
   addAttribute() {
-    
+    this.submitted = true
+    if (this.attributeForm.invalid) {
+      console.log('Dont send data');
+      this.submitted = false
+      return
+    }
     const validAttributes = this.attributeForm.value.attributes.map(
       (attr: any) => {
         return {
@@ -179,12 +195,12 @@ export class AttributeModalComponent implements OnInit {
         .select(selectAttributeCreationState)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((options) => {
+          const isMeasured = this.attributeForm.value.isMeasured
           let attribute = {
-            id: this.editId!,
             attributeName: this.attributeForm.value.attributeName,
             description: this.attributeForm.value.description,
-            isMeasured: this.attributeForm.value.isMeasured,
-            unit: this.attributeForm.value.unit,
+            isMeasured,
+            unit: isMeasured ? this.attributeForm.value.unit : '',
             variantOptions: options,
           };
           console.log('Sending', attribute);
@@ -206,6 +222,9 @@ export class AttributeModalComponent implements OnInit {
         };
         this.store.dispatch(addAttribute(attribute));
         console.log('Sending', attribute);
+        // setTimeout(() => {
+          
+        // }, 1500);
         this.dialogRef.close();
       });
   }
@@ -216,11 +235,11 @@ export class AttributeModalComponent implements OnInit {
     this.attributes.push(
       this.fb.group({
         name: [''],
-        price: '',
+        price: ['', Validators.required],
         media: null,
-        baseAmount: '',
-        maxAmount: '',
-        priceIncrement: '',
+        baseAmount: ['', Validators.required],
+        maxAmount: ['', Validators.required],
+        priceFactor: ['', Validators.required],
         id,
         coverImage: '',
       })
@@ -236,7 +255,7 @@ export class AttributeModalComponent implements OnInit {
         media: '',
         baseAmount: '',
         maxAmount: '',
-        priceIncrement: '',
+        priceFactor: '',
         id,
       })
     );

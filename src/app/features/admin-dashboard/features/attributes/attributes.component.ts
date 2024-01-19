@@ -80,8 +80,6 @@ export class AttributesComponent implements OnInit, AfterViewInit {
         this.selectForm.patchValue({ [value]: true });
       });
       this.localAttributes.map((attr) => {
-        console.log('Attr', attr);
-
         this.itemSelected({ name: '', isAdded: false, value: '' }, attr.id);
       });
       this.indeterminateCheckbox.indeterminate = true;
@@ -98,8 +96,6 @@ export class AttributesComponent implements OnInit, AfterViewInit {
     selected: { name: string; value: string; isAdded: boolean },
     id: string
   ) {
-    console.log('selected', selected, id);
-
     if (this.attributesTodelete.has(id)) {
       this.attributesTodelete.delete(id);
     } else {
@@ -112,9 +108,6 @@ export class AttributesComponent implements OnInit, AfterViewInit {
 
   deleteAttributes() {
     const deleteList = Array.from(this.attributesTodelete);
-    console.log('DeleteList', deleteList);
-
-    console.log('Delete all');
     this.store.dispatch(deleteAll({ deleteList }));
 
     this.attributesTodelete.clear();

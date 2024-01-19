@@ -92,7 +92,7 @@ export class AdminService {
     return this.http.delete(`${this.baseUrl}/admin/attributes/${attributeId}`)
   }
 
-  updateAttribute(attribute: UpdateAttribute) {
+  updateAttribute(attribute: BulkAttribute) {
     return this.http.put(`${this.baseUrl}/admin/attributes/bulk`, attribute)
   }
 

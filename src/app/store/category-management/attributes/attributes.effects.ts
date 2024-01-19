@@ -11,10 +11,11 @@ import {
   updateAttribute,
   uploadImage,
 } from './attributes.actions';
-import { catchError, concatMap, exhaustMap, map, of, switchMap, tap } from 'rxjs';
+import { catchError, concatMap, exhaustMap, map, of, switchMap, tap, throwError, timeout } from 'rxjs';
 import { AdminService } from '../../../core/services/admin/admin.service';
-import { setLoadingSpinner } from '../../loader/actions/loader.actions';
+import { resetLoader, setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { GetAttribute } from '../../../types';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class AttributeEffect {
@@ -25,10 +26,22 @@ export class AttributeEffect {
         return this.adminService.uploadImage(props.form).pipe(
           // tap(data => console.log('Upload response', data)),
           map(({ url }) => {
+            this.store.dispatch(setLoadingSpinner({
+              isError: false,
+              message: 'Picture uploaded',
+              status: false
+            }))
+            setTimeout(() => {
+              this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
+            }, 1500);
             return gotImage({ url, id: props.id });
           }),
-          catchError(() => {
-            return of();
+          catchError((err) => {
+            return of(setLoadingSpinner({
+              isError: true,
+              message: err.error.detail,
+              status: false
+            }));
           })
         );
       })
@@ -42,10 +55,25 @@ export class AttributeEffect {
         return this.adminService.addAttribute(props).pipe(
           tap((data) => console.log('Upload response', props)),
           map((props: GetAttribute) => {
+            this.store.dispatch(setLoadingSpinner({
+              isError: false,
+              message: 'Added attribute successfully',
+              status: false
+            }))
             return gotAttributes({ attributes: props.data });
           }),
-          catchError(() => {
-            return of();
+          timeout(5000),
+          catchError((err) => {
+            throwError(() => 'Request timed out');
+            console.log('Could not add');
+            setTimeout(() => {
+              this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
+            }, 5000);
+            return of(setLoadingSpinner({
+              isError: true,
+              message: 'Waiting for backend error message for adding attributes',
+              status: false
+            }));
           })
         );
       })
@@ -58,6 +86,11 @@ export class AttributeEffect {
       switchMap((props) => {
         return this.adminService.getAttributes().pipe(
           map((props: GetAttribute) => {
+            this.store.dispatch(setLoadingSpinner({
+              isError: false,
+              message: props.message,
+              status: false
+            }))
             return gotAttributes({ attributes: props.data });
           }),
           catchError((err) => {
@@ -80,6 +113,11 @@ export class AttributeEffect {
         switchMap((props) => {
           return this.adminService.deleteAttributeOption(props.optionId).pipe(
             map(() => {
+              this.store.dispatch(setLoadingSpinner({
+                isError: false,
+                message: 'Deleted attribute successfully',
+                status: false
+              }))
               return getAttributes();
             }),
             catchError((err) => {
@@ -102,6 +140,11 @@ export class AttributeEffect {
         exhaustMap((props) => {
           return this.adminService.updateAttribute(props).pipe(
             map(() => {
+              this.store.dispatch(setLoadingSpinner({
+                isError: false,
+                message: 'Updated attribute successfully',
+                status: false
+              }))
               return getAttributes();
             }),
             catchError((err) => {
@@ -124,6 +167,11 @@ export class AttributeEffect {
         concatMap((props) => {
           return this.adminService.deleteAttribute(props.attributeId).pipe(
             map(() => {
+              this.store.dispatch(setLoadingSpinner({
+                isError: false,
+                message: 'Deleted attribute',
+                status: false
+              }))
               return getAttributes();
             }),
             catchError((err) => {
@@ -161,5 +209,5 @@ export class AttributeEffect {
       );
   })
 
-  constructor(private action$: Actions, private adminService: AdminService) {}
+  constructor(private action$: Actions, private adminService: AdminService, private store: Store) {}
 }
