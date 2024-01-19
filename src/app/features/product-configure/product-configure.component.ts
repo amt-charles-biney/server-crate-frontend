@@ -170,6 +170,10 @@ generateStorageSizes(productArr: any[]): number[] {
   resetDefault(type: string) {
     const getIncludedProduct = this.productConfig.options[type].filter(product => product.isIncluded == true)[0]
     if(getIncludedProduct) this.updateConfigQueryParam({ type, id: getIncludedProduct?.id, size: getIncludedProduct?.baseAmount.toString()})
+    else {
+         delete this.queryMapper[type]
+         this.updateConfigQueryParam(null)
+    }
   }
   
 }
