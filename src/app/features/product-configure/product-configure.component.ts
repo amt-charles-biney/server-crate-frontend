@@ -188,5 +188,9 @@ generateStorageSizes(productArr: any[]): number[] {
          this.updateConfigQueryParam(null)
     }
   }
+
+  isActiveLinkMeasured = (activeLink: string) => {
+    return this.productConfig.options[activeLink].some(item => item.isMeasured === true)
+  }
   
 }
