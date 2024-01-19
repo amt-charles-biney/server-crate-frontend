@@ -5,4 +5,5 @@ RUN npm install
 COPY . ./
 RUN npm run build --omit=dev
 
+FROM nginx:alpine
 COPY --from=build /app/dist/server-create-frontend/browser /usr/share/nginx/html/server-create-frontend
