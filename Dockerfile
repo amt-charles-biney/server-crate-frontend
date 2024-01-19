@@ -1,5 +1,8 @@
-FROM node:alpine
+FROM node:alpine as build
 WORKDIR /server-create-frontend
-COPY . ./
+COPY package*.json ./
 RUN npm install
-EXPOSE 4200
+COPY . ./
+RUN npm run build --omit=dev
+
+COPY --from=build /app/dist/server-create-frontend /usr/share/nginx/html/server-create-frontend
