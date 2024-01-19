@@ -111,8 +111,8 @@ export type ProductItem = {
   category: {
     id: string;
     name: string;
-  };
-  isFeatured: boolean;
+  }
+  isFeatured: boolean
 };
 
 export type ResendOtp = {
@@ -207,6 +207,36 @@ export interface IProductConfiguration {
   vatIncluded: number;
 }
 
+export interface IParamConfigOptions {
+  warranty: boolean,
+  components: string,
+}
+
+// new and improved configurations
+export interface IConfiguredOption {
+  id: string | null;
+  optionId: string;
+  optionName: string;
+  optionType: string;
+  optionPrice: number;
+  isMeasured: boolean,
+  baseAmount: 1.00,
+  size: string,
+  included: true
+}
+
+export interface IConfiguredProduct {
+  id: string | null;
+  totalPrice: number;
+  productId: string;
+  productPrice: number;
+  configuredPrice: number;
+  configured: IConfiguredOption[];
+  warranty: boolean;
+  vatIncluded: number
+}
+
+
 export interface ICompatibleOption {
   id: string;
   name: string;
@@ -216,6 +246,10 @@ export interface ICompatibleOption {
   unit: string;
   isCompatible: boolean;
   isIncluded: boolean;
+  isMeasured: boolean;
+  baseAmount: number;
+  maxAmount: number; 
+  priceIncrement: number
 }
 
 export interface ICategoryOption {
@@ -261,7 +295,7 @@ export type VariantOption = {
   media: string;
   baseAmount: number;
   maxAmount: number;
-  priceIncrement: number;
+  priceFactor: number;
   unit: string;
 };
 
@@ -271,7 +305,7 @@ export type StoreVariant = {
   media: string;
   baseAmount: string;
   maxAmount: string;
-  priceIncrement: string;
+  priceFactor: string;
   id: string;
 };
 
@@ -304,7 +338,7 @@ export type AttributeOption = {
 export type AdditionalInfo = {
   baseAmount: number;
   maxAmount: number;
-  priceIncrement: number;
+  priceFactor: number;
 }
 export type GetAttribute = {
   data: Attribute[];
@@ -318,7 +352,7 @@ export type AttributeDataResponse = {
   additionalInfo: {
     baseAmount: number;
     maxAmount: number;
-    priceIncrement: number;
+    priceFactor: number;
   };
   optionPrice: number;
   optionMedia: string;

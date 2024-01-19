@@ -3,8 +3,8 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { EMPTY, mergeMap, of, tap } from "rxjs";
 import { map, exhaustMap, catchError } from "rxjs";
 import { ProductService } from "../../core/services/product/product.service";
-import { loadProduct, loadProductConfig, loadProductConfigFailure, loadProductConfigSuccess, loadProductFailure, loadProductSuccess } from "./product-spec.action";
-import { ICategoryConfig, ProductItem } from "../../types";
+import { loadProduct, loadProductConfig, loadProductConfigFailure, loadProductConfigItem, loadProductConfigItemFailure, loadProductConfigItemSuccess, loadProductConfigSuccess, loadProductFailure, loadProductSuccess } from "./product-spec.action";
+import { ICategoryConfig, IConfiguredProduct, IParamConfigOptions, ProductItem } from "../../types";
 
 @Injectable()
 export class ProductSpecEffects {
@@ -41,12 +41,32 @@ export class ProductSpecEffects {
             return loadProductConfigSuccess({ productConfig })
           }),
           catchError((error: any) => {
-            console.log("product config error ", error)
             return of(loadProductConfigFailure({ error }))
           })
         )
       })
     )
   })
+
+
+  loadProductConfigItem$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(loadProductConfigItem),
+      exhaustMap((props: { productId: string, configOptions: IParamConfigOptions}) => {
+        return this.productService.getProductConfigItem(props.productId, props.configOptions)
+        .pipe(
+          map((productConfigItem: IConfiguredProduct) => {
+            return loadProductConfigItemSuccess({ productConfigItem })
+          }),
+          catchError((error: any) => {
+            console.log("load product config item error ", error)
+            return of(loadProductConfigItemFailure({ error }))
+          })
+        )
+      })
+    )
+  })
+
+  
   constructor(private action$: Actions, private productService: ProductService) {}
 }

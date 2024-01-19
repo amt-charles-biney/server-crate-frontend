@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import * as ProductConfigActions from './product-spec.action'; 
-import { ProductItem } from '../../types';
+import { IConfiguredProduct, ProductItem } from '../../types';
 
 export interface ProductConfigState {
   product: ProductItem | null;
@@ -9,12 +9,24 @@ export interface ProductConfigState {
   error: any;
 }
 
+export interface ProductConfigItemState {
+  productConfigItemLoading: any,
+  productConfigItemError: any,
+  productConfigItem: IConfiguredProduct | null
+}
+
 export const initialState: ProductConfigState = {
   product: null,
   productConfig: null,
   loading: false,
   error: null
 };
+
+export const ProductConfigInitialState : ProductConfigItemState =  {
+  productConfigItemLoading: false,
+  productConfigItemError: null,
+  productConfigItem: null
+}
 
 export const productConfigFeature = createFeature({
     name: 'productconfig',
@@ -30,6 +42,17 @@ export const productConfigFeature = createFeature({
 })
 
 
+export const productConfigItemFeature = createFeature({
+  name: 'productConfigItem',
+  reducer: createReducer(
+    ProductConfigInitialState,
+    on(ProductConfigActions.loadProductConfigItem, state => ({...state, loading: true, error: null})),
+    on(ProductConfigActions.loadProductConfigItemSuccess, (state, { productConfigItem }) => ({...state, productConfigItem, loading: false})),
+    on(ProductConfigActions.loadProductConfigItemFailure, (state, { error }) => ({...state, error: error, loading: false }))
+  )
+})
+
+
 export const {
     name,
     reducer,
@@ -39,3 +62,11 @@ export const {
     selectProductConfig,
     selectProduct
 } = productConfigFeature
+
+
+export const {
+  selectProductConfigItemState,
+  selectProductConfigItem,
+  selectProductConfigItemLoading,
+  selectProductConfigItemError
+} =  productConfigItemFeature

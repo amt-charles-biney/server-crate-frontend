@@ -17,7 +17,7 @@ export const attributeCreationFeature = createFeature({
             media: url,
             name: '',
             price: '',
-            priceIncrement: '',
+            priceFactor: '',
         }
         return [
             ...oldAttributes,

@@ -24,6 +24,10 @@ export const route: Routes = [
   {
     path: '',
     component: AdminDashboardComponent,
+    providers: [
+      provideEffects(AttributeEffect),
+      provideState(attributesFeature)
+    ],
     children: [
       {
         path: 'products',

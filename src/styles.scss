@@ -76,7 +76,9 @@ app-account-settings .mdc-tab--active {
   background-color: #ecf7ec;
   transition: all 1s
 }
-
+// input.ng-invalid:not(form) {
+//   border: 1px solid red;
+// }
 app-account-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: #3cb043
 }

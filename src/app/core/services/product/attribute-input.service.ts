@@ -14,6 +14,9 @@ export class AttributeInputService {
       group[attribute.attributeName] = new FormControl('', Validators.required)
                                               
     });
+    group['categoryName'] = new FormControl('', Validators.required)
+    group['attributesInput'] = new FormControl('')
+    group['variants'] = new FormControl('')
     return new FormGroup(group);
   }
   toSelectFormGroup(attributes: Attribute[] ) {
