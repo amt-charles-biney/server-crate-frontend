@@ -6,4 +6,9 @@ COPY . ./
 RUN npm run build --omit=dev
 
 FROM nginx:alpine
-COPY --from=build /server-create-frontend/dist/server-crate-frontend/browser /usr/share/nginx/html/server-crate-frontend
+# Remove the default Nginx configuration
+RUN rm /etc/nginx/conf.d/*.conf
+
+# Copy your custom Nginx configuration
+COPY nginx/nginx.conf /etc/nginx/conf.d/
+COPY --from=build /server-create-frontend/dist/server-crate-frontend/browser /usr/share/nginx/html
