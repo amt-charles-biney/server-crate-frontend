@@ -6,7 +6,7 @@ export const environment = {
     products: 'http://localhost:8080/api/v1/admin/product', 
     products_user: 'http://localhost:8080/api/v1/product',
     category_user: 'http://localhost:8080/api/v1/category',
-    config: 'http://localhost:8080/api/v1/config'
+    config: 'http://localhost:8080/api/v1/config',
     production: false,
     base_url: 'http://localhost:8080/api/v1', 
 };
