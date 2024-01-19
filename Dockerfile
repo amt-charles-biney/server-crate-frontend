@@ -6,4 +6,4 @@ COPY . ./
 RUN npm run build --omit=dev
 
 FROM nginx:alpine
-COPY --from=build /app/dist/server-create-frontend/browser /usr/share/nginx/html/server-create-frontend
+COPY --from=build /server-create-frontend/dist/server-create-frontend/browser /usr/share/nginx/html/server-create-frontend
