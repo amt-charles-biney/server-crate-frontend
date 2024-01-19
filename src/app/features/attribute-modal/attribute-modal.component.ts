@@ -237,9 +237,9 @@ export class AttributeModalComponent implements OnInit {
         name: [''],
         price: ['', Validators.required],
         media: null,
-        baseAmount: ['', Validators.required],
-        maxAmount: ['', Validators.required],
-        priceFactor: ['', Validators.required],
+        baseAmount: [''],
+        maxAmount: [''],
+        priceFactor: [''],
         id,
         coverImage: '',
       })
