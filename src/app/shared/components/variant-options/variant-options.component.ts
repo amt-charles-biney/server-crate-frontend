@@ -18,7 +18,7 @@ export class VariantOptionsComponent {
   constructor(private store: Store) {}
 
   deleteOption(optionId: string) {
-    this.store.dispatch(deleteAttributeOption({ optionId }));
+    this.store.dispatch(deleteAttributeOption({ optionId, attributeId: this.attribute.id }));
   }
 
   edit() {

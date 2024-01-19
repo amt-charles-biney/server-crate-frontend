@@ -264,7 +264,7 @@ export class AttributeModalComponent implements OnInit {
 
   deleteOption(index: number, optionId: string) {
     if (this.editId) {
-      this.store.dispatch(deleteAttributeOption({ optionId }))
+      this.store.dispatch(deleteAttributeOption({ optionId, attributeId: this.data.attribute.id}))
     } else {
       this.attributes.removeAt(index)
     }
