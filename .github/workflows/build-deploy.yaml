@@ -56,7 +56,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/server-create-frontend:latest
+          tags: ${{ secrets.DOCKERHUB_ORG_NAME }}/server-create-frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
