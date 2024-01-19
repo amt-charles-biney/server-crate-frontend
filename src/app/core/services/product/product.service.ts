@@ -1,29 +1,27 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IParamConfigOptions, ProductItem } from '../../../types';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  productUserUrl: string = environment.products_user
-  categoryUserUrl: string = environment.category_user
-  configUrl: string = environment.config
+  base_url: string = environment.base_url
 
   constructor(private http: HttpClient) { }
 
   getProduct(id: string) {
-    return this.http.get<ProductItem>(`${this.productUserUrl}/${id}`)
+    return this.http.get<ProductItem>(`${this.base_url}/product/${id}`)
   }
 
   getProductConfiguration(categoryId: string) {
-    return this.http.get<any>(`${this.categoryUserUrl}/${categoryId}/config`)
+    return this.http.get<any>(`${this.base_url}/category/${categoryId}/config`)
   }
 
   getProductConfigItem(productId: string, configOptions: IParamConfigOptions) {
-    const url = `${this.configUrl}/${productId}`;
+    const url = `${this.base_url}/config/${productId}`;
     
     let params = new HttpParams();
     params = params.set('warranty', configOptions.warranty.toString());
