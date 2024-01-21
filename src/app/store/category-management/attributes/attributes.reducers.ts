@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { Attribute, StoreVariant } from '../../../types';
-import { addAttributeToStore, deleteAll, deleteMultipleAttributes, gotAttributes, gotImage, resetAttributeCreation, updateAttributesInStore } from './attributes.actions';
+import { addAttributeToStore, deleteAll, deleteMultipleAttributes, gotAttributes, gotImage, putBackAttributeOptionInStore, removeAttributeOptionInStore, resetAttributeCreation, updateAttributesInStore } from './attributes.actions';
 
 const initialState: StoreVariant[] = []
 
@@ -65,7 +65,30 @@ export const attributesFeature = createFeature({
         }),
         on(deleteAll, () => {
             return []
+        }),
+        on(removeAttributeOptionInStore, (state, props ) => {
+            const newState = state.map((attribute) => {
+                if (attribute.id === props.attribute.id) {
+                    const newAttributeOptions = attribute.attributeOptions.filter((option) => option.id !== props.id)                    
+                    const newAttribute: Attribute = { ...attribute, attributeOptions: newAttributeOptions }
+                    return newAttribute
+                }
+                return attribute
+            } )
+            return newState
+        }),
+        on(putBackAttributeOptionInStore, (state, props) => {
+            const newState = state.map((attribute) => {
+                if (attribute.id === props.attribute.id) {
+                    const newAttributeOptions = [...attribute.attributeOptions, props ]                   
+                    const newAttribute: Attribute = { ...attribute, attributeOptions: newAttributeOptions }
+                    return newAttribute
+                }
+                return attribute
+            } )
+            return newState
         })
+
     )
 })
 

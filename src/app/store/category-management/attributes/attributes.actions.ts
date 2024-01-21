@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Attribute, BulkAttribute, StoreVariant, UpdateAttribute, UploadResponse } from "../../../types";
+import { Attribute, AttributeOption, BulkAttribute, StoreVariant, UpdateAttribute, UploadResponse } from "../../../types";
 
 export const uploadImage = createAction('[upload] upload image', props<{ form: FormData, id: string }>())
 
@@ -24,3 +24,7 @@ export const updateAttribute = createAction('[attribute] update attribute', prop
 export const deleteMultipleAttributes = createAction('[attribute] delete multiple attributes', props<{ deleteList: string[] }>())
 
 export const deleteAll = createAction('[attribute] delete all', props<{ deleteList: string[] }>())
+
+export const removeAttributeOptionInStore = createAction('[attribute] remove attribute in store', props<AttributeOption>())
+
+export const putBackAttributeOptionInStore = createAction('[attribute] put back attribute in store', props<AttributeOption>())

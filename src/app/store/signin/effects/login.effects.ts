@@ -21,13 +21,11 @@ export class LoginEffect {
           map((response: VerifiedUser) => {
             this.authService.setToken(response.token);
             this.profileService.setUser({ firstName: response.firstName, lastName: response.lastName})
-            setTimeout(() => {
-              if (response.role === 'ADMIN') {
-                this.router.navigateByUrl('/admin', { replaceUrl: true });
-              } else {
-                this.router.navigateByUrl('/settings', { replaceUrl: true });
-              }
-            }, 1500);
+            if (response.role === 'ADMIN') {
+              this.router.navigateByUrl('/admin', { replaceUrl: true });
+            } else {
+              this.router.navigateByUrl('/settings', { replaceUrl: true });
+            }
             return setLoadingSpinner({
               status: false,
               message: 'Login Successful',

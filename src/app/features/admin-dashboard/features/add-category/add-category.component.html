@@ -1,6 +1,6 @@
-<h2 class="font-bold text-xl">Category Details</h2>
+<h2 class="font-bold text-[24px]">Category Details</h2>
 <form [formGroup]="categoryForm" class="flex flex-col gap-10 min-h-screen">
-  <section>
+  <section class="w-1/2">
     <app-custom-input
       id="categoryName"
       label="Category Name"
@@ -10,9 +10,12 @@
     />
   </section>
   <section>
-    <h2 class="font-[500]">Incompatible Attributes</h2>
-    <section class="grid grid-cols-2 gap-x-10">
-      <label class="flex flex-col mt-4 gap-0.5" for="attributesInput">
+    <h2 class="font-bold font-dm-sans">Incompatible Attributes</h2>
+    <section class="grid grid-cols-6 w-full gap-x-10">
+      <label
+        class="flex flex-col col-span-3 mt-4 gap-0.5"
+        for="attributesInput"
+      >
         <span>Attributes</span>
         <input
           type="text"
@@ -40,36 +43,147 @@
         </mat-autocomplete>
       </label>
       <ng-container *ngIf="selectedAttributes | async as variantsForAttribute">
-      <label class="flex flex-col mt-4 gap-0.5" for="variants">
-        <span>Variants</span>
-        <input
-          type="text"
-          id="variants"
-          placeholder="Select an option"
-          class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
-          aria-label="Number"
-          matInput
-          [formControl]="$any(categoryForm.controls['variants'])"
-          [matAutocomplete]="variants"
-        />
-          <mat-autocomplete
-            (optionSelected)="variantSelected($event)"
-            [hideSingleSelectionIndicator]="true"
-            [displayWith]="variantDisplay"
-            #variants="matAutocomplete"
+        <!-- <label class="flex flex-col mt-4 gap-0.5" for="variants">
+            <span>Variants</span>
+            <input
+              type="text"
+              id="variants"
+              placeholder="Select an option"
+              class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
+              aria-label="Number"
+              matInput
+              [formControl]="$any(categoryForm.controls['variants'])"
+              [matAutocomplete]="variants"
+            />
+              <mat-autocomplete
+              
+                (optionSelected)="variantSelected($event)"
+                [hideSingleSelectionIndicator]="true"
+                [displayWith]="variantDisplay"
+                #variants="matAutocomplete"
+              >
+                @for (option of variantsForAttribute; track option) {
+                <mat-option [value]="option" class="relative">
+                  <span>
+                    {{ option.optionName }}
+                  </span>
+                  <button type="button"
+                  type="button"
+                  
+                  class="absolute right-2"
+                >
+                  <app-custom-check-box />
+                </button>
+                </mat-option>
+                }
+              </mat-autocomplete>
+            </label> -->
+        <div class="flex flex-col col-span-2 gap-0.5 mt-4">
+          <span>Variants</span>
+          <mat-select
+            panelClass="myPanel"
+            placeholder="Select an option"
+            class="flex-1 border-[1.5px] h-[42px] rounded-md"
+            [formControl]="$any(categoryForm.controls['variants'])"
+            multiple
           >
-            @for (option of variantsForAttribute; track option) {
-            <mat-option [value]="option" class="relative">
-              <span>
-                {{ option.optionName }}
-              </span>
-            </mat-option>
+            @for (variant of variantsForAttribute; track variant) {
+            <mat-option
+              class="flex-row-reverse !text-sm !pr-[11px] myOption"
+              [value]="variant"
+              >{{ variant.optionName }}</mat-option
+            >
             }
-          </mat-autocomplete>
-        </label>
+          </mat-select>
+        </div>
+        <button type="button"
+          (click)="addAttribute()"
+          class="text-figma-green font-inter text-xs underline self-end"
+        >
+          Add attribute
+        </button>
       </ng-container>
-
     </section>
+  </section>
+  <section
+    class="flex items-center bg-[#D9D9D91A] pt-[8px] pb-[7px] overflow-auto"
+  >
+  
+    <button *ngIf="isOverflown(contentWrapper)"  type="button"
+      [ngClass]="
+        makeRightButtonGreen
+          ? 'bg-figma-green text-white'
+          : 'bg-attr-button text-[#B0B0B0]'
+      "
+      (click)="sideScroll(contentWrapper, 25, 100, -10)"
+      class="h-6 w-6 mx-[9px] rounded-full p-[6px]"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+        fill="none"
+      >
+        <path
+          d="M7.5 2.5L4 6L7.5 9.5"
+          stroke="currentColor"
+          stroke-width="0.9"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <div class="flex divide-x overflow-auto" #contentWrapper>
+      <div
+        class="flex flex-col px-[10px]"
+        *ngFor="let incompatibleAttribute of incompatibleAttributes | keyvalue"
+      >
+        <p class="font-inter pb-[9px] text-xs">
+          {{ incompatibleAttribute.key }}
+        </p>
+        <div class="flex gap-[18px]">
+          <button type="button" (click)="removeAttributeOption(attribute, incompatibleAttributes)"
+            class="flex items-center py-[5px] px-[12px] rounded-[70px] bg-attr-button w-max"
+            *ngFor="let attribute of incompatibleAttribute.value.values()"
+          >
+            <span class="whitespace-nowrap text-xs">{{
+              attribute.optionName
+            }}</span>
+            <img
+              class="pl-[12px]"
+              src="/assets/remove.svg"
+              alt="remove button"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+    <button *ngIf="isOverflown(contentWrapper)" type="button"
+      [ngClass]="
+        makeLeftButtonGreen
+          ? 'bg-figma-green text-white'
+          : 'bg-attr-button text-[#B0B0B0]'
+      "
+      class="mx-[9px] h-6 w-6 rounded-full p-[6px]"
+      (click)="sideScroll(contentWrapper, 25, 100, 10)"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+        fill="none"
+      >
+        <path
+          d="M4.5 2.5L8 6L4.5 9.5"
+          stroke="currentColor"
+          stroke-width="0.9"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
   </section>
   <ng-container *ngIf="attributes | async as attributes" `>
     <section>

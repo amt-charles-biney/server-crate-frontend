@@ -7,7 +7,9 @@ module.exports = {
     extend: {
       colors: {
         'figma-gray': '#bdbdbd',
-        'figma-green': '#3cb043'
+        'figma-green': '#3cb043',
+        'placeholder': '#B9BDC2',
+        'attr-button': '#F3F4F6'
       },
       gridTemplateRows: {
         '20': 'repeat(20, minmax(0, 1fr))',
@@ -17,6 +19,7 @@ module.exports = {
       },
       fontFamily: {
         'inter': ['inter', 'sans-serif'],
+        'dm-sans': ['DM Sans', 'sans-serif']
       }
     }
   },

@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&display=swap');
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -8,6 +9,7 @@ input::-webkit-inner-spin-button {
 
 /* Firefox */
 input[type=number] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 html,
@@ -191,6 +193,10 @@ app-admin-dashboard .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
 app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
   color: #3cb043;
 }
+app-admin-dashboard .mat-mdc-tab-link .mdc-tab__text-label {
+  color: #1D2939;
+  font-weight: 700;
+}
 app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
   color: #3cb043;
 }
@@ -247,6 +253,55 @@ app-preference-selection .mat-expansion-indicator:after {
   border-color: black;
 }
 
+app-add-category .mat-mdc-select-arrow {
+  border-left: 15px solid transparent !important;
+  border-right: none !important;
+  border-top: 15px solid transparent !important;
+  border-image-source: url('./assets/chevron-down.svg') !important;
+  border-image-repeat: stretch !important;
+}
+app-add-category .mat-mdc-select-arrow:focus {
+  transform: rotate(180deg);
+
+}
+app-add-category .mat-mdc-select-arrow svg {
+  display: none;
+}
+app-add-category .mat-mdc-select {
+  display: flex;
+}
+app-add-category .mat-mdc-select-arrow-wrapper {
+  margin-right: 10px;
+}
+
+app-add-category .mat-mdc-select-placeholder {
+  margin-left: 10px;
+  color: #B9BDC2;
+}
+app-add-category .mat-mdc-option .mat-icon, .mat-mdc-option .mat-pseudo-checkbox-full {
+  width: 20px !important;
+  height: 20px !important;
+  margin-right: 0px !important;
+  border-radius: 6px;
+  border: 1.5px solid #D0D5DD
+}
+app-add-category .mat-mdc-option .mat-icon, .mat-mdc-option .mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked {
+  background-color:#3cb043
+}
+.myPanel {
+  margin-block: 10px;
+  border-radius: 4px !important;
+}
+app-add-category .mat-mdc-select-value-text {
+  margin-left: 10px
+}
+
+.myOption.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: #3cb043 !important;
+}
+#chevron-scroll {
+  fill: white;
+}
 @media only screen and (max-width: 768px) {
   app-payment-details .mat-mdc-tab-group {
     max-width: 100%;
@@ -255,3 +310,14 @@ app-preference-selection .mat-expansion-indicator:after {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+ /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+}
+}
