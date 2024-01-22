@@ -5,11 +5,12 @@ import { CustomButtonComponent } from '../../../../shared/components/custom-butt
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { saveChanges } from '../../../../core/utils/settings';
 import { Contact } from '../../../../types';
+import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-mobile-money-payment',
   standalone: true,
-  imports: [CommonModule, CustomInputComponent, CustomButtonComponent, ReactiveFormsModule],
+  imports: [CommonModule, CustomInputComponent, CustomButtonComponent, ReactiveFormsModule, CustomSelectComponent],
   templateUrl: './mobile-money-payment.component.html',
   styleUrl: './mobile-money-payment.component.scss'
 })

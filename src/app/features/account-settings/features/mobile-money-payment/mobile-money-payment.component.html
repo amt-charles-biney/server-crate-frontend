@@ -1,25 +1,26 @@
-<form class="flex flex-col mt-4 md:mt-0" [formGroup]="mobileMoneyForm" (ngSubmit)="addWallet()">
-    <app-custom-input
-      label="Network"
-      type="select"
-      formControlName="network"
-      id="network"
-      [options]="['MTN', 'Vodafone']"
+<form
+  class="flex flex-col mt-4 md:mt-0"
+  [formGroup]="mobileMoneyForm"
+  (ngSubmit)="addWallet()"
+>
+  <app-custom-select
+    label="Network"
+    [control]="$any(mobileMoneyForm.controls['network'])"
+    [options]="['MTN', 'Vodafone']"
+  />
+  <label class="flex flex-col gap-0.5 mt-4" for="contact">
+    <span class="">Contact</span>
+    <input
+      id="contact"
+      [ngClass]="showWarning ? 'border-red-600' : ''"
+      type="tel"
+      class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
+      #telInput
     />
-    <label class="flex flex-col gap-0.5 mt-4" for="contact">
-      <span class="">Contact</span>
-      <input
-        id="contact"
-        [ngClass]="showWarning ? 'border-red-600' : ''"
-        type="tel"
-        class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
-        #telInput
-      />
-    </label>
-    @if (showWarning !== '') {
-      <span class="text-red-600 text-sm">{{ showWarning }}</span>
-    }
+  </label>
+  @if (showWarning !== '') {
+  <span class="text-red-600 text-sm">{{ showWarning }}</span>
+  }
 
-    <app-custom-button buttonText="Add Wallet" [isPrimaryButton]="true"/>
+  <app-custom-button buttonText="Add Wallet" [isPrimaryButton]="true" />
 </form>
-  

@@ -19,6 +19,7 @@ import { AttributesComponent } from './features/attributes/attributes.component'
 import { AddCategoryComponent } from './features/add-category/add-category.component';
 import { AttributeEffect } from '../../store/category-management/attributes/attributes.effects';
 import { attributeCreationFeature, attributesFeature } from '../../store/category-management/attributes/attributes.reducers';
+import { ConfigEffect } from '../../store/category-management/attributes/config/config.effects';
 
 export const route: Routes = [
   {
@@ -58,6 +59,9 @@ export const route: Routes = [
       {
         path: 'add-category',
         component: AddCategoryComponent,
+        providers: [
+          provideEffects(ConfigEffect)
+        ]
       },
       {
         path: 'dashboard',
@@ -65,7 +69,11 @@ export const route: Routes = [
       },
       {
         path: 'category-management',
-        component: CategoryManagementComponent
+        component: CategoryManagementComponent,
+        providers: [
+          provideEffects(CategoryEffect),
+          provideState(categoryFeature),
+        ]
       },
       {
         path: 'attributes',

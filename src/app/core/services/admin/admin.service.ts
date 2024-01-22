@@ -9,6 +9,8 @@ import {
   BulkAttribute,
   GetAttribute,
   UpdateAttribute,
+  CategoryConfig,
+  Configuration,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -102,5 +104,9 @@ export class AdminService {
     return this.http.delete(`${this.baseUrl}/admin/attributes/all`, {
       body: deleteList
     })
+  }
+
+  createCategoryConfig(categoryConfig: Configuration) {
+    return this.http.post(`${this.baseUrl}/admin/category/config`, categoryConfig)
   }
 }

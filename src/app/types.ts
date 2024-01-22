@@ -362,3 +362,22 @@ export type AttributeDataResponse = {
     isMeasured: boolean;
   };
 };
+
+export type CategoryConfig = {
+  name: string;
+  type: string;
+  price: number;
+  media: string;
+  unit: string;
+  isCompatible: boolean;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  baseAmount: number;
+  maxAmount: number;
+  priceFactor: number;
+}
+
+export type Configuration = {
+  name: string;
+  config: CategoryConfig[]
+}

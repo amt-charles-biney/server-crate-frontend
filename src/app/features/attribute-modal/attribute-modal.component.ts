@@ -16,7 +16,6 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -35,13 +34,14 @@ import {
 } from '../../store/category-management/attributes/attributes.actions';
 import { CLOUD_NAME, UPLOAD_PRESET } from '../../core/utils/constants';
 import { AdminService } from '../../core/services/admin/admin.service';
-import { Attribute, AttributeOption, BulkAttribute, LoadingStatus } from '../../types';
+import { Attribute, AttributeOption, LoadingStatus } from '../../types';
 import { getUniqueId } from '../../core/utils/settings';
 import { selectAttributeCreationState } from '../../store/category-management/attributes/attributes.reducers';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-loader.component';
 import { Observable } from 'rxjs';
 import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
+import { CustomSelectComponent } from '../../shared/components/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-attribute-modal',
@@ -54,7 +54,8 @@ import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
     FormsModule,
     ReactiveFormsModule,
     CustomImageComponent,
-    AuthLoaderComponent
+    AuthLoaderComponent,
+    CustomSelectComponent
   ],
   templateUrl: './attribute-modal.component.html',
   styleUrl: './attribute-modal.component.scss',
