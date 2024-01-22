@@ -1,0 +1,41 @@
+<span class="mt-4 mb-4">{{ label }}</span>
+@if (isMultipleSelect) {
+  <mat-select
+    panelClass="myPanel"
+    [placeholder]="placeholder"
+    [ngClass]="isDisabled ? 'bg-attr-button' : ''"
+    class="flex-1 border-[1.5px] h-[42px] rounded-md"
+    [formControl]="control"
+    multiple
+    (selectionChange)="select($event)"
+    [disabled]="isDisabled"
+  >
+    @for (option of options; track option) {
+    <mat-option
+      class="flex-row-reverse !text-sm !pr-[11px] myOption"
+      [value]="option"
+      >{{ option.optionName ?? option }}</mat-option
+    >
+    }
+  </mat-select>
+} @else {
+  <mat-select
+    panelClass="myPanel"
+    [placeholder]="placeholder"
+    [ngClass]="isDisabled ? 'bg-attr-button' : ''"
+    class="flex-1 border-[1.5px] h-[42px] rounded-md"
+    [formControl]="control"
+    (selectionChange)="select($event)"
+    [disabled]="isDisabled"
+    [compareWith]="compareFn"
+    [value]="control.value"
+  >
+    @for (option of options; track option) {
+    <mat-option
+      class="flex-row !text-sm !pr-[11px] myOption"
+      [value]="option"
+      >{{ option.optionName ?? option.attributeName ?? option }}</mat-option
+    >
+    }
+  </mat-select>
+}
