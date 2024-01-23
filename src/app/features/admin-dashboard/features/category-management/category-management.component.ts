@@ -10,7 +10,7 @@ import { selectCategoryAndConfigState } from '../../../../store/category-managem
 import { CommonModule } from '@angular/common';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { MatMenuModule } from '@angular/material/menu';
-import { ViewChildren, QueryList } from '@angular/core';
+import { TableRowComponent } from '../../../../shared/components/table-row/table-row.component';
 @Component({
   selector: 'app-category-management',
   standalone: true,
@@ -21,7 +21,8 @@ import { ViewChildren, QueryList } from '@angular/core';
     CustomCheckBoxComponent,
     FormsModule,
     ReactiveFormsModule,
-    MatMenuModule
+    MatMenuModule,
+    TableRowComponent
   ],
   templateUrl: './category-management.component.html',
   styleUrl: './category-management.component.scss',

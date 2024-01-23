@@ -53,7 +53,7 @@
         <th class="col-span-1 text-center self-center">Action</th>
       </tr>
       <ng-container *ngIf="categoriesAndConfig | async as categories">
-        <tr
+        <!-- <tr
           class="grid grid-cols-12 py-3 border-b text-sm"
           *ngFor="let category of categories"
         >
@@ -92,6 +92,13 @@
               </button>
             </mat-menu>
           </td>
+        </tr> -->
+        <tr
+          class=""
+          *ngFor="let category of categories"
+        >
+          
+        <app-table-row [category]="category" [control]="$any(selectForm.controls[category.name])" (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"/>
         </tr>
       </ng-container>
     </table>
