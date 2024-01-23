@@ -11,6 +11,7 @@ import {
   UpdateAttribute,
   CategoryConfig,
   Configuration,
+  CategoryAndConfig,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -108,5 +109,9 @@ export class AdminService {
 
   createCategoryConfig(categoryConfig: Configuration) {
     return this.http.post(`${this.baseUrl}/admin/category/config`, categoryConfig)
+  }
+
+  getCategoriesAndConfig() {
+    return this.http.get<CategoryAndConfig[]>(`${this.baseUrl}/category/config`)
   }
 }

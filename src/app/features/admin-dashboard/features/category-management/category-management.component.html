@@ -1,10 +1,8 @@
 <main class="flex flex-col min-h-screen">
   <section class="flex w-full justify-between">
-    <h2 class="font-bold text-xl">Category List</h2>
+    <h2 class="font-bold text-2xl">Category List</h2>
     <section class="flex items-center gap-6">
-      <button
-        class="flex items-center gap-2 font-[500] text-sm py-1 px-2"
-      >
+      <button class="flex items-center gap-2 font-[500] text-sm py-1 px-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -24,58 +22,78 @@
       </button>
       <button
         routerLink="/admin/add-category"
-        class="flex items-center gap-2 rounded font-[500] bg-figma-green text-white text-sm py-1 px-2"
+        class="flex items-center gap-2 rounded font-[500] bg-figma-green text-white py-1 px-[10px]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
           fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          data-slot="icon"
-          class="w-4 h-4"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
+            d="M15.8337 10.8346H10.8337V15.8346H9.16699V10.8346H4.16699V9.16797H9.16699V4.16797H10.8337V9.16797H15.8337V10.8346Z"
+            fill="white"
           />
         </svg>
         <p>Create Category</p>
       </button>
     </section>
   </section>
-  <section>
-    <table class="flex flex-col w-full mt-6">
-      <tr class="flex items-center bg-[#fcfcfd] h-10">
-        <th
-          class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[30%] text-start"
-        >
-          
+  <section class="mt-6">
+    <table class="w-full">
+      <tr class="grid grid-cols-12 py-3 border-b text-table-text text-xs">
+        <th class="col-span-2 flex items-center gap-9">
+          <app-custom-check-box (changeHandler)="removeCheck()" />
+          <p class="whitespace-nowrap">Category Name</p>
         </th>
-        <th
-          class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[30%] text-start"
-        >
-          Category Name
-        </th>
+        <th class="col-span-5 text-start self-center">Base Configuration</th>
+        <th class="col-span-4 text-start self-center">Number of Products</th>
 
-        <th
-          class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[15%] text-start"
-        >
-          Base Configuration
-        </th>
-        <th
-          class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[15%] text-start"
-        >
-          Number of Products
-        </th>
-
-        <th
-          class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[10%] flex justify-center text-start"
-        >
-          Action
-        </th>
+        <th class="col-span-1 text-center self-center">Action</th>
       </tr>
+      <ng-container *ngIf="categoriesAndConfig | async as categories">
+        <tr
+          class="grid grid-cols-12 py-3 border-b text-sm"
+          *ngFor="let category of categories"
+        >
+          <td class="flex items-center gap-9 col-span-2">
+            <app-custom-check-box
+              (changeHandler)="itemSelected($event, category.id)"
+              [formControl]="$any(selectForm.controls[category.name])"
+              [name]="category.name"
+              [value]="category.id"
+            />
+            <p class="overflow-hidden whitespace-nowrap text-ellipsis">{{ category.name }}</p>
+          </td>
+          <td
+            class="col-span-5 flex items-center gap-3 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+          >
+            <p class="" *ngFor="let config of category.config | slice : 0 : 3">
+              <span>{{ config }}</span>
+            </p>
+            <p *ngIf="category.config.length > 0" class="bg-light-green text-figma-green rounded-full w-[23px] h-[23px] flex flex-col justify-center items-center text-xs">+{{category.config.length - 3}}</p>
+          </td>
+          <td
+            class="col-span-4 overflow-hidden whitespace-nowrap text-ellipsis self-center"
+          >
+            {{ category.productCount }}
+          </td>
+          <td class="col-span-1 self-center">
+            <button class="flex justify-center w-full" [matMenuTriggerFor]="menu">
+              <img src="/assets/ellipses.svg" alt="ellipses" />
+            </button>
+            <mat-menu #menu="matMenu" panelClass="customMenu">
+              <button (click)="editCategory(category.id)" mat-menu-item>
+                <span class="text-sm">Edit</span>
+              </button>
+              <button (click)="showCategoryInfo(category.id)" mat-menu-item>
+                <span class="text-sm">View</span>
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+      </ng-container>
     </table>
   </section>
   <router-outlet />

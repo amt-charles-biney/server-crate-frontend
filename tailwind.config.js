@@ -9,7 +9,10 @@ module.exports = {
         'figma-gray': '#bdbdbd',
         'figma-green': '#3cb043',
         'placeholder': '#B9BDC2',
-        'attr-button': '#F3F4F6'
+        'attr-button': '#F3F4F6',
+        'table-text': '#667085',
+        'light-green': '#ECF7EC',
+        'table-bg': '#FCFCFD'
       },
       gridTemplateRows: {
         '20': 'repeat(20, minmax(0, 1fr))',

@@ -20,6 +20,7 @@ import { AddCategoryComponent } from './features/add-category/add-category.compo
 import { AttributeEffect } from '../../store/category-management/attributes/attributes.effects';
 import { attributeCreationFeature, attributesFeature } from '../../store/category-management/attributes/attributes.reducers';
 import { ConfigEffect } from '../../store/category-management/attributes/config/config.effects';
+import { configFeature } from '../../store/category-management/attributes/config/config.reducers';
 
 export const route: Routes = [
   {
@@ -71,8 +72,8 @@ export const route: Routes = [
         path: 'category-management',
         component: CategoryManagementComponent,
         providers: [
-          provideEffects(CategoryEffect),
-          provideState(categoryFeature),
+          provideEffects(ConfigEffect),
+          provideState(configFeature),
         ]
       },
       {

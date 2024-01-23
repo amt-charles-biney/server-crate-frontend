@@ -25,9 +25,9 @@ input[type="checkbox"] {
   place-content: center;
   appearance: none;
   border: 1px solid #c5c5c5;
-  border-radius: 2px;
-  width: 15px;
-  height: 15px;
+  border-radius: 4px;
+  width: 20px;
+  height: 20px;
   transform: translateY(-0.075em);
   background-color: white;
   margin: 0;
@@ -318,6 +318,10 @@ app-custom-select .mat-mdc-select-value-text {
 .myOption.mdc-list-item--selected:not(.mdc-list-item--disabled)
   .mdc-list-item__primary-text {
   color: #3cb043 !important;
+}
+
+app-category-management  {
+  padding-block: 4px !important;
 }
 
 @media only screen and (max-width: 768px) {

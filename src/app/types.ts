@@ -381,3 +381,10 @@ export type Configuration = {
   name: string;
   config: CategoryConfig[]
 }
+
+export type CategoryAndConfig = {
+  name: string;
+  id: string;
+  config: string[];
+  productCount: number
+}

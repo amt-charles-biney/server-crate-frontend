@@ -33,7 +33,7 @@ import {
 } from '../../../../store/category-management/attributes/attributes.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 import { Router } from '@angular/router';
-import { sendConfig } from '../../../../store/category-management/attributes/config/category.actions';
+import { sendConfig } from '../../../../store/category-management/attributes/config/config.actions';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 
@@ -187,13 +187,15 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     incompatibles.forEach((incompatibleAttribute) => {
       if (incompatibleSet[incompatibleAttribute.attribute.name]) {
         console.log('Already there', incompatibleSet[incompatibleAttribute.attribute.name]);
+        console.log('prev', incompatibleSet[incompatibleAttribute.attribute.name]);
         
         incompatibleSet[incompatibleAttribute.attribute.name].add(
           incompatibleAttribute
         );
-        console.log(incompatibleSet);
+        console.log('after', incompatibleSet[incompatibleAttribute.attribute.name]);
         
       } else {
+        console.log('after', incompatibleSet[incompatibleAttribute.attribute.name]);
         incompatibleSet[incompatibleAttribute.attribute.name] = new Set([
           incompatibleAttribute,
         ]);
