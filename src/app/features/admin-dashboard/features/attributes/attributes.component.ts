@@ -20,11 +20,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { VariantOptionsComponent } from '../../../../shared/components/variant-options/variant-options.component';
 import {
   deleteAll,
-  deleteAttribute,
-  deleteMultipleAttributes,
   resetAttributeCreation,
 } from '../../../../store/category-management/attributes/attributes.actions';
-
+import {CdkAccordionModule} from '@angular/cdk/accordion';
+import { ExpandableComponent } from '../../../../shared/components/expandable/expandable.component';
 @Component({
   selector: 'app-attributes',
   standalone: true,
@@ -36,6 +35,8 @@ import {
     MatDialogModule,
     MatExpansionModule,
     VariantOptionsComponent,
+    CdkAccordionModule,
+    ExpandableComponent
   ],
   templateUrl: './attributes.component.html',
   styleUrl: './attributes.component.scss',
