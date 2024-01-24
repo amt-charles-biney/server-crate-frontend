@@ -1,0 +1,326 @@
+<main class="relative grid grid-cols-4 gap-10 max-w-screen-maxCap mx-auto mt-12">
+  <aside class="col-span-1 flex flex-col gap-3">
+    <h1 class="text-xl font-bold">GPU Servers</h1>
+    <button
+      (click)="clearFilters()"
+      class="underline w-fit text-red-600 text-sm mt-4"
+    >
+      Clear All Filters
+    </button>
+    <form [formGroup]="filterForm" class="flex flex-col border">
+      <h3 class="font-semibold text-lg border-b p-3">Filters</h3>
+      <mat-accordion class="border-b">
+        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <p class="text-md">Product Type</p>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="productType"
+                name="productType"
+                label="Network"
+                value="Network"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="productType"
+                name="productType"
+                label="GPU"
+                value="GPU"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="productType"
+                name="productType"
+                label="Storage"
+                value="Storage"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="productType"
+                name="productType"
+                label="Console"
+                value="Console"
+              />
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion class="border-b">
+        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Processor </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="processor"
+                name="processor"
+                label="Intel Xeon"
+                value="Intel Xeon"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="processor"
+                name="processor"
+                label="NVIDIA"
+                value="NVIDIA"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="processor"
+                name="processor"
+                label="Intel Core i3"
+                value="Intel Core i3"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="processor"
+                name="processor"
+                label="Intel Core"
+                value="Intel Core"
+              />
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion class="border-b">
+        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Shop By Price </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="price"
+                name="price"
+                value="0-500"
+                label="$0 - $500"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="price"
+                name="price"
+                value="500-1000"
+                label="$500 - $1000"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="price"
+                name="price"
+                value="1000-1500"
+                label="$1000 - $1500"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="price"
+                name="price"
+                value="> 1500"
+                label="Over $1500"
+              />
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion class="border-b">
+        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Brand </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul *ngIf="brands$ | async as brands">
+            <li *ngFor="let brand of brands">
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="brand"
+                name="brand"
+                [value]="brand.name"
+                [label]="brand.name"
+              />
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion class="border-b">
+        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Mounting </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="mounting"
+                name="mounting"
+                value="2U"
+                label="Asus"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="mounting"
+                name="mounting"
+                value="1U"
+                label="1U"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="mounting"
+                name="mounting"
+                value="Rack mount"
+                label="Rack mount"
+              />
+            </li>
+            <li>
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="mounting"
+                name="mounting"
+                value="Hewlett-Packard"
+                label="Hewlett-Packard"
+              />
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form>
+  </aside>
+  <section class="col-span-3 flex flex-col">
+    <div class="flex items-center justify-between">
+      <p *ngIf="total | async as total">
+        {{ total }} {{ total === 1 ? "Server" : "Servers" }}
+      </p>
+      <div class="flex items-center gap-3">
+        <button (click)="clearFilters()" class="underline hover:text-gray-700">
+          All Products
+        </button>
+        <button (click)="compareEvent()"
+          class="w-fit flex items-center gap-3 py-1 px-3 font-semibold bg-figma-green text-white rounded-lg"
+        >
+          <img src="/assets/compare-btn-icon.svg" alt="compare" />
+          <p>Compare</p>
+        </button>
+      </div>
+    </div>
+    <section
+      class="grid gap-4 mt-6 grid-flow-row lg:grid-cols-3 2xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1"
+    >
+      <ng-container
+        *ngIf="{ products: products | async, total: total | async } as products"
+      >
+        <ng-container *ngIf="products.total !== 0; else noProducts">
+          <ng-container *ngIf="products.products && products.total">
+            @for (product of products.products| paginate: { id: 'server',
+            itemsPerPage: 9, currentPage: page, totalItems: products.total};
+            track product) {
+            <app-user-product-item [product]="product" (selectorEmitter)="onSelect($event)"/>
+            }
+          </ng-container>
+        </ng-container>
+        <ng-template #noProducts>
+          <p>No products to display</p>
+        </ng-template>
+      </ng-container>
+    </section>
+    <pagination-template
+      #p="paginationApi"
+      class="flex gap-3 mt-6 self-end"
+      (pageChange)="getPage($event, search)"
+      id="server"
+      rounded-md
+      (pageBoundsCorrection)="getPage($event, search)"
+    >
+      <button
+        [ngClass]="p.isFirstPage() ? 'pointer-events-none text-gray-200' : ''"
+        class="flex flex-col justify-center items-center w-10 h-10 border rounded-md"
+        (click)="p.previous()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
+        </svg>
+      </button>
+
+      <div
+        *ngFor="let page of p.pages"
+        [class.current]="p.getCurrent() === page.value"
+      >
+        <button
+          class="w-10 h-10 font-bold border rounded-md"
+          (click)="p.setCurrent(page.value)"
+          *ngIf="p.getCurrent() !== page.value"
+        >
+          <span>{{ page.label }}</span>
+        </button>
+        <button
+          class="w-10 h-10 font-bold border rounded-md"
+          [ngClass]="
+            p.getCurrent() === page.value
+              ? 'text-figma-green bg-figma-green bg-opacity-5 border-figma-green'
+              : ''
+          "
+          *ngIf="p.getCurrent() === page.value"
+        >
+          <span>{{ page.label }}</span>
+        </button>
+      </div>
+
+      <button
+        class="flex flex-col justify-center items-center w-10 h-10 border rounded-md"
+        [ngClass]="p.isLastPage() ? 'pointer-events-none text-gray-200' : ''"
+        (click)="p.next()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m8.25 4.5 7.5 7.5-7.5 7.5"
+          />
+        </svg>
+      </button>
+    </pagination-template>
+  </section>
+</main>
