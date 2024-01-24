@@ -1,7 +1,11 @@
 <h2 class="font-bold text-[24px]">Category Details</h2>
-<app-auth-loader [loadingState]="loadingStatus"/>
-<ng-container >
-  <form [formGroup]="categoryForm" (ngSubmit)="createConfig()" class="flex flex-col gap-10 min-h-screen">
+<app-auth-loader [loadingState]="loadingStatus" />
+<ng-container>
+  <form
+    [formGroup]="categoryForm"
+    (ngSubmit)="createConfig()"
+    class="flex flex-col gap-10 min-h-screen"
+  >
     <section class="w-1/2">
       <app-custom-input
         id="categoryName"
@@ -10,10 +14,11 @@
         placeholder="Enter category name"
         [formControl]="$any(categoryForm.controls['categoryName'])"
       />
-      @if (categoryName.invalid && (categoryName.touched || categoryName.dirty)) {
-        <div *ngIf="categoryName?.errors?.['required']">
-          <span class="text-red-600">A category name is required</span>
-        </div>
+      @if (categoryName.invalid && (categoryName.touched || categoryName.dirty))
+      {
+      <div *ngIf="categoryName?.errors?.['required']">
+        <span class="text-red-600">A category name is required</span>
+      </div>
       }
     </section>
     <section>
@@ -21,13 +26,15 @@
       <section class="grid grid-cols-6 w-full gap-x-10">
         <div class="col-span-3 mt-4">
           <app-custom-select
-                label="Attributes"
-                [control]="$any(categoryForm.controls['attributesInput'])"
-                [options]="localAttributes"
-                (onSelect)="onSelectChange($event)"
-              />
+            label="Attributes"
+            [control]="$any(categoryForm.controls['attributesInput'])"
+            [options]="localAttributes"
+            (onSelect)="onSelectChange($event)"
+          />
         </div>
-        <ng-container *ngIf="selectedAttributes | async as variantsForAttribute">
+        <ng-container
+          *ngIf="selectedAttributes | async as variantsForAttribute"
+        >
           <div class="flex flex-col col-span-2 gap-0.5 mt-4">
             <app-custom-select
               label="Variants"
@@ -80,7 +87,9 @@
       <div class="flex divide-x overflow-auto" #contentWrapper>
         <div
           class="flex flex-col px-[10px]"
-          *ngFor="let incompatibleAttribute of incompatibleAttributes | keyvalue"
+          *ngFor="
+            let incompatibleAttribute of incompatibleAttributes | keyvalue
+          "
         >
           <p class="font-inter pb-[9px] text-xs">
             {{ incompatibleAttribute.key }}
@@ -136,15 +145,33 @@
       <section>
         <h2 class="font-[700] font-dm-sans mb-[34px]">Base Configuration</h2>
         <section class="grid grid-cols-2 gap-x-20 gap-y-6">
-          @for (attribute of attributes; track $index) {
-          <app-custom-select
+          @for (attribute of attributes; track $index) { @if
+          (attribute.isMeasured) {
+          <div class="grid grid-cols-2 gap-[13px]">
+            <app-custom-select
               [label]="attribute.attributeName"
               [control]="$any(categoryForm.controls[attribute.attributeName])"
               [options]="attribute.attributeOptions"
               (onSelect)="onSelectConfigOptions($event, attribute)"
               [isDisabled]="attribute.attributeOptions.length === 0"
             />
-          }
+            <app-custom-select
+              [control]="
+                $any(categoryForm.controls[attribute.attributeName + 'Size'])
+              "
+              [options]="sizes[attribute.attributeName]"
+              [isDisabled]="!sizes[attribute.attributeName]"
+            />
+          </div>
+          } @else {
+          <app-custom-select
+            [label]="attribute.attributeName"
+            [control]="$any(categoryForm.controls[attribute.attributeName])"
+            [options]="attribute.attributeOptions"
+            (onSelect)="onSelectConfigOptions($event, attribute)"
+            [isDisabled]="attribute.attributeOptions.length === 0"
+          />
+          } }
         </section>
       </section>
     </ng-container>

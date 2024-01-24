@@ -11,15 +11,15 @@ import {
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Attribute, AttributeOption, CategoryConfig, LoadingStatus } from '../../../../types';
+import {
+  Attribute,
+  AttributeOption,
+  CategoryConfig,
+  LoadingStatus,
+} from '../../../../types';
 import { selectAttributesState } from '../../../../store/category-management/attributes/attributes.reducers';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -32,7 +32,6 @@ import {
   removeAttributeOptionInStore,
 } from '../../../../store/category-management/attributes/attributes.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
-import { Router } from '@angular/router';
 import { sendConfig } from '../../../../store/category-management/attributes/config/config.actions';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
@@ -51,7 +50,7 @@ import { selectLoaderState } from '../../../../store/loader/reducers/loader.redu
     MatSelectModule,
     MatFormFieldModule,
     CustomSelectComponent,
-    AuthLoaderComponent
+    AuthLoaderComponent,
   ],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
@@ -60,7 +59,7 @@ import { selectLoaderState } from '../../../../store/loader/reducers/loader.redu
 export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   private attributes$ = new BehaviorSubject<Attribute[]>([]);
   private selectedAttribute$ = new BehaviorSubject<AttributeOption[]>([]);
-  loadingStatus!: Observable<LoadingStatus>
+  loadingStatus!: Observable<LoadingStatus>;
   selectedAttributes = this.selectedAttribute$.asObservable();
   attributes = this.attributes$.asObservable();
   categoryForm!: FormGroup;
@@ -70,27 +69,29 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   isOverflow = false;
   categoryConfig: CategoryConfig[] = [];
   categoryConfigSet: Record<string, CategoryConfig> = {};
+  sizes: Record<string, string[]> = {};
   @ViewChild('contentWrapper') contentWrapper!: ElementRef<HTMLDivElement>;
   incompatibleAttributes: Record<string, Set<AttributeOption>> = {};
-  formValue: any
+  formValue: any;
   constructor(
     private store: Store,
     private attributeService: AttributeInputService,
-    private destroyRef: DestroyRef,
-    private fb: FormBuilder
+    private destroyRef: DestroyRef
   ) {}
   ngOnInit(): void {
-    this.attributes = this.store.select(selectAttributesState)
+    this.attributes = this.store.select(selectAttributesState);
     this.attributes
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe((attrs) => {
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((attrs) => {
         this.categoryForm = this.attributeService.toFormGroup(attrs);
         if (this.formValue) {
-          this.categoryForm = this.attributeService.editFormGroup(this.formValue)
+          this.categoryForm = this.attributeService.editFormGroup(
+            this.formValue
+          );
         }
         this.localAttributes = attrs;
       });
-    this.loadingStatus = this.store.select(selectLoaderState)
+    this.loadingStatus = this.store.select(selectLoaderState);
   }
 
   ngAfterViewInit(): void {
@@ -186,27 +187,48 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     const incompatibleSet: Record<string, Set<AttributeOption>> = {};
     incompatibles.forEach((incompatibleAttribute) => {
       if (incompatibleSet[incompatibleAttribute.attribute.name]) {
-        console.log('Already there', incompatibleSet[incompatibleAttribute.attribute.name]);
-        console.log('prev', incompatibleSet[incompatibleAttribute.attribute.name]);
-        
+        console.log(
+          'Already there',
+          incompatibleSet[incompatibleAttribute.attribute.name]
+        );
+        console.log(
+          'prev',
+          incompatibleSet[incompatibleAttribute.attribute.name]
+        );
+
         incompatibleSet[incompatibleAttribute.attribute.name].add(
           incompatibleAttribute
         );
-        console.log('after', incompatibleSet[incompatibleAttribute.attribute.name]);
-        
+        console.log(
+          'after',
+          incompatibleSet[incompatibleAttribute.attribute.name]
+        );
       } else {
-        console.log('after', incompatibleSet[incompatibleAttribute.attribute.name]);
+        console.log(
+          'after',
+          incompatibleSet[incompatibleAttribute.attribute.name]
+        );
         incompatibleSet[incompatibleAttribute.attribute.name] = new Set([
           incompatibleAttribute,
         ]);
       }
-      this.formValue = this.categoryForm.value
-      this.store.dispatch(removeAttributeOptionInStore(incompatibleAttribute));      
+      this.formValue = this.categoryForm.value;
+      this.store.dispatch(removeAttributeOptionInStore(incompatibleAttribute));
     });
     return incompatibleSet;
   }
 
   createConfig() {
+    console.log('Set', this.categoryConfigSet);
+    console.log('FormData', this.categoryForm.value);
+    console.log('Sizes', this.sizes);
+    for (let attributeName in this.sizes) {
+      const optionName = this.categoryForm.controls[attributeName].value.optionName;
+      const newBaseAmount = parseInt(this.categoryForm.value[`${attributeName}Size`])
+      if (this.categoryConfigSet[optionName] && !isNaN(newBaseAmount)) {
+        this.categoryConfigSet[optionName].baseAmount = newBaseAmount;
+      }
+    }
     const payload = {
       name: this.categoryForm.value['categoryName'],
       config: Array.from(Object.values(this.categoryConfigSet)),
@@ -217,8 +239,13 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
     const includedAttributeOption = event.value as AttributeOption;
-    console.log(attribute);
-
+    if (attribute.isMeasured) {
+      this.sizes[attribute.attributeName] = this.generateSizes(
+        includedAttributeOption.additionalInfo.baseAmount,
+        includedAttributeOption.additionalInfo.maxAmount,
+        attribute.unit
+      );
+    }
     const configOption: CategoryConfig = {
       name: includedAttributeOption.optionName,
       type: includedAttributeOption.attribute.name,
@@ -262,14 +289,20 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     this.categoryConfig.push(configOption, ...restOfConfig);
-    console.log('Category Config', this.categoryConfig);
-    console.log('Set', this.categoryConfigSet);
+  }
+
+  generateSizes(baseAmount: number, maxAmount: number, unit: string) {
+    const sizes: string[] = [];
+    for (let size = baseAmount; size <= maxAmount; size = size + baseAmount) {
+      sizes.push(`${size} ${unit}`);
+    }
+    return sizes;
   }
   get attributesInput() {
     return this.categoryForm.get('attributesInput')!;
   }
 
   get categoryName() {
-    return this.categoryForm.get('categoryName')!
+    return this.categoryForm.get('categoryName')!;
   }
 }

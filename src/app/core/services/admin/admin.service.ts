@@ -112,6 +112,6 @@ export class AdminService {
   }
 
   getCategoriesAndConfig() {
-    return this.http.get<CategoryAndConfig[]>(`${this.baseUrl}/category/config`)
+    return this.http.get<CategoryAndConfig[]>(`${this.baseUrl}/admin/category/config`)
   }
 }

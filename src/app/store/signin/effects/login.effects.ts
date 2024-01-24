@@ -22,7 +22,7 @@ export class LoginEffect {
             this.authService.setToken(response.token);
             this.profileService.setUser({ firstName: response.firstName, lastName: response.lastName})
             if (response.role === 'ADMIN') {
-              this.router.navigateByUrl('/admin', { replaceUrl: true });
+              this.router.navigateByUrl('/admin/dashboard', { replaceUrl: true });
             } else {
               this.router.navigateByUrl('/settings', { replaceUrl: true });
             }
