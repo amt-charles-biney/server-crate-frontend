@@ -1,7 +1,7 @@
 <cdk-accordion-item #accordionItem="cdkAccordionItem">
     <tr
       (click)="toggle()"
-      class="grid grid-cols-12 py-3 text-sm cursor-pointer"
+      class="grid grid-cols-11 py-3 pl-3 text-sm cursor-pointer"
     >
       <td
         class="flex items-center gap-9 pr-5 md:col-span-3 2xl:col-span-2"
@@ -22,28 +22,31 @@
         </p>
       </td>
       <td
-        class="col-span-3 overflow-hidden whitespace-nowrap text-ellipsis self-center"
+        class="col-span-2 overflow-hidden whitespace-nowrap text-ellipsis self-center font-inter font-[500] text-xs"
       >
         @if (attribute.isMeasured) {
         <div
-          class="flex items-center w-fit gap-1 bg-[#ecf8f1] rounded-2xl px-3 py-1"
+          class="flex items-center w-fit gap-[6px] bg-[#ecf8f1] rounded-2xl px-3 py-1"
         >
-          <div
-            class="rounded-full bg-figma-green w-1.5 h-1.5"
-          ></div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+          <circle cx="4" cy="4" r="3" fill="#14BA6D"/>
+          </svg>
           <p
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-xs text-[#2f8f57]"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-[#2f8f57]"
           >
             Measured
           </p>
         </div>
         } @else {
         <div
-          class="flex items-center w-fit gap-1 bg-[#fdf0f1] rounded-2xl px-3 py-1"
+          class="flex items-center w-fit gap-[6px] bg-[#fdf0f1] rounded-2xl px-3 py-1"
         >
-          <div class="rounded-full bg-[#d20202] w-1.5 h-1.5"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+          <circle cx="4" cy="4" r="3" fill="#CB000E"/>
+          </svg>
+          
           <p
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-xs text-[#b84545]"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-[#b84545]"
           >
             Not measured
           </p>
@@ -56,7 +59,7 @@
         </button>
       </td>
     </tr>
-    <section [@collapse]="collapsed" class="w-[92%] h-[220px] overflow-auto ml-auto">
+    <section [@collapse]="collapsed" class="w-[92%] 2xl:w-[96%] overflow-hidden ml-auto">
       <app-variant-options
         [attributeOptions]="attribute.attributeOptions"
         [isMeasured]="attribute.isMeasured"

@@ -46,16 +46,16 @@
     <form [formGroup]="selectForm">
       <table class="flex flex-col w-full mt-6">
         <tr
-          class="grid grid-cols-12 py-3 border-b text-table-text bg-table-bg text-xs font-[500]"
+          class="grid grid-cols-11 py-3 pl-3 border-b text-table-text bg-table-bg text-xs font-[500]"
         >
           <th class="md:col-span-3 2xl:col-span-2 flex items-center gap-9">
             <app-custom-check-box (changeHandler)="removeCheck()" />
             <p class="whitespace-nowrap">Attribute Name</p>
           </th>
           <th class="col-span-5 text-start self-center">Description</th>
-          <th class="col-span-3 text-start self-center">Measurement Type</th>
+          <th class="col-span-2 text-start self-center">Measurement Type</th>
 
-          <th class="col-span-1 text-center self-center">Action</th>
+          <th class="col-span-1 text-center self-center"></th>
         </tr>
         <ng-container *ngIf="attributes | async as attributes">
           <cdk-accordion>

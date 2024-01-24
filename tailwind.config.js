@@ -5,6 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        maxCap: '1440px'
+      },
       colors: {
         'figma-gray': '#bdbdbd',
         'figma-green': '#3cb043',

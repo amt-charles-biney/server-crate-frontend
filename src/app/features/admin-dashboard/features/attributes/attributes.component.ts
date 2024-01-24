@@ -109,6 +109,9 @@ export class AttributesComponent implements OnInit, AfterViewInit {
 
   deleteAttributes() {
     const deleteList = Array.from(this.attributesTodelete);
+    if (deleteList.length === 0) {
+      return
+    }
     this.store.dispatch(deleteAll({ deleteList }));
 
     this.attributesTodelete.clear();
