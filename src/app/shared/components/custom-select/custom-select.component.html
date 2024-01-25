@@ -36,7 +36,7 @@
     [compareWith]="compareFn"
     [value]="control.value"
   >
-    @for (option of options; track $index;) {
+    @for (option of options; track option;) {
     <mat-option
       class="flex-row !text-sm !pr-[11px] myOption"
       [value]="option"
