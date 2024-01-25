@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
+  deleteCategoriesAndConfig,
   getCategoriesAndConfig,
+  getSingleCategoryAndConfig,
   gotCategoryAndConfig,
   sendConfig,
 } from './config.actions';
-import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
+import { catchError, exhaustMap, map, of, switchMap, tap } from 'rxjs';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { Store } from '@ngrx/store';
 import {
@@ -32,13 +34,11 @@ export class ConfigEffect {
                 })
               );
               setTimeout(() => {
-                this.store.dispatch(
-                  resetLoader({ isError: false, message: '', status: false })
-                );
                 this.router.navigateByUrl('/admin/category-management');
               }, 1500);
+              return resetLoader({ isError: false, message: '', status: false })
             }),
-            catchError((err) => {
+            catchError((err) => {              
               return of(
                 setLoadingSpinner({
                   isError: true,
@@ -51,7 +51,6 @@ export class ConfigEffect {
         })
       );
     },
-    { dispatch: false }
   );
 
   getCategoriesAndConfig$ = createEffect(() => {
@@ -75,6 +74,43 @@ export class ConfigEffect {
       })
     );
   });
+
+  getSingleCategory$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(getSingleCategoryAndConfig),
+      switchMap((props) => {
+        return this.adminService.getSingleCategory(props.id).pipe(
+          tap((data) => console.log('Data', data)
+          )
+        )
+      })
+    )
+  }, { dispatch: false })
+
+  deleteCategories$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(deleteCategoriesAndConfig),
+      exhaustMap((props) => {
+        return this.adminService.deleteCategories(props.deleteList).pipe(
+          map(() => {
+            setTimeout(() => {
+              this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
+            }, 1500);
+            return getCategoriesAndConfig();
+          }),
+          catchError((err) => {
+            return of(
+              setLoadingSpinner({
+                isError: true,
+                message: err.error.detail || 'Deleted',
+                status: false,
+              })
+            );
+          })
+        );
+      })
+    );
+  })
 
   constructor(
     private action$: Actions,

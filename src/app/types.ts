@@ -331,7 +331,8 @@ export type AttributeOption = {
   attribute: {
     name: string;
     id: string;
-    isMeasured: boolean
+    isMeasured: boolean,
+    unit: string
   }
 }
 

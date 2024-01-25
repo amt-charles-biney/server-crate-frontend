@@ -2,7 +2,7 @@
   <section class="flex w-full justify-between">
     <h2 class="font-bold text-2xl">Category List</h2>
     <section class="flex items-center gap-6">
-      <button class="flex items-center gap-2 font-[500] text-sm py-1 px-2">
+      <button (click)="deleteCategories()" class="flex items-center gap-2 font-[500] text-sm py-1 px-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -53,51 +53,10 @@
         <th class="col-span-1 text-center self-center">Action</th>
       </tr>
       <ng-container *ngIf="categoriesAndConfig | async as categories">
-        <!-- <tr
-          class="grid grid-cols-12 py-3 border-b text-sm"
-          *ngFor="let category of categories"
-        >
-          <td class="flex items-center gap-9 col-span-2">
-            <app-custom-check-box
-              (changeHandler)="itemSelected($event, category.id)"
-              [formControl]="$any(selectForm.controls[category.name])"
-              [name]="category.name"
-              [value]="category.id"
-            />
-            <p class="overflow-hidden whitespace-nowrap text-ellipsis">{{ category.name }}</p>
-          </td>
-          <td
-            class="col-span-5 flex items-center gap-3 text-start overflow-hidden whitespace-nowrap text-ellipsis"
-          >
-            <p class="" *ngFor="let config of category.config | slice : 0 : 3">
-              <span>{{ config }}</span>
-            </p>
-            <p *ngIf="category.config.length > 0" class="bg-light-green text-figma-green rounded-full w-[23px] h-[23px] flex flex-col justify-center items-center text-xs">+{{category.config.length - 3}}</p>
-          </td>
-          <td
-            class="col-span-4 overflow-hidden whitespace-nowrap text-ellipsis self-center"
-          >
-            {{ category.productCount }}
-          </td>
-          <td class="col-span-1 self-center">
-            <button class="flex justify-center w-full" [matMenuTriggerFor]="menu">
-              <img src="/assets/ellipses.svg" alt="ellipses" />
-            </button>
-            <mat-menu #menu="matMenu" panelClass="customMenu">
-              <button (click)="editCategory(category.id)" mat-menu-item>
-                <span class="text-sm">Edit</span>
-              </button>
-              <button (click)="showCategoryInfo(category.id)" mat-menu-item>
-                <span class="text-sm">View</span>
-              </button>
-            </mat-menu>
-          </td>
-        </tr> -->
         <tr
           class=""
           *ngFor="let category of categories"
         >
-          
         <app-table-row [category]="category" [control]="$any(selectForm.controls[category.name])" (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"/>
         </tr>
       </ng-container>

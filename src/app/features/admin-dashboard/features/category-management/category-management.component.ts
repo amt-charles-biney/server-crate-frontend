@@ -3,7 +3,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { getCategoriesAndConfig } from '../../../../store/category-management/attributes/config/config.actions';
+import { deleteCategoriesAndConfig, getCategoriesAndConfig } from '../../../../store/category-management/attributes/config/config.actions';
 import { BehaviorSubject, tap } from 'rxjs';
 import { CategoryAndConfig } from '../../../../types';
 import { selectCategoryAndConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { TableRowComponent } from '../../../../shared/components/table-row/table-row.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DeleteModalComponent } from '../../../../shared/components/delete-modal/delete-modal.component';
 @Component({
   selector: 'app-category-management',
   standalone: true,
@@ -22,7 +24,9 @@ import { TableRowComponent } from '../../../../shared/components/table-row/table
     FormsModule,
     ReactiveFormsModule,
     MatMenuModule,
-    TableRowComponent
+    TableRowComponent,
+    DeleteModalComponent,
+    MatDialogModule
   ],
   templateUrl: './category-management.component.html',
   styleUrl: './category-management.component.scss',
@@ -38,7 +42,8 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
 
   constructor(
     private store: Store,
-    private inputService: AttributeInputService
+    private inputService: AttributeInputService,
+    public dialog: MatDialog,
   ) {}
   ngOnInit(): void {
     this.store.dispatch(getCategoriesAndConfig());
@@ -96,5 +101,21 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
   }
   showCategoryInfo(id: string) {
     console.log('view', id)
+  }
+  deleteCategories() {
+    const deleteList = Array.from(this.categoriesTodelete);
+    if (deleteList.length === 0) {
+      return
+    }
+    const dialogRef = this.dialog.open(DeleteModalComponent, {
+      data: { deleteList },
+    });
+    // this.store.dispatch(deleteCategoriesAndConfig({ deleteList }));
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.categoriesTodelete.clear();
+        this.indeterminateCheckbox.indeterminate = false;
+      }
+    });
   }
 }

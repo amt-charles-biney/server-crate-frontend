@@ -114,4 +114,14 @@ export class AdminService {
   getCategoriesAndConfig() {
     return this.http.get<CategoryAndConfig[]>(`${this.baseUrl}/admin/category/config`)
   }
+
+  getSingleCategory(id: string) {
+    return this.http.get(`${ this.baseUrl }/config/one/${id}`)
+  }
+
+  deleteCategories(deleteList: string[]) {
+    return this.http.delete(`${this.baseUrl}/admin/category/config`, {
+      body: deleteList
+    })
+  }
 }

@@ -5,35 +5,51 @@ import { CustomCheckBoxComponent } from '../custom-check-box/custom-check-box.co
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-table-row',
   standalone: true,
-  imports: [CommonModule, CustomCheckBoxComponent, FormsModule, ReactiveFormsModule, MatMenuModule, ClickOutsideDirective],
+  imports: [
+    CommonModule,
+    CustomCheckBoxComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatMenuModule,
+    ClickOutsideDirective,
+  ],
   templateUrl: './table-row.component.html',
   styleUrl: './table-row.component.scss',
 })
 export class TableRowComponent {
-  @Input() category!: CategoryAndConfig
-  @Input() control!: FormControl
-  @Output() itemSelectedEmitter = new EventEmitter<{ selected:  {name: string; value: string; isAdded: boolean}, id: string}>()
+  @Input() category!: CategoryAndConfig;
+  @Input() control!: FormControl;
+  @Output() itemSelectedEmitter = new EventEmitter<{
+    selected: { name: string; value: string; isAdded: boolean };
+    id: string;
+  }>();
   isMenuOpened: boolean = false;
   @Output() closeEvent = new EventEmitter<void>();
-
-  closeCategoryInfo() {   
-   this.isMenuOpened = false
+  constructor(private router: Router) {}
+  closeCategoryInfo() {
+    this.isMenuOpened = false;
     this.closeEvent.emit();
   }
 
-  itemSelected( selected: {name: string, value: string, isAdded: boolean}, id: string) {
-    this.itemSelectedEmitter.emit({ selected, id })
+  itemSelected(
+    selected: { name: string; value: string; isAdded: boolean },
+    id: string
+  ) {
+    this.itemSelectedEmitter.emit({ selected, id });
   }
 
   editCategory(id: string) {
-    console.log('Edit', id);
+    console.log('Reroute');
+    
+    this.router.navigateByUrl(`/admin/add-category/${id}`)
   }
   showCategoryInfo(id: string) {
-    console.log('view', id)
-    this.isMenuOpened = true
+    console.log('view', id);
+    this.isMenuOpened = true;
   }
 }

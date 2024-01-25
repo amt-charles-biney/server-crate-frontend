@@ -1,0 +1,16 @@
+<main class="w-[400px] p-6">
+    <header class="flex items-center justify-between">
+        <img src="/assets/delete-pulse.svg" alt="delete">
+        <button (click)="dialogRef.close(false)">
+            <img src="/assets/close.svg" alt="close button" />
+        </button>
+    </header>
+    <section class="flex flex-col gap-2 mt-5">
+        <h2 class="text-lg font-semibold">Delete {{data.deleteList.length === 1 ? 'Category' : 'Categories'}}?</h2>
+        <p class="text-sm text-table-text">This category would be permanently deleted from the system.</p>
+    </section>
+    <section class="flex gap-3 mt-8">
+        <button (click)="dialogRef.close(false)" class="w-[170px] py-[10px] rounded-lg border border-[#D0D5DD]">Cancel</button>
+        <button (click)="deleteCategories()" class="w-[170px] py-[10px] rounded-lg bg-[#E1000F] text-white">Yes, Delete</button>
+    </section>
+</main>

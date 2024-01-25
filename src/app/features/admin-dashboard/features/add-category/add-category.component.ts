@@ -32,9 +32,10 @@ import {
   removeAttributeOptionInStore,
 } from '../../../../store/category-management/attributes/attributes.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
-import { sendConfig } from '../../../../store/category-management/attributes/config/config.actions';
+import { getSingleCategoryAndConfig, sendConfig } from '../../../../store/category-management/attributes/config/config.actions';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-category',
@@ -70,15 +71,22 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   categoryConfig: CategoryConfig[] = [];
   categoryConfigSet: Record<string, CategoryConfig> = {};
   sizes: Record<string, string[]> = {};
+  id!: string | null
   @ViewChild('contentWrapper') contentWrapper!: ElementRef<HTMLDivElement>;
   incompatibleAttributes: Record<string, Set<AttributeOption>> = {};
   formValue: any;
   constructor(
     private store: Store,
     private attributeService: AttributeInputService,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
   ngOnInit(): void {
+    this.id = this.activatedRoute.snapshot.paramMap.get('id')
+    if (this.id) {
+      this.store.dispatch(getSingleCategoryAndConfig({ id: this.id }))
+    }
     this.attributes = this.store.select(selectAttributesState);
     this.attributes
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -161,7 +169,7 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     return remainingAttributeOptions;
   }
 
-  addAttribute() {
+  addIncompatibleAttribute() {
     const element = this.contentWrapper.nativeElement;
     const attribute = this.categoryForm.get('variants')
       ?.value as AttributeOption[];
@@ -187,27 +195,10 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     const incompatibleSet: Record<string, Set<AttributeOption>> = {};
     incompatibles.forEach((incompatibleAttribute) => {
       if (incompatibleSet[incompatibleAttribute.attribute.name]) {
-        console.log(
-          'Already there',
-          incompatibleSet[incompatibleAttribute.attribute.name]
-        );
-        console.log(
-          'prev',
-          incompatibleSet[incompatibleAttribute.attribute.name]
-        );
-
         incompatibleSet[incompatibleAttribute.attribute.name].add(
           incompatibleAttribute
         );
-        console.log(
-          'after',
-          incompatibleSet[incompatibleAttribute.attribute.name]
-        );
       } else {
-        console.log(
-          'after',
-          incompatibleSet[incompatibleAttribute.attribute.name]
-        );
         incompatibleSet[incompatibleAttribute.attribute.name] = new Set([
           incompatibleAttribute,
         ]);
@@ -219,9 +210,6 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   createConfig() {
-    console.log('Set', this.categoryConfigSet);
-    console.log('FormData', this.categoryForm.value);
-    console.log('Sizes', this.sizes);
     for (let attributeName in this.sizes) {
       const optionName = this.categoryForm.controls[attributeName].value.optionName;
       const newBaseAmount = parseInt(this.categoryForm.value[`${attributeName}Size`])
@@ -234,7 +222,34 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       config: Array.from(Object.values(this.categoryConfigSet)),
     };
     console.log('Sending payload', payload);
+    console.log('Incompatible attributes', this.incompatibleAttributes
+    );
+    console.log(this.convertIncompatiblesToCategoryConfig(this.incompatibleAttributes));    
     this.store.dispatch(sendConfig(payload))
+  }
+
+  convertIncompatiblesToCategoryConfig(incompatibleAttributes: Record<string, Set<AttributeOption>>) {
+    let categoryConfigList: CategoryConfig[] = []
+    for (let key in incompatibleAttributes) {
+      const incompatibleAttribute = incompatibleAttributes[key]
+      incompatibleAttribute.forEach((attribute) => {
+        const categoryConfig: CategoryConfig = {
+          baseAmount: attribute.additionalInfo.baseAmount,
+          maxAmount: attribute.additionalInfo.maxAmount,
+          priceFactor: attribute.additionalInfo.priceFactor,
+          isCompatible: false,
+          isIncluded: false,
+          isMeasured: attribute.attribute.isMeasured,
+          media: attribute.optionMedia,
+          name: attribute.optionName,
+          type: attribute.attribute.name,
+          price: attribute.optionPrice,
+          unit: attribute.attribute.unit
+        }
+        categoryConfigList.push(categoryConfig)
+      })
+    }
+    return categoryConfigList
   }
 
   onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
@@ -297,6 +312,10 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       sizes.push(`${size} ${unit}`);
     }
     return sizes;
+  }
+
+  cancel() {
+    this.router.navigateByUrl('/admin/category-management')
   }
   get attributesInput() {
     return this.categoryForm.get('attributesInput')!;

@@ -1,17 +1,18 @@
 <main class="flex">
   <!-- sidebar -->
-  <aside class="flex min-h-screen w-72 flex-col p-6 border bg-[#fdfdfd]">
+  <aside class="flex min-h-screen w-[352px] flex-col p-8 border bg-[#fdfdfd]">
     <a routerLink="/">
       <img
         ngSrc="/assets/logo.svg"
         width="179"
         height="48"
+        class="w-[179px] h-[48px]"
         priority
         alt="logo at header"
       />
     </a>
     <section class="my-10">
-      <p class="text-sm mb-5 font-semibold text-gray-600 tracking-wide">
+      <p class="text-sm mb-5 font-bold text-[#595959] tracking-wide">
         Main Menu
       </p>
       <nav mat-tab-nav-bar [tabPanel]="tabPanel">
@@ -50,16 +51,16 @@
         </section>
       </nav>
     </section>
-    <article class="flex items-center gap-3">
+    <article class="flex items-center gap-3 ml-6">
       <img class="h-5 w-5" src="/assets/logout.svg" alt="logout" />
       <button (click)="logout()" class="mt-0.5 text-sm font-bold">Logout</button>
     </article>
   </aside>
   <div class="flex-1 overflow-hidden">
     <mat-tab-nav-panel #tabPanel>
-      <nav class="flex border-b px-6 w-full justify-between items-center bg-[#fdfdfd]">
+      <nav class="flex border-b pl-6 pr-[26px] w-full h-[111px] justify-between items-center bg-[#fdfdfd]">
         <h2 class="font-bold tracking-wide">{{ activeLink.label }}</h2>
-        <div class="flex items-center py-6 justify-around w-[30%] 2xl:w-[10%] 2xl:mr-6">
+        <div class="flex gap-12 py-6 w-[169px]">
           <!-- <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -74,25 +75,31 @@
               d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
             />
           </svg> -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            data-slot="icon"
-            class="w-6 h-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-            />
-          </svg>
+          <div class="flex items-center gap-9">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
+              <path d="M19.0002 19.5002L14.6572 15.1572M14.6572 15.1572C15.4001 14.4143 15.9894 13.5324 16.3914 12.5618C16.7935 11.5911 17.0004 10.5508 17.0004 9.50021C17.0004 8.4496 16.7935 7.40929 16.3914 6.43866C15.9894 5.46803 15.4001 4.58609 14.6572 3.84321C13.9143 3.10032 13.0324 2.51103 12.0618 2.10898C11.0911 1.70693 10.0508 1.5 9.00021 1.5C7.9496 1.5 6.90929 1.70693 5.93866 2.10898C4.96803 2.51103 4.08609 3.10032 3.34321 3.84321C1.84288 5.34354 1 7.37842 1 9.50021C1 11.622 1.84288 13.6569 3.34321 15.1572C4.84354 16.6575 6.87842 17.5004 9.00021 17.5004C11.122 17.5004 13.1569 16.6575 14.6572 15.1572Z" stroke="#1D2939" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              data-slot="icon"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+              />
+            </svg>
+          </div>
           <app-user-profile-image [smaller]="true" />
         </div>
       </nav>
-      <section class="p-5">
+      <section class="p-[26px]">
         <div class="p-3">
           <router-outlet />
         </div>
