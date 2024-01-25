@@ -53,25 +53,31 @@ export class ProductConfigureComponent {
   loading: boolean = false
   size: string = '0'
   componentSizable: string = ""
+  unit:string = "GB"
 
   productConfigItem: IConfiguredProduct = {
     totalPrice: 0,
+    productName: "",
     configuredPrice: 0,
     configured: [],
     productId: '',
     productPrice: 0,
     id: null,
     warranty: false,
-    vatIncluded: 0,
+    vat: 0,
   };
+
+  isMeasuredPriceMapper: {[key: string]: number} = {}
 
   activeLink: string = '';
   configKeys: string[] = [];
   queryMapper: { [key: string]: string } = {};
   isComponentSizableQueryMapper: ({[key: string]: string}) = {}
 
-  setActiveLink = (active: string) => (this.activeLink = active);
-$: any;
+  setActiveLink = (active: string) => {
+    this.unit = this.productConfig.options[active][0]?.unit || "GB"
+    this.activeLink = active
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -109,7 +115,7 @@ $: any;
 
     this.getConfigKeys().subscribe((keys) => {
       this.configKeys = keys;
-      this.activeLink = keys[0];
+      this.setActiveLink(keys[0])
     });
   }
 
@@ -119,6 +125,8 @@ $: any;
     );
   };
 
+  getMeasuredUnit = ():string => { return " "}
+
   onOptionChange(check: boolean) {
     this.warranty = check;
     this.updateConfigQueryParam(null, this.warranty)
@@ -126,15 +134,19 @@ $: any;
 
   buildQueryMapper = () => {
     for (let product of this.productConfigItem.configured) {
-      this.queryMapper[product.optionType] = `${product.optionId}_${product.isMeasured ? product?.size || product?.baseAmount : product?.baseAmount}`;
+      this.queryMapper[product.optionType] = `${product.optionId}_${product.isMeasured ? product?.size || product?.baseAmount : product?.baseAmount || 0}`;
+      if(product?.isMeasured) this.isMeasuredPriceMapper[product.optionType] = product.optionPrice;
     }
+  }
+
+  calculateisMeasuredPrice = (type: string) => {
+    return this.productConfigItem.configured.filter(config => config.optionType === type)[0]?.optionPrice || 0
   }
   
 
   onSizeableOptionChange = ({ type, id = this.componentSizable, size = this.size }: { type: string, id: string, size: string }) => {
     this.componentSizable = id;
     this.size = size;
-  
     this.updateConfigQueryParam({ type, id: id, size: size });
   };
   
@@ -152,7 +164,7 @@ $: any;
   };
 
 
-isActiveSelectedOption = ({ type, id, size }: { type: string; id: string; size: string }): boolean => this.queryMapper[type] === `${id}_${size}`;
+isActiveSelectedOption = ({ type, id, size }: { type: string; id: string; size: string }): boolean => this.queryMapper[type] === `${id}_${size || 0}`;
 
 generateStorageSizes(productArr: any[]): number[] {
     let storageSize = [];
