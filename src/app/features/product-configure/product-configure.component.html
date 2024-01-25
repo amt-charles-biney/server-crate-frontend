@@ -29,7 +29,7 @@
                </div>
             </div>
 
-            <div class="max-w-md flex flex-col gap-6 w-full">
+            <div class="max-w-[488px] flex flex-col gap-6 w-full">
                <div class="flex flex-col gap-[20px]">
                   <h2 class="font-bold text-[20px]">{{ product.productName }}</h2>
                   <p class="text-[13px] font-normal">{{ product.productDescription }}</p>
@@ -83,11 +83,11 @@
 
       <div class="w-full flex gap-4 mb-20 flex-row flex-wrap mx-auto justify-between items-start">
          <div class="flex-1 w-full">
-            <div class="mb-5 mt-10">
+            <div class="mb-5">
                <h2 class="text-xl font-bold">Configurations</h2>
             </div>
             <ng-container *ngIf="productConfig$ | async as productConfig">
-               <nav class="w-full max-w-4xl" mat-tab-nav-bar [tabPanel]="tabPanel">
+               <nav class="w-full max-w-[710px]" mat-tab-nav-bar [tabPanel]="tabPanel">
                   <a *ngFor="let attribute of configKeys; let i = index" [active]="activeLink === attribute"
                      (click)="setActiveLink(attribute)" mat-tab-link>
                      <div class="flex items-center gap-3">
@@ -140,7 +140,7 @@
                                 class="p-2 border-[2px] border-[#E8EAEB] focus:outline-none text-gray-700 pl-4 rounded-md w-full flex-1 max-w-lg pr-8 appearance-none"
                               >
                                 <option class="hover" [value]="sizes" *ngFor="let sizes of generateStorageSizes(productConfig.options[activeLink])">
-                                  {{ sizes }} {{ unit}}
+                                  {{ sizes }} {{ unit }}
                                 </option>
                               </select>
                               <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -209,7 +209,7 @@
 
 
          <div
-            class="border-[1px] w-full flex-1 h-[327px] max-w-md mt-5 flex flex-col p-4 border-dashed rounded-xl justify-between border-[#E6E6E6]">
+            class="border-[1px] flex-1 h-[327px] max-w-[486px] w-full mt-5 flex flex-col p-4 border-dashed rounded-xl justify-between border-[#E6E6E6]">
             <div class="w-full gap-4 flex flex-col">
                <h2 class="font-semibold text-lg">Order Summary</h2>
                <span class="flex flex-row justify-between w-full items-center">
