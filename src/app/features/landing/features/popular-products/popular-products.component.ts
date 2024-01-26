@@ -41,24 +41,21 @@ export class PopularProductsComponent {
             this.currentPopularSlide = s.track.details.rel
           },
           mode: "free",
-          breakpoints: {
-            "(min-width: 400px)": {
-              slides: { perView: 2, spacing: 20 },
-            },
-            "(min-width: 640px)": {
-              slides: { perView: 2, spacing: 20 },
-            },
-            "(min-width: 1024px)": {
-              slides: { perView: 3, spacing: 30 },
-            },
-            "(min-width: 1280px)": {
-              slides: { perView: 3, spacing: 40 },
-            },
-          },
           slides: {
-            perView: 1,
-            spacing: 10,
+            perView: "auto",
+            spacing: 16
           },
+          breakpoints: {
+            "(min-width: 1450px)": {
+              slides: { perView: "auto", spacing: 0 }
+            },
+            "(max-width: 600px)": {
+              slides: { perView: 1, spacing: 0 }
+            },
+            "(max-width: 1008px)": {
+              slides: { perView: 2, spacing: 16}
+            },
+          }
         })
       }
 
