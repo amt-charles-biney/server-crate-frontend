@@ -81,7 +81,7 @@
 
 
       <div class="w-full flex gap-4 mb-20 flex-row flex-wrap mx-auto justify-between items-start">
-         <div class="flex-1 w-full">
+         <div class="flex-1 w-full mt-0 lg:-mt-20">
             <div class="mb-5">
                <h2 class="text-xl font-bold">Configurations</h2>
             </div>
@@ -90,7 +90,7 @@
                   <a *ngFor="let attribute of configKeys; let i = index" [active]="activeLink === attribute"
                      (click)="setActiveLink(attribute)" mat-tab-link>
                      <div class="flex items-center gap-3">
-                        <p class="mt-0.5">{{ attribute }}</p>
+                        <p class="mt-0.5 text-[14px] font-inter font-[400px]">{{ attribute }}</p>
                      </div>
                   </a>
                </nav>
