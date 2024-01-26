@@ -77,7 +77,6 @@ input[type="checkbox"]:checked::before {
 
 app-account-settings .mdc-tab--active {
   background-color: #ecf7ec;
-  transition: all 1s;
 }
 // input.ng-invalid:not(form) {
 //   border: 1px solid red;
@@ -145,6 +144,15 @@ app-product-configure .mat-mdc-tab-header {
 app-product-configure .mat-mdc-tab-links {
   border-bottom: 1px solid #E8EAEB;
 }
+app-account-settings .mat-mdc-tab-links {
+  border-bottom: 1px solid #E8EAEB;
+}
+
+app-account-settings .mdc-tab--active {
+  background-color: #ECF7EC;
+  border-bottom: 2px solid #3CB043;
+}
+
 
 app-account-settings .mdc-tab-indicator {
   display: none;
