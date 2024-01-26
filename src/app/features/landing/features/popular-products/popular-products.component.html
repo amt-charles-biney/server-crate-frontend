@@ -1,19 +1,21 @@
-<section class="mt-10">
+<section class="mt-10 max-w-screen-maxCap mx-auto">
   <h2 class="font-bold text-xl py-8">Most Popular</h2>
 
   <ng-container *ngIf="popularProducts$ | async as popularProducts">
     @if(popularProducts.length <= 0) {
     <div>no new products available!!</div>
     }
-    <div class="keen-slider w-full" #popularSliderRef>
+
+    <div class="keen-slider" #popularSliderRef>
       @for (product of popularProducts; let i = $index; track i) {
-      <div class="keen-slider__slide p-4">
-        <app-user-product-item
-          [product]="product"
-        ></app-user-product-item>
-      </div>
+        <div class="keen-slider__slide p-4 w-full mx-auto sm:mx-0 md:max-w-[320px]">
+          <div class="w-[297px]">
+            <app-user-product-item [product]="product"></app-user-product-item>
+          </div>
+        </div>
       }
     </div>
+
     <div class="flex flex-row mt-8 items-center justify-between w-full">
       <div class="flex flex-row items-center gap-2">
         <span

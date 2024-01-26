@@ -228,12 +228,13 @@ export interface IConfiguredOption {
 export interface IConfiguredProduct {
   id: string | null;
   totalPrice: number;
+  productName: string;
   productId: string;
   productPrice: number;
   configuredPrice: number;
   configured: IConfiguredOption[];
   warranty: boolean;
-  vatIncluded: number
+  vat: number
 }
 
 

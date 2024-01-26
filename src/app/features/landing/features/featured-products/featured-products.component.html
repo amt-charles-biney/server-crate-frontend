@@ -1,5 +1,5 @@
-<main class="mt-10">
-    <section class="flex flex-col gap-3">
+<main class="mt-10 flex items-center justify-center">
+  <section class="flex flex-col max-w-screen-maxCap">
         <h2 class="font-bold text-center text-xl py-6">Featured Products</h2>
         <ng-container *ngIf="loading$ | async as loading">
             <div *ngIf="loading">
@@ -13,15 +13,17 @@
         
 
         <ng-container *ngIf="featuredProducts$ | async as featuredProducts">
-          <div class="grid gap-4 grid-flow-row lg:grid-cols-4 2xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
-              @for(product of featuredProducts; let idx = $index; track idx) {
-                  <app-user-product-item [product]="product"></app-user-product-item>
-              }
-          </div>
+          <div class="flex flex-wrap gap-[16px] justify-center max-w-screen-maxCap">
+            @for(product of featuredProducts; let idx = $index; track idx) {
+              <div class="w-[297px] mx-auto">
+                <app-user-product-item [product]="product"></app-user-product-item>
+              </div>
+            }
+        </div>        
         </ng-container>
         
 
-        <div class="flex items-center justify-center w-full">
+        <div class="flex items-center justify-center w-full mt-10">
             <button
             (click)="navigateToProduct()"
             class="bg-[#3CB043] max-w-[235px] w-full text-white p-4 rounded-lg hover:bg-green-500">
