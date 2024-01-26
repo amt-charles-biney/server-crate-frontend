@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Attribute, CategoryAndConfig } from '../../../types';
+import { Attribute, AttributeOption, CategoryAndConfig } from '../../../types';
 
 @Injectable({
   providedIn: 'root',
@@ -47,13 +47,15 @@ export class AttributeInputService {
     });
     return new FormGroup(group);
   }
-  editFormGroup(obj: Record<string, string>) {
+  editFormGroup(obj: Record<string, string | AttributeOption>) {
     const group: any = {};
 
     for (let key in obj) {
       group[key] = new FormControl(obj[key]);
     }
     group['attributesInput'] = new FormControl('');
+    console.log("Group", group);
+    
     return new FormGroup(group);
   }
 }

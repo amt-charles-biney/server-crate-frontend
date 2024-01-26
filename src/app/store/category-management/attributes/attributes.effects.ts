@@ -157,10 +157,23 @@ export class AttributeEffect {
               return getAttributes();
             }),
             catchError((err) => {
+              let errorMessage =  ''
+              if (err && err.error && err.error.detail) {
+                errorMessage = err.error.detail
+              } else {
+                errorMessage = 'Server response error'
+              }
+              setTimeout(() => {
+                this.store.dispatch(resetLoader({
+                  isError: true,
+                  message: '',
+                  status: false
+                }))
+              }, 1500);
               return of(
                 setLoadingSpinner({
                   isError: true,
-                  message: err.error.detail,
+                  message: errorMessage,
                   status: false,
                 })
               );
@@ -211,10 +224,16 @@ export class AttributeEffect {
               return getAttributes();
             }),
             catchError((err) => {
+              let errorMessage =  ''
+              if (err && err.error && err.error.detail) {
+                errorMessage = err.error.detail
+              } else {
+                errorMessage = 'Server response error'
+              }
               return of(
                 setLoadingSpinner({
                   isError: true,
-                  message: err.error.detail,
+                  message: errorMessage,
                   status: false,
                 })
               );

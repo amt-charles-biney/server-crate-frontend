@@ -12,6 +12,8 @@ import {
   CategoryConfig,
   Configuration,
   CategoryAndConfig,
+  EditConfig,
+  ConfigurationEdit,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -116,12 +118,16 @@ export class AdminService {
   }
 
   getSingleCategory(id: string) {
-    return this.http.get(`${ this.baseUrl }/config/one/${id}`)
+    return this.http.get<EditConfig>(`${ this.baseUrl }/admin/category/config/${id}`)
   }
 
   deleteCategories(deleteList: string[]) {
     return this.http.delete(`${this.baseUrl}/admin/category/config`, {
       body: deleteList
     })
+  }
+
+  editCategory(id: string, categoryConfig: ConfigurationEdit) {
+    return this.http.put(`${this.baseUrl}/admin/category/config/${id}`, categoryConfig)
   }
 }

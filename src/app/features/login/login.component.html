@@ -1,7 +1,7 @@
 <main class="grid grid-cols-1 p-3 md:p-0 md:grid-cols-2">
   <section class="flex flex-col items-center md:py-12 md:px-16">
     <img
-      class="mb-6 self-start md:mb-16 cursor-pointer"
+      class=" self-start cursor-pointer 2xl:mb-0"
       routerLink="/"
       ngSrc="/assets/logo.svg"
       width="173"
@@ -9,52 +9,55 @@
       priority
       alt="Company logo"
     />
-    <h1 class="text-3xl mt-6 md:m-0 font-bold">Sign in to your account</h1>
-    <div class="w-full">
-      <app-auth-loader [loadingState]="loadingState$"/>
-    </div>
-    <form
-      novalidate
-      [formGroup]="loginForm"
-      (ngSubmit)="submitRegistrationForm()"
-      class="md:p-0 px-4 md:max-w-[500px] mx-auto w-full"
-    >
-      <app-custom-input
-        id="email"
-        label="Email"
-        type="email"
-        placeholder="Enter your email"
-        formControlName="email"
-      />
-      @if (email?.invalid && (email?.touched || email?.dirty)) {
-      <span class="text-red-600">Please enter a valid email</span>
-      }
-      <app-custom-input
-        id="password"
-        label="Password"
-        type="password"
-        placeholder="Enter password"
-        formControlName="password"
-      />
-      <div class="flex w-full justify-between">
-        <label class="flex items-center mt-1 gap-1 text-sm" for="rememberMe">
-          <input type="checkbox" name="rememberMe" id="rememberMe" />
-          <p>Remember me</p>
-        </label>
-        <a class="underline" routerLink="/forgot-password/reset-link"
-          >Forgot Password?</a
-        >
-      </div>
+    <div class="w-full h-full flex flex-col justify-center items-center ">
 
-      <app-custom-button
-        buttonText="Sign in"
-        [disableButton]="this.loginForm.invalid"
-      />
-      <p class="text-center mt-6">
-        Don't have an account?
-        <a class="font-semibold underline" routerLink="/signup">Sign up</a>
-      </p>
-    </form>
+      <h1 class="text-3xl mt-6 md:m-0 font-bold">Sign in to your account</h1>
+      <div class="w-full">
+        <app-auth-loader [loadingState]="loadingState$"/>
+      </div>
+      <form
+        novalidate
+        [formGroup]="loginForm"
+        (ngSubmit)="submitRegistrationForm()"
+        class="md:p-0 px-4 md:max-w-[500px] mx-auto w-full"
+      >
+        <app-custom-input
+          id="email"
+          label="Email"
+          type="email"
+          placeholder="Enter your email"
+          formControlName="email"
+        />
+        @if (email?.invalid && (email?.touched || email?.dirty)) {
+        <span class="text-red-600">Please enter a valid email</span>
+        }
+        <app-custom-input
+          id="password"
+          label="Password"
+          type="password"
+          placeholder="Enter password"
+          formControlName="password"
+        />
+        <div class="flex w-full justify-between">
+          <label class="flex items-center mt-1 gap-1 text-sm" for="rememberMe">
+            <input type="checkbox" name="rememberMe" id="rememberMe" />
+            <p>Remember me</p>
+          </label>
+          <a class="underline" routerLink="/forgot-password/reset-link"
+            >Forgot Password?</a
+          >
+        </div>
+  
+        <app-custom-button
+          buttonText="Sign in"
+          [disableButton]="this.loginForm.invalid"
+        />
+        <p class="text-center mt-6">
+          Don't have an account?
+          <a class="font-semibold underline" routerLink="/signup">Sign up</a>
+        </p>
+      </form>
+    </div>
   </section>
   <!-- <img
     class="hidden md:flex w-full !h-screen !relative"

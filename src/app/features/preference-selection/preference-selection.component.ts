@@ -51,6 +51,7 @@ export class PreferenceSelectionComponent implements OnInit {
   page: number = 0;
   brands$!: Observable<Select[]>;
   search: string = ''
+  isGridMode: boolean = true
   constructor(
     private store: Store,
     public dialog: MatDialog,

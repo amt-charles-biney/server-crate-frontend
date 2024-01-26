@@ -34,7 +34,7 @@
     (selectionChange)="select($event)"
     [disabled]="isDisabled"
     [compareWith]="compareFn"
-    [value]="control.value"
+    [value]="control?.value || 'empty'"
   >
     @for (option of options; track option;) {
     <mat-option

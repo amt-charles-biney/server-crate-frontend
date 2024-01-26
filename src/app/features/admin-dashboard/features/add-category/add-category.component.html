@@ -150,7 +150,7 @@
       <section>
         <h2 class="font-[700] font-dm-sans mb-[34px]">Base Configuration</h2>
         <section class="grid grid-cols-2 gap-x-20 gap-y-6">
-          @for (attribute of attributes; track $index) { @if
+          @for (attribute of localAttributes; track $index) { @if
           (attribute.isMeasured) {
           <div class="grid grid-cols-2 gap-[13px]">
             <app-custom-select

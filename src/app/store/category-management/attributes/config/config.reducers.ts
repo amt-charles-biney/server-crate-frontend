@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { CategoryAndConfig } from "../../../../types";
-import { gotCategoryAndConfig } from "./config.actions";
+import { CategoryAndConfig, EditConfig } from "../../../../types";
+import { gotCategoryAndConfig, gotSingleCategory, resetEditState } from "./config.actions";
 import { state } from "@angular/animations";
 
 const initialState: CategoryAndConfig[] = []
@@ -14,4 +14,34 @@ export const configFeature = createFeature({
         })
     )
 })
+
+const editConfigInitialState: EditConfig = {
+    name: '',
+    config: [],
+    id: '',
+    incompatible: {}
+}
+export const editConfigFeature = createFeature({
+    name: 'editConfig',
+    reducer: createReducer(
+        editConfigInitialState,
+        on(gotSingleCategory, (state, {config, id, name, incompatible }) => {
+            return {
+                name,
+                id, 
+                config,
+                incompatible
+            }
+        }),
+        on(resetEditState, () => {
+            return {
+                name: '',
+                config: [],
+                id: '',
+                incompatible: {}
+            }
+        })
+    )
+})
 export const { selectCategoryAndConfigState } = configFeature
+export const { selectConfig, selectName, selectId, selectEditConfigState } = editConfigFeature

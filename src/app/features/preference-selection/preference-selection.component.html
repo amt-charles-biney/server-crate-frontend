@@ -1,9 +1,9 @@
 <main class="relative grid grid-cols-4 gap-10 max-w-screen-maxCap mx-auto mt-12">
   <aside class="col-span-1 flex flex-col gap-3">
-    <h1 class="text-xl font-bold">GPU Servers</h1>
+    <h1 class="text-2xl font-bold">GPU Servers</h1>
     <button
       (click)="clearFilters()"
-      class="underline w-fit text-red-600 text-sm mt-4"
+      class="underline w-fit text-red-color text-sm mt-4"
     >
       Clear All Filters
     </button>
@@ -13,10 +13,10 @@
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <p class="text-md">Product Type</p>
+              <p class="text-[16px]">Product Type</p>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul>
+          <ul class="flex flex-col gap-2">
             <li>
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
@@ -59,9 +59,9 @@
       <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
-            <mat-panel-title> Processor </mat-panel-title>
+            <mat-panel-title class="text-[16px]"> Processor </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul>
+          <ul class="flex flex-col gap-2">
             <li>
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
@@ -104,9 +104,9 @@
       <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
-            <mat-panel-title> Shop By Price </mat-panel-title>
+            <mat-panel-title class="text-[16px]"> Shop By Price </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul>
+          <ul class="flex flex-col gap-2">
             <li>
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
@@ -149,9 +149,9 @@
       <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
-            <mat-panel-title> Brand </mat-panel-title>
+            <mat-panel-title class="text-[16px]"> Brand </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul *ngIf="brands$ | async as brands">
+          <ul class="flex flex-col gap-2" *ngIf="brands$ | async as brands">
             <li *ngFor="let brand of brands">
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
@@ -167,9 +167,9 @@
       <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
-            <mat-panel-title> Mounting </mat-panel-title>
+            <mat-panel-title class="text-[16px]"> Mounting </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul>
+          <ul class="flex flex-col gap-2">
             <li>
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
@@ -212,10 +212,13 @@
     </form>
   </aside>
   <section class="col-span-3 flex flex-col">
-    <div class="flex items-center justify-between">
-      <p *ngIf="total | async as total">
+    <div class="flex items-center w-full justify-between">
+      <p *ngIf="total | async as total;else no_servers">
         {{ total }} {{ total === 1 ? "Server" : "Servers" }}
       </p>
+      <ng-template #no_servers>
+       <p>0 Servers</p>
+      </ng-template>
       <div class="flex items-center gap-3">
         <button (click)="clearFilters()" class="underline hover:text-gray-700">
           All Products
@@ -226,10 +229,16 @@
           <img src="/assets/compare-btn-icon.svg" alt="compare" />
           <p>Compare</p>
         </button>
+        <button (click)="isGridMode=true" class="w-9 h-9 flex flex-col items-center justify-center rounded-full bg-[#C4C4C4] bg-opacity-10">
+          <img src="/assets/grid-mode.svg" alt="grid mode">
+        </button>
+        <button (click)="isGridMode=false" class="w-9 h-9 flex flex-col items-center justify-center rounded-full bg-[#C4C4C4] bg-opacity-10">
+          <img class="text-green-500" src="/assets/list-mode.svg" alt="list mode">
+        </button>
       </div>
     </div>
     <section
-      class="grid gap-4 mt-6 grid-flow-row lg:grid-cols-3 2xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1"
+      class="grid gap-4 mt-6 grid-flow-row grid-cols-3 lg:grid-cols-2 md:grid-cols-1 xl:grid-cols-3"
     >
       <ng-container
         *ngIf="{ products: products | async, total: total | async } as products"
@@ -239,7 +248,9 @@
             @for (product of products.products| paginate: { id: 'server',
             itemsPerPage: 9, currentPage: page, totalItems: products.total};
             track product) {
-            <app-user-product-item [product]="product" (selectorEmitter)="onSelect($event)"/>
+              <div class="flex justify-center items-center">
+                <app-user-product-item [isGrid]="isGridMode" [product]="product" (selectorEmitter)="onSelect($event)"/>
+              </div>
             }
           </ng-container>
         </ng-container>

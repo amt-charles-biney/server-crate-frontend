@@ -376,6 +376,7 @@ export type CategoryConfig = {
   baseAmount: number;
   maxAmount: number;
   priceFactor: number;
+  id?: string
 }
 
 export type Configuration = {
@@ -388,4 +389,17 @@ export type CategoryAndConfig = {
   id: string;
   config: string[];
   productCount: number
+}
+
+export type EditConfig = {
+  name: string;
+  config: CategoryConfig[],
+  id: string,
+  incompatible: Record<string, Set<AttributeOption>>
+}
+
+export type ConfigurationEdit = {
+  name: string;
+  config: CategoryConfig[],
+  id: string
 }

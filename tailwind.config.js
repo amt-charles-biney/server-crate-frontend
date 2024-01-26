@@ -6,7 +6,9 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        maxCap: '1440px'
+        maxCap: '1440px',
+        'xl': '1320px',
+        '2xl': '1743px'
       },
       colors: {
         'figma-gray': '#bdbdbd',
@@ -15,7 +17,9 @@ module.exports = {
         'attr-button': '#F3F4F6',
         'table-text': '#667085',
         'light-green': '#ECF7EC',
-        'table-bg': '#FCFCFD'
+        'table-bg': '#FCFCFD',
+        'product-text': '#676767',
+        'red-color': '#E1000F'
       },
       gridTemplateRows: {
         '20': 'repeat(20, minmax(0, 1fr))',

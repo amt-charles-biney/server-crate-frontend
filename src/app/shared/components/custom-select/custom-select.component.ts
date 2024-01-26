@@ -26,11 +26,17 @@ export class CustomSelectComponent implements OnInit {
   select(event: MatSelectChange) {
     this.onSelect.emit(event);
   }
-  compareFn(c1: AttributeOption, c2: AttributeOption): boolean {
+  compareFn(c1: AttributeOption | number , c2: AttributeOption | string | number): boolean {    
+    console.log('c1', c2, 'c2', c2);
     if (c1 && c2) {
+      if (typeof c1 === 'number' || typeof c2 === 'number') {
+        return c1 === c2
+      }
+      if (typeof c2 === 'string') {
+        return c1.optionName === c2
+      }
       return c1.optionName === c2.optionName;
     }
     return false
-
   }
 }
