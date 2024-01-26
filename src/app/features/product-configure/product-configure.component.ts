@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../../core/components/header/header.component';
-import { FooterComponent } from '../../core/components/footer/footer.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ICategoryConfig,
@@ -25,7 +23,7 @@ import cloneDeep from 'lodash.clonedeep';
 @Component({
   selector: 'app-product-configure',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, CommonModule, MatTabsModule],
+  imports: [CommonModule, MatTabsModule],
   templateUrl: './product-configure.component.html',
   styleUrl: './product-configure.component.scss',
 })
