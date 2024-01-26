@@ -139,7 +139,11 @@ app-account-settings .mat-mdc-tab-header {
 }
 
 app-product-configure .mat-mdc-tab-header {
-  background-color: #fbfbfb;
+  background-color: white;
+}
+
+app-product-configure .mat-mdc-tab-links {
+  border-bottom: 1px solid #E8EAEB;
 }
 
 app-account-settings .mdc-tab-indicator {
@@ -218,9 +222,8 @@ app-admin-dashboard .mdc-tab--active {
 }
 
 app-product-configure .mdc-tab--active {
-  background-color: #f7fcf7;
-  transition: all 1s;
-  border-radius: 12px;
+  background-color: #ECF7EC;
+  border-bottom: 2px solid #3CB043;
 }
 
 app-admin-dashboard .mdc-tab:hover {
