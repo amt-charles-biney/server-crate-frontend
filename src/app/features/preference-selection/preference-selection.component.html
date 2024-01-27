@@ -1,4 +1,6 @@
-<main class="relative grid grid-cols-4 gap-10 max-w-screen-maxCap mx-auto mt-12">
+<main
+  class="relative grid grid-cols-4 gap-10 max-w-screen-maxCap mx-auto mt-12"
+>
   <aside class="col-span-1 flex flex-col gap-3">
     <h1 class="text-2xl font-bold">GPU Servers</h1>
     <button
@@ -104,7 +106,9 @@
       <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
-            <mat-panel-title class="text-[16px]"> Shop By Price </mat-panel-title>
+            <mat-panel-title class="text-[16px]">
+              Shop By Price
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <ul class="flex flex-col gap-2">
             <li>
@@ -213,32 +217,75 @@
   </aside>
   <section class="col-span-3 flex flex-col">
     <div class="flex items-center w-full justify-between">
-      <p *ngIf="total | async as total;else no_servers">
+      <p *ngIf="total | async as total; else no_servers">
         {{ total }} {{ total === 1 ? "Server" : "Servers" }}
       </p>
       <ng-template #no_servers>
-       <p>0 Servers</p>
+        <p>0 Servers</p>
       </ng-template>
       <div class="flex items-center gap-3">
         <button (click)="clearFilters()" class="underline hover:text-gray-700">
           All Products
         </button>
-        <button (click)="compareEvent()"
+        <button
+          (click)="compareEvent()"
           class="w-fit flex items-center gap-3 py-1 px-3 font-semibold bg-figma-green text-white rounded-lg"
         >
           <img src="/assets/compare-btn-icon.svg" alt="compare" />
           <p>Compare</p>
         </button>
-        <button (click)="isGridMode=true" class="w-9 h-9 flex flex-col items-center justify-center rounded-full bg-[#C4C4C4] bg-opacity-10">
-          <img src="/assets/grid-mode.svg" alt="grid mode">
+        <button
+          (click)="isGridMode = true"
+          [ngClass]="!isGridMode ? 'text-[#B0B0B0]' : 'text-figma-green'"
+          class="w-9 h-9 ml-6 flex flex-col items-center justify-center rounded-full bg-[#C4C4C4] bg-opacity-10"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="menu (2) 1">
+              <path
+                id="Vector"
+                d="M5.62467 2.08398C6.08977 2.08398 6.55032 2.17559 6.98002 2.35358C7.40971 2.53156 7.80014 2.79244 8.12902 3.12132C8.45792 3.45019 8.71876 3.84062 8.89676 4.27032C9.07476 4.70001 9.16634 5.16055 9.16634 5.62565V9.16732H5.62467C4.68537 9.16732 3.78453 8.79415 3.12034 8.12998C2.45615 7.46579 2.08301 6.56496 2.08301 5.62565C2.08301 4.68634 2.45615 3.78551 3.12034 3.12132C3.78453 2.45713 4.68537 2.08398 5.62467 2.08398ZM5.62467 10.834H9.16634V14.3757C9.16634 15.0762 8.95859 15.7609 8.56942 16.3433C8.1803 16.9257 7.62717 17.3797 6.98002 17.6477C6.33286 17.9158 5.62075 17.9859 4.93373 17.8492C4.24672 17.7126 3.61565 17.3753 3.12034 16.88C2.62503 16.3847 2.28772 15.7537 2.15106 15.0666C2.01441 14.3796 2.08454 13.6675 2.3526 13.0203C2.62067 12.3732 3.07461 11.8201 3.65703 11.4309C4.23946 11.0417 4.9242 10.834 5.62467 10.834ZM14.3747 2.08398C15.314 2.08398 16.2148 2.45713 16.879 3.12132C17.5432 3.78551 17.9163 4.68634 17.9163 5.62565C17.9163 6.56496 17.5432 7.46579 16.879 8.12998C16.2148 8.79415 15.314 9.16732 14.3747 9.16732H10.833V5.62565C10.833 4.68634 11.2062 3.78551 11.8703 3.12132C12.5345 2.45713 13.4353 2.08398 14.3747 2.08398ZM10.833 10.834H14.3747C15.0752 10.834 15.7599 11.0417 16.3423 11.4309C16.9248 11.8201 17.3787 12.3732 17.6468 13.0203C17.9148 13.6675 17.9849 14.3796 17.8483 15.0666C17.7117 15.7537 17.3743 16.3847 16.879 16.88C16.3837 17.3753 15.7527 17.7126 15.0656 17.8492C14.3786 17.9859 13.6665 17.9158 13.0193 17.6477C12.3722 17.3797 11.8191 16.9257 11.4299 16.3433C11.0408 15.7609 10.833 15.0762 10.833 14.3757V10.834Z"
+                fill="currentColor"
+              />
+            </g>
+          </svg>
         </button>
-        <button (click)="isGridMode=false" class="w-9 h-9 flex flex-col items-center justify-center rounded-full bg-[#C4C4C4] bg-opacity-10">
-          <img class="text-green-500" src="/assets/list-mode.svg" alt="list mode">
+        <button
+          (click)="isGridMode = false"
+          [ngClass]="isGridMode ? 'text-[#B0B0B0]' : 'text-figma-green'"
+          class="w-9 h-9 flex flex-col items-center justify-center rounded-full bg-[#C4C4C4] bg-opacity-10"
+        >
+          <svg
+            id="list-mode"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="Filter">
+              <g id="Components/Icon/Filter">
+                <path
+                  id="Shape"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M2.5 6.25V7.08333H17.5V6.25H2.5ZM8.33333 13.75H11.6667V12.9167H8.33333V13.75ZM15 10.4167H5V9.58333H15V10.4167Z"
+                  fill="currentColor"
+                />
+              </g>
+            </g>
+          </svg>
         </button>
       </div>
     </div>
     <section
-      class="grid gap-4 mt-6 grid-flow-row grid-cols-3 lg:grid-cols-2 md:grid-cols-1 xl:grid-cols-3"
+    [ngClass]="{'flex flex-col gap-10 self-start': !isGridMode, 'grid gap-4 grid-flow-row grid-cols-3 lg:grid-cols-2 md:grid-cols-1 xl:grid-cols-3': isGridMode}"
+      class="mt-6 "
     >
       <ng-container
         *ngIf="{ products: products | async, total: total | async } as products"
@@ -248,9 +295,12 @@
             @for (product of products.products| paginate: { id: 'server',
             itemsPerPage: 9, currentPage: page, totalItems: products.total};
             track product) {
-              <div class="flex justify-center items-center">
-                <app-user-product-item [isGrid]="isGridMode" [product]="product" (selectorEmitter)="onSelect($event)"/>
-              </div>
+              <app-user-product-item
+                [isGrid]="isGridMode"
+                [product]="product"
+                (selectorEmitter)="onSelect($event)"
+              />
+            
             }
           </ng-container>
         </ng-container>

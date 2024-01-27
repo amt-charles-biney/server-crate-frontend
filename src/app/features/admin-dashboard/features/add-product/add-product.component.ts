@@ -303,7 +303,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
               setLoadingSpinner({
                 status: false,
                 message:
-                  err.error?.detail || 'Please enter all the required data',
+                  err.error?.detail || 'Server response error',
                 isError: true,
               })
             );
