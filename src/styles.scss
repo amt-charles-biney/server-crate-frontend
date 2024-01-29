@@ -288,6 +288,10 @@ app-custom-select .mat-mdc-select-arrow svg {
 app-custom-select .mat-mdc-select {
   display: flex;
 }
+
+app-custom-select .mat-mdc-select-required.mat-mdc-select-invalid {
+  border-color: red;
+}
 app-custom-select .mat-mdc-select-arrow-wrapper {
   margin-right: 10px;
 }

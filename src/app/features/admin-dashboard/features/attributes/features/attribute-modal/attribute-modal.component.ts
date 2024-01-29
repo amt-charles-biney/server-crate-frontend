@@ -10,19 +10,20 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
-import { CustomCheckBoxComponent } from '../../shared/components/custom-check-box/custom-check-box.component';
+import { CustomInputComponent } from '../../../../../../shared/components/custom-input/custom-input.component';
+import { CustomCheckBoxComponent } from '../../../../../../shared/components/custom-check-box/custom-check-box.component';
 import {
   AbstractControl,
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CustomImageComponent } from '../../shared/components/custom-image/custom-image.component';
+import { CustomImageComponent } from '../../../../../../shared/components/custom-image/custom-image.component';
 import { Store } from '@ngrx/store';
 import {
   addAttribute,
@@ -31,17 +32,28 @@ import {
   updateAttribute,
   updateAttributesInStore,
   uploadImage,
-} from '../../store/category-management/attributes/attributes.actions';
-import { CLOUD_NAME, UPLOAD_PRESET } from '../../core/utils/constants';
-import { AdminService } from '../../core/services/admin/admin.service';
-import { Attribute, AttributeOption, LoadingStatus } from '../../types';
-import { getUniqueId } from '../../core/utils/settings';
-import { selectAttributeCreationState } from '../../store/category-management/attributes/attributes.reducers';
+} from '../../../../../../store/category-management/attributes/attributes.actions';
+import {
+  CLOUD_NAME,
+  UPLOAD_PRESET,
+} from '../../../../../../core/utils/constants';
+import { AdminService } from '../../../../../../core/services/admin/admin.service';
+import {
+  Attribute,
+  AttributeOption,
+  LoadingStatus,
+} from '../../../../../../types';
+import { getUniqueId } from '../../../../../../core/utils/settings';
+import { selectAttributeCreationState } from '../../../../../../store/category-management/attributes/attributes.reducers';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-loader.component';
+import { AuthLoaderComponent } from '../../../../../../shared/components/auth-loader/auth-loader.component';
 import { Observable } from 'rxjs';
-import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
-import { CustomSelectComponent } from '../../shared/components/custom-select/custom-select.component';
+import { selectLoaderState } from '../../../../../../store/loader/reducers/loader.reducers';
+import { CustomSelectComponent } from '../../../../../../shared/components/custom-select/custom-select.component';
+import {
+  attributeFormValidator,
+  unitRequiredIfMeasured,
+} from '../../../../../../core/utils/validators';
 
 @Component({
   selector: 'app-attribute-modal',
@@ -55,7 +67,7 @@ import { CustomSelectComponent } from '../../shared/components/custom-select/cus
     ReactiveFormsModule,
     CustomImageComponent,
     AuthLoaderComponent,
-    CustomSelectComponent
+    CustomSelectComponent,
   ],
   templateUrl: './attribute-modal.component.html',
   styleUrl: './attribute-modal.component.scss',
@@ -65,8 +77,7 @@ export class AttributeModalComponent implements OnInit {
   modalForm!: FormGroup;
   attributeForm!: FormGroup;
   coverImage: Array<string | null> = [];
-  loadingStatus$!: Observable<LoadingStatus>
-  submitted = false
+  loadingStatus$!: Observable<LoadingStatus>;
   id = '';
   editId: string | null = null;
   constructor(
@@ -78,7 +89,7 @@ export class AttributeModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { attribute: Attribute }
   ) {}
   ngOnInit(): void {
-    this.loadingStatus$ = this.store.select(selectLoaderState)
+    this.loadingStatus$ = this.store.select(selectLoaderState);
     if (this.data && this.data.attribute) {
       const {
         attributeName,
@@ -91,10 +102,16 @@ export class AttributeModalComponent implements OnInit {
       console.log('Attribute', this.data.attribute);
       this.editId = id;
       for (let attr of attributeOptions) {
-        const baseAmount = attr.additionalInfo.baseAmount ? attr.additionalInfo.baseAmount.toString() : ''
-        const maxAmount = attr.additionalInfo.maxAmount ? attr.additionalInfo.maxAmount.toString() : ''
-        const priceFactor = attr.additionalInfo.priceFactor ? attr.additionalInfo.priceFactor.toString() : ''
-        const price = attr.optionPrice ? attr.optionPrice.toString() : ''
+        const baseAmount = attr.additionalInfo.baseAmount
+          ? attr.additionalInfo.baseAmount.toString()
+          : '';
+        const maxAmount = attr.additionalInfo.maxAmount
+          ? attr.additionalInfo.maxAmount.toString()
+          : '';
+        const priceFactor = attr.additionalInfo.priceFactor
+          ? attr.additionalInfo.priceFactor.toString()
+          : '';
+        const price = attr.optionPrice ? attr.optionPrice.toString() : '';
         this.store.dispatch(
           addAttributeToStore({
             baseAmount,
@@ -103,29 +120,34 @@ export class AttributeModalComponent implements OnInit {
             media: attr.optionMedia ? attr.optionMedia : '',
             name: attr.optionName ? attr.optionName : '',
             price,
-            priceFactor
+            priceFactor,
           })
         );
       }
-      this.attributeForm = this.fb.group({
-        attributeName: [attributeName, Validators.required],
-        description: [description],
-        isMeasured: [isMeasured],
-        unit: [unit],
-        attributes: this.fb.array(
-          attributeOptions.map((attributeOption) =>
-            this.createAttr(attributeOption)
-          )
-        ),
-      });
+      this.attributeForm = this.fb.group(
+        {
+          attributeName: [attributeName, Validators.required],
+          description: [description],
+          isMeasured: [isMeasured],
+          unit: [unit, unitRequiredIfMeasured()],
+          attributes: this.fb.array(
+            attributeOptions.map((attributeOption) =>
+              this.createAttr(attributeOption)
+            )
+          ),
+        },
+      );
     } else {
-      this.attributeForm = this.fb.group({
-        attributeName: ['', Validators.required],
-        description: [''],
-        isMeasured: [false],
-        unit: [''],
-        attributes: this.fb.array([]),
-      });
+      this.attributeForm = this.fb.group(
+        {
+          attributeName: ['', Validators.required],
+          description: [''],
+          isMeasured: [false],
+          unit: ['', unitRequiredIfMeasured()],
+          attributes: this.fb.array<FormGroup[]>([]),
+        },
+      );
+      this.addAttributeForm();
     }
   }
   createAttr(attributeOption: AttributeOption): FormGroup {
@@ -170,12 +192,16 @@ export class AttributeModalComponent implements OnInit {
     this.coverImage[index] = null;
   }
 
+  validateAttributes(formArray: FormArray) {
+    console.log('FormArray', formArray);
+  }
+
   addAttribute() {
-    this.submitted = true
     if (this.attributeForm.invalid) {
+      console.log('Invalid', this.findInvalidControls());
       console.log('Dont send data');
-      this.submitted = false
-      return
+      this.attributeForm.markAllAsTouched()
+      return;
     }
     const validAttributes = this.attributeForm.value.attributes.map(
       (attr: any) => {
@@ -191,12 +217,12 @@ export class AttributeModalComponent implements OnInit {
     );
     if (this.editId) {
       console.log('Is Editing', this.editId);
-      
+
       this.store
         .select(selectAttributeCreationState)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((options) => {
-          const isMeasured = this.attributeForm.value.isMeasured
+          const isMeasured = this.attributeForm.value.isMeasured;
           let attribute = {
             attributeName: this.attributeForm.value.attributeName,
             description: this.attributeForm.value.description,
@@ -205,9 +231,9 @@ export class AttributeModalComponent implements OnInit {
             variantOptions: options,
           };
           console.log('Sending', attribute);
-          this.store.dispatch(updateAttribute(attribute))
+          this.store.dispatch(updateAttribute(attribute));
         });
-        this.dialogRef.close();
+      this.dialogRef.close();
       return;
     }
     this.store
@@ -224,27 +250,68 @@ export class AttributeModalComponent implements OnInit {
         this.store.dispatch(addAttribute(attribute));
         console.log('Sending', attribute);
         // setTimeout(() => {
-          
+
         // }, 1500);
         this.dialogRef.close();
       });
   }
+  modifyValidator() {
+    this.attributes.controls.forEach((formGroup: AbstractControl) => {
+      if (formGroup instanceof FormGroup) {
+        if (this.isMeasured.value) {
+          console.log('Setting validators');
+
+          formGroup.get('baseAmount')?.setValidators(Validators.required);
+          formGroup.get('baseAmount')?.updateValueAndValidity();
+          formGroup.get('maxAmount')?.setValidators(Validators.required);
+          formGroup.get('maxAmount')?.updateValueAndValidity();
+          formGroup.get('priceFactor')?.setValidators(Validators.required);
+          formGroup.get('priceFactor')?.updateValueAndValidity();
+
+          this.attributeForm.get('unit')?.setValidators(unitRequiredIfMeasured())
+          this.attributeForm.get('unit')?.updateValueAndValidity()
+
+          console.log('Unit',  this.attributeForm.value);
+        } else {
+          console.log('Removing validators');
+          
+          formGroup.get('baseAmount')?.removeValidators(Validators.required);
+          formGroup.get('baseAmount')?.updateValueAndValidity();
+          formGroup.get('maxAmount')?.removeValidators(Validators.required);
+          formGroup.get('maxAmount')?.updateValueAndValidity();
+
+          formGroup.get('priceFactor')?.removeValidators(Validators.required);
+          formGroup.get('priceFactor')?.updateValueAndValidity();
+          
+          this.attributeForm.get('unit')?.clearValidators()
+          this.attributeForm.get('unit')?.updateValueAndValidity()
+
+        }
+      }
+    });
+  }
 
   addAttributeForm() {
     const id = getUniqueId(4);
+    const commonAttributes = {
+      name: ['', Validators.required],
+      price: ['', Validators.required],
+      media: null,
+      baseAmount: this.isMeasured.value ? ['', [Validators.required]] : [''],
+      maxAmount: this.isMeasured.value ? ['', Validators.required] : [''],
+      priceFactor: this.isMeasured.value ? ['', Validators.required] : [''],
+      id,
+      coverImage: '',
+    };
 
     this.attributes.push(
-      this.fb.group({
-        name: [''],
-        price: ['', Validators.required],
-        media: null,
-        baseAmount: [''],
-        maxAmount: [''],
-        priceFactor: [''],
-        id,
-        coverImage: '',
-      })
+      this.fb.group(
+        this.isMeasured.value
+          ? { ...commonAttributes, ...{ validators: attributeFormValidator() } }
+          : commonAttributes
+      )
     );
+
     // console.log('fomr values', ...this.attributeForm.value.attributes);
     // const primitiveFileList: FileList = this.attributeForm.value.media;
     // console.log('filelist', primitiveFileList);
@@ -265,10 +332,23 @@ export class AttributeModalComponent implements OnInit {
 
   deleteOption(index: number, optionId: string) {
     if (this.editId) {
-      this.store.dispatch(deleteAttributeOption({ optionId, attributeId: this.data.attribute.id}))
+      this.store.dispatch(
+        deleteAttributeOption({ optionId, attributeId: this.data.attribute.id })
+      );
     } else {
-      this.attributes.removeAt(index)
+      this.attributes.removeAt(index);
     }
+  }
+
+  findInvalidControls() {
+    const invalid = [];
+    const controls = this.attributeForm.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
   }
 
   get attributes() {

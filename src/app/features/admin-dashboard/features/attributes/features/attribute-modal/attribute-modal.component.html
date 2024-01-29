@@ -28,15 +28,14 @@
           class="font-[500]"
           label="Has measurement"
           formControlName="isMeasured"
+          (changeHandler)="modifyValidator()"
         />
         @if (isMeasured.value) {
-        <app-custom-input
-          type="select"
-          id="unit"
-          formControlName="unit"
+        <app-custom-select
+          [control]="$any(attributeForm.controls['unit'])"
           [options]="['KB', 'GB', 'TB']"
+          [isRequired]="true"
         />
-        
         }
       </div>
     </div>
@@ -54,16 +53,27 @@
       type="button"
       class="flex items-center text-figma-green gap-1 self-end"
     >
-    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
-      <path d="M16.3337 11.3346H11.3337V16.3346H9.66699V11.3346H4.66699V9.66797H9.66699V4.66797H11.3337V9.66797H16.3337V11.3346Z" fill="#3CB043"/>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="21"
+        height="21"
+        viewBox="0 0 21 21"
+        fill="none"
+      >
+        <path
+          d="M16.3337 11.3346H11.3337V16.3346H9.66699V11.3346H4.66699V9.66797H9.66699V4.66797H11.3337V9.66797H16.3337V11.3346Z"
+          fill="#3CB043"
+        />
       </svg>
       <p class="text-xs font-inter underline">Add new variant</p>
     </button>
     <section>
       <table class="flex flex-col w-full mt-6">
-        <tr class="flex items-center text-table-text bg-table-bg text-xs font-[500] border-b h-10">
+        <tr
+          class="flex items-center text-table-text bg-table-bg text-xs font-[500] border-b h-10"
+        >
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500  w-[30%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[30%] text-start"
           >
             Variant
           </th>
@@ -187,7 +197,7 @@
                 class="text-gray-500 font-[500] text-sm w-[10%] flex justify-center items-center"
               >
                 <button type="button" (click)="deleteOption(i, attrs.value.id)">
-                 <img src="/assets/trash.svg" alt="">
+                  <img src="/assets/trash.svg" alt="" />
                 </button>
               </td>
             </tr>
