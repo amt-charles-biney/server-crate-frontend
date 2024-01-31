@@ -50,7 +50,6 @@ import { selectLoaderState } from '../../../../store/loader/reducers/loader.redu
 import { ActivatedRoute, Router } from '@angular/router';
 import { selectEditConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
 import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actions';
-import { IncompatibleTableComponent } from '../../../../shared/components/incompatible-table/incompatible-table.component';
 import {
   convertToAttributeOption,
   convertToCategoryConfig,
@@ -74,7 +73,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatFormFieldModule,
     CustomSelectComponent,
     AuthLoaderComponent,
-    IncompatibleTableComponent,
     MatMenuModule,
   ],
   templateUrl: './add-category.component.html',
