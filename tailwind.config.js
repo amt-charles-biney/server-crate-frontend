@@ -19,7 +19,9 @@ module.exports = {
         'light-green': '#ECF7EC',
         'table-bg': '#FCFCFD',
         'product-text': '#676767',
-        'red-color': '#E1000F'
+        'red-color': '#E1000F',
+        'sidebar-text': '#1D2939',
+        'active-link': '#F7FCF7'
       },
       gridTemplateRows: {
         '20': 'repeat(20, minmax(0, 1fr))',
