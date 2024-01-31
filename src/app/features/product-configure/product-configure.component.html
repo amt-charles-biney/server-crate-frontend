@@ -5,7 +5,7 @@
          <div class="text-[13px] font-normal flex flex-row gap-1 items-center text-[#999999]">
             <span [routerLink]="['/']" class="hover:underline cursor-pointer hover:text-green-600">Home</span>
             <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
-            <span [routerLink]="['/product']" [replaceUrl]="true" class="hover:underline cursor-pointer hover:text-green-600">Product</span>
+            <span (click)="gotoProduct()" class="hover:underline cursor-pointer hover:text-green-600">Product</span>
             <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
             <span class="text-[13px]">{{ product.productName || '...' }}</span>
             <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
@@ -15,7 +15,7 @@
          <div>{{ loading ? "loading..." : ""}}</div>
 
          <div class="w-full mt-10 flex gap-[97px] flex-row flex-wrap mx-auto justify-between items-start">
-            <div class="flex flex-col lg:flex-row items-start gap-4 flex-1 w-full">
+            <div class="flex flex-col lg:flex-row items-start gap-4 flex-1 w-full mb-20">
                <div class="flex flex-row lg:flex-col gap-[49px] items-center">
                   <div *ngFor="let image of product.imageUrl; let i = index"
                      class="border-[2px] hover:border-[#3CB043] border-[#E6E6E6] rounded-lg w-full max-w-[130px] p-4">
@@ -105,7 +105,7 @@
                         class="hover:underline cursor-pointer mb-4 flex flex-row gap-2 items-center text-sm text-[#3CB043]">
                            <span>Reset to default </span>
                            <span>
-                              <img 
+                              <img
                               src="/assets/reset.svg"
                               alt="reset default"
                               />
@@ -130,7 +130,7 @@
                                  </svg>
                            </div>
                            </div>
-   
+
                            <div class="flex flex-row items-center gap-[54px] w-full">
                             <div class="relative max-w-[247px] w-full">
                               <select
@@ -149,14 +149,14 @@
                                     </svg>
                               </div>
                             </div>
-                            
+
                             <div class="font-medium text-[20px]">
                               ${{isMeasuredPriceMapper[activeLink] || "0"}}
                             </div>
                            </div>
 
                          </div>
-                         
+
                       </div>
 
                      }
@@ -167,7 +167,7 @@
                            class="hover:underline cursor-pointer mb-4 flex flex-row gap-2 items-center text-sm text-[#3CB043]">
                               <span>Reset to default </span>
                               <span>
-                                 <img 
+                                 <img
                                  src="/assets/reset.svg"
                                  alt="reset default"
                                  />
@@ -179,14 +179,14 @@
                         let i = index
                       ">
                         <div
-                           (click)="updateConfigQueryParam({ type: attributeProduct.type, id: attributeProduct.id, size: attributeProduct.baseAmount || 0})"
-                           class="cursor-pointer border-[2px] relative hover:border-[#3CB043] {{ isActiveSelectedOption({ type: attributeProduct.type, id: attributeProduct.id, size: attributeProduct.baseAmount }) ? 'border-green-600 border-2' : '' }} flex flex-col border-[#E6E6E6] rounded-lg w-[190px] h-[170px] p-4">
+                           (click)="updateConfigQueryParam({ type: attributeProduct.type, id: attributeProduct.compatibleOptionId, size: '0' })"
+                           class="cursor-pointer border-[2px] relative hover:border-[#3CB043] {{ isActiveSelectedOption({ type: attributeProduct.type, id: attributeProduct.compatibleOptionId, size: attributeProduct.baseAmount }) ? 'border-green-600 border-2' : '' }} flex flex-col border-[#E6E6E6] rounded-lg w-[190px] h-[170px] p-4">
                            <img
                            title="attribute-check"
-                              *ngIf="isActiveSelectedOption({ type: attributeProduct.type, id: attributeProduct.id, size: attributeProduct.baseAmount})"
-                              src="/assets/option.svg" [alt]="attributeProduct.id"
+                              *ngIf="isActiveSelectedOption({ type: attributeProduct.type, id: attributeProduct.compatibleOptionId, size: attributeProduct.baseAmount})"
+                              src="/assets/option.svg" [alt]="attributeProduct.compatibleOptionId"
                               class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3" />
-                           
+
                            <div class="w-full flex flex-row items-center justify-center max-h-[140px] h-full">
                               <img title="attribte-media" [src]="attributeProduct.media" [alt]="attributeProduct.media" class="w-24 h-24" />
                            </div>
