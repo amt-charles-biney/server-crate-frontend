@@ -16,7 +16,6 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -54,7 +53,7 @@ import {
   attributeFormValidator,
   unitRequiredIfMeasured,
 } from '../../../../../../core/utils/validators';
-
+import { v4 as uuidv4 } from 'uuid'
 @Component({
   selector: 'app-attribute-modal',
   standalone: true,
@@ -99,7 +98,6 @@ export class AttributeModalComponent implements OnInit {
         isMeasured,
         unit,
       } = this.data.attribute;
-      console.log('Attribute', this.data.attribute);
       this.editId = id;
       for (let attr of attributeOptions) {
         const baseAmount = attr.additionalInfo.baseAmount
@@ -159,7 +157,7 @@ export class AttributeModalComponent implements OnInit {
       optionName,
       optionPrice,
     } = attributeOption;
-    console.log('attributeOption', attributeOption);
+    
     this.coverImage.push(optionMedia);
     return this.fb.group({
       name: [optionName],
@@ -192,14 +190,8 @@ export class AttributeModalComponent implements OnInit {
     this.coverImage[index] = null;
   }
 
-  validateAttributes(formArray: FormArray) {
-    console.log('FormArray', formArray);
-  }
-
   addAttribute() {
     if (this.attributeForm.invalid) {
-      console.log('Invalid', this.findInvalidControls());
-      console.log('Dont send data');
       this.attributeForm.markAllAsTouched()
       return;
     }
@@ -216,7 +208,7 @@ export class AttributeModalComponent implements OnInit {
       updateAttributesInStore({ attributes: validAttributes })
     );
     if (this.editId) {
-      console.log('Is Editing', this.editId);
+      
 
       this.store
         .select(selectAttributeCreationState)
@@ -229,8 +221,9 @@ export class AttributeModalComponent implements OnInit {
             isMeasured,
             unit: isMeasured ? this.attributeForm.value.unit : '',
             variantOptions: options,
+            id: this.editId
           };
-          console.log('Sending', attribute);
+          
           this.store.dispatch(updateAttribute(attribute));
         });
       this.dialogRef.close();
@@ -248,7 +241,7 @@ export class AttributeModalComponent implements OnInit {
           variantOptions: options,
         };
         this.store.dispatch(addAttribute(attribute));
-        console.log('Sending', attribute);
+        
         // setTimeout(() => {
 
         // }, 1500);
@@ -259,7 +252,7 @@ export class AttributeModalComponent implements OnInit {
     this.attributes.controls.forEach((formGroup: AbstractControl) => {
       if (formGroup instanceof FormGroup) {
         if (this.isMeasured.value) {
-          console.log('Setting validators');
+          
 
           formGroup.get('baseAmount')?.setValidators(Validators.required);
           formGroup.get('baseAmount')?.updateValueAndValidity();
@@ -271,9 +264,9 @@ export class AttributeModalComponent implements OnInit {
           this.attributeForm.get('unit')?.setValidators(unitRequiredIfMeasured())
           this.attributeForm.get('unit')?.updateValueAndValidity()
 
-          console.log('Unit',  this.attributeForm.value);
+          
         } else {
-          console.log('Removing validators');
+          
           
           formGroup.get('baseAmount')?.removeValidators(Validators.required);
           formGroup.get('baseAmount')?.updateValueAndValidity();
@@ -292,7 +285,7 @@ export class AttributeModalComponent implements OnInit {
   }
 
   addAttributeForm() {
-    const id = getUniqueId(4);
+    const id = uuidv4()
     const commonAttributes = {
       name: ['', Validators.required],
       price: ['', Validators.required],
@@ -312,9 +305,9 @@ export class AttributeModalComponent implements OnInit {
       )
     );
 
-    // console.log('fomr values', ...this.attributeForm.value.attributes);
+    // 
     // const primitiveFileList: FileList = this.attributeForm.value.media;
-    // console.log('filelist', primitiveFileList);
+    // 
 
     this.store.dispatch(
       addAttributeToStore({
@@ -335,6 +328,7 @@ export class AttributeModalComponent implements OnInit {
       this.store.dispatch(
         deleteAttributeOption({ optionId, attributeId: this.data.attribute.id })
       );
+      this.attributes.removeAt(index)
     } else {
       this.attributes.removeAt(index);
     }

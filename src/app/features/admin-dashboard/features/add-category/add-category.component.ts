@@ -1,4 +1,11 @@
 import {
+  CategoryEdit,
+  CategoryEditResponse,
+  CategoryPayload,
+  EditConfig,
+  EditConfigResponse,
+} from './../../../../types';
+import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
@@ -10,11 +17,10 @@ import {
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, debounceTime, fromEvent, tap } from 'rxjs';
 import {
   Attribute,
   AttributeOption,
-  CategoryAndConfig,
   CategoryConfig,
   LoadingStatus,
 } from '../../../../types';
@@ -42,11 +48,16 @@ import {
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 import { ActivatedRoute, Router } from '@angular/router';
+import { selectEditConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
+import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actions';
+import { IncompatibleTableComponent } from '../../../../shared/components/incompatible-table/incompatible-table.component';
 import {
-  selectEditConfigState,
-  selectName,
-} from '../../../../store/category-management/attributes/config/config.reducers';
-import { tap } from 'lodash';
+  convertToAttributeOption,
+  convertToCategoryConfig,
+  getAttributeOptionList,
+  isAttributeOption,
+} from '../../../../core/utils/helpers';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-add-category',
@@ -63,29 +74,34 @@ import { tap } from 'lodash';
     MatFormFieldModule,
     CustomSelectComponent,
     AuthLoaderComponent,
+    IncompatibleTableComponent,
+    MatMenuModule,
   ],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AddCategoryComponent implements OnInit, OnDestroy {
   private attributes$ = new BehaviorSubject<Attribute[]>([]);
   private selectedAttribute$ = new BehaviorSubject<AttributeOption[]>([]);
   loadingStatus!: Observable<LoadingStatus>;
   selectedAttributes = this.selectedAttribute$.asObservable();
   attributes = this.attributes$.asObservable();
   categoryForm!: FormGroup;
-  localAttributes!: Attribute[];
+  localAttributes: Attribute[] = [];
+  localAttributesForEdit: CategoryEdit[] = [];
   makeLeftButtonGreen = true;
   makeRightButtonGreen = false;
   isOverflow = false;
   categoryConfig: CategoryConfig[] = [];
   categoryConfigSet: Record<string, CategoryConfig> = {};
+  incompatibleSet: Record<string, AttributeOption[]> = {};
   sizes: Record<string, string[]> = {};
   id!: string | null;
   @ViewChild('contentWrapper') contentWrapper!: ElementRef<HTMLDivElement>;
-  incompatibleAttributes: Record<string, Set<AttributeOption>> = {};
   formValue!: Record<string, string>;
+  formAttributes!: Record<string, string>;
+  resize$!: Observable<Event>
   constructor(
     private store: Store,
     private attributeService: AttributeInputService,
@@ -95,84 +111,89 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.attributes = this.store.select(selectAttributesState);
-    this.attributes
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((attrs) => {
+    this.resize$ = fromEvent(window, 'resize').pipe(
+      tap(() => {
+        this.isOverflow = this.isOverflown(this.contentWrapper.nativeElement)
+      }),
+    )
+    this.attributes = this.store.select(selectAttributesState).pipe(
+      tap((attrs) => {
         this.localAttributes = attrs;
-      });
-    if (this.id) {
-      this.store.dispatch(getSingleCategoryAndConfig({ id: this.id }));
-      this.store
-        .select(selectEditConfigState)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((configuration) => {
-          const { config, id, name, incompatible } = configuration;
-          let values: Record<string, string> = {
-            categoryName: name,
-            StorageSize: '400',
-            MemorySize: '600',
-            attributesInput: '',
-            variants: '',
-          };
-          config.forEach((configItem) => {
-            if (configItem.isIncluded) {
-              values[configItem.type] = configItem.name;
-            }
-            if (configItem.isMeasured) {
-              values[`${configItem.type}Size`] = configItem.baseAmount.toString();
-                this.sizes[configItem.type] = this.generateSizes(
-                  configItem.baseAmount,
-                  configItem.maxAmount,
-                  configItem.unit
-                );
-            }
-            if (incompatible[configItem.type]) {
-              incompatible[configItem.type].forEach((incompatibleType) => {
-                console.log('incompatible type', incompatibleType);                
-                this.localAttributes = this.removeFromLocalAttributes(
-                  this.localAttributes,
-                  incompatibleType
-                );
-              });
-            }
-          });
-          
-          if (Object.values(values).length > 0) {
-            this.categoryForm = this.attributeService.editFormGroup(values);
-            this.categoryForm.setValue({ ...values });
-          }
-          this.incompatibleAttributes = incompatible;
-          console.log('Form', values);
-        });
-    } else {
-      this.attributes
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((attrs) => {
-          this.categoryForm = this.attributeService.toFormGroup(attrs);
+        this.categoryForm = this.attributeService.toFormGroup(attrs);
+        //Prevents the form losing data when a new attribute is added to incompatible pile
+        if (this.formValue) {
+          this.categoryForm.patchValue({ ...this.formValue });
+        }
+        if (this.id) {
+          this.store.dispatch(getSingleCategoryAndConfig({ id: this.id }));
 
-          if (this.formValue) {
-            console.log('Here');
-
-            this.categoryForm = this.attributeService.editFormGroup(
-              this.formValue
-            );
-          }
-        });
-    }
-
+          this.store
+            .select(selectEditConfigState)
+            .pipe(
+              tap((editConfig: EditConfigResponse) => {
+                const { config, name } = editConfig;
+                this.incompatibleSet = this.generateIncompatiblesTable(config);
+                const editFormValues = this.attributeService.editFormGroup(
+                  config,
+                  name
+                ).value;
+                
+                config.forEach((categoryConfig) => {
+                  if (categoryConfig.isMeasured && categoryConfig.isIncluded) {
+                    this.sizes[categoryConfig.type] = this.generateSizes(
+                      categoryConfig.baseAmount,
+                      categoryConfig.maxAmount,
+                      categoryConfig.unit
+                    );
+                  }
+                  if (!categoryConfig.isCompatible) {
+                    this.localAttributes = this.removeFromLocalAttributes(
+                      this.localAttributes,
+                      categoryConfig.attributeOptionId
+                    );
+                  }
+                  if (categoryConfig.isIncluded) {
+                    this.categoryConfigSet[categoryConfig.name] = convertToCategoryConfig(categoryConfig)
+                  }
+                });
+                this.categoryForm.patchValue({ ...editFormValues });
+              }),
+              takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe();
+        }
+      })
+    );
     this.loadingStatus = this.store.select(selectLoaderState);
-  }
-
-  ngAfterViewInit(): void {
-    console.log('Content wrapper', this.contentWrapper.nativeElement);
   }
 
   ngOnDestroy(): void {
     this.store.dispatch(getAttributes());
     this.store.dispatch(resetEditState());
   }
-
+  removeFromLocalAttributes(localAttributes: Attribute[], optionId: string) {
+    let newLocalAttributes: Attribute[] = [];
+    newLocalAttributes = localAttributes?.map((attribute) => {
+      let newLocalAttributeOptions: AttributeOption[] =
+        attribute.attributeOptions.filter(
+          (attributeOption) => attributeOption.id !== optionId
+        );
+      return { ...attribute, attributeOptions: newLocalAttributeOptions };
+    });
+    return newLocalAttributes;
+  }
+  putInLocalAttributes(localAttributes: Attribute[], newOption: AttributeOption) {
+    let newLocalAttributes: Attribute[] = [];
+    newLocalAttributes = localAttributes?.map((attribute) => {
+      let newLocalAttributeOptions: AttributeOption[] = []
+      if (attribute.id === newOption.attribute.id) {
+        newLocalAttributeOptions = [...attribute.attributeOptions, newOption];
+        return { ...attribute, attributeOptions: newLocalAttributeOptions };
+      }
+      return attribute
+    });
+    return newLocalAttributes;
+  }
   sideScroll(
     element: HTMLDivElement,
     speed: number,
@@ -200,14 +221,6 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.makeRightButtonGreen = false;
     }
-    console.log(
-      'scrollwidth',
-      element.scrollWidth,
-      'scrollLeft',
-      element.scrollLeft,
-      'offsetWidth',
-      element.offsetWidth
-    );
   }
 
   onSelectChange(event: MatSelectChange) {
@@ -217,140 +230,172 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   isOverflown(element: HTMLElement) {
     return element.scrollWidth > element.clientWidth;
   }
-  removeAttributeOption(
-    option: AttributeOption,
-    incompatibleAttributesParam: Record<string, Set<AttributeOption>>
-  ) {    
-    let incompatibleAttributes = incompatibleAttributesParam
+  removeAttributeOption(option: AttributeOption) {
     const name = option.attribute.name;
-    console.log('IncomaptibleAttributes', incompatibleAttributes);
-    if (Array.isArray(incompatibleAttributes[name])) {
-      console.log('Array');
-      incompatibleAttributes = {[name]: new Set(incompatibleAttributes[name])}
-      console.log('IncomaptibleAttributesSet', incompatibleAttributes);
+    this.incompatibleSet[name] = this.incompatibleSet[name].filter(
+      (opt) => option.id !== opt.id
+    );
+    if (!this.id) {
+      this.store.dispatch(putBackAttributeOptionInStore(option));
+    } else {
+      this.localAttributes = this.putInLocalAttributes(this.localAttributes, option)
     }
-    
-    let remainingAttributeOptions = incompatibleAttributes[name].delete(option);
-    this.store.dispatch(putBackAttributeOptionInStore(option));
-    if (incompatibleAttributes[name].size === 0) {
-      delete incompatibleAttributes[name];
+    if (this.incompatibleSet[name].length === 0) {
+      delete this.incompatibleSet[name];
     }
-    console.log(this.incompatibleAttributes);
-    this.categoryConfigSet = {};
-    return remainingAttributeOptions;
-  }
-
-  removeFromLocalAttributes(
-    localAttributes: Attribute[],
-    option: AttributeOption
-  ) {
-    let newLocalAttributes: Attribute[] = [];
-    newLocalAttributes = localAttributes?.map((attribute) => {
-      let newLocalAttributeOptions: AttributeOption[] = [];
-      attribute.attributeOptions.forEach((attributeOption) => {
-        if (attributeOption.optionName !== option.optionName) {
-          newLocalAttributeOptions.push(attributeOption);
-        }
-      });
-      return { ...attribute, attributeOptions: newLocalAttributeOptions };
+    // this.categoryConfigSet = {};
+    this.categoryConfigSet[option.optionName] = {
+      attributeId: option.attribute.id,
+      attributeName: option.attribute.name,
+      attributeOptionId: option.id,
+      isCompatible: true,
+      isIncluded: false,
+      isMeasured: option.attribute.isMeasured,
+      size: option.additionalInfo.baseAmount,
+    };
+    // dispatching to store refreshes the form, the ff line puts back the selected values
+    this.categoryForm.patchValue({
+      attributesInput: '',
+      variants: '',
+      [option.attribute.name]: this.id ? '' : option.optionName,
     });
-    return newLocalAttributes;
   }
 
   addIncompatibleAttribute() {
-    const element = this.contentWrapper.nativeElement;
-    const attribute = this.categoryForm.get('variants')
+    const incompatibleAttributes = this.categoryForm.get('variants')
       ?.value as AttributeOption[];
-    this.incompatibleAttributes = {
-      ...this.incompatibleAttributes,
-      ...this.buildIncompatibleTable(attribute),
-    };
-    this.isOverflow = !(element.scrollWidth === element.offsetWidth);
-    console.log(this.isOverflow, 'client');
+    if (incompatibleAttributes.length === 0) {
+      return;
+    }
+    const element = this.contentWrapper.nativeElement;
+    // If Windows 10 for eg, is made incompatible, remove all OS attributeOptions
+
+    incompatibleAttributes.forEach((incompatibleAttribute) => {
+      if (incompatibleAttribute.attribute.isMeasured) {
+        this.sizes[incompatibleAttribute.attribute.name] = [];
+      }
+      if (this.categoryConfigSet[incompatibleAttribute.optionName]) {
+        if (
+          this.categoryConfigSet[incompatibleAttribute.optionName]
+            .attributeName === incompatibleAttribute.attribute.name
+        ) {
+          delete this.categoryConfigSet[incompatibleAttribute.optionName];
+        }
+      }
+    });
+    this.buildIncompatibleTable(incompatibleAttributes);
+    this.isOverflow = this.isOverflown(element)
     if (
       element.offsetHeight < element.scrollHeight ||
       element.offsetWidth < element.scrollWidth
     ) {
-      console.log('OVERFLOW');
     }
-    console.log(this.isOverflown(this.contentWrapper.nativeElement));
-    this.categoryConfigSet = {};
     this.selectedAttribute$.next([]);
+    this.categoryForm.patchValue({ attributesInput: '', variants: '' });
   }
-  buildIncompatibleTable(
-    incompatibles: AttributeOption[]
-  ): Record<string, Set<AttributeOption>> {
-    const incompatibleSet: Record<string, Set<AttributeOption>> = {};
+
+  generateIncompatiblesTable(config: CategoryEditResponse[]) {
+    const newIncompatibleSet: Record<string, AttributeOption[]> = {};
+    config.forEach((categoryAttribute) => {
+      if (!categoryAttribute.isCompatible) {
+        if (newIncompatibleSet[categoryAttribute.type]) {
+          newIncompatibleSet[categoryAttribute.type].push(
+            convertToAttributeOption(
+              categoryAttribute,
+              categoryAttribute.attributeId,
+              categoryAttribute.attributeOptionId
+            )
+          );
+        } else {
+          newIncompatibleSet[categoryAttribute.type] = [
+            convertToAttributeOption(
+              categoryAttribute,
+              categoryAttribute.attributeId,
+              categoryAttribute.attributeOptionId
+            ),
+          ];
+        }
+      }
+    });
+    return newIncompatibleSet;
+  }
+
+  buildIncompatibleTable(incompatibles: AttributeOption[]) {
     incompatibles.forEach((incompatibleAttribute) => {
-      if (incompatibleSet[incompatibleAttribute.attribute.name]) {
-        incompatibleSet[incompatibleAttribute.attribute.name].add(
+      if (this.incompatibleSet[incompatibleAttribute.attribute.name]) {
+        this.incompatibleSet[incompatibleAttribute.attribute.name].push(
           incompatibleAttribute
         );
       } else {
-        incompatibleSet[incompatibleAttribute.attribute.name] = new Set([
+        this.incompatibleSet[incompatibleAttribute.attribute.name] = [
           incompatibleAttribute,
-        ]);
+        ];
       }
       this.formValue = this.categoryForm.value;
-      this.store.dispatch(removeAttributeOptionInStore(incompatibleAttribute));
+      // this.store.dispatch(
+      //   removeAttributeOptionInStore({
+      //     attributeId: incompatibleAttribute.attribute.id,
+      //     optionId: incompatibleAttribute.id,
+      //   })
+      // );
+      this.localAttributes = this.removeFromLocalAttributes(
+        this.localAttributes,
+        incompatibleAttribute.id
+      );
     });
-    return incompatibleSet;
   }
 
-  createConfig() {
-    for (let attributeName in this.sizes) {
-      const optionName =
-        this.categoryForm.controls[attributeName].value.optionName;
-      const newBaseAmount = parseInt(
-        this.categoryForm.value[`${attributeName}Size`]
-      );
-      if (this.categoryConfigSet[optionName] && !isNaN(newBaseAmount)) {
-        this.categoryConfigSet[optionName].baseAmount = newBaseAmount;
-      }
-    }
-    const payload = {
+  createConfig() {    
+    const payload: CategoryPayload = {
       name: this.categoryForm.value['categoryName'],
-      config: Array.from(Object.values(this.categoryConfigSet)).concat(
-        this.convertIncompatiblesToCategoryConfig(this.incompatibleAttributes)
+      config: Array.from(
+        Object.values(this.categoryConfigSet).concat(
+          this.convertIncompatiblesToCategoryConfig(this.incompatibleSet)
+        )
       ),
     };
-    console.log('Sending payload', payload);
-    console.log('Incompatible attributes', this.incompatibleAttributes);
-    console.log(
-      this.convertIncompatiblesToCategoryConfig(this.incompatibleAttributes)
-    );
+
     scrollTo({ top: 0, behavior: 'smooth' });
-    if (this.id) {
+    if (this.categoryForm.invalid) {
+      this.store.dispatch(
+        setLoadingSpinner({
+          isError: true,
+          message: 'Please provide a category name',
+          status: false,
+        })
+      );
+      return;
+    }
+
+    if (this.id) {      
       const editPayload = {
         ...payload,
-        id: this.id
-      }
-      this.store.dispatch(sendEditedConfig({ configuration: editPayload, id: this.id }))
-    } else {
+        id: this.id,
+      };      
+
+      this.store.dispatch(
+        sendEditedConfig({ configuration: editPayload, id: this.id })
+      );
+    } else {      
       this.store.dispatch(sendConfig(payload));
     }
   }
 
   convertIncompatiblesToCategoryConfig(
-    incompatibleAttributes: Record<string, Set<AttributeOption>>
+    incompatibleAttributes: Record<string, AttributeOption[]>
   ) {
     let categoryConfigList: CategoryConfig[] = [];
     for (let key in incompatibleAttributes) {
       const incompatibleAttribute = incompatibleAttributes[key];
       incompatibleAttribute.forEach((attribute) => {
         const categoryConfig: CategoryConfig = {
-          baseAmount: attribute.additionalInfo.baseAmount,
-          maxAmount: attribute.additionalInfo.maxAmount,
-          priceFactor: attribute.additionalInfo.priceFactor,
+          size: attribute.additionalInfo.baseAmount,
           isCompatible: false,
           isIncluded: false,
           isMeasured: attribute.attribute.isMeasured,
-          media: attribute.optionMedia,
-          name: attribute.optionName,
-          type: attribute.attribute.name,
-          price: attribute.optionPrice,
-          unit: attribute.attribute.unit,
-          id: attribute.id
+          attributeId: attribute.id,
+          attributeName: attribute.attribute.name,
+          attributeOptionId: attribute.id,
         };
         categoryConfigList.push(categoryConfig);
       });
@@ -358,53 +403,50 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     return categoryConfigList;
   }
 
-  onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
-    const includedAttributeOption = event.value as AttributeOption;
-    console.log('Included Attribute', includedAttributeOption);
+  sizeSelection(event: MatSelectChange, attribute: Attribute) {
+    const selectedSize = event.value as string;
+    const correspondingAttributeOption: CategoryEditResponse =
+      this.categoryForm.value[attribute.attributeName];
     
+    const newBaseAmount = parseInt(selectedSize);
+    this.categoryConfigSet[correspondingAttributeOption.name].size =
+      newBaseAmount;
+  }
+  onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
+    const selectedAttributeOption = event.value as AttributeOption;    
     if (attribute.isMeasured) {
       this.sizes[attribute.attributeName] = this.generateSizes(
-        includedAttributeOption.additionalInfo.baseAmount,
-        includedAttributeOption.additionalInfo.maxAmount,
+        selectedAttributeOption.additionalInfo.baseAmount,
+        selectedAttributeOption.additionalInfo.maxAmount,
         attribute.unit
       );
     }
     const configOption: CategoryConfig = {
-      name: includedAttributeOption.optionName,
-      type: includedAttributeOption.attribute.name,
-      price: includedAttributeOption.optionPrice,
-      media: includedAttributeOption.optionMedia,
+      attributeId: attribute.id,
+      attributeOptionId: selectedAttributeOption.id,
       isCompatible: true,
-      unit: attribute.unit,
       isIncluded: true,
-      isMeasured: includedAttributeOption.attribute.isMeasured,
-      baseAmount: includedAttributeOption.additionalInfo.baseAmount,
-      priceFactor: includedAttributeOption.additionalInfo.priceFactor,
-      maxAmount: includedAttributeOption.additionalInfo.maxAmount,
-      id: includedAttributeOption.id
+      isMeasured: attribute.isMeasured,
+      size: selectedAttributeOption.additionalInfo.baseAmount,
+      attributeName: attribute.attributeName,
     };
 
-    this.categoryConfigSet[configOption.name] = configOption;
+    this.categoryConfigSet[selectedAttributeOption.optionName] = configOption;
 
     let restOfConfig: CategoryConfig[] = [];
 
     this.localAttributes.forEach((attr) => {
-      if (attr.id === includedAttributeOption.attribute.id) {
+      if (attr.id === selectedAttributeOption.attribute.id) {
         attr.attributeOptions.forEach((attributeOption) => {
-          if (includedAttributeOption.id !== attributeOption.id) {
+          if (selectedAttributeOption.id !== attributeOption.id) {
             const config: CategoryConfig = {
-              name: attributeOption.optionName,
-              type: attributeOption.attribute.name,
-              price: attributeOption.optionPrice,
-              media: attributeOption.optionMedia,
-              unit: attr.unit,
               isCompatible: true,
               isIncluded: false,
               isMeasured: attributeOption.attribute.isMeasured,
-              baseAmount: attributeOption.additionalInfo.baseAmount,
-              maxAmount: attributeOption.additionalInfo.maxAmount,
-              priceFactor: attributeOption.additionalInfo.priceFactor,
-              id: attributeOption.id
+              size: attributeOption.additionalInfo.baseAmount,
+              attributeOptionId: attributeOption.id,
+              attributeId: attributeOption.attribute.id,
+              attributeName: attributeOption.attribute.name,
             };
             restOfConfig.push(config);
 
@@ -422,10 +464,6 @@ export class AddCategoryComponent implements OnInit, AfterViewInit, OnDestroy {
       sizes.push(`${size} ${unit}`);
     }
     return sizes;
-  }
-
-  getConfigId(name: string, type: string, config: CategoryConfig[]) {
-
   }
 
   cancel() {

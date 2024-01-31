@@ -66,10 +66,10 @@ export const attributesFeature = createFeature({
         on(deleteAll, () => {
             return []
         }),
-        on(removeAttributeOptionInStore, (state, props ) => {
+        on(removeAttributeOptionInStore, (state, { attributeId, optionId } ) => {
             const newState = state.map((attribute) => {
-                if (attribute.id === props.attribute.id) {
-                    const newAttributeOptions = attribute.attributeOptions.filter((option) => option.id !== props.id)                    
+                if (attribute.id === attributeId) {
+                    const newAttributeOptions = attribute.attributeOptions.filter((option) => option.id !== optionId)                    
                     const newAttribute: Attribute = { ...attribute, attributeOptions: newAttributeOptions }
                     return newAttribute
                 }

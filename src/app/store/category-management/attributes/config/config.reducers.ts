@@ -1,5 +1,5 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { CategoryAndConfig, EditConfig } from "../../../../types";
+import { CategoryAndConfig, EditConfig, EditConfigResponse } from "../../../../types";
 import { gotCategoryAndConfig, gotSingleCategory, resetEditState } from "./config.actions";
 import { state } from "@angular/animations";
 
@@ -15,22 +15,20 @@ export const configFeature = createFeature({
     )
 })
 
-const editConfigInitialState: EditConfig = {
+const editConfigInitialState: EditConfigResponse = {
     name: '',
     config: [],
     id: '',
-    incompatible: {}
 }
 export const editConfigFeature = createFeature({
     name: 'editConfig',
     reducer: createReducer(
         editConfigInitialState,
-        on(gotSingleCategory, (state, {config, id, name, incompatible }) => {
+        on(gotSingleCategory, (state, {config, id, name }) => {
             return {
                 name,
                 id, 
                 config,
-                incompatible
             }
         }),
         on(resetEditState, () => {
@@ -38,7 +36,6 @@ export const editConfigFeature = createFeature({
                 name: '',
                 config: [],
                 id: '',
-                incompatible: {}
             }
         })
     )

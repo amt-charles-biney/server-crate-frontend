@@ -339,6 +339,9 @@ app-custom-select .mat-mdc-select-value-text {
 app-category-management  {
   padding-block: 4px !important;
 }
+.mat-mdc-menu-content {
+  padding: 0px !important;
+}
 
 @media only screen and (max-width: 768px) {
   app-payment-details .mat-mdc-tab-group {

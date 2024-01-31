@@ -9,7 +9,7 @@ import {
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { AttributeModalComponent } from '../../../attribute-modal/attribute-modal.component';
+import { AttributeModalComponent } from './features/attribute-modal/attribute-modal.component';
 import { Store } from '@ngrx/store';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { Attribute } from '../../../../types';

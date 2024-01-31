@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Attribute, AttributeOption, CategoryAndConfig } from '../../../types';
+import { Attribute, AttributeOption, CategoryAndConfig, CategoryConfig, CategoryEdit, CategoryEditResponse } from '../../../types';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ import { Attribute, AttributeOption, CategoryAndConfig } from '../../../types';
 export class AttributeInputService {
   constructor() {}
   toFormGroup(attributes: Attribute[]) {
-    const group: any = {};
+    const group: Record<string, FormControl> = {};
     attributes.forEach((attribute) => {
       // const testAttr: AttributeOption = {
       //   additionalInfo: {
@@ -36,6 +36,21 @@ export class AttributeInputService {
     group['variants'] = new FormControl('');
     return new FormGroup(group);
   }
+  editFormGroup(attributes: CategoryEditResponse[], name: string) {    
+    const group: Record<string, FormControl> = {};
+    attributes.forEach((attribute) => {
+      if (attribute.isMeasured && attribute.isIncluded) {        
+        group[`${attribute.type}Size`] = new FormControl(attribute.size);        
+      }
+      if (attribute.isIncluded) {
+        group[attribute.type] = new FormControl(attribute);
+      }
+    });
+    group['categoryName'] = new FormControl(name, Validators.required);
+    group['attributesInput'] = new FormControl('');
+    group['variants'] = new FormControl('');
+    return new FormGroup(group);
+  }
   toSelectFormGroup(attributes: Attribute[] | CategoryAndConfig[]) {
     const group: any = {};
     attributes.forEach((attribute) => {
@@ -47,15 +62,11 @@ export class AttributeInputService {
     });
     return new FormGroup(group);
   }
-  editFormGroup(obj: Record<string, string | AttributeOption>) {
-    const group: any = {};
-
-    for (let key in obj) {
-      group[key] = new FormControl(obj[key]);
+  createInitialForm(formValues: Record<string, string>){
+    const group: Record<string, FormControl> = {}
+    for (let key in formValues) {
+      group[key] = new FormControl(formValues[key])
     }
-    group['attributesInput'] = new FormControl('');
-    console.log("Group", group);
-    
-    return new FormGroup(group);
+    return new FormGroup(group)
   }
 }

@@ -63,9 +63,9 @@ export class AdminDashboardComponent implements OnInit {
       }
     ];
     this.activeLink = this.navLinks[0];
-    // if (this.router.url !== '/admin/dashboard') {
-    //   this.router.navigateByUrl('/admin/category-management');
-    // }
+    if (this.router.url !== '/admin/dashboard') {
+      this.router.navigateByUrl('/admin/dashboard');
+    }
   }
 
   logout() {

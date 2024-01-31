@@ -11,7 +11,7 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select';
   styleUrl: './custom-select.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomSelectComponent implements OnInit{
+export class CustomSelectComponent {
   @Input() control!: FormControl;
   @Input() options!: any;
   @Input() label = '';
@@ -21,14 +21,11 @@ export class CustomSelectComponent implements OnInit{
   @Input() isDisabled = false;
   @Input() isRequired = false;
   @Output() onSelect = new EventEmitter<MatSelectChange>();
-ngOnInit(): void {
-  console.log('Control', this.control.touched);
-  
-}
+
   select(event: MatSelectChange) {
     this.onSelect.emit(event);
   }
-  compareFn(c1: string  , c2: string): boolean {    
+  compareFn(c1: string  , c2: string): boolean {        
     if (c1 && c2) {
       return c1 !== c2;
     }

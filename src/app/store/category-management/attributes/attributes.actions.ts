@@ -25,6 +25,6 @@ export const deleteMultipleAttributes = createAction('[attribute] delete multipl
 
 export const deleteAll = createAction('[attribute] delete all', props<{ deleteList: string[] }>())
 
-export const removeAttributeOptionInStore = createAction('[attribute] remove attribute in store', props<AttributeOption>())
+export const removeAttributeOptionInStore = createAction('[attribute] remove attribute in store', props<{ optionId: string, attributeId: string }>())
 
 export const putBackAttributeOptionInStore = createAction('[attribute] put back attribute in store', props<AttributeOption>())

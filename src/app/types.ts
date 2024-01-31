@@ -334,7 +334,8 @@ export type AttributeOption = {
     id: string;
     isMeasured: boolean,
     unit: string
-  }
+  },
+  compatibleOptionId?: string
 }
 
 export type AdditionalInfo = {
@@ -365,20 +366,20 @@ export type AttributeDataResponse = {
   };
 };
 
-export type CategoryConfig = {
-  name: string;
-  type: string;
-  price: number;
-  media: string;
-  unit: string;
-  isCompatible: boolean;
-  isIncluded: boolean;
-  isMeasured: boolean;
-  baseAmount: number;
-  maxAmount: number;
-  priceFactor: number;
-  id?: string
-}
+// export type CategoryConfig = {
+//   name: string;
+//   type: string;
+//   price: number;
+//   media: string;
+//   unit: string;
+//   isCompatible: boolean;
+//   isIncluded: boolean;
+//   isMeasured: boolean;
+//   baseAmount: number;
+//   maxAmount: number;
+//   priceFactor: number;
+//   id?: string
+// }
 
 export type Configuration = {
   name: string;
@@ -394,13 +395,78 @@ export type CategoryAndConfig = {
 
 export type EditConfig = {
   name: string;
-  config: CategoryConfig[],
+  config: CategoryEdit[],
   id: string,
-  incompatible: Record<string, Set<AttributeOption>>
 }
 
 export type ConfigurationEdit = {
   name: string;
   config: CategoryConfig[],
   id: string
+}
+
+export type CategoryEdit = {
+  name: string;
+  type: string;
+  price: number;
+  media: string;
+  unit: string;
+  isCompatible: boolean;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  baseAmount: number;
+  maxAmount: number;
+  priceFactor: number;
+  id?: string
+}
+
+export type AttributeFormGroup = {
+  name: string;
+  price: string;
+  media: string | null; 
+  baseAmount: string;
+  maxAmount: string;
+  priceFactor: string;
+  id: string;
+  coverImage: string;
+}
+
+export type CategoryPayload = {
+  name: string;
+  config: CategoryConfig[]
+}
+
+export type CategoryConfig = {
+  attributeId: string;
+  attributeOptionId: string;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  isCompatible: boolean;
+  size: number;
+  attributeName: string
+}
+
+export type CategoryEditResponse = {
+  compatibleOptionId: string;
+  name: string;
+  type: string;
+  price: number;
+  media: string;
+  unit: string;
+  isCompatible: boolean;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  priceFactor: number;
+  size: number;
+  attributeId: string;
+  attributeOptionId: string;
+  priceIncrement: number;
+  baseAmount: number;
+  maxAmount: number
+}
+
+export type EditConfigResponse = {
+  name: string;
+  id: string;
+  config: CategoryEditResponse[]
 }

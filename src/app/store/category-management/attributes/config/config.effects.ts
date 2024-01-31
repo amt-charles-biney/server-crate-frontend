@@ -21,43 +21,41 @@ import { CategoryAndConfig } from '../../../../types';
 
 @Injectable()
 export class ConfigEffect {
-  sendConfig$ = createEffect(
-    () => {
-      return this.action$.pipe(
-        ofType(sendConfig),
-        switchMap((props) => {
-          return this.adminService.createCategoryConfig(props).pipe(
-            map(() => {
-              this.store.dispatch(
-                setLoadingSpinner({
-                  isError: false,
-                  message: 'Created new category',
-                  status: false,
-                })
-              );
-              this.router.navigateByUrl('/admin/category-management');
-              return resetLoader({ isError: false, message: '', status: false })
-            }),
-            catchError((err) => {  
-              let errorMessage =  ''
-              if (err && err.error && err.error.detail) {
-                errorMessage = err.error.detail
-              } else {
-                errorMessage = 'Server response error'
-              }
-              return of(
-                setLoadingSpinner({
-                  isError: true,
-                  message: errorMessage,
-                  status: false,
-                })
-              );
-            })
-          );
-        })
-      );
-    },
-  );
+  sendConfig$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(sendConfig),
+      switchMap((props) => {
+        return this.adminService.createCategoryConfig(props).pipe(
+          map(() => {
+            this.store.dispatch(
+              setLoadingSpinner({
+                isError: false,
+                message: 'Created new category',
+                status: false,
+              })
+            );
+            this.router.navigateByUrl('/admin/category-management');
+            return resetLoader({ isError: false, message: '', status: false });
+          }),
+          catchError((err) => {
+            let errorMessage = '';
+            if (err && err.error && err.error.detail) {
+              errorMessage = err.error.detail;
+            } else {
+              errorMessage = 'Server response error';
+            }
+            return of(
+              setLoadingSpinner({
+                isError: true,
+                message: errorMessage,
+                status: false,
+              })
+            );
+          })
+        );
+      })
+    );
+  });
 
   getCategoriesAndConfig$ = createEffect(() => {
     return this.action$.pipe(
@@ -65,16 +63,15 @@ export class ConfigEffect {
       exhaustMap(() => {
         return this.adminService.getCategoriesAndConfig().pipe(
           map((categories: CategoryAndConfig[]) => {
-           
             return gotCategoryAndConfig({ categories });
           }),
           catchError((err) => {
-            let errorMessage =  ''
-              if (err && err.error && err.error.detail) {
-                errorMessage = err.error.detail
-              } else {
-                errorMessage = 'Server response error'
-              }
+            let errorMessage = '';
+            if (err && err.error && err.error.detail) {
+              errorMessage = err.error.detail;
+            } else {
+              errorMessage = 'Server response error';
+            }
             return of(
               setLoadingSpinner({
                 isError: true,
@@ -94,21 +91,18 @@ export class ConfigEffect {
       switchMap((props) => {
         return this.adminService.getSingleCategory(props.id).pipe(
           map((props) => {
-            setTimeout(() => {
-              this.store.dispatch(
-                resetLoader({ isError: false, message: '', status: false })
-              );
-            }, 1500);
-            
+            this.store.dispatch(
+              resetLoader({ isError: false, message: '', status: false })
+            );
             return gotSingleCategory(props);
           }),
           catchError((err) => {
-            let errorMessage =  ''
-              if (err && err.error && err.error.detail) {
-                errorMessage = err.error.detail
-              } else {
-                errorMessage = 'Server response error'
-              }
+            let errorMessage = '';
+            if (err && err.error && err.error.detail) {
+              errorMessage = err.error.detail;
+            } else {
+              errorMessage = 'Server response error';
+            }
             return of(
               setLoadingSpinner({
                 isError: true,
@@ -136,12 +130,12 @@ export class ConfigEffect {
             return getCategoriesAndConfig();
           }),
           catchError((err) => {
-            let errorMessage =  ''
-              if (err && err.error && err.error.detail) {
-                errorMessage = err.error.detail
-              } else {
-                errorMessage = 'Server response error'
-              }
+            let errorMessage = '';
+            if (err && err.error && err.error.detail) {
+              errorMessage = err.error.detail;
+            } else {
+              errorMessage = 'Server response error';
+            }
             return of(
               setLoadingSpinner({
                 isError: true,
@@ -162,15 +156,15 @@ export class ConfigEffect {
         return this.adminService.editCategory(id, configuration).pipe(
           map(() => {
             this.router.navigateByUrl('/admin/category-management');
-            return resetLoader({ isError: false, message: '', status: false }) 
+            return resetLoader({ isError: false, message: '', status: false });
           }),
           catchError((err) => {
-            let errorMessage =  ''
-              if (err && err.error && err.error.detail) {
-                errorMessage = err.error.detail
-              } else {
-                errorMessage = 'Server response error'
-              }
+            let errorMessage = '';
+            if (err && err.error && err.error.detail) {
+              errorMessage = err.error.detail;
+            } else {
+              errorMessage = 'Server response error';
+            }
             return of(
               setLoadingSpinner({
                 isError: true,
