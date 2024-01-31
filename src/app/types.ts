@@ -208,7 +208,7 @@ export interface IProductConfigureOptionType {
     price: number
 }
 
-export interface IProductConfiguration { 
+export interface IProductConfiguration {
   productId: string,
   configurations: IProductConfigureOptionType[],
   productPrice: number,
@@ -250,7 +250,6 @@ export interface IConfiguredProduct {
 
 
 export interface ICompatibleOption {
-  id: string;
   name: string;
   type: string;
   price: number;
@@ -260,8 +259,11 @@ export interface ICompatibleOption {
   isIncluded: boolean;
   isMeasured: boolean;
   baseAmount: number;
-  maxAmount: number; 
-  priceIncrement: number
+  maxAmount: number;
+  priceIncrement: number;
+  attributeId: string;
+  attributeOptionId: string;
+  compatibleOptionId: string
 }
 
 export interface ICategoryOption {
