@@ -1,8 +1,24 @@
-<button routerLink="/settings/general"
+<ng-container *ngIf="initials$ | async as initials">
+<button
 [ngClass]="smaller ? 'h-10 w-10 text-sm' : 'h-[117px] w-[117px] text-5xl'"
   class="flex flex-col justify-center items-center bg-black rounded-full"
+  [matMenuTriggerFor]="dropdown"
 >
-<ng-container *ngIf="initials$ | async as initials">
   <p class="tracking-wider text-white uppercase">{{ initials.firstName[0] + initials.lastName[0] }}</p>
-</ng-container>
 </button>
+<mat-menu class="w-60 mt-6" #dropdown="matMenu" yPosition="below">
+  <div class="flex items-center gap-3 py-3 px-4">
+    <div class="flex items-center justify-center w-10 h-10 bg-black rounded-full">
+      <p class="tracking-wider text-white uppercase">{{ initials.firstName[0] + initials.lastName[0] }}</p>
+    </div>
+    <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm text-profile-text">{{ initials.firstName }} {{ initials.lastName }}</p>
+  </div>
+  <button (click)="navigateToSettings()" class="py-[10px] px-4 border-t text-sm text-profile-text w-full text-start">
+      <span class="text-sm text-profile-text">Account Settings</span>
+  </button>
+  <button (click)="accountLogout()" class="py-[10px] px-4 border-t text-sm text-profile-text w-full text-start">
+      <span class="text-sm text-profile-text">Logout</span>
+  </button>
+</mat-menu>
+</ng-container>
+

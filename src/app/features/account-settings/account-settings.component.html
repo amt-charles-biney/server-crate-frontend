@@ -9,7 +9,15 @@
         [active]="activeLink.label === link.label"
         [routerLink]="link.link"
       >
-        <span [ngClass]="activeLink.label === link.label ? 'text-figma-green' : 'text-table-text'" class="font-inter ">{{ link.label }}</span></a
+        <span
+          [ngClass]="
+            activeLink.label === link.label
+              ? 'text-figma-green'
+              : 'text-table-text'
+          "
+          class="font-inter"
+          >{{ link.label }}</span
+        ></a
       >
       }
     </nav>
@@ -17,21 +25,30 @@
       <section
         class="flex flex-col items-stretch divide-y justify-around gap-6 overflow-hidden md:grid md:grid-cols-7 md:divide-y-0 my-[121px]"
       >
+      <ng-container *ngIf="name$ | async as name">
         <div class="flex flex-col gap-4 items-center col-span-2 md:border-r">
-          <app-user-profile-image />
-          <div>
-            <ng-container *ngIf="name$ | async as name">
-              <p class="text-xl font-bold text-center">{{name.firstName}} {{name.lastName}}</p>
-            </ng-container>
-            <div class="flex flex-col gap-2">
-              <button (click)="accountLogout()" class="text-sm underline"> logout </button>
-              @if (isAdmin) {
-                <button class="text-sm underline" routerLink="/admin/dashboard">Go to Admin Dashboard</button>
-              }
-            </div>
+          <div
+            class="flex flex-col justify-center items-center bg-black rounded-full h-[117px] w-[117px] text-5xl"
+          >
+            <p class="tracking-wider text-white uppercase">
+              {{ name.firstName[0] }}{{ name.lastName[0] }}
+            </p>
           </div>
-          <button class="underline text-xs text-red-color">Delete Account</button>
-        </div>
+          <div>
+              <p class="text-xl font-bold text-center">
+                {{ name.firstName }} {{ name.lastName }}
+              </p>
+                @if (isAdmin) {
+                  <button class="text-sm underline" routerLink="/admin/dashboard">
+                    Go to Admin Dashboard
+                  </button>
+                }
+            </div>
+            <button class="underline text-xs text-red-color">
+              Delete Account
+            </button>
+          </div>
+        </ng-container>
         <div class="col-span-5 md:ml-[46px] md:w-[80%]">
           <router-outlet />
         </div>

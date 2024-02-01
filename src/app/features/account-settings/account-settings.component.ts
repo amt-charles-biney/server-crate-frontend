@@ -13,7 +13,6 @@ import { UserProfileImageComponent } from '../../shared/components/user-profile-
 import { ProfileService } from '../../core/services/user-profile/profile.service';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
-import { logout } from '../../core/utils/helpers';
 import { Observable } from 'rxjs';
 import { CURRENT_INDEX } from '../../core/utils/constants';
 @Component({
@@ -83,16 +82,12 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
     ];
     this.activeIndex = Number(sessionStorage.getItem(CURRENT_INDEX)) || 0;
     this.activeLink = this.navLinks[this.activeIndex];
-    // if (this.router.url !== '/settings/general') {
-    //   this.router.navigateByUrl('/settings/general');
-    // }
-    this.router.navigateByUrl(this.navLinks[this.activeIndex].link);
+    this.router.navigateByUrl(`/settings/${this.navLinks[this.activeIndex].link}`);    
     this.name$ = this.profileService.getUser();
   }
   ngOnDestroy(): void {
     sessionStorage.removeItem(CURRENT_INDEX);
   }
-  accountLogout = () => logout();
 
   setCurrentIndex(link: Link) {
     this.activeLink = link;
