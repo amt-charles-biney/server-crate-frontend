@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   ICategoryConfig,
   ICategoryOption,
@@ -32,7 +32,8 @@ import { MatTabsModule } from '@angular/material/tabs'
   imports: [
     CommonModule,
     MatTabsModule,
-    RouterModule
+    RouterModule,
+    RouterLink
   ],
   templateUrl: './product-configure.component.html',
   styleUrl: './product-configure.component.scss'
