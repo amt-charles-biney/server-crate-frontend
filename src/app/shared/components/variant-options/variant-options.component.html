@@ -39,7 +39,7 @@
       Action
     </th>
   </tr>
-  <section class="h-[220px] overflow-auto">
+  <section class="h-fit max-h-[220px] overflow-auto">
     @for (attr of attributeOptions; track $index) {
     <tr
       class="grid grid-cols-12 py-3 border-b text-table-text text-sm font-[500]"
@@ -80,10 +80,7 @@
         </p>
       </td>
       }
-      <td class="flex items-center gap-3">
-        <button (click)="edit()">
-          <img src="/assets/edit.svg" alt="edit icon" />
-        </button>
+      <td class="ml-2">
         <button (click)="deleteOption(attr.id)">
           <img src="/assets/trash.svg" alt="delete icon" />
         </button>

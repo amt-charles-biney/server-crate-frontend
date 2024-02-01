@@ -55,7 +55,7 @@
           <th class="col-span-5 text-start self-center">Description</th>
           <th class="col-span-2 text-start self-center">Measurement Type</th>
 
-          <th class="col-span-1 text-center self-center"></th>
+          <th class="col-span-1 text-center self-center">Actions</th>
         </tr>
         <ng-container *ngIf="attributes | async as attributes">
           <cdk-accordion>
@@ -65,6 +65,7 @@
                 [attribute]="attribute"
                 [control]="$any(selectForm.controls[attribute.attributeName])"
                 (editEmitter)="editOption($event)"
+                (deleteEmitter)="deleteAttribute($event)"
                 (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"
               />
             </div>

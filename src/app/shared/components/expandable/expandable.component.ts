@@ -1,11 +1,12 @@
 import { CdkAccordionModule } from '@angular/cdk/accordion';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CustomCheckBoxComponent } from '../custom-check-box/custom-check-box.component';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Attribute } from '../../../types';
 import { VariantOptionsComponent } from '../variant-options/variant-options.component';
 import { CommonModule } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-expandable',
@@ -16,6 +17,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     FormsModule,
     ReactiveFormsModule,
     VariantOptionsComponent,
+    MatMenuModule,
     CommonModule,
   ],
   templateUrl: './expandable.component.html',
@@ -35,10 +37,11 @@ export class ExpandableComponent {
     id: string;
   }>();
   @Output() editEmitter = new EventEmitter<Attribute>();
-
+  @Output() deleteEmitter = new EventEmitter<{ id: string }>()
   @Input() control!: FormControl;
   @Input() attribute!: Attribute;
   collapsed = true;
+  showChevron = false
 
   itemSelected(
     selected: { name: string; value: string; isAdded: boolean },
@@ -52,5 +55,16 @@ export class ExpandableComponent {
 
   toggle() {
     this.collapsed = !this.collapsed
+  }
+
+  deleteAttribute(id: string ) {
+    this.deleteEmitter.emit({ id })
+  }
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.showChevron = true
+  }
+  @HostListener('mouseleave') onMouseLeave() {
+    this.showChevron = false
   }
 }

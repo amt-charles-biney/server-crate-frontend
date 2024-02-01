@@ -12,9 +12,14 @@
           [name]="attribute.attributeName"
           [value]="attribute.id"
         />
-        <p class="overflow-hidden whitespace-nowrap text-ellipsis">
-          {{ attribute.attributeName }}
-        </p>
+        <div class="flex items-center gap-3">
+          <button *ngIf="showChevron" class="">
+            <img [ngClass]="collapsed ? '' : 'rotate-90'" class=" transition-transform duration-300 w-4 h-4" src="/assets/rotate-chevron.svg" alt="expand" />
+          </button>
+          <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+            {{ attribute.attributeName }}
+          </p>
+        </div>
       </td>
       <td class="col-span-5 flex items-center gap-3 text-start">
         <p class="">
@@ -54,9 +59,20 @@
         }
       </td>
       <td class="col-span-1 self-center">
-        <button class="flex justify-center w-full">
-          <img [ngClass]="collapsed ? '' : 'rotate-180'" class=" transition-transform duration-300 w-6 h-6" src="/assets/chevron-down.svg" alt="expand" />
+        <button (click)="$event.stopPropagation()" class="flex justify-center w-full" [matMenuTriggerFor]="menu">
+          <img src="/assets/ellipses.svg" alt="ellipses" />
         </button>
+        <mat-menu #menu="matMenu" panelClass="customMenu">
+          <button (click)="editOption(attribute)" mat-menu-item>
+            <span class="text-sm">Edit</span>
+          </button>
+          <button
+          (click)="deleteAttribute(attribute.id)"
+            mat-menu-item
+          >
+            <span class="text-sm">Delete</span>
+          </button>
+        </mat-menu>
       </td>
     </tr>
     <section [@collapse]="collapsed" class="w-[92%] 2xl:w-[96%] overflow-hidden ml-auto">

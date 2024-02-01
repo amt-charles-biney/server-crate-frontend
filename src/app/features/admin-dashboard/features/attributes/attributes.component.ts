@@ -20,6 +20,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { VariantOptionsComponent } from '../../../../shared/components/variant-options/variant-options.component';
 import {
   deleteAll,
+  deleteAttribute,
   resetAttributeCreation,
 } from '../../../../store/category-management/attributes/attributes.actions';
 import {CdkAccordionModule} from '@angular/cdk/accordion';
@@ -116,6 +117,10 @@ export class AttributesComponent implements OnInit, AfterViewInit {
 
     this.attributesTodelete.clear();
     this.indeterminateCheckbox.indeterminate = false;
+  }
+
+  deleteAttribute({ id }: { id: string }) {
+    this.store.dispatch(deleteAttribute({attributeId: id }))
   }
 
   editOption(attribute: Attribute) {
