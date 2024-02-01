@@ -1,8 +1,6 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AdminLink } from '../../types';
 import { Router, RouterModule } from '@angular/router';
-import { MatTabsModule } from '@angular/material/tabs';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 import { Store } from '@ngrx/store';
 import { getAttributes } from '../../store/category-management/attributes/attributes.actions';

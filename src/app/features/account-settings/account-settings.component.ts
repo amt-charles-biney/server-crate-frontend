@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TermsAndConditionsComponent } from '../../shared/components/terms-and-conditions/terms-and-conditions.component';
 import { ResetPasswordComponent } from '../reset/reset-password/reset-password.component';
@@ -15,6 +15,7 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { logout } from '../../core/utils/helpers';
 import { Observable } from 'rxjs';
+import { CURRENT_INDEX } from '../../core/utils/constants';
 @Component({
   selector: 'app-account-settings',
   standalone: true,
@@ -29,20 +30,25 @@ import { Observable } from 'rxjs';
     PrivacyPolicyComponent,
     RouterModule,
     UserProfileImageComponent,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './account-settings.component.html',
   styleUrl: './account-settings.component.scss',
 })
-export class AccountSettingsComponent implements OnInit {
+export class AccountSettingsComponent implements OnInit, OnDestroy {
   navLinks: Link[] = [];
   activeLink!: Link;
-  name$!: Observable<Username>
-  isAdmin: boolean = false
+  activeIndex: number = 0;
+  name$!: Observable<Username>;
+  isAdmin: boolean = false;
 
-  constructor(private router: Router, private profileService: ProfileService, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private profileService: ProfileService,
+    private authService: AuthService
+  ) {}
   ngOnInit(): void {
-    this.isAdmin = this.authService.isAdmin()
+    this.isAdmin = this.authService.isAdmin();
     this.navLinks = [
       {
         label: 'General',
@@ -75,13 +81,21 @@ export class AccountSettingsComponent implements OnInit {
         index: 5,
       },
     ];
-    this.activeLink = this.navLinks[0];
-    if (this.router.url !== '/settings/general') {
-      this.router.navigateByUrl('/settings/general');
-    }
-    this.name$ = this.profileService.getUser()
+    this.activeIndex = Number(sessionStorage.getItem(CURRENT_INDEX)) || 0;
+    this.activeLink = this.navLinks[this.activeIndex];
+    // if (this.router.url !== '/settings/general') {
+    //   this.router.navigateByUrl('/settings/general');
+    // }
+    this.router.navigateByUrl(this.navLinks[this.activeIndex].link);
+    this.name$ = this.profileService.getUser();
   }
+  ngOnDestroy(): void {
+    sessionStorage.removeItem(CURRENT_INDEX);
+  }
+  accountLogout = () => logout();
 
-  accountLogout = () => logout()
-
+  setCurrentIndex(link: Link) {
+    this.activeLink = link;
+    sessionStorage.setItem(CURRENT_INDEX, link.index.toString());
+  }
 }

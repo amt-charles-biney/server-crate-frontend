@@ -97,7 +97,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   id!: string | null;
   @ViewChild('contentWrapper') contentWrapper!: ElementRef<HTMLDivElement>;
   formValue!: Record<string, string>;
-  formAttributes!: Record<string, string>;
   resize$!: Observable<Event>
   constructor(
     private store: Store,
@@ -165,7 +164,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.store.dispatch(getAttributes());
     this.store.dispatch(resetEditState());
   }
   removeFromLocalAttributes(localAttributes: Attribute[], optionId: string) {

@@ -6,3 +6,4 @@ export const CLOUD_NAME = 'dah4l2inx'
 export const NO_AUTH = new HttpContextToken<boolean>(() => false);
 
 export const CURRENT_TAB = 'server-crate-current-tab'
+export const CURRENT_INDEX = 'server-crate-current-index'
