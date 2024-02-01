@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AdminLink } from '../../types';
 import { Router, RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -15,13 +15,15 @@ import { CURRENT_TAB } from '../../core/utils/constants';
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss',
 })
-export class AdminDashboardComponent implements OnInit {
+export class AdminDashboardComponent implements OnInit, OnDestroy {
   activeLink: string = ''
   constructor(private router: Router, private store: Store) {}
   ngOnInit(): void {
     this.store.dispatch(getAttributes());
-    console.log('Where am I', this.router.url);
     this.activeLink = sessionStorage.getItem(CURRENT_TAB) || 'Dashboard'
+  }
+  ngOnDestroy(): void {
+    sessionStorage.removeItem(CURRENT_TAB)
   }
 
   setCurrentTab(currentTab: string) {

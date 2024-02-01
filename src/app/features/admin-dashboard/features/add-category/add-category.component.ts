@@ -87,7 +87,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   attributes = this.attributes$.asObservable();
   categoryForm!: FormGroup;
   localAttributes: Attribute[] = [];
-  localAttributesForEdit: CategoryEdit[] = [];
   makeLeftButtonGreen = true;
   makeRightButtonGreen = false;
   isOverflow = false;
@@ -403,11 +402,10 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
   sizeSelection(event: MatSelectChange, attribute: Attribute) {
     const selectedSize = event.value as string;
-    const correspondingAttributeOption: CategoryEditResponse =
+    const correspondingAttributeOption: AttributeOption =
       this.categoryForm.value[attribute.attributeName];
-    
     const newBaseAmount = parseInt(selectedSize);
-    this.categoryConfigSet[correspondingAttributeOption.name].size =
+    this.categoryConfigSet[correspondingAttributeOption.optionName].size =
       newBaseAmount;
   }
   onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
