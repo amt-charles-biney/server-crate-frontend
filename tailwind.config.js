@@ -21,7 +21,8 @@ module.exports = {
         'product-text': '#676767',
         'red-color': '#E1000F',
         'sidebar-text': '#1D2939',
-        'active-link': '#F7FCF7'
+        'active-link': '#F7FCF7',
+        'profile-text': '#344054'
       },
       gridTemplateRows: {
         '20': 'repeat(20, minmax(0, 1fr))',

@@ -91,12 +91,6 @@ export type Link = {
   index: number;
 };
 
-export type AdminLink = {
-  label: string;
-  link: string;
-  svg: string;
-};
-
 export type ProductItem = {
   imageUrl: string;
   coverImage: string;
@@ -367,21 +361,6 @@ export type AttributeDataResponse = {
     isMeasured: boolean;
   };
 };
-
-// export type CategoryConfig = {
-//   name: string;
-//   type: string;
-//   price: number;
-//   media: string;
-//   unit: string;
-//   isCompatible: boolean;
-//   isIncluded: boolean;
-//   isMeasured: boolean;
-//   baseAmount: number;
-//   maxAmount: number;
-//   priceFactor: number;
-//   id?: string
-// }
 
 export type Configuration = {
   name: string;

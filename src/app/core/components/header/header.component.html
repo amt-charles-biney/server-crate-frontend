@@ -87,9 +87,7 @@
         </button>
         </div>
         @if (isAuthenticated) {
-        <a routerLink="/settings/general">
           <app-user-profile-image [smaller]="true" />
-        </a>
         } @else {
         <a
           class="py-1 px-10 font-semibold bg-figma-green text-white rounded-lg"

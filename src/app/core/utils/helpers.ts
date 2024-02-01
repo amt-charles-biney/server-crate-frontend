@@ -5,10 +5,12 @@ export const logout = () => {
   window.location.reload();
 };
 
-export function isAttributeOption(obj: any): obj is AttributeOption {
+export function isAttributeOption(obj: any): obj is AttributeOption {  
   return obj && typeof obj.id === 'string';
 }
-
+export function isCategoryEditResponse(obj: any): obj is CategoryEditResponse {
+  return obj && typeof obj.attributeOptionId === 'string'
+}
 export function convertToCategoryEdit(attributeOption: AttributeOption, isCompatible: boolean, isIncluded: boolean): CategoryEdit {
     return {
       baseAmount: attributeOption.additionalInfo.baseAmount,
