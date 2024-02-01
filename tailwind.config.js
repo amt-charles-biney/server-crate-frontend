@@ -31,7 +31,8 @@ module.exports = {
       },
       fontFamily: {
         'inter': ['inter', 'sans-serif'],
-        'dm-sans': ['DM Sans', 'sans-serif']
+        'dm-sans': ['DM Sans', 'sans-serif'],
+        'plus-jakarta-sans': ['Plus Jakarta Sans']
       }
     }
   },

@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap');
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -153,6 +154,10 @@ app-account-settings .mdc-tab--active {
   border-bottom: 2px solid #3CB043;
 }
 
+app-account-settings .mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link {
+  flex-grow: 0;
+}
+
 
 app-account-settings .mdc-tab-indicator {
   display: none;
@@ -243,13 +248,6 @@ app-admin-dashboard .mdc-tab-indicator {
   display: none;
 }
 
-// .iti {
-//   width: 100%;
-// }
-
-// app-custom-input .cdk-overlay-pane {
-//   width: 53px;
-// }
 .custom-panel {
   width: fit-content;
 }
