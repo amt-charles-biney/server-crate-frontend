@@ -87,6 +87,7 @@ export class ProductConfigureComponent {
   ) { }
 
   ngOnInit(): void {
+
     this.productId = this.route.snapshot.paramMap.get('id')?.toString() ?? ''
 
     this.store.dispatch(loadProduct({ id: this.productId }))
@@ -114,8 +115,10 @@ export class ProductConfigureComponent {
     })
 
     this.getConfigKeys().subscribe((keys) => {
-      this.configKeys = keys
-      this.setActiveLink(keys[0])
+      if(keys) {
+        this.configKeys = keys
+        this.setActiveLink(keys[0])
+      }
     })
   }
 
@@ -144,6 +147,7 @@ export class ProductConfigureComponent {
   }
 
   onSizeableOptionChange = ({ type, id = this.componentSizable, size = this.size }: { type: string, id: string, size: string }): void => {
+    console.log("type id size", id, size, type)
     this.componentSizable = id
     this.size = size
     this.updateConfigQueryParam({ type, id, size })

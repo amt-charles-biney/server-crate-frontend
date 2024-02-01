@@ -118,7 +118,7 @@
                                (change)="onSizeableOptionChange({ type: activeLink, id: selectConfig.value, size: selectSize.value })"
                                class="p-2 border-[2px] pl-4 pr-8 border-[#E8EAEB] focus:outline-none rounded-md w-full flex-1 max-w-lg appearance-none"
                             >
-                               <option [value]="attributeProduct.id"
+                               <option [value]="attributeProduct.compatibleOptionId"
                                   *ngFor="let attributeProduct of productConfig.options[activeLink]">
                                   {{ attributeProduct.name }}
                                </option>
