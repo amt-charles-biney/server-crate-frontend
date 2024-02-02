@@ -127,7 +127,7 @@ export class AttributeModalComponent implements OnInit {
           attributeName: [attributeName, Validators.required],
           description: [description],
           isMeasured: [isMeasured],
-          unit: [unit, unitRequiredIfMeasured()],
+          unit: [unit || 'GB', unitRequiredIfMeasured()],
           attributes: this.fb.array(
             attributeOptions.map((attributeOption) =>
               this.createAttr(attributeOption)
@@ -141,7 +141,7 @@ export class AttributeModalComponent implements OnInit {
           attributeName: ['', Validators.required],
           description: [''],
           isMeasured: [false],
-          unit: ['', unitRequiredIfMeasured()],
+          unit: ['GB', unitRequiredIfMeasured()],
           attributes: this.fb.array<FormGroup[]>([]),
         },
       );
