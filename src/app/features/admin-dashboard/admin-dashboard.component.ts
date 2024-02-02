@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 import { Store } from '@ngrx/store';
 import { getAttributes } from '../../store/category-management/attributes/attributes.actions';
-import { CURRENT_TAB } from '../../core/utils/constants';
+import { CURRENT_AD_TAB } from '../../core/utils/constants';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -18,17 +18,19 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private store: Store) {}
   ngOnInit(): void {
     this.store.dispatch(getAttributes());
-    this.activeLink = sessionStorage.getItem(CURRENT_TAB) || 'Dashboard'
+    this.activeLink = sessionStorage.getItem(CURRENT_AD_TAB) || 'Dashboard'
   }
   ngOnDestroy(): void {
-    sessionStorage.removeItem(CURRENT_TAB)
+    sessionStorage.removeItem(CURRENT_AD_TAB)
   }
 
   setCurrentTab(currentTab: string) {
-    sessionStorage.setItem(CURRENT_TAB, currentTab)
+    sessionStorage.setItem(CURRENT_AD_TAB, currentTab)
     this.activeLink = currentTab
   }
-
+  setAdminLink() {
+    this.activeLink = 'Settings'
+  }
   logout() {
     localStorage.clear()
     this.router.navigateByUrl('/login')

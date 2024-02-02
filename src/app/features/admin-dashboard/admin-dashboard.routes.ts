@@ -107,7 +107,7 @@ export const route: Routes = [
       },
       {
         path: 'settings',
-        component: SettingsComponent
+        loadChildren: () => import('./features/settings/settings.routes').then(m => m.route),
       }
     ],
   },

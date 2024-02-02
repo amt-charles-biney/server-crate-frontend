@@ -1,5 +1,5 @@
 <main
-  class="relative grid grid-cols-4 gap-[69px] px-14 2xl:px-0 w-[1239px] mx-auto mt-12"
+  class="relative grid grid-cols-4 gap-[69px] max-w-[1239px] px-14 lg:px-0 w-full mx-auto mt-12"
 >
   <aside class="col-span-1 flex flex-col gap-3">
     <h1 class="text-2xl font-bold">GPU Servers</h1>
@@ -69,8 +69,8 @@
                 (changeHandler)="itemSelected($event)"
                 formControlName="processor"
                 name="processor"
-                label="Intel Xeon"
-                value="Intel Xeon"
+                label="Intel Xeon Silver"
+                value="Intel Xeon Silver"
               />
             </li>
             <li>
@@ -78,8 +78,8 @@
                 (changeHandler)="itemSelected($event)"
                 formControlName="processor"
                 name="processor"
-                label="NVIDIA"
-                value="NVIDIA"
+                label="AMD Frieren"
+                value="AMD Frieren"
               />
             </li>
             <li>
@@ -87,8 +87,8 @@
                 (changeHandler)="itemSelected($event)"
                 formControlName="processor"
                 name="processor"
-                label="Intel Core i3"
-                value="Intel Core i3"
+                label="Ryzen Allergy 32"
+                value="Ryzen Allergy 32"
               />
             </li>
             <li>
@@ -168,7 +168,7 @@
           </ul>
         </mat-expansion-panel>
       </mat-accordion>
-      <mat-accordion class="border-b">
+      <!-- <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title class="text-[16px]"> Mounting </mat-panel-title>
@@ -212,7 +212,7 @@
             </li>
           </ul>
         </mat-expansion-panel>
-      </mat-accordion>
+      </mat-accordion> -->
     </form>
   </aside>
   <section class="col-span-3 2xl:w-[923px] flex flex-col ">
@@ -284,7 +284,7 @@
       </div>
     </div>
     <section
-    [ngClass]="{' flex-col gap-10 self-start': !isGridMode, 'flex-wrap gap-x-4 gap-y-[40px]': isGridMode}"
+    [ngClass]="{' flex-col gap-10 self-start': !isGridMode, 'flex-wrap gap-x-2 xl:gap-x-4 gap-y-[40px]': isGridMode}"
       class="flex mt-6 "
     >
       <ng-container

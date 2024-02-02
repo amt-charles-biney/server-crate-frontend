@@ -298,14 +298,16 @@
           <p class="text-sm font-dm-sans text-[#595959]">General</p>
           <a
             (click)="setCurrentTab('Settings')"
-            [ngClass]="
-              activeLink === 'Settings'
-                ? 'bg-red-color text-figma-green rounded-xl'
-                : 'text-sidebar-text'
-            "
-            routerLink="/admin/settings"
+            routerLink="/admin/settings/general"
           >
-            <div class="flex items-center gap-3 p-4">
+            <div
+              [ngClass]="
+                activeLink === 'Settings'
+                  ? 'bg-active-link text-figma-green rounded-xl'
+                  : 'text-sidebar-text'
+              "
+              class="flex items-center gap-3 p-4"
+            >
               <svg
                 width="24"
                 height="24"
@@ -346,9 +348,7 @@
     </section>
     <article class="flex items-center gap-3 p-4">
       <img class="h-6 w-6" src="/assets/logout.svg" alt="logout" />
-      <button (click)="logout()" class=" font-bold">
-        Logout
-      </button>
+      <button (click)="logout()" class="font-bold">Logout</button>
     </article>
   </aside>
   <div class="flex-1 overflow-hidden">
@@ -403,7 +403,10 @@
             />
           </svg>
         </div>
-        <app-user-profile-image [smaller]="true" />
+        <app-user-profile-image
+          [smaller]="true"
+          (adminLinkEmitter)="setAdminLink()"
+        />
       </div>
     </nav>
     <section class="p-[26px]">

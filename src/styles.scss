@@ -76,7 +76,10 @@ input[type="checkbox"]:checked::before {
   background-color: white;
 }
 
-app-account-settings .mdc-tab--active {
+app-account-settings  .mdc-tab--active {
+  background-color: #ecf7ec;
+}
+app-settings  .mdc-tab--active {
   background-color: #ecf7ec;
 }
 // input.ng-invalid:not(form) {
@@ -85,12 +88,20 @@ app-account-settings .mdc-tab--active {
 app-account-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: #3cb043;
 }
+app-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043;
+}
 
 app-product-configure .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: #3cb043;
 }
 
 app-account-settings
+  .mat-mdc-tab-link.mdc-tab--active:focus
+  .mdc-tab__text-label {
+  color: #3cb043;
+}
+app-settings
   .mat-mdc-tab-link.mdc-tab--active:focus
   .mdc-tab__text-label {
   color: #3cb043;
@@ -105,6 +116,9 @@ app-product-configure
 app-account-settings .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
   color: #3cb043;
 }
+app-settings .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043;
+}
 
 app-product-configure .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
   color: #3cb043;
@@ -113,12 +127,20 @@ app-product-configure .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
 app-account-settings .mat-mdc-tab .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
+app-settings .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
 
 app-product-configure .mat-mdc-tab .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
 
 app-account-settings
+  .mat-mdc-tab.mdc-tab--active:focus
+  .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+app-settings
   .mat-mdc-tab.mdc-tab--active:focus
   .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
@@ -133,10 +155,23 @@ app-product-configure
 app-account-settings .mat-mdc-tab-body {
   background-color: white;
 }
+app-settings .mat-mdc-tab-body {
+  background-color: white;
+}
+app-settings .mat-mdc-tab-body {
+  background-color: white;
+}
 
 app-account-settings .mat-mdc-tab-header {
   background-color: #fbfbfb;
 }
+app-settings .mat-mdc-tab-header {
+  background-color: #fbfbfb;
+}
+app-settings .mat-mdc-tab-header {
+  background-color: #fbfbfb;
+}
+
 
 app-product-configure .mat-mdc-tab-header {
   background-color: white;
@@ -148,18 +183,32 @@ app-product-configure .mat-mdc-tab-links {
 app-account-settings .mat-mdc-tab-links {
   border-bottom: 1px solid #E8EAEB;
 }
+app-settings .mat-mdc-tab-links {
+  border-bottom: 1px solid #E8EAEB;
+}
 
 app-account-settings .mdc-tab--active {
   background-color: #ECF7EC;
   border-bottom: 2px solid #3CB043;
 }
+app-settings .mdc-tab--active {
+  background-color: #ECF7EC;
+  border-bottom: 2px solid #3CB043;
+}
+
 
 app-account-settings .mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link {
+  flex-grow: 0;
+}
+app-settings .mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link {
   flex-grow: 0;
 }
 
 
 app-account-settings .mdc-tab-indicator {
+  display: none;
+}
+app-settings .mdc-tab-indicator {
   display: none;
 }
 
@@ -203,35 +252,16 @@ app-payment-details .mat-mdc-tab-group {
   max-width: 120%;
 }
 
-app-admin-dashboard .mat-mdc-tab-links {
-  flex-direction: column;
-  gap: 5px;
+
+
+app-settings .mat-mdc-tab-links {
+  flex-direction: row;
 }
 
-app-admin-dashboard .mdc-tab {
-  justify-content: start;
-}
-
-app-admin-dashboard .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-  color: #3cb043;
-}
-app-admin-dashboard
-  .mat-mdc-tab-link.mdc-tab--active:focus
-  .mdc-tab__text-label {
-  color: #3cb043;
-}
-app-admin-dashboard .mat-mdc-tab-link .mdc-tab__text-label {
-  color: #1d2939;
-  font-weight: 700;
-}
-app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
-  color: #3cb043;
-}
-
-app-admin-dashboard .mdc-tab--active {
+app-settings .mdc-tab--active {
   background-color: #f7fcf7;
   transition: all 1s;
-  border-radius: 12px;
+  border-radius: 0;
 }
 
 app-product-configure .mdc-tab--active {
@@ -239,14 +269,6 @@ app-product-configure .mdc-tab--active {
   border-bottom: 2px solid #3CB043;
 }
 
-app-admin-dashboard .mdc-tab:hover {
-  border-radius: 12px;
-  background-color: #f7fcf7;
-}
-
-app-admin-dashboard .mdc-tab-indicator {
-  display: none;
-}
 
 .custom-panel {
   width: fit-content;

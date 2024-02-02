@@ -60,8 +60,8 @@
       </section>
     </section>
     <section
-    *ngIf="incompatibleSet | keyvalue "
-      class="flex items-center bg-[#D9D9D91A] pt-[8px] pb-[7px] overflow-auto"
+    [ngClass]="numOfIncompatibles === 0 ? 'bg-white' : 'bg-[#D9D9D91A] pt-[8px] pb-[7px]'"
+      class="flex items-center  overflow-auto"
     >
       <button
         *ngIf="isOverflow"

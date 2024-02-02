@@ -1,12 +1,9 @@
 import {
-  CategoryEdit,
   CategoryEditResponse,
   CategoryPayload,
-  EditConfig,
   EditConfigResponse,
 } from './../../../../types';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
@@ -17,7 +14,7 @@ import {
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, debounceTime, fromEvent, tap } from 'rxjs';
+import { BehaviorSubject, Observable, fromEvent, tap } from 'rxjs';
 import {
   Attribute,
   AttributeOption,
@@ -34,9 +31,7 @@ import { CustomCheckBoxComponent } from '../../../../shared/components/custom-ch
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
-  getAttributes,
   putBackAttributeOptionInStore,
-  removeAttributeOptionInStore,
 } from '../../../../store/category-management/attributes/attributes.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 import {
@@ -53,8 +48,6 @@ import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actio
 import {
   convertToAttributeOption,
   convertToCategoryConfig,
-  getAttributeOptionList,
-  isAttributeOption,
 } from '../../../../core/utils/helpers';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -93,6 +86,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   categoryConfig: CategoryConfig[] = [];
   categoryConfigSet: Record<string, CategoryConfig> = {};
   incompatibleSet: Record<string, AttributeOption[]> = {};
+  numOfIncompatibles = 0
   sizes: Record<string, string[]> = {};
   id!: string | null;
   @ViewChild('contentWrapper') contentWrapper!: ElementRef<HTMLDivElement>;
@@ -249,6 +243,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       size: option.additionalInfo.baseAmount,
     };
     // dispatching to store refreshes the form, the ff line puts back the selected values
+    this.numOfIncompatibles = Object.values(this.incompatibleSet).length
     this.categoryForm.patchValue({
       attributesInput: '',
       variants: '',
@@ -286,6 +281,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     ) {
     }
     this.selectedAttribute$.next([]);
+    this.numOfIncompatibles = Object.values(this.incompatibleSet).length
     this.categoryForm.patchValue({ attributesInput: '', variants: '' });
   }
 
@@ -327,12 +323,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
         ];
       }
       this.formValue = this.categoryForm.value;
-      // this.store.dispatch(
-      //   removeAttributeOptionInStore({
-      //     attributeId: incompatibleAttribute.attribute.id,
-      //     optionId: incompatibleAttribute.id,
-      //   })
-      // );
       this.localAttributes = this.removeFromLocalAttributes(
         this.localAttributes,
         incompatibleAttribute.id
