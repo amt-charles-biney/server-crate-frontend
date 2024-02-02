@@ -32,6 +32,8 @@ import {
 } from '../../store/product-spec/product-spec.action'
 import { CommonModule } from '@angular/common'
 import { MatTabsModule } from '@angular/material/tabs'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatSelectModule } from '@angular/material/select'
 
 @Component({
   selector: 'app-product-configure',
@@ -41,7 +43,9 @@ import { MatTabsModule } from '@angular/material/tabs'
     FooterComponent,
     CommonModule,
     MatTabsModule,
-    RouterModule
+    RouterModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   templateUrl: './product-configure.component.html',
   styleUrl: './product-configure.component.scss'
@@ -147,8 +151,6 @@ export class ProductConfigureComponent {
       this.queryMapper[product.optionType] = `${product.optionId}_${product.isMeasured ? product?.size ?? product?.baseAmount : 0}`
       if (product?.isMeasured) this.isMeasuredPriceMapper[product.optionType] = product.optionPrice
     }
-
-    console.log('load ...', this.queryMapper)
   }
 
   calculateisMeasuredPrice = (type: string): number => {
@@ -156,9 +158,6 @@ export class ProductConfigureComponent {
   }
 
   onSizeableOptionChange = ({ type, id = this.componentSizable, size = this.size }: { type: string, id: string, size: string }): void => {
-    console.log("type id size", id, size, type)
-    this.componentSizable = id
-    this.size = size
     this.updateConfigQueryParam({ type, id, size })
   }
 
@@ -174,7 +173,8 @@ export class ProductConfigureComponent {
 
   isActiveSelectedOption = ({ type, id, size }: { type: string, id: string, size: string }): boolean => this.queryMapper[type] === `${id}_${0}`
 
-  generateStorageSizes(productArr: any[]): number[] {
+  generateStorageSizes(attributeId: string, productArr: any[]): number[] {
+    console.log("attribute id ", attributeId)
     const storageSize = []
     const minBaseAmount = productArr.reduce((min, option) => Math.min(min, option.baseAmount), Infinity)
     const maxMaxAmount = productArr.reduce((max, option) => Math.max(max, option.maxAmount), -Infinity)
@@ -189,7 +189,7 @@ export class ProductConfigureComponent {
 
   resetDefault(type: string): void {
     const getIncludedProduct = this.productConfig.options[type].filter(product => product.isIncluded)[0]
-    if (getIncludedProduct) this.updateConfigQueryParam({ type, id: getIncludedProduct.compatibleOptionId, size: getIncludedProduct?.baseAmount.toString() })
+    if (getIncludedProduct) this.updateConfigQueryParam({ type, id: getIncludedProduct.compatibleOptionId, size: (getIncludedProduct.baseAmount !== null) ? getIncludedProduct?.baseAmount.toString() : "0" })
     else {
       delete this.queryMapper[type]
       this.updateConfigQueryParam(null)

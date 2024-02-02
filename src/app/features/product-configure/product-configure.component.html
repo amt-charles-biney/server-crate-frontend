@@ -139,7 +139,7 @@
                                 (change)="onSizeableOptionChange({ type: activeLink, id: selectConfig.value, size: selectSize.value })"
                                 class="p-2 border-[2px] border-[#E8EAEB] focus:outline-none text-gray-700 pl-4 rounded-md w-full flex-1 max-w-lg pr-8 appearance-none"
                               >
-                                <option class="hover" [value]="sizes" *ngFor="let sizes of generateStorageSizes(productConfig.options[activeLink])">
+                                <option class="hover" [value]="sizes" [disabled]="" *ngFor="let sizes of generateStorageSizes(selectConfig.value, productConfig.options[activeLink])">
                                   {{ sizes }} {{ unit }}
                                 </option>
                               </select>
