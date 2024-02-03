@@ -31,7 +31,8 @@ import {
 import { CommonModule } from '@angular/common'
 import { MatTabsModule } from '@angular/material/tabs'
 import { MatFormFieldModule } from '@angular/material/form-field'
-import { MatSelectChange, MatSelectModule } from '@angular/material/select'
+import { MatSelectModule } from '@angular/material/select'
+import { OrderSummaryComponent } from './order-summary/order-summary.component'
 
 @Component({
   selector: 'app-product-configure',
@@ -43,7 +44,8 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select'
     MatTabsModule,
     RouterModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    OrderSummaryComponent
   ],
   templateUrl: './product-configure.component.html',
   styleUrl: './product-configure.component.scss'

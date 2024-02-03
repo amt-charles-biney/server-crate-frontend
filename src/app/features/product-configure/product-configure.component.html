@@ -198,34 +198,7 @@
          </div>
 
 
-         <div
-            class="border-[1px] flex-1 h-[327px] max-w-[486px] w-full mt-5 flex flex-col p-4 border-dashed rounded-xl justify-between border-[#E6E6E6]">
-            <div class="w-full gap-4 flex flex-col">
-               <h2 class="font-semibold text-lg">Order Summary</h2>
-               <span class="flex flex-row justify-between w-full items-center">
-                  <span class="text-xs font-normal">{{ productConfigItem.productName }}</span>
-                  <span class="font-medium text-xs">$ {{productConfigItem.productPrice}}</span>
-               </span>
-               <span class="flex flex-row justify-between w-full items-center">
-                  <span class="text-xs font-normal">Configurations</span>
-                  <span class="font-medium text-xs">$ {{productConfigItem.configuredPrice}}</span>
-               </span>
-            </div>
-
-            <div class="w-full gap-4 flex flex-col">
-               <span class="flex flex-row justify-between w-full items-center">
-                  <span class="text-xs font-[400px]">Total(2)</span>
-                  <span class="font-medium text-xs">$ {{productConfigItem.totalPrice}}</span>
-               </span>
-               <span class="flex flex-row justify-between w-full items-center">
-                  <span class="text-xs font-normal">(Incl. VAT)</span>
-                  <span class="font-medium text-xs">{{productConfigItem.vat}}</span>
-               </span>
-               <button class="bg-[#3CB043] hover:bg-green-500 w-full p-2 rounded-xl text-white font-[500px] text-[20px]">
-                  Add to cart
-               </button>
-            </div>
-         </div>
+         <app-order-summary [warranty]="warranty" [components]="queryMapper" [productConfigItem]="productConfigItem"></app-order-summary>
       </div>
    </section>
    <app-footer />
