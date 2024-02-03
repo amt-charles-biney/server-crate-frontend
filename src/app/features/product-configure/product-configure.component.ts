@@ -50,9 +50,6 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select'
 })
 
 export class ProductConfigureComponent {
-  @ViewChild('selectConfig') selectConfig!: ElementRef
-  @ViewChild('selectSize') selectSize!: ElementRef
-
   defaultSelectedValues: (Record<string, IdefaultSelectedProps>) = {}
 
   product$: Observable<ProductItem | null> = this.store.select(selectProduct)
@@ -81,12 +78,9 @@ export class ProductConfigureComponent {
     vat: 0
   }
 
-  isMeasuredPriceMapper: Record<string, number> = {}
-
   activeLink: string = ''
   configKeys: string[] = []
   queryMapper: Record<string, string> = {}
-  isComponentSizableQueryMapper: (Record<string, string>) = {}
 
   setActiveLink = (active: string): void => {
     this.unit = this.productConfig.options[active][0]?.unit ?? 'GB'
@@ -143,9 +137,10 @@ export class ProductConfigureComponent {
   }
 
   /**
-   * Builds the queries for included components on initialization
-   */
-
+ * Builds the query mapper based on the configured products.
+ * Assigns query strings to each product's optionType in the queryMapper object.
+ * Also assigns default selected values for measured products in the defaultSelectedValues object.
+ */
   buildQueryMapper = (): void => {
     for (const product of this.productConfigItem.configured) {
       this.queryMapper[product.optionType] = `${product.optionId}_${product.isMeasured ? product?.size || product?.baseAmount : 0}`
@@ -155,11 +150,24 @@ export class ProductConfigureComponent {
     }
   }
 
+  /**
+   * Handles the change event for sizeable options.
+   * Updates the defaultSelectedValues object with the new size.
+   * Calls updateConfigQueryParam method to update configuration query parameters.
+   * @param {IConfigureSelectProps} - An object containing type, id, and size properties.
+   */
   onSizeableOptionChange = ({ type, id, size }: IConfigureSelectProps): void => {
     this.defaultSelectedValues[type] = { ...this.defaultSelectedValues[type], size: String(size) }
     this.updateConfigQueryParam({ type, id: this.defaultSelectedValues[type]?.id, size })
   }
 
+  /**
+ * Handles the change event for variant sizable options.
+ * Retrieves the adjusted size for the selected option.
+ * Updates the defaultSelectedValues object with the new id and adjusted size.
+ * Calls updateConfigQueryParam method to update configuration query parameters.
+ * @param {IConfigureSelectProps} - An object containing type and id properties.
+ */
   onSelectVariantSizableChange = ({ type, id }: IConfigureSelectProps): void => {
     const getCurrentConfiguredProduct: any = this.productConfig.options[type]?.find(product => product.compatibleOptionId === id)
     const adjustedSize = getCurrentConfiguredProduct?.size
