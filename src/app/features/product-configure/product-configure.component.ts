@@ -20,6 +20,9 @@ import {
 } from '../../store/product-spec/product-spec.action'
 import { CommonModule } from '@angular/common'
 import { MatTabsModule } from '@angular/material/tabs'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatSelectModule } from '@angular/material/select'
+import { OrderSummaryComponent } from './order-summary/order-summary.component'
 
 @Component({
   selector: 'app-product-configure',
@@ -28,6 +31,9 @@ import { MatTabsModule } from '@angular/material/tabs'
     CommonModule,
     MatTabsModule,
     RouterModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    OrderSummaryComponent
     RouterLink
   ],
   templateUrl: './product-configure.component.html',
