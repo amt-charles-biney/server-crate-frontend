@@ -16,6 +16,7 @@ import { AdminService } from '../../../core/services/admin/admin.service';
 import { resetLoader, setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { GetAttribute } from '../../../types';
 import { Store } from '@ngrx/store';
+import { errorHandler } from '../../../core/utils/helpers';
 
 @Injectable()
 export class AttributeEffect {
@@ -157,12 +158,6 @@ export class AttributeEffect {
               return getAttributes();
             }),
             catchError((err) => {
-              let errorMessage =  ''
-              if (err && err.error && err.error.detail) {
-                errorMessage = err.error.detail
-              } else {
-                errorMessage = 'Server response error'
-              }
               setTimeout(() => {
                 this.store.dispatch(resetLoader({
                   isError: true,
@@ -173,7 +168,7 @@ export class AttributeEffect {
               return of(
                 setLoadingSpinner({
                   isError: true,
-                  message: errorMessage,
+                  message: errorHandler(err),
                   status: false,
                 })
               );
@@ -224,16 +219,10 @@ export class AttributeEffect {
               return getAttributes();
             }),
             catchError((err) => {
-              let errorMessage =  ''
-              if (err && err.error && err.error.detail) {
-                errorMessage = err.error.detail
-              } else {
-                errorMessage = 'Server response error'
-              }
               return of(
                 setLoadingSpinner({
                   isError: true,
-                  message: errorMessage,
+                  message: errorHandler(err),
                   status: false,
                 })
               );

@@ -8,6 +8,7 @@ import { SignIn } from '../../../types';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { ProfileService } from '../../../core/services/user-profile/profile.service';
+import { errorHandler } from '../../../core/utils/helpers';
 
 @Injectable()
 export class LoginEffect {
@@ -36,7 +37,7 @@ export class LoginEffect {
             return of(
               setLoadingSpinner({
                 status: false,
-                message: err.error.detail ?? '',
+                message: errorHandler(err),
                 isError: true,
               })
             );

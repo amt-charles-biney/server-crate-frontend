@@ -1,63 +1,105 @@
-import { AttributeOption, CategoryConfig, CategoryEdit, CategoryEditResponse } from '../../types';
+import {
+  AttributeOption,
+  CategoryConfig,
+  CategoryEdit,
+  CategoryEditResponse,
+} from '../../types';
 
 export const logout = () => {
   localStorage.clear();
+  sessionStorage.clear()
   window.location.reload();
 };
 
-export function isAttributeOption(obj: any): obj is AttributeOption {  
+export function isAttributeOption(obj: any): obj is AttributeOption {
   return obj && typeof obj.id === 'string';
 }
 export function isCategoryEditResponse(obj: any): obj is CategoryEditResponse {
-  return obj && typeof obj.attributeOptionId === 'string'
+  return obj && typeof obj.attributeOptionId === 'string';
 }
-export function convertToCategoryEdit(attributeOption: AttributeOption, isCompatible: boolean, isIncluded: boolean): CategoryEdit {
-    return {
-      baseAmount: attributeOption.additionalInfo.baseAmount,
-      isCompatible,
-      isIncluded,
-      isMeasured: attributeOption.attribute.isMeasured,
-      maxAmount: attributeOption.additionalInfo.maxAmount,
-      media: attributeOption.optionMedia,
-      name: attributeOption.optionName,
-      price: attributeOption.optionPrice,
-      priceFactor: attributeOption.additionalInfo.priceFactor,
-      type: attributeOption.attribute.name,
-      unit: attributeOption.attribute.unit,
-    }
+export function convertToCategoryEdit(
+  attributeOption: AttributeOption,
+  isCompatible: boolean,
+  isIncluded: boolean
+): CategoryEdit {
+  return {
+    baseAmount: attributeOption.additionalInfo.baseAmount,
+    isCompatible,
+    isIncluded,
+    isMeasured: attributeOption.attribute.isMeasured,
+    maxAmount: attributeOption.additionalInfo.maxAmount,
+    media: attributeOption.optionMedia,
+    name: attributeOption.optionName,
+    price: attributeOption.optionPrice,
+    priceFactor: attributeOption.additionalInfo.priceFactor,
+    type: attributeOption.attribute.name,
+    unit: attributeOption.attribute.unit,
+  };
 }
 
-export function convertToAttributeOption(categoryEdit: CategoryEditResponse, attributeId: string, optionId: string): AttributeOption {
-  const {baseAmount, isCompatible, isIncluded, isMeasured, maxAmount, media, name, price, priceFactor, type, unit } = categoryEdit
+export function convertToAttributeOption(
+  categoryEdit: CategoryEditResponse,
+  attributeId: string,
+  optionId: string
+): AttributeOption {
+  const {
+    baseAmount,
+    isCompatible,
+    isIncluded,
+    isMeasured,
+    maxAmount,
+    media,
+    name,
+    price,
+    priceFactor,
+    type,
+    unit,
+  } = categoryEdit;
   return {
     additionalInfo: {
       baseAmount,
       maxAmount,
-      priceFactor
+      priceFactor,
     },
     attribute: {
       id: attributeId,
       isMeasured,
       name: type,
-      unit
+      unit,
     },
     id: optionId,
     optionMedia: media,
     optionName: name,
     optionPrice: price,
-    compatibleOptionId: categoryEdit.compatibleOptionId
-  }
+    compatibleOptionId: categoryEdit.compatibleOptionId,
+  };
 }
 
-export function getAttributeOptionList(categories: CategoryEditResponse[]): AttributeOption[] {
+export function getAttributeOptionList(
+  categories: CategoryEditResponse[]
+): AttributeOption[] {
   const attributeOptionList: AttributeOption[] = categories.map((category) => {
-    return convertToAttributeOption(category, category.attributeId, category.attributeOptionId)
-  })
-  return attributeOptionList
+    return convertToAttributeOption(
+      category,
+      category.attributeId,
+      category.attributeOptionId
+    );
+  });
+  return attributeOptionList;
 }
 
-export function convertToCategoryConfig(categoryEdit: CategoryEditResponse): CategoryConfig {
-  const { isCompatible, isIncluded, isMeasured, type, attributeId, attributeOptionId, size } = categoryEdit
+export function convertToCategoryConfig(
+  categoryEdit: CategoryEditResponse
+): CategoryConfig {
+  const {
+    isCompatible,
+    isIncluded,
+    isMeasured,
+    type,
+    attributeId,
+    attributeOptionId,
+    size,
+  } = categoryEdit;
   return {
     attributeId,
     attributeName: type,
@@ -65,6 +107,16 @@ export function convertToCategoryConfig(categoryEdit: CategoryEditResponse): Cat
     isCompatible,
     isIncluded,
     isMeasured,
-    size
+    size,
+  };
+}
+
+export function errorHandler(err: any): string {
+  let errorMessage = '';
+  if (err && err.error && err.error.detail) {
+    errorMessage = err.error.detail;
+  } else {
+    errorMessage = 'Server response error';
   }
+  return errorMessage
 }
