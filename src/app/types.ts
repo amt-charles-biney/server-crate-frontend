@@ -279,3 +279,15 @@ export interface ICategoryConfig {
   }
   options: ICategoryOption
 }
+
+export interface IConfigureSelectProps {
+  type: string
+  id: string
+  size: string | number
+}
+
+export interface IdefaultSelectedProps {
+  price: number
+  id: string
+  size: string
+}

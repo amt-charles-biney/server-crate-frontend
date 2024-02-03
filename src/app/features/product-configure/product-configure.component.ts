@@ -1,14 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router, RouterLink, RouterModule } from '@angular/router';
 import {
   ICategoryConfig,
-  ICategoryOption,
-  ICompatibleOption,
-  IConfiguredOption,
   IConfiguredProduct,
   IParamConfigOptions,
-  IProductConfiguration,
-  IProductConfigureOptionType,
   ProductItem,
 } from '../../types';
 import { Store } from '@ngrx/store';
