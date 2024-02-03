@@ -451,3 +451,15 @@ export type EditConfigResponse = {
   id: string;
   config: CategoryEditResponse[]
 }
+
+export interface IConfigureSelectProps {
+  type: string
+  id: string
+  size: string | number
+}
+
+export interface IdefaultSelectedProps {
+  price: number
+  id: string
+  size: string
+}

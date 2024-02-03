@@ -112,46 +112,36 @@
                            </span>
                         </button>
                          <div class="flex flex-row w-full justify-start gap-[90px]">
-                           <div class="relative max-w-[247px] w-full">
-                            <select
-                            title="select-option"
-                            #selectConfig
-                               (change)="onSizeableOptionChange({ type: activeLink, id: selectConfig.value, size: selectSize.value })"
-                               class="p-2 border-[2px] pl-4 pr-8 border-[#E8EAEB] focus:outline-none rounded-md w-full flex-1 max-w-lg appearance-none"
-                            >
-                               <option [value]="attributeProduct.compatibleOptionId"
-                                  *ngFor="let attributeProduct of productConfig.options[activeLink]">
-                                  {{ attributeProduct.name }}
-                               </option>
-                            </select>
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M4 6.66602L7.5286 10.1946C7.78894 10.455 8.21105 10.455 8.4714 10.1946L12 6.66602" stroke="#1B1D1F" stroke-width="1.33333" stroke-linecap="round"/>
-                                 </svg>
-                           </div>
-                           </div>
+                           <div class="max-w-[247px] w-full ">
+                              <mat-select
+                               [(value)]="defaultSelectedValues[activeLink].id"
+                               [panelClass]="'mt-4 -ml-2 rounded-md'"
+                               (selectionChange)="onSelectVariantSizableChange({ type: activeLink, id: $event.value, size: defaultSelectedValues[activeLink].size})"
+                                 class="py-2 x-2  h-[42px] p-2 border-[2px] border-[#E8EAEB] focus:outline-none rounded-md w-full flex-1 max-w-lg appearance-none"
+                              >
+                                 <mat-option [value]="attributeProduct.compatibleOptionId"
+                                    *ngFor="let attributeProduct of productConfig.options[activeLink]">
+                                    {{ attributeProduct.name }}
+                                 </mat-option>
+                              </mat-select>
+                             </div>
 
                            <div class="flex flex-row items-center gap-[54px] w-full">
                             <div class="relative max-w-[247px] w-full">
-                              <select
-                                title="select-size"
-                                #selectSize
-                                (change)="onSizeableOptionChange({ type: activeLink, id: selectConfig.value, size: selectSize.value })"
-                                class="p-2 border-[2px] border-[#E8EAEB] focus:outline-none text-gray-700 pl-4 rounded-md w-full flex-1 max-w-lg pr-8 appearance-none"
+                              <mat-select
+                                [(value)]="defaultSelectedValues[activeLink].size"
+                                [panelClass]="'mt-4 -ml-2 rounded-md'"
+                                (selectionChange)="onSizeableOptionChange({ type: activeLink, id: defaultSelectedValues[activeLink].id, size: $event.value })"
+                                class="py-2 x-2  h-[42px] p-2 border-[2px] border-[#E8EAEB] focus:outline-none rounded-md w-full flex-1 max-w-lg appearance-none"
                               >
-                                <option class="hover" [value]="sizes" [disabled]="" *ngFor="let sizes of generateStorageSizes(selectConfig.value, productConfig.options[activeLink])">
+                                <mat-option class="hover" [value]="sizes" [disabled]="" *ngFor="let sizes of generateStorageSizes(defaultSelectedValues[activeLink].id, productConfig.options[activeLink])">
                                   {{ sizes }} {{ unit }}
-                                </option>
-                              </select>
-                              <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4 6.66602L7.5286 10.1946C7.78894 10.455 8.21105 10.455 8.4714 10.1946L12 6.66602" stroke="#1B1D1F" stroke-width="1.33333" stroke-linecap="round"/>
-                                    </svg>
-                              </div>
+                                </mat-option>
+                              </mat-select>
                             </div>
 
                             <div class="font-medium text-[20px]">
-                              ${{isMeasuredPriceMapper[activeLink] || "0"}}
+                              {{defaultSelectedValues[activeLink].price === 0 ? "included" : "$" + defaultSelectedValues[activeLink].price}}
                             </div>
                            </div>
 
