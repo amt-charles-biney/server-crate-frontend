@@ -49,6 +49,9 @@ input[type="checkbox"].indeterminateCheckbox {
   border-color: #3cb043;
   background-color: #ECF7EC80
 }
+input[type="checkbox"].indeterminateCheckbox-all-selected {
+  background-color: #3cb043;
+}
 
 input[type="checkbox"]:indeterminate::after {
   content: "";
@@ -362,6 +365,15 @@ app-category-management  {
 }
 .mat-mdc-menu-content {
   padding: 0px !important;
+}
+
+.cdk-overlay-dark-backdrop {
+  -webkit-backdrop-filter: blur(8px);  
+  backdrop-filter: blur(8px) !important;
+  background: none;
+  background-color: rgba(228 ,228 ,228 ,0.10);
+  box-shadow: 0px 10px 15px 10px rgba(0 ,0 ,0 ,0.15);
+
 }
 
 @media only screen and (max-width: 768px) {

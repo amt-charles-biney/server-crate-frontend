@@ -42,7 +42,6 @@ import {
   AttributeOption,
   LoadingStatus,
 } from '../../../../../../types';
-import { getUniqueId } from '../../../../../../core/utils/settings';
 import { selectAttributeCreationState } from '../../../../../../store/category-management/attributes/attributes.reducers';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthLoaderComponent } from '../../../../../../shared/components/auth-loader/auth-loader.component';
@@ -158,7 +157,7 @@ export class AttributeModalComponent implements OnInit {
       optionPrice,
     } = attributeOption;
     
-    this.coverImage.push(optionMedia);
+    this.coverImage.push(optionMedia || null);
     return this.fb.group({
       name: [optionName],
       price: optionPrice,

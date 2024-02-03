@@ -3,6 +3,7 @@
     <h2 class="font-bold text-2xl">Attribute List</h2>
     <section class="flex items-center gap-6">
       <button
+        *ngIf="attributesTodelete.size > 0"
         (click)="deleteAttributes()"
         class="flex items-center gap-2 font-[500] text-sm py-1 px-2"
       >

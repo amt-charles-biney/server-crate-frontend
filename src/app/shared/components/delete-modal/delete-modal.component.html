@@ -1,6 +1,14 @@
 <main class="w-[400px] p-6">
     <header class="flex items-center justify-between">
-        <img src="/assets/delete-pulse.svg" alt="delete">
+        <div class="relative">
+            <img src="/assets/delete-pulse.svg" alt="delete">
+            <div class="absolute top-0 border-2 h-[22px] w-[21px] rounded-full border-red-600 animate-ping">
+            </div>
+            <div class="absolute top-0 border-2 h-[22px] w-[21px] rounded-full border-red-400 animate-ping">
+            </div>
+            <div class="absolute top-0 border-2 h-[22px] w-[21px] rounded-full border-red-200 animate-ping">
+            </div>
+        </div>
         <button (click)="dialogRef.close(false)">
             <img src="/assets/close.svg" alt="close button" />
         </button>

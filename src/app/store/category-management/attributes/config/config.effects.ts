@@ -9,7 +9,7 @@ import {
   sendConfig,
   sendEditedConfig,
 } from './config.actions';
-import { catchError, exhaustMap, map, of, switchMap, tap } from 'rxjs';
+import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { Store } from '@ngrx/store';
 import {
@@ -18,6 +18,7 @@ import {
 } from '../../../loader/actions/loader.actions';
 import { Router } from '@angular/router';
 import { CategoryAndConfig } from '../../../../types';
+import { errorHandler } from '../../../../core/utils/helpers';
 
 @Injectable()
 export class ConfigEffect {
@@ -38,16 +39,10 @@ export class ConfigEffect {
             return resetLoader({ isError: false, message: '', status: false });
           }),
           catchError((err) => {
-            let errorMessage = '';
-            if (err && err.error && err.error.detail) {
-              errorMessage = err.error.detail;
-            } else {
-              errorMessage = 'Server response error';
-            }
             return of(
               setLoadingSpinner({
                 isError: true,
-                message: errorMessage,
+                message: errorHandler(err),
                 status: false,
               })
             );
@@ -66,16 +61,10 @@ export class ConfigEffect {
             return gotCategoryAndConfig({ categories });
           }),
           catchError((err) => {
-            let errorMessage = '';
-            if (err && err.error && err.error.detail) {
-              errorMessage = err.error.detail;
-            } else {
-              errorMessage = 'Server response error';
-            }
             return of(
               setLoadingSpinner({
                 isError: true,
-                message: errorMessage,
+                message: errorHandler(err),
                 status: false,
               })
             );
@@ -97,16 +86,10 @@ export class ConfigEffect {
             return gotSingleCategory(props);
           }),
           catchError((err) => {
-            let errorMessage = '';
-            if (err && err.error && err.error.detail) {
-              errorMessage = err.error.detail;
-            } else {
-              errorMessage = 'Server response error';
-            }
             return of(
               setLoadingSpinner({
                 isError: true,
-                message: errorMessage,
+                message: errorHandler(err),
                 status: false,
               })
             );
@@ -130,16 +113,10 @@ export class ConfigEffect {
             return getCategoriesAndConfig();
           }),
           catchError((err) => {
-            let errorMessage = '';
-            if (err && err.error && err.error.detail) {
-              errorMessage = err.error.detail;
-            } else {
-              errorMessage = 'Server response error';
-            }
             return of(
               setLoadingSpinner({
                 isError: true,
-                message: errorMessage,
+                message: errorHandler(err),
                 status: false,
               })
             );
@@ -159,16 +136,10 @@ export class ConfigEffect {
             return resetLoader({ isError: false, message: '', status: false });
           }),
           catchError((err) => {
-            let errorMessage = '';
-            if (err && err.error && err.error.detail) {
-              errorMessage = err.error.detail;
-            } else {
-              errorMessage = 'Server response error';
-            }
             return of(
               setLoadingSpinner({
                 isError: true,
-                message: errorMessage,
+                message: errorHandler(err),
                 status: false,
               })
             );

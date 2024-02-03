@@ -3,9 +3,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CategoryAndConfig } from '../../../types';
 import { CustomCheckBoxComponent } from '../custom-check-box/custom-check-box.component';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatMenuModule } from '@angular/material/menu';
-import { ClickOutsideDirective } from '../../directives/click-outside.directive';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { HoverDirective } from '../../directives/hover.directive';
 
 @Component({
   selector: 'app-table-row',
@@ -15,8 +14,7 @@ import { Router, RouterModule } from '@angular/router';
     CustomCheckBoxComponent,
     FormsModule,
     ReactiveFormsModule,
-    MatMenuModule,
-    ClickOutsideDirective,
+    HoverDirective
   ],
   templateUrl: './table-row.component.html',
   styleUrl: './table-row.component.scss',
@@ -29,6 +27,7 @@ export class TableRowComponent {
     id: string;
   }>();
   isMenuOpened: boolean = false;
+  isHovered: boolean = false
   @Output() closeEvent = new EventEmitter<void>();
   constructor(private router: Router) {}
   closeCategoryInfo() {
@@ -43,13 +42,10 @@ export class TableRowComponent {
     this.itemSelectedEmitter.emit({ selected, id });
   }
 
-  editCategory(id: string) {
-    console.log('Reroute');
-    
+  editCategory(id: string) {    
     this.router.navigateByUrl(`/admin/add-category/${id}`)
   }
   showCategoryInfo(id: string) {
-    console.log('view', id);
     this.isMenuOpened = true;
   }
 }

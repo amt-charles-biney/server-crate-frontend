@@ -3,13 +3,12 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { Success, UserSignUp } from '../../../types';
-import {
-  signUp,
-} from '../actions/signup.actions';
+import { signUp } from '../actions/signup.actions';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { ProfileService } from '../../../core/services/user-profile/profile.service';
+import { errorHandler } from '../../../core/utils/helpers';
 
 @Injectable()
 export class SignUpEffect {
@@ -19,20 +18,15 @@ export class SignUpEffect {
       tap((userData) => console.log('userData', userData)),
       exhaustMap((signUpData: UserSignUp) => {
         console.log('Data', signUpData);
-        this.signUpService.setEmail(signUpData.email)
+        this.signUpService.setEmail(signUpData.email);
         return this.signUpService.signUp(signUpData).pipe(
           tap((data: Success) => console.log('Sign up', data)),
           map((data: Success) => {
             console.log('Successfull');
-            // this.store.dispatch(
-            //   setLoadingSpinner({
-            //     status: false,
-            //     message:
-            //       'OTP has been sent to your email. Please verify your email',
-            //     isError: false,
-            //   })
-            // );
-            this.profileService.setUser({ firstName: signUpData.firstName, lastName: signUpData.lastName})
+            this.profileService.setUser({
+              firstName: signUpData.firstName,
+              lastName: signUpData.lastName,
+            });
             setTimeout(() => {
               this.router.navigateByUrl('/otp', { replaceUrl: true });
             }, 2000);
@@ -44,14 +38,14 @@ export class SignUpEffect {
             });
           }),
           catchError((error) => {
-            let errorMessage = 'User with this email already exists'
-            if (error.error && error.error.detail) {
-              errorMessage = error.error.detail ?? 'Couldn\'t reach the server'
-            }
-        
-            return of(setLoadingSpinner({ status: false, message: errorMessage, isError: true }));
+            return of(
+              setLoadingSpinner({
+                status: false,
+                message: errorHandler(error),
+                isError: true,
+              })
+            );
           }),
-          tap(console.log)
         );
       })
     )

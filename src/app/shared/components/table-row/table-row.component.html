@@ -13,21 +13,26 @@
   <td
     class="relative md:col-span-4 2xl:col-span-5 flex items-center gap-3 text-start"
   >
-  <div class="flex items-center gap-3 text-start w-[70%] 2xl:w-[50%] overflow-hidden text-ellipsis whitespace-nowrap">
+    <div
+      class="flex items-center gap-3 text-start w-[70%] 2xl:w-[50%] overflow-hidden text-ellipsis whitespace-nowrap"
+    >
       <p class="" *ngFor="let config of category.config | slice : 0 : 3">
         <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{
           config
         }}</span>
       </p>
-  </div>
-    <p
+    </div>
+    <button
+      appHover
+      (hoverEmitter)="isHovered=$event"
+      (click)="showCategoryInfo(category.id)"
       *ngIf="category.config.length > 3"
       class="bg-light-green text-figma-green rounded-full w-[23px] h-[23px] flex flex-col justify-center items-center text-xs"
     >
       +{{ category.config.length - 3 }}
-    </p>
+  </button>
     <div
-      *ngIf="isMenuOpened"
+      *ngIf="isHovered"
       class="flex flex-col absolute z-50 top-5 text-sm rounded shadow-md border w-[252px] bg-white"
     >
       <div class="px-4 py-2 font-inter">
@@ -51,22 +56,11 @@
     {{ category.productCount }}
   </td>
   <td class="col-span-1 self-center">
-    <button class="flex justify-center w-full" [matMenuTriggerFor]="menu">
-      <img src="/assets/ellipses.svg" alt="ellipses" />
+    <button
+      (click)="editCategory(category.id)"
+      class="flex justify-center w-full"
+    >
+      <img src="/assets/edit.svg" alt="edit" />
     </button>
-    <mat-menu #menu="matMenu" panelClass="customMenu">
-      <button (click)="editCategory(category.id)" mat-menu-item>
-        <span class="text-sm">Edit</span>
-      </button>
-      <button
-        appClickOutside
-        (clickOutside)="closeCategoryInfo()"
-        (click)="showCategoryInfo(category.id)"
-        mat-menu-item
-        [disabled]="category.config.length === 0"
-      >
-        <span class="text-sm">View</span>
-      </button>
-    </mat-menu>
   </td>
 </div>

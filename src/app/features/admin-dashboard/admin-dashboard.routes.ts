@@ -53,6 +53,7 @@ export const route: Routes = [
         component: AddProductComponent,
         providers: [
           provideEffects(CategoryEffect),
+          provideState(productsFeature),
           provideState(categoryFeature),
           provideState(configurationFeature),
         ]

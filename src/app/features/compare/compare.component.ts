@@ -30,7 +30,7 @@ export class CompareComponent implements OnInit, OnDestroy {
       this.store.dispatch(getUserConfiguration({id: this.firstProduct.category.id, name: this.firstProduct.category.name }))
       this.store.dispatch(getUserConfiguration({id: this.secondProduct.category.id, name: this.secondProduct.category.name }))
       
-      this.productAttr = this.store.select(selectConfigurationState)
+      // this.productAttr = this.store.select(selectConfigurationState)
     } else {
       this.clearSelections()
     }
