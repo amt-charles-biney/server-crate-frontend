@@ -1,5 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router, RouterLink, RouterModule } from '@angular/router';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import {
+  ActivatedRoute,
+  NavigationExtras,
+  Router,
+  RouterModule,
+} from '@angular/router';
 import {
   ICategoryConfig,
   IConfiguredProduct,
