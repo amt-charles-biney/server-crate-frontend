@@ -39,14 +39,11 @@ import { OrderSummaryComponent } from './order-summary/order-summary.component'
     MatFormFieldModule,
     MatSelectModule,
     OrderSummaryComponent
-    RouterLink
   ],
   templateUrl: './product-configure.component.html',
   styleUrl: './product-configure.component.scss'
 })
 export class ProductConfigureComponent {
-  @ViewChild('selectConfig') selectConfig!: ElementRef
-  @ViewChild('selectSize') selectSize!: ElementRef
 
   product$: Observable<ProductItem | null> = this.store.select(selectProduct)
   productConfig$: Observable<any> = this.store.select(selectProductConfig)
