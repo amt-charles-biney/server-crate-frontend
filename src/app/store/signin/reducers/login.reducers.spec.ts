@@ -16,7 +16,7 @@ fdescribe('LoginFeature', () => {
     })
 
     describe('signInSuccess action', () => {
-        it('should update the state', () => {
+        it('should update the state immutably', () => {
             const payload: VerifiedUser = {
                 email: 'test@gmail.com',
                 firstName: 'Test',
@@ -37,6 +37,7 @@ fdescribe('LoginFeature', () => {
             const state = loginFeature.reducer(initialState, action)
 
             expect(state).toEqual(newState)
+            expect(state).not.toBe(newState)
         })
     })
 })

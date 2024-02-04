@@ -3,7 +3,7 @@
   (ngSubmit)="verifyEmail()"
   class="md:p-0 px-4 md:max-w-[500px] mx-auto flex flex-col items-center gap-4"
 >
-  <p class="mt-4">We have sent you a One Time Password on your mobile</p>
+  <p class="mt-4 text-[20px] font-[500]">We have sent you a One Time Password on your mobile</p>
   <ng-container *ngIf="time | async as time">
     <app-countdown
       [timeInMinutes]="time"

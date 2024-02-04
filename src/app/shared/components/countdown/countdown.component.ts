@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { map, takeWhile, tap, timer } from 'rxjs';
 import { resetLoader, setLoadingSpinner } from '../../../store/loader/actions/loader.actions';
 import { TimerService } from '../../../core/services/timer/timer.service';
+import { OTP_EXPIRATION } from '../../../core/utils/constants';
 
 @Component({
   selector: 'app-countdown',
@@ -23,7 +24,7 @@ export class CountdownComponent {
     map((n) => {
       const time = (this.timeInMinutes * 60 - n) * 1000;
       sessionStorage.setItem(
-        'server-crate-otp-expiration',
+        OTP_EXPIRATION,
         JSON.stringify(time / 60000)
       );
       return time;

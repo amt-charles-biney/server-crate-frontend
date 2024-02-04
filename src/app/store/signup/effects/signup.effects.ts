@@ -23,14 +23,6 @@ export class SignUpEffect {
           tap((data: Success) => console.log('Sign up', data)),
           map((data: Success) => {
             console.log('Successfull');
-            // this.store.dispatch(
-            //   setLoadingSpinner({
-            //     status: false,
-            //     message:
-            //       'OTP has been sent to your email. Please verify your email',
-            //     isError: false,
-            //   })
-            // );
             this.profileService.setUser({
               firstName: signUpData.firstName,
               lastName: signUpData.lastName,
