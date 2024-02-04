@@ -25,9 +25,12 @@ export const loadProductConfigFailure = createAction(
   props<{ error: any }>()
 );
 
-
 export const loadProductConfigItem = createAction('[ProductConfigItem Component] Get product Config Item', props<{productId: string, configOptions: IParamConfigOptions}>());
 export const loadProductConfigItemSuccess = createAction('[ProductConfigItem Component] Get product Config Item Success', props<{ productConfigItem: IConfiguredProduct }>());
 export const loadProductConfigItemFailure = createAction('[ProductConfig Component] Get Product Config Item Failure',
   props<{ error: any }>()
-);
+)
+
+export const addToCartItem = createAction('[ProductCartItem Component] Add product Config Item to cart', props<{ productId: string, configOptions: IParamConfigOptions }>())
+export const addToCartItemSuccess = createAction('[ProductCartItem Component] Add product Config item to cart success', props<{ productCartItem: IConfiguredProduct }>())
+export const addToCartItemFailure = createAction('[ProductCartItem Component] Add product Config Item to cart failure', props<{ error: any }>())
