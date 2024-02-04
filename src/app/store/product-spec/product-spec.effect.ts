@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { EMPTY, mergeMap, of, tap } from "rxjs";
 import { map, exhaustMap, catchError } from "rxjs";
 import { ProductService } from "../../core/services/product/product.service";
-import { loadProduct, loadProductConfig, loadProductConfigFailure, loadProductConfigItem, loadProductConfigItemFailure, loadProductConfigItemSuccess, loadProductConfigSuccess, loadProductFailure, loadProductSuccess } from "./product-spec.action";
+import { addToCartItem, addToCartItemFailure, addToCartItemSuccess, loadProduct, loadProductConfig, loadProductConfigFailure, loadProductConfigItem, loadProductConfigItemFailure, loadProductConfigItemSuccess, loadProductConfigSuccess, loadProductFailure, loadProductSuccess } from "./product-spec.action";
 import { ICategoryConfig, IConfiguredProduct, IParamConfigOptions, ProductItem } from "../../types";
 
 @Injectable()
@@ -61,6 +61,25 @@ export class ProductSpecEffects {
           catchError((error: any) => {
             console.log("load product config item error ", error)
             return of(loadProductConfigItemFailure({ error }))
+          })
+        )
+      })
+    )
+  })
+
+  loadProductCartItem$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(addToCartItem),
+      exhaustMap((props: { productId: string, configOptions: IParamConfigOptions }) => {
+        return this.productService.addProductToCart(props.productId, props.configOptions)
+        .pipe(
+          map((productCartItem: IConfiguredProduct) => {
+            console.log("load cart item posted success ", productCartItem)
+            return addToCartItemSuccess({ productCartItem })
+          }),
+          catchError((error: any) => {
+            console.log("load cart item posted error ", error)
+            return of(addToCartItemFailure({ error }))
           })
         )
       })
