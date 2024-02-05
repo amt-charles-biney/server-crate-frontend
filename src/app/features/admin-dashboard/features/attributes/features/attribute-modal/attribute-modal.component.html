@@ -126,6 +126,7 @@
                       [editId]="editId"
                       [previewImage]="coverImage[i]"
                       (removeImageEmitter)="removeImage($event, i)"
+                      [isAttributeUpload]="true"
                       (uploadImageEmitter)="
                         replaceImage(
                           $event,

@@ -1,7 +1,7 @@
 <div [ngClass]="customClass">
   <p class="font-[500]">{{ label }}</p>
   <div [ngClass]="containerClass" class="group">
-    @if ((!formControl.value && editId === null) || (previewImage === null)) {
+    @if ((!formControl.value && editId === null || isAttributeUpload === true) || (previewImage === null)) {
     <ng-content></ng-content>
     <input
       [id]="'#' + elementId"

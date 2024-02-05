@@ -3,7 +3,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { deleteCategoriesAndConfig, getCategoriesAndConfig } from '../../../../store/category-management/attributes/config/config.actions';
+import { getCategoriesAndConfig } from '../../../../store/category-management/attributes/config/config.actions';
 import { BehaviorSubject, tap } from 'rxjs';
 import { CategoryAndConfig } from '../../../../types';
 import { selectCategoryAndConfigState } from '../../../../store/category-management/attributes/config/config.reducers';

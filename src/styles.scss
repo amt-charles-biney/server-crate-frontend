@@ -364,6 +364,15 @@ app-category-management  {
   padding: 0px !important;
 }
 
+.cdk-overlay-dark-backdrop {
+  -webkit-backdrop-filter: blur(8px);  
+  backdrop-filter: blur(8px) !important;
+  background: none;
+  background-color: rgba(228 ,228 ,228 ,0.10);
+  box-shadow: 0px 10px 15px 10px rgba(0 ,0 ,0 ,0.15);
+
+}
+
 @media only screen and (max-width: 768px) {
   app-payment-details .mat-mdc-tab-group {
     max-width: 100%;

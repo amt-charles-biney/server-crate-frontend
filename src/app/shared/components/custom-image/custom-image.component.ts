@@ -58,6 +58,7 @@ export class CustomImageComponent
   @Input() containerClass!: string;
   @Input() previewImage: string | null | ArrayBuffer = null;
   @Input() editId!: string | null;
+  @Input() isAttributeUpload: boolean = false
   localPreview: string | null | ArrayBuffer = null
   @Output() removeImageEmitter = new EventEmitter<string>()
   @Output() uploadImageEmitter = new EventEmitter<{imgSrc: string, imageToChange: string, file?: File}>()

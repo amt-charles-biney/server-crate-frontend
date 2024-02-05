@@ -34,7 +34,10 @@ module.exports = {
         'inter': ['inter', 'sans-serif'],
         'dm-sans': ['DM Sans', 'sans-serif'],
         'plus-jakarta-sans': ['Plus Jakarta Sans']
-      }
+      },
+      animation:{
+        'ping': 'ping 1s linear infinite'},
+   
     }
   },
   plugins: []
