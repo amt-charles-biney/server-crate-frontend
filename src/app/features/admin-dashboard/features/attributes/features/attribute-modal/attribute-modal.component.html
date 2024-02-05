@@ -124,9 +124,8 @@
                       customClass="flex flex-col h-[50%] xl:h-[60%]"
                       previewClass="w-[33px] h-5"
                       [editId]="editId"
-                      [previewImage]="coverImage[i]"
+                      [previewImage]="coverImage[i] || null"
                       (removeImageEmitter)="removeImage($event, i)"
-                      [isAttributeUpload]="true"
                       (uploadImageEmitter)="
                         replaceImage(
                           $event,

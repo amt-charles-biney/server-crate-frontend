@@ -124,7 +124,7 @@
         elementId="coverImage"
         containerClass="relative flex flex-col items-center justify-center border rounded-lg h-full"
         customClass="flex flex-col mt-4 h-[50%] xl:h-[60%]"
-        previewClass="w-full h-96 object-center"
+        previewClass="w-full h-96 object-contain"
         [previewImage]="coverImage"
         [editId]="id"
         label="Cover Image"
@@ -152,7 +152,8 @@
           <app-custom-image
             formControlName="image1"
             elementId="image1"
-            containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+            containerClass="relative flex flex-col items-center justify-center border w-[119px] h-[85px] rounded-lg"
+            previewClass="w-[119px] h-[85px] object-contain"
             [previewImage]="image1"
             [editId]="id"
             (removeImageEmitter)="removeImage($event)"
@@ -169,7 +170,8 @@
           <app-custom-image
             formControlName="image2"
             elementId="image2"
-            containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+            containerClass="relative flex flex-col items-center justify-center border w-[119px] h-[85px] rounded-lg"
+            previewClass="w-[119px] h-[85px] object-contain"
             [previewImage]="image2"
             [editId]="id"
             (removeImageEmitter)="removeImage($event)"
@@ -186,7 +188,8 @@
           <app-custom-image
             formControlName="image3"
             elementId="image3"
-            containerClass="relative flex flex-col items-center justify-center border w-28 h-20 rounded-lg"
+            containerClass="relative flex flex-col items-center justify-center border w-[119px] h-[85px] rounded-lg"
+            previewClass="w-[119px] h-[85px] object-contain"
             [previewImage]="image3"
             [editId]="id"
             (removeImageEmitter)="removeImage($event)"
@@ -233,8 +236,8 @@
     <div class="w-[488px] overflow-auto rounded-lg mt-2 bg-[#fbfbfb]">
       <ul class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc">
         <ng-container *ngIf="options | async as options">
-          <ng-container *ngIf="options[0]">
-            <li class="leading-4 w-max px-3 text-[13px]" *ngFor="let option of options[0].options| keyvalue ">
+          <ng-container *ngIf="options">
+            <li class="leading-4 w-max px-3 text-[13px]" *ngFor="let option of options.options| keyvalue ">
               <p>{{ option.key }}</p>
               <p class="text-gray-400">{{ option.value[0].name }}</p>
             </li>

@@ -69,7 +69,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   addProductForm!: RxFormGroup;
   categories$!: Observable<Select[]>;
   brands$!: Observable<Select[]>;
-  private option$ = new Subject<BasicConfig[]>();
+  private option$ = new Subject<BasicConfig>();
   private product$ = new Subject<ProductItem>();
   product = this.product$.asObservable();
   options = this.option$.asObservable();
@@ -166,7 +166,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
             this.image2 = data.imageUrl[1] || null;
             this.image3 = data.imageUrl[2] || null;
 
-            this.addProductForm.setValue({ ...this.formGroup });
+            this.addProductForm.patchValue({ ...this.formGroup });
           }),
           takeUntilDestroyed(this.destroyRef),
           catchError((err) => {

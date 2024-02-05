@@ -57,10 +57,10 @@ export const route: Routes = [
             {
                 path: 'compare',
                 loadComponent: () => import('../compare/compare.component').then(m => m.CompareComponent),
-                providers: [
-                    provideEffects(CategoryEffect),
-                    provideState(configurationFeature)
-                ]
+                // providers: [
+                //     provideEffects(CategoryEffect),
+                //     provideState(configurationFeature)
+                // ]
             }
         ],
         component: HomeComponent
