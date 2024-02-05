@@ -49,6 +49,9 @@ input[type="checkbox"].indeterminateCheckbox {
   border-color: #3cb043;
   background-color: #ECF7EC80
 }
+input[type="checkbox"].indeterminateCheckbox-all-selected {
+  background-color: #3cb043;
+}
 
 input[type="checkbox"]:indeterminate::after {
   content: "";

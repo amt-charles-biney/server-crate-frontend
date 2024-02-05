@@ -77,6 +77,7 @@ export class AttributesComponent implements OnInit, AfterViewInit {
     );
     if (someValuesSelected) {
       this.clearSelected();
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
     } else {
       Object.keys(this.selectForm.value).forEach((value) => {
         this.selectForm.patchValue({ [value]: true });
@@ -103,9 +104,21 @@ export class AttributesComponent implements OnInit, AfterViewInit {
     } else {
       this.attributesTodelete.add(id);
     }
-    this.indeterminateCheckbox.indeterminate = Object.values(
+    const allSelected = Object.values(
+      this.selectForm.value
+    ).every((value) => value);
+    const someSelected = Object.values(
       this.selectForm.value
     ).some((value) => value);
+    if (allSelected) {
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox-all-selected'
+      this.indeterminateCheckbox.indeterminate = false
+    } else if (someSelected) {
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
+      this.indeterminateCheckbox.indeterminate = true
+    } else {
+      this.indeterminateCheckbox.indeterminate = false
+    }    
   }
 
   deleteAttributes() {
