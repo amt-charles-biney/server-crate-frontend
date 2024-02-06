@@ -1,4 +1,4 @@
-<section class="mt-16 mb-12">
+<section class="mt-16 w-full max-w-[1240px] mx-auto mb-12">
   <h2 class="font-semibold text-xl py-12 text-center">Our Customer feedback</h2>
   <div
     class="bg-white keen-slider flex items-center max-w-screen-maxCap mx-auto w-full h-auto"
@@ -8,7 +8,7 @@
       *ngFor="let feedback of feedbacks"
       class="flex flex-col items-center gap-6 keen-slider__slide justify-center max-w-2xl w-full h-full p-8"
     >
-      <h2 class="text-3xl text-center">{{ feedback.message }}</h2>
+      <h2 class="text-[36px] leading-[44px] tracking-[-2%] text-center max-w-[1024px] w-full">{{ feedback.message }}</h2>
       <img [src]="feedback.image" alt="user1" class="w-24 h-24" />
 
       <div class="flex flex-col gap-2 text-center">

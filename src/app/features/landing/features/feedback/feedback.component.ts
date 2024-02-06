@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider';
 
 @Component({
@@ -43,12 +43,15 @@ export class FeedbackComponent {
         initial: this.currentFeedbackSlide,
         slideChanged: (s) => {
           this.currentFeedbackSlide = s.track.details.rel
+          this.cdr.detectChanges()
         },
       })
       this.dotHelper = [
         ...Array(this.feedbackSlider.track.details.slides.length).keys(),
       ]
+      
     })
+
   }
 
   ngOnDestroy() {
@@ -56,12 +59,11 @@ export class FeedbackComponent {
   }
 
 
-
-
-
   createStarArray = (num: number) => {
     let newArr = Array(num).fill(0)
     return newArr;
   }
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
 }
