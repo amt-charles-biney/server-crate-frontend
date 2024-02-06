@@ -16,6 +16,15 @@ export function checkIfPasswordsMatch(): ValidatorFn {
       : { confirmPwd: { value: 'Passwords do not match' } };
   };
 }
+export function categoryIsNotUnassigned(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const category = control.parent?.get('category');
+    if (category?.value.name === 'unassigned') {
+      return { category: { value: 'Category is unassigned' } };
+    }    
+    return null
+  };
+}
 
 export function formValidator(
   password: string,

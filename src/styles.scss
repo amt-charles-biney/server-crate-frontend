@@ -372,7 +372,6 @@ app-category-management  {
   background: none;
   background-color: rgba(228 ,228 ,228 ,0.10);
   box-shadow: 0px 10px 15px 10px rgba(0 ,0 ,0 ,0.15);
-
 }
 app-header .mat-badge-small.mat-badge-overlap.mat-badge-after .mat-badge-content {
   right: 2px;
@@ -380,6 +379,12 @@ app-header .mat-badge-small.mat-badge-overlap.mat-badge-after .mat-badge-content
 
 app-header .mat-badge-small.mat-badge-above .mat-badge-content {
   top: 4px;
+}
+
+.customShadow {
+  box-shadow: 0px -1px 43px -12px rgba(107,107,107,0.93);
+  -webkit-box-shadow: 0px -1px 43px -12px rgba(107,107,107,0.93);
+  -moz-box-shadow: 0px -1px 43px -12px rgba(107,107,107,0.93);
 }
 @media only screen and (max-width: 768px) {
   app-payment-details .mat-mdc-tab-group {
