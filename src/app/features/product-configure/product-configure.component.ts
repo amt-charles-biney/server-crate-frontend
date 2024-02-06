@@ -104,7 +104,7 @@ export class ProductConfigureComponent {
     this.productConfigItem$.subscribe((product) => {
       if (product !== null) this.productConfigItem = product
       this.buildQueryMapper()
-      // this.cdr.detectChanges()
+      this.cdr.detectChanges()
     })
 
     this.productConfig$.subscribe((product: ICategoryConfig) => {
@@ -196,7 +196,6 @@ export class ProductConfigureComponent {
       components: joinQuery
     }
     const navigationExtras: NavigationExtras = { queryParams: currentParams, queryParamsHandling: 'merge' }
-    console.log("navigation extra ", navigationExtras)
     void this.router.navigate([], navigationExtras)
   }
 
