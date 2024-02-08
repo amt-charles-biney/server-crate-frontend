@@ -104,7 +104,7 @@ export class ProductConfigureComponent {
     this.productConfigItem$.subscribe((product) => {
       if (product !== null) this.productConfigItem = product
       this.buildQueryMapper()
-      this.cdr.detectChanges()
+      // this.cdr.detectChanges()
     })
 
     this.productConfig$.subscribe((product: ICategoryConfig) => {
