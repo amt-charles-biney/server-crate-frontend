@@ -24,7 +24,7 @@
     </button>
   </section>
   <section
-    class="relative pb-24 grid gap-4 xl:gap-x-0 mt-6 grid-flow-row grid-cols-3 lg:grid-cols-2 md:grid-cols-1 xl:grid-cols-3 2xl:grid-cols-4 h-[90%] 2xl:h-[60%]"
+    class="relative flex flex-wrap gap-x-[42px] gap-y-[32px]"
   >
     <ng-container
       *ngIf="{ products: products | async, total: total | async } as products"
@@ -39,7 +39,7 @@
     </ng-container>
     <pagination-template
       #p="paginationApi"
-      class="flex gap-3 absolute bottom-10 right-10"
+      class="flex w-full justify-end self-end gap-3 "
       (pageChange)="getPage($event)"
       id="server"
       rounded-md

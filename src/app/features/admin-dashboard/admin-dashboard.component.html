@@ -1,6 +1,6 @@
 <main class="flex">
   <!-- sidebar -->
-  <aside class="flex min-h-screen flex-col p-8 border bg-[#fdfdfd]">
+  <aside class="flex min-h-screen w-[352px] flex-col p-8 border bg-[#fdfdfd]">
     <a routerLink="/">
       <img
         ngSrc="/assets/logo.svg"
@@ -356,7 +356,7 @@
       class="flex border-b pl-6 pr-[26px] w-full h-[111px] justify-between items-center bg-[#fdfdfd]"
     >
       <h2 class="font-bold tracking-wide">{{ activeLink }}</h2>
-      <div class="flex gap-12 py-6 w-[169px]">
+      <div class="flex justify-end gap-12 py-6 w-[169px]">
         <!-- <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -409,8 +409,8 @@
         />
       </div>
     </nav>
-    <section class="p-[26px]">
-      <div class="p-3">
+    <section class="p-[25px]">
+      <div class="py-3">
         <router-outlet />
       </div>
     </section>
