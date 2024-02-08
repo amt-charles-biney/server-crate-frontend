@@ -2,25 +2,26 @@ import { Component, Input } from '@angular/core'
 import { type IParamConfigOptions, type IConfiguredProduct } from '../../../types'
 import { Store } from '@ngrx/store'
 import { addToCartItem } from '../../../store/product-spec/product-spec.action'
-import { Router } from 'express'
-import { ActivatedRoute } from '@angular/router'
+import { Observable } from 'rxjs'
+import { selectProductCartItemLoading } from '../../../store/product-spec/product-spec.reducer'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-order-summary',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './order-summary.component.html'
 })
 export class OrderSummaryComponent {
   @Input() productConfigItem!: IConfiguredProduct
-  @Input() warranty: any = false
   @Input() productId!: string
   @Input() querySnapShot!: IParamConfigOptions
 
-  constructor (private store: Store, private router: ActivatedRoute) {}
+  loader$: Observable<boolean> = this.store.select(selectProductCartItemLoading);
+
+  constructor (private store: Store) {}
 
   addProductToCart (): void {
-    console.log('config options ', this.querySnapShot)
     this.store.dispatch(addToCartItem({ productId: this.productId, configOptions: this.querySnapShot  }))
   }
 }
