@@ -12,7 +12,7 @@ import { settingsGuard } from './core/guards/settings.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
 import { authGuard } from './core/guards/auth.guard';
-import { productConfigFeature, productConfigItemFeature } from './store/product-spec/product-spec.reducer';
+import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from './store/product-spec/product-spec.reducer';
 import { ProductSpecEffects } from './store/product-spec/product-spec.effect';
 
 export const routes: Routes = [
@@ -57,6 +57,7 @@ export const routes: Routes = [
         providers: [
             provideState(productConfigFeature),
             provideEffects(ProductSpecEffects),
+            provideState(productCartItemFeature),
             provideState(productConfigItemFeature)
         ]
     },
