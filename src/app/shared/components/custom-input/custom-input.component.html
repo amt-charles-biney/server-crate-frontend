@@ -52,16 +52,19 @@
       />
     </div>
     } @else if (type === "async") {
-    <input
-      type="text"
-      [id]="id"
-      [placeholder]="placeholder"
-      class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
-      aria-label="Number"
-      matInput
-      [formControl]="formControl"
-      [matAutocomplete]="auto"
-    />
+      <div class="relative">
+        <input
+          type="text"
+          [id]="id"
+          [placeholder]="placeholder"
+          class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
+          aria-label="Number"
+          matInput
+          [formControl]="formControl"
+          [matAutocomplete]="auto"
+        />
+        <img class="absolute top-3 right-[10px] transition-transform duration-300 w-4 h-4" src="/assets/chevron-down.svg" alt="expand" />
+      </div>
     <mat-autocomplete
       (optionSelected)="optionSelected($event)"
       [hideSingleSelectionIndicator]="true"

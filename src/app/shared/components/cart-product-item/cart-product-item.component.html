@@ -22,13 +22,16 @@
     <div>
       <div class="text-[13px] flex justify-between text-[#737373] mb-[10px]">
         <span>Includes:</span>
-        <div>
-          <span class="text-black ml-2" *ngFor="let option of product.configured"
-            >{{ option.optionName }},</span
+        <div class="whitespace-nowrap">
+          <span class="text-black ml-2 text-ellipses" *ngFor="let option of product.configured | slice: 0 : 3; let i = index"
+            >{{ option.optionName }}<span *ngIf="i !== product.configured.length - 1">,</span></span
           >
+          @if (product.configured.length > 3) {
+            <span class="ml-2">+{{ product.configured.length - 3}}</span>
+          }
         </div>
       </div>
-      <div class="flex items-center gap-2 text-sm">
+      <div class="flex items-center gap-2 mt-[10px] text-sm">
         <p>QTY</p>
         <div class="flex items-center text-[13px] gap-3 bg-[#E8EAEB80] rounded-3xl px-2">
           <button (click)="decrementQuantity()">-</button>
@@ -39,7 +42,7 @@
   
       <button
         (click)="deleteCartItem(product.id)"
-        class="self-start text-xs underline text-red-color"
+        class="self-start text-xs mt-[5px] underline text-red-color"
       >
         Remove
       </button>

@@ -13,9 +13,13 @@ import {
 } from '@angular/animations';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { filter, search } from '../../../store/users/users.actions';
+import { filter } from '../../../store/users/users.actions';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
+import {MatBadgeModule} from '@angular/material/badge';
+import { Observable } from 'rxjs';
+import { selectCount } from '../../../store/cart/cart.reducers';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -28,7 +32,8 @@ import {MatButtonModule} from '@angular/material/button';
     ReactiveFormsModule,
     FormsModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    MatBadgeModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -57,6 +62,7 @@ export class HeaderComponent implements OnInit {
   isAuthenticated!: boolean;
   showSearch: boolean = false;
   searchForm!: FormGroup
+  numberOfCartItems$!: Observable<number>
   constructor(private authService: AuthService, private store: Store, private router: Router) {
     this.isAuthenticated = this.authService.isAuthenticated();
   }
@@ -64,6 +70,7 @@ export class HeaderComponent implements OnInit {
     this.searchForm = new FormGroup({
       searchValue: new FormControl('', Validators.required)
     })
+    this.numberOfCartItems$ = this.store.select(selectCount) 
   }
 
   openSearch() {

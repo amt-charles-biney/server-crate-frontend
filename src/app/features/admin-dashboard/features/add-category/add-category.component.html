@@ -60,8 +60,12 @@
       </section>
     </section>
     <section
-    [ngClass]="numOfIncompatibles === 0 ? 'bg-white' : 'bg-[#D9D9D91A] pt-[8px] pb-[7px]'"
-      class="flex items-center  overflow-auto"
+      [ngClass]="
+        numOfIncompatibles === 0
+          ? 'bg-white'
+          : 'bg-[#D9D9D91A] pt-[8px] pb-[7px]'
+      "
+      class="flex items-center overflow-auto"
     >
       <button
         *ngIf="isOverflow"
@@ -195,7 +199,7 @@
             (onSelect)="onSelectConfigOptions($event, attribute)"
             [isDisabled]="attribute.attributeOptions.length === 0"
           />
-          <app-custom-select
+          <!-- <app-custom-select
             [control]="
               $any(categoryForm.controls[attribute.attributeName + 'Size'])
             "
@@ -207,6 +211,18 @@
                 sizes[attribute.attributeName].length === 0)
             "
             (onSelect)="sizeSelection($event, attribute)"
+          /> -->
+          <app-custom-size-selection
+            [control]="
+              $any(categoryForm.controls[attribute.attributeName + 'Size'])
+            "
+            [options]="sizes[attribute.attributeName] || []"
+            (selectionEmitter)="sizeSelection($event, attribute)"
+            [attribute]="attribute"
+            [isDisabled]="
+              !sizes[attribute.attributeName] ||
+              (sizes[attribute.attributeName] &&
+                sizes[attribute.attributeName].length === 0)"
           />
         </div>
         } @else {
