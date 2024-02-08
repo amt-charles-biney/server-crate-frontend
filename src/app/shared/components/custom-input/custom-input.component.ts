@@ -93,9 +93,7 @@ export class CustomInputComponent
       });
     }
   }
-  displayFn(option: Select): string {
-    console.log('displayed', option.name);
-    
+  displayFn(option: Select): string {    
     return option && option.name ? option.name : ''
   }
   showPasswordHandler(event: Event) {

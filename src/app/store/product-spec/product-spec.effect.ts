@@ -5,6 +5,7 @@ import { map, exhaustMap, catchError } from "rxjs";
 import { ProductService } from "../../core/services/product/product.service";
 import { addToCartItem, addToCartItemFailure, addToCartItemSuccess, loadProduct, loadProductConfig, loadProductConfigFailure, loadProductConfigItem, loadProductConfigItemFailure, loadProductConfigItemSuccess, loadProductConfigSuccess, loadProductFailure, loadProductSuccess } from "./product-spec.action";
 import { ICategoryConfig, IConfiguredProduct, IParamConfigOptions, ProductItem } from "../../types";
+import { getCartItems } from "../cart/cart.actions";
 
 @Injectable()
 export class ProductSpecEffects {
@@ -75,7 +76,7 @@ export class ProductSpecEffects {
         .pipe(
           map((productCartItem: IConfiguredProduct) => {
             console.log("load cart item posted success ", productCartItem)
-            return addToCartItemSuccess({ productCartItem })
+            return getCartItems()
           }),
           catchError((error: any) => {
             console.log("load cart item posted error ", error)

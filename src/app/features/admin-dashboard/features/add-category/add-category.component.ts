@@ -26,13 +26,10 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import {
-  putBackAttributeOptionInStore,
-} from '../../../../store/category-management/attributes/attributes.actions';
+import { putBackAttributeOptionInStore } from '../../../../store/category-management/attributes/attributes.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 import {
   getSingleCategoryAndConfig,
@@ -48,8 +45,10 @@ import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actio
 import {
   convertToAttributeOption,
   convertToCategoryConfig,
+  isCategoryEditResponse,
 } from '../../../../core/utils/helpers';
 import { MatMenuModule } from '@angular/material/menu';
+import { CustomSizeSelectionComponent } from '../../../../shared/components/custom-size-selection/custom-size-selection.component';
 
 @Component({
   selector: 'app-add-category',
@@ -63,10 +62,10 @@ import { MatMenuModule } from '@angular/material/menu';
     MatAutocompleteModule,
     CustomCheckBoxComponent,
     MatSelectModule,
-    MatFormFieldModule,
     CustomSelectComponent,
     AuthLoaderComponent,
     MatMenuModule,
+    CustomSizeSelectionComponent
   ],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
@@ -86,12 +85,12 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   categoryConfig: CategoryConfig[] = [];
   categoryConfigSet: Record<string, CategoryConfig> = {};
   incompatibleSet: Record<string, AttributeOption[]> = {};
-  numOfIncompatibles = 0
+  numOfIncompatibles = 0;
   sizes: Record<string, string[]> = {};
   id!: string | null;
   @ViewChild('contentWrapper') contentWrapper!: ElementRef<HTMLDivElement>;
   formValue!: Record<string, string>;
-  resize$!: Observable<Event>
+  resize$!: Observable<Event>;
   constructor(
     private store: Store,
     private attributeService: AttributeInputService,
@@ -103,9 +102,9 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.resize$ = fromEvent(window, 'resize').pipe(
       tap(() => {
-        this.isOverflow = this.isOverflown(this.contentWrapper.nativeElement)
-      }),
-    )
+        this.isOverflow = this.isOverflown(this.contentWrapper.nativeElement);
+      })
+    );
     this.attributes = this.store.select(selectAttributesState).pipe(
       tap((attrs) => {
         this.localAttributes = attrs;
@@ -127,7 +126,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
                   config,
                   name
                 ).value;
-                
+
                 config.forEach((categoryConfig) => {
                   if (categoryConfig.isMeasured && categoryConfig.isIncluded) {
                     this.sizes[categoryConfig.type] = this.generateSizes(
@@ -143,12 +142,13 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
                     );
                   }
                   if (categoryConfig.isIncluded) {
-                    this.categoryConfigSet[categoryConfig.name] = convertToCategoryConfig(categoryConfig)
+                    this.categoryConfigSet[categoryConfig.name] =
+                      convertToCategoryConfig(categoryConfig);
                   }
                 });
-                this.categoryForm.patchValue({ ...editFormValues });
+                this.categoryForm.patchValue({ ...editFormValues });                
               }),
-              takeUntilDestroyed(this.destroyRef),
+              takeUntilDestroyed(this.destroyRef)
             )
             .subscribe();
         }
@@ -171,15 +171,18 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     });
     return newLocalAttributes;
   }
-  putInLocalAttributes(localAttributes: Attribute[], newOption: AttributeOption) {
+  putInLocalAttributes(
+    localAttributes: Attribute[],
+    newOption: AttributeOption
+  ) {
     let newLocalAttributes: Attribute[] = [];
     newLocalAttributes = localAttributes?.map((attribute) => {
-      let newLocalAttributeOptions: AttributeOption[] = []
+      let newLocalAttributeOptions: AttributeOption[] = [];
       if (attribute.id === newOption.attribute.id) {
         newLocalAttributeOptions = [...attribute.attributeOptions, newOption];
         return { ...attribute, attributeOptions: newLocalAttributeOptions };
       }
-      return attribute
+      return attribute;
     });
     return newLocalAttributes;
   }
@@ -227,7 +230,10 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     if (!this.id) {
       this.store.dispatch(putBackAttributeOptionInStore(option));
     } else {
-      this.localAttributes = this.putInLocalAttributes(this.localAttributes, option)
+      this.localAttributes = this.putInLocalAttributes(
+        this.localAttributes,
+        option
+      );
     }
     if (this.incompatibleSet[name].length === 0) {
       delete this.incompatibleSet[name];
@@ -243,7 +249,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       size: option.additionalInfo.baseAmount,
     };
     // dispatching to store refreshes the form, the ff line puts back the selected values
-    this.numOfIncompatibles = Object.values(this.incompatibleSet).length
+    this.numOfIncompatibles = Object.values(this.incompatibleSet).length;
     this.categoryForm.patchValue({
       attributesInput: '',
       variants: '',
@@ -274,14 +280,14 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       }
     });
     this.buildIncompatibleTable(incompatibleAttributes);
-    this.isOverflow = this.isOverflown(element)
+    this.isOverflow = this.isOverflown(element);
     if (
       element.offsetHeight < element.scrollHeight ||
       element.offsetWidth < element.scrollWidth
     ) {
     }
     this.selectedAttribute$.next([]);
-    this.numOfIncompatibles = Object.values(this.incompatibleSet).length
+    this.numOfIncompatibles = Object.values(this.incompatibleSet).length;
     this.categoryForm.patchValue({ attributesInput: '', variants: '' });
   }
 
@@ -330,7 +336,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  createConfig() {    
+  createConfig() {
     const payload: CategoryPayload = {
       name: this.categoryForm.value['categoryName'],
       config: Array.from(
@@ -352,16 +358,16 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.id) {      
+    if (this.id) {
       const editPayload = {
         ...payload,
         id: this.id,
-      };      
+      };
 
       this.store.dispatch(
         sendEditedConfig({ configuration: editPayload, id: this.id })
       );
-    } else {      
+    } else {
       this.store.dispatch(sendConfig(payload));
     }
   }
@@ -388,16 +394,23 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     return categoryConfigList;
   }
 
-  sizeSelection(event: MatSelectChange, attribute: Attribute) {
-    const selectedSize = event.value as string;
-    const correspondingAttributeOption: AttributeOption =
+  sizeSelection(event: MatAutocompleteSelectedEvent, attribute: Attribute) {
+    const selectedSize = event.option.value as string;
+    const correspondingAttributeOption: any =
       this.categoryForm.value[attribute.attributeName];
     const newBaseAmount = parseInt(selectedSize);
-    this.categoryConfigSet[correspondingAttributeOption.optionName].size =
-      newBaseAmount;
+    if (isCategoryEditResponse(correspondingAttributeOption)) {
+      this.categoryConfigSet[correspondingAttributeOption.name].size =
+        newBaseAmount;
+    } else {
+      this.categoryConfigSet[correspondingAttributeOption.optionName].size =
+        newBaseAmount;
+    }
+    console.log('Category set', this.categoryConfigSet);
+    
   }
   onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
-    const selectedAttributeOption = event.value as AttributeOption;    
+    const selectedAttributeOption = event.value as AttributeOption;
     if (attribute.isMeasured) {
       this.sizes[attribute.attributeName] = this.generateSizes(
         selectedAttributeOption.additionalInfo.baseAmount,

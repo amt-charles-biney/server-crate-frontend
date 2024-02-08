@@ -1,5 +1,5 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { CartProductItem, CartResponse } from "../../types";
+import { CartResponse } from "../../types";
 import { gotCartItems } from "./cart.actions";
 
 const cartState: CartResponse = {
@@ -20,4 +20,4 @@ export const cartFeature = createFeature({
     )
 })
 
-export const { selectCartState, selectConfiguredProducts, selectCount } = cartFeature
+export const { selectCartState, selectConfiguredProducts, selectCount, reducer } = cartFeature

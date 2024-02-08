@@ -21,7 +21,6 @@ export class CartComponent implements OnInit {
   subTotal!: number
   constructor(private store: Store) {}
   ngOnInit(): void {
-    this.store.dispatch(getCartItems())
     this.cartItems = this.store.select(selectConfiguredProducts).pipe(
       tap(cartItems => {
         this.subTotal = 0

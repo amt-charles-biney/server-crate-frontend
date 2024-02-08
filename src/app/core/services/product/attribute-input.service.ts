@@ -40,7 +40,7 @@ export class AttributeInputService {
     const group: Record<string, FormControl> = {};
     attributes.forEach((attribute) => {
       if (attribute.isMeasured && attribute.isIncluded) {        
-        group[`${attribute.type}Size`] = new FormControl(attribute.size);        
+        group[`${attribute.type}Size`] = new FormControl(`${attribute.size} ${attribute.unit}`);        
       }
       if (attribute.isIncluded) {
         group[attribute.type] = new FormControl(attribute);

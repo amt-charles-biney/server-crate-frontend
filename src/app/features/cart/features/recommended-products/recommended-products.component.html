@@ -5,7 +5,7 @@
 
   <div class="keen-slider" #recommendedSliderRef>
     @for (product of recommendedProducts; let i = $index; track i) {
-    <div class="keen-slider__slide p-4 w-full mx-auto sm:mx-0 md:max-w-[320px]">
+    <div class="keen-slider__slide w-full mx-auto sm:mx-0 md:max-w-[320px]">
         <app-user-product-item [product]="product"></app-user-product-item>
     </div>
     }
