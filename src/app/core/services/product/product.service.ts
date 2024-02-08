@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IParamConfigOptions, ProductItem } from '../../../types';
+import { CartResponse, IParamConfigOptions, ProductItem } from '../../../types';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -28,5 +28,13 @@ export class ProductService {
     params = params.set('components', configOptions.components?.toString() || '');
 
     return this.http.get<any>(url, { params });
+  }
+
+  getCartItems() {
+    return this.http.get<CartResponse>(`${this.base_url}/carts`)
+  }
+
+  deleteCartItem(id: string) {
+    return this.http.delete(`${this.base_url}/carts/delete-item/${id}`)
   }
 }

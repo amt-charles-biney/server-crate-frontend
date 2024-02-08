@@ -217,6 +217,8 @@
         </button>
         
         <button
+          [disabled]="addProductForm.invalid"
+          [ngClass]="addProductForm.invalid ? 'cursor-not-allowed' : ''"
           class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
         >
           {{ id ? "Edit" : "Save" }}
