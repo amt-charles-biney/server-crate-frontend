@@ -452,6 +452,35 @@ export type EditConfigResponse = {
   config: CategoryEditResponse[]
 }
 
+export type CartResponse = {
+  configuredProducts: CartProductItem[],
+  count: number;
+}
+
+export type CartProductItem = {
+  id: string;
+  totalPrice: number;
+  productId: string;
+  productName: string;
+  productDescription: string;
+  productCoverImage: string;
+  productPrice: number;
+  configuredPrice: number;
+  configured: Array<ConfiguredProduct>;
+}
+
+export type ConfiguredProduct = {
+  id: string;
+  optionId: string;
+  optionName: string;
+  optionType: string;
+  optionPrice: string;
+  isMeasured: boolean;
+  baseAmount: number;
+  size: string;
+  included: boolean;
+}
+
 export interface IConfigureSelectProps {
   type: string
   id: string

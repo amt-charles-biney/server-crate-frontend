@@ -199,9 +199,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
     this.loadingState$ = this.store.select(selectLoaderState);
     this.options = this.store.select(selectConfigurationState);
-    // if (this.router.url !== '/settings') {
-    // }
-    // this.router.navigateByUrl('/admin/add-product');
   }
 
   ngOnDestroy(): void {
@@ -251,6 +248,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
 
   addProduct() {
+    if (this.addProductForm.invalid) return;
     this.store.dispatch(
       setLoadingSpinner({
         status: true,
@@ -262,9 +260,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
     const formData: FormData = (<FormGroupExtension>(
       this.addProductForm
     )).toFormData();
-    // formData.forEach((val: FormDataEntryValue, key: string) => {
-    //   console.log(`Val ${val} key ${key}`);
-    // });
+
     const coverImage = formData.get('coverImage[0]');
     const image1 = formData.get('image1[0]');
     const image2 = formData.get('image2[0]');
@@ -288,10 +284,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
     formData.append('file', image1!);
     formData.append('file', image2!);
     formData.append('file', image3!);
-
-    // formData.forEach((val: FormDataEntryValue, key: string) => {
-    //   console.log(`After Val ${val} key ${key}`);
-    // });
 
     if (this.id) {
       this.adminService
