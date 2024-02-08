@@ -21,7 +21,6 @@ import {
   selectProduct,
   selectProductConfig,
   selectProductConfigItem,
-  selectProductConfigItemLoading,
 } from '../../store/product-spec/product-spec.reducer'
 import { Observable, map } from 'rxjs'
 import {
@@ -33,6 +32,7 @@ import { MatTabsModule } from '@angular/material/tabs'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSelectModule } from '@angular/material/select'
 import { OrderSummaryComponent } from './order-summary/order-summary.component'
+import { ProductLoadingComponent } from './product-loading/product-loading.component';
 
 @Component({
   selector: 'app-product-configure',
@@ -45,7 +45,8 @@ import { OrderSummaryComponent } from './order-summary/order-summary.component'
     RouterModule,
     MatFormFieldModule,
     MatSelectModule,
-    OrderSummaryComponent
+    OrderSummaryComponent,
+    ProductLoadingComponent
   ],
   templateUrl: './product-configure.component.html',
   styleUrl: './product-configure.component.scss'
@@ -57,15 +58,13 @@ export class ProductConfigureComponent {
   product$: Observable<ProductItem | null> = this.store.select(selectProduct)
   productConfig$: Observable<any> = this.store.select(selectProductConfig)
   productConfigItem$: Observable<IConfiguredProduct | null> = this.store.select(selectProductConfigItem)
-  loading$: Observable<boolean> = this.store.select(selectProductConfigItemLoading)
+  
 
   productId: string = ''
   productConfig!: ICategoryConfig
   product!: ProductItem
   warranty: boolean = false
-  loading: boolean = false
   size: string = '0'
-  componentSizable: string = ''
   unit: string = 'GB'
 
   productConfigItem: IConfiguredProduct = {
@@ -114,10 +113,6 @@ export class ProductConfigureComponent {
         this.configKeys = keys
         this.setActiveLink(keys[0])
       }
-    })
-
-    this.loading$.subscribe(loader => {
-      this.loading = loader
     })
 
     this.route.queryParams.subscribe((queryParams) => {
@@ -244,7 +239,7 @@ export class ProductConfigureComponent {
     }
   }
 
-  /**
+/**
    * Checks if the config options having the same attribute type has a measured field
    * @param activeLink
    * @returns
