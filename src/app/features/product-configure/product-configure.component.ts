@@ -82,6 +82,7 @@ export class ProductConfigureComponent {
   activeLink: string = ''
   configKeys: string[] = []
   queryMapper: Record<string, string> = {}
+  querySnapShot!: IParamConfigOptions
 
   setActiveLink = (active: string): void => {
     this.unit = this.productConfig.options[active][0]?.unit ?? 'GB'
@@ -120,6 +121,8 @@ export class ProductConfigureComponent {
         warranty: queryParams['warranty'] ?? this.warranty,
         components: queryParams['components']
       }
+
+      this.querySnapShot = configOptions
       this.store.dispatch(loadProductConfigItem({ productId: this.productId, configOptions }))
     })
   }
@@ -193,6 +196,7 @@ export class ProductConfigureComponent {
       components: joinQuery
     }
     const navigationExtras: NavigationExtras = { queryParams: currentParams, queryParamsHandling: 'merge' }
+    console.log("navigation extra ", navigationExtras)
     void this.router.navigate([], navigationExtras)
   }
 
