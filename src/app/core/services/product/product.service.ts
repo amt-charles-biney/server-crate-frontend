@@ -36,9 +36,9 @@ export class ProductService {
 
     let params = new HttpParams()
     params = params.set('warranty', configOptions.warranty.toString())
-    params = params.set('components', configOptions.components ?? '')
+    params = params.set('components', configOptions.components?.toString() ?? '')
 
-    return this.http.post<any>(url, { params })
+    return this.http.post<any>(url, null, { params })
   }
 
   getCartItems() {
