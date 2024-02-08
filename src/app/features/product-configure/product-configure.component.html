@@ -12,7 +12,7 @@
             <span class="text-green-600">Configure</span>
          </div>
 
-         <div>{{ loading ? "loading..." : ""}}</div>
+         <app-product-loading />
 
          <div class="w-full mt-10 flex gap-[97px] flex-row flex-wrap mx-auto justify-between items-start">
             <div class="flex flex-col lg:flex-row items-start gap-4 flex-1 w-full mb-20">
@@ -198,7 +198,11 @@
          </div>
 
 
-         <app-order-summary [productId]="productId" [warranty]="warranty" [components]="queryMapper" [productConfigItem]="productConfigItem"></app-order-summary>
+         <app-order-summary 
+         [productId]="productId" 
+         [warranty]="warranty" 
+         [querySnapShot]="querySnapShot"
+         [productConfigItem]="productConfigItem" />
       </div>
    </section>
    <app-footer />

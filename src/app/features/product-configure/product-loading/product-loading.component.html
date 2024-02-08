@@ -1,0 +1,23 @@
+<ng-container *ngIf="productConfigItemLoading || productLoading">
+    <img alt="img-spinner" src="/assets/spinner.svg" class="w-16 h-16" />
+</ng-container>
+
+<ng-container class="flex flex-col gap-3 max-w-sm" *ngIf="productConfigItemError || productCartItemError || productError">
+    <div class="w-full rounded-md bg-red-100 text-red-400 p-4">
+        {{ productCartItemError}}
+    </div>
+
+    <div class="w-full rounded-md bg-red-100 text-red-400 p-4">
+        {{ productConfigItemError }}
+    </div>
+
+    <div class="w-full rounded-md bg-red-100 text-red-400 p-4">
+        {{ productError }}
+    </div>
+</ng-container>
+
+<ng-container class="flex flex-col gap-3 max-w-sm" *ngIf="addToCartMessage !== null&& productCartItemLoading === false">
+    <div class="w-full rounded-md bg-green-100 text-green-400 font-bold p-4">
+        {{ addToCartMessage }}
+    </div>
+</ng-container>
