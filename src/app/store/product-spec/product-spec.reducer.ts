@@ -18,7 +18,8 @@ export interface ProductConfigItemState {
 export interface ProductCartItemState {
   productCartItem: IConfiguredProduct | null,
   productCartItemLoading: boolean,
-  productCartItemError: any
+  productCartItemError: any,
+  message: String | null
 }
 
 export const initialState: ProductConfigState = {
@@ -37,7 +38,8 @@ export const ProductConfigInitialState : ProductConfigItemState =  {
 export const ProductCartInitialState: ProductCartItemState = {
   productCartItem: null,
   productCartItemLoading: false,
-  productCartItemError: null
+  productCartItemError: null,
+  message: null
 }
 
 export const productConfigFeature = createFeature({
@@ -67,9 +69,10 @@ export const productCartItemFeature = createFeature({
   name: 'productCartItem',
   reducer: createReducer(
     ProductCartInitialState,
-    on(ProductConfigActions.addToCartItem, state => ({...state, productCartItemLoading: true, productCartItemError: null})),
-    on(ProductConfigActions.addToCartItemSuccess, (state, { productCartItem }) => ({...state, productCartItem, productCartItemLoading: false})),
-    on(ProductConfigActions.addToCartItemFailure, (state, { error }) => ({...state, productCartItemError: error, productCartItemLoading: false }))
+    on(ProductConfigActions.addToCartItem, state => ({...state, productCartItemLoading: true, productCartItemError: null, message: null})),
+    on(ProductConfigActions.addToCartItemSuccess, (state, { message, configuration }) => ({...state, productCartItem: configuration, message,  productCartItemLoading: false})),
+    on(ProductConfigActions.addToCartItemFailure, (state, { error }) => ({...state, productCartItemError: error, productCartItemLoading: false , message: null})),
+    on(ProductConfigActions.resetCartMessage, (state) => ({...state, message: null}))
 
   )
 })
@@ -95,6 +98,6 @@ export const {
   selectProductCartItem,
   selectProductCartItemError,
   selectProductCartItemLoading,
-  selectProductCartItemState
-
+  selectProductCartItemState,
+  selectMessage
 } = productCartItemFeature

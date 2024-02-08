@@ -76,9 +76,9 @@ export class ProductSpecEffects {
       exhaustMap((props: { productId: string, configOptions: IParamConfigOptions }) => {
         return this.productService.addProductToCart(props.productId, props.configOptions)
         .pipe(
-          map((productCartItem: IConfiguredProduct) => {
-            console.log("load cart item posted success ", productCartItem)
-            return addToCartItemSuccess({ productCartItem })
+          map((props: { message: string , configuration: IConfiguredProduct }) => {
+            console.log("load cart item posted success ", props.message, props.configuration)
+            return addToCartItemSuccess({ message: props.message, configuration: props.configuration })
           }),
           catchError((error: any) => {
             console.log("load cart item posted error ", error)

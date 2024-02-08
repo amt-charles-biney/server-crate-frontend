@@ -32,5 +32,7 @@ export const loadProductConfigItemFailure = createAction('[ProductConfig Compone
 )
 
 export const addToCartItem = createAction('[ProductCartItem Component] Add product Config Item to cart', props<{ productId: string, configOptions: IParamConfigOptions }>())
-export const addToCartItemSuccess = createAction('[ProductCartItem Component] Add product Config item to cart success', props<{ productCartItem: IConfiguredProduct }>())
+export const addToCartItemSuccess = createAction('[ProductCartItem Component] Add product Config item to cart success', props<{ message: string, configuration: IConfiguredProduct }>())
 export const addToCartItemFailure = createAction('[ProductCartItem Component] Add product Config Item to cart failure', props<{ error: any }>())
+
+export const resetCartMessage = createAction('[ProductCartItem Reset Message] reset success message');
