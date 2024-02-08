@@ -17,8 +17,9 @@ export class ProductSpecEffects {
           map((product: ProductItem) => {
             return loadProductSuccess({ product })}),
           catchError((error: any) => {
+            const getError: string = error["error"]["detail"] ?? "failed"
             console.log("get product error ", error)
-           return of(loadProductFailure({ error }))
+           return of(loadProductFailure({ error: getError }))
           })
         )
       })
@@ -41,7 +42,8 @@ export class ProductSpecEffects {
             return loadProductConfigSuccess({ productConfig })
           }),
           catchError((error: any) => {
-            return of(loadProductConfigFailure({ error }))
+            const getError: string = error["error"]["detail"] ?? "failed"
+            return of(loadProductConfigFailure({ error: getError }))
           })
         )
       })
@@ -59,8 +61,9 @@ export class ProductSpecEffects {
             return loadProductConfigItemSuccess({ productConfigItem })
           }),
           catchError((error: any) => {
-            console.log("load product config item error ", error)
-            return of(loadProductConfigItemFailure({ error }))
+            const getError: string = error["error"]["detail"] ?? "failed"
+            console.log("load product config item error ", error["error"]["detail"])
+            return of(loadProductConfigItemFailure({ error: getError }))
           })
         )
       })
@@ -79,7 +82,8 @@ export class ProductSpecEffects {
           }),
           catchError((error: any) => {
             console.log("load cart item posted error ", error)
-            return of(addToCartItemFailure({ error }))
+            const getError: string = error["error"]["detail"] ?? "failed"
+            return of(addToCartItemFailure({ error: getError }))
           })
         )
       })
