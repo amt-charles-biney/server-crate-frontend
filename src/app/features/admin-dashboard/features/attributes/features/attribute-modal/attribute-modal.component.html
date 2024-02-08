@@ -26,15 +26,15 @@
         <app-custom-check-box
           name="productType"
           class="font-[500]"
-          label="Has isMeasured"
+          label="Has measurement"
           formControlName="isMeasured"
+          (changeHandler)="modifyValidator()"
         />
         @if (isMeasured.value) {
-        <app-custom-input
-          type="select"
-          id="unit"
-          formControlName="unit"
+        <app-custom-select
+          [control]="$any(attributeForm.controls['unit'])"
           [options]="['KB', 'GB', 'TB']"
+          [isRequired]="true"
         />
         }
       </div>
@@ -51,60 +51,59 @@
     <button
       (click)="addAttributeForm()"
       type="button"
-      class="flex text-figma-green gap-3 self-end"
+      class="flex items-center text-figma-green gap-1 self-end"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
+        width="21"
+        height="21"
+        viewBox="0 0 21 21"
         fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        data-slot="icon"
-        class="w-5 h-5"
       >
         <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 4.5v15m7.5-7.5h-15"
+          d="M16.3337 11.3346H11.3337V16.3346H9.66699V11.3346H4.66699V9.66797H9.66699V4.66797H11.3337V9.66797H16.3337V11.3346Z"
+          fill="#3CB043"
         />
       </svg>
-      <p class="text-sm underline">Add new variant</p>
+      <p class="text-xs font-inter underline">Add new variant</p>
     </button>
     <section>
       <table class="flex flex-col w-full mt-6">
-        <tr class="flex items-center bg-[#fcfcfd] border-b h-10">
+        <tr
+          class="flex items-center text-table-text bg-table-bg text-xs font-[500] border-b h-10"
+        >
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[30%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[30%] text-start"
           >
             Variant
           </th>
           @if (isMeasured.value) {
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[15%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-start"
           >
             Base Amount
           </th>
           } @if (isMeasured.value) {
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[15%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-start"
           >
             Max Amount
           </th>
           }
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[15%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-start"
           >
             Price
           </th>
           @if (isMeasured.value) {
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[15%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-start"
           >
             Price Factor
           </th>
           }
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 font-[500] text-sm w-[10%] flex justify-center text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[10%] flex justify-center text-start"
           >
             Action
           </th>
@@ -123,9 +122,9 @@
                       [elementId]="attrs.value.id + ' coverImage'"
                       containerClass="relative flex flex-col items-center justify-center h-full"
                       customClass="flex flex-col h-[50%] xl:h-[60%]"
-                      previewClass="w-7 h-7"
+                      previewClass="w-[33px] h-5"
                       [editId]="editId"
-                      [previewImage]="coverImage[i]"
+                      [previewImage]="coverImage[i] || null"
                       (removeImageEmitter)="removeImage($event, i)"
                       (uploadImageEmitter)="
                         replaceImage(
@@ -150,7 +149,7 @@
                     </app-custom-image>
                   </button>
                   <input
-                    class="w-full outline-none"
+                    class="w-full outline-none placeholder:text-placeholder"
                     type="text"
                     placeholder="Enter variant name"
                     formControlName="name"
@@ -160,7 +159,7 @@
               @if (isMeasured.value) {
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-start">
                 <input
-                  class="w-full outline-none"
+                  class="w-full outline-none placeholder:text-placeholder"
                   type="number"
                   placeholder="Enter amount"
                   formControlName="baseAmount"
@@ -169,7 +168,7 @@
               } @if (isMeasured.value) {
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-start">
                 <input
-                  class="w-full outline-none"
+                  class="w-full outline-none placeholder:text-placeholder"
                   type="number"
                   placeholder="Max Amt"
                   formControlName="maxAmount"
@@ -178,7 +177,7 @@
               }
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-start">
                 <input
-                  class="w-full outline-none"
+                  class="w-full outline-none placeholder:text-placeholder"
                   type="number"
                   placeholder="Enter price"
                   formControlName="price"
@@ -187,7 +186,7 @@
               @if (isMeasured.value) {
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-start">
                 <input
-                  class="w-full outline-none"
+                  class="w-full outline-none placeholder:text-placeholder"
                   type="number"
                   placeholder="Price factor"
                   formControlName="priceFactor"
@@ -198,20 +197,7 @@
                 class="text-gray-500 font-[500] text-sm w-[10%] flex justify-center items-center"
               >
                 <button type="button" (click)="deleteOption(i, attrs.value.id)">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5 text-red-600"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                    />
-                  </svg>
+                  <img src="/assets/trash.svg" alt="" />
                 </button>
               </td>
             </tr>

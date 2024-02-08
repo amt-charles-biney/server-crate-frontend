@@ -1,8 +1,9 @@
 <main class="flex flex-col min-h-screen">
   <section class="flex w-full justify-between">
-    <h2 class="font-bold text-xl">Attribute List</h2>
+    <h2 class="font-bold text-2xl">Attribute List</h2>
     <section class="flex items-center gap-6">
       <button
+        *ngIf="attributesTodelete.size > 0"
         (click)="deleteAttributes()"
         class="flex items-center gap-2 font-[500] text-sm py-1 px-2"
       >
@@ -24,21 +25,18 @@
       </button>
       <button
         (click)="openDialog()"
-        class="flex items-center gap-2 rounded font-[500] bg-figma-green text-white text-sm py-1 px-2"
+        class="flex items-center gap-2 rounded font-[500] bg-figma-green text-white py-1 px-[10px]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
           fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          data-slot="icon"
-          class="w-4 h-4"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
+            d="M15.8337 10.8346H10.8337V15.8346H9.16699V10.8346H4.16699V9.16797H9.16699V4.16797H10.8337V9.16797H15.8337V10.8346Z"
+            fill="white"
           />
         </svg>
         <p>Create Attribute</p>
@@ -48,90 +46,32 @@
   <section>
     <form [formGroup]="selectForm">
       <table class="flex flex-col w-full mt-6">
-        <mat-accordion class="border-b">
-          <mat-expansion-panel class="mat-elevation-z0" disabled>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="flex items-center gap-5 mt-1">
-                <app-custom-check-box (changeHandler)="removeCheck()" />
+        <tr
+          class="grid grid-cols-11 py-3 pl-3 border-b text-table-text bg-table-bg text-xs font-[500]"
+        >
+          <th class="md:col-span-3 2xl:col-span-2 flex items-center gap-9">
+            <app-custom-check-box (changeHandler)="removeCheck()" />
+            <p class="whitespace-nowrap">Attribute Name</p>
+          </th>
+          <th class="col-span-5 text-start self-center">Description</th>
+          <th class="col-span-2 text-start self-center">Measurement Type</th>
 
-                <p>Attribute Name</p>
-              </mat-panel-title>
-              <mat-panel-description class="flex items-center justify-between">
-                <p
-                  class="overflow-hidden whitespace-nowrap text-ellipsis w-64 flex-1"
-                >
-                  Description
-                </p>
-
-                <p class="flex-1">Measurement Type</p>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-        </mat-accordion>
-
+          <th class="col-span-1 text-center self-center">Actions</th>
+        </tr>
         <ng-container *ngIf="attributes | async as attributes">
-          @for (attribute of attributes; track $index) {
-
-          <mat-accordion class="border-b">
-            <mat-expansion-panel class="mat-elevation-z0">
-              <mat-expansion-panel-header>
-                <mat-panel-title class="flex items-center gap-5">
-                  <app-custom-check-box
-                    (changeHandler)="itemSelected($event, attribute.id)"
-                    [formControl]="$any(selectForm.controls[attribute.attributeName])"
-                    [name]="attribute.attributeName"
-                    [value]="attribute.id"
-                  />
-                  <p>{{ attribute.attributeName }}</p>
-                </mat-panel-title>
-                <mat-panel-description
-                  class="flex items-center justify-between gap-24"
-                >
-                  <p
-                    class="overflow-hidden whitespace-nowrap text-ellipsis w-64 flex-1"
-                  >
-                    {{ attribute.description }}
-                  </p>
-                  <div class="flex-auto">
-                    @if (attribute.isMeasured) {
-                    <div
-                      class="flex items-center w-fit gap-1 bg-[#ecf8f1] rounded-2xl px-3 py-1"
-                    >
-                      <div
-                        class="rounded-full bg-figma-green w-1.5 h-1.5"
-                      ></div>
-                      <p
-                        class="overflow-hidden whitespace-nowrap text-ellipsis text-xs text-[#2f8f57]"
-                      >
-                        Measured
-                      </p>
-                    </div>
-                    } @else {
-                    <div
-                      class="flex items-center w-fit gap-1 bg-[#fdf0f1] rounded-2xl px-3 py-1"
-                    >
-                      <div class="rounded-full bg-[#d20202] w-1.5 h-1.5"></div>
-                      <p
-                        class="overflow-hidden whitespace-nowrap text-ellipsis text-xs text-[#b84545]"
-                      >
-                        Not measured
-                      </p>
-                    </div>
-                    }
-                  </div>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <section class="w-[96%] ml-auto">
-                <app-variant-options
-                  [attributeOptions]="attribute.attributeOptions"
-                  [isMeasured]="attribute.isMeasured"
-                  [attribute]="attribute"
-                  (editOption)="editOption($event)"
-                />
-              </section>
-            </mat-expansion-panel>
-          </mat-accordion>
-          }
+          <cdk-accordion>
+            @for (attribute of attributes; track $index) {
+            <div class="border-b">
+              <app-expandable
+                [attribute]="attribute"
+                [control]="$any(selectForm.controls[attribute.attributeName])"
+                (editEmitter)="editOption($event)"
+                (deleteEmitter)="deleteAttribute($event)"
+                (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"
+              />
+            </div>
+            }
+          </cdk-accordion>
         </ng-container>
       </table>
     </form>

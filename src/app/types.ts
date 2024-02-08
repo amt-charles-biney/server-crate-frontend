@@ -91,12 +91,6 @@ export type Link = {
   index: number;
 };
 
-export type AdminLink = {
-  label: string;
-  link: string;
-  svg: string;
-};
-
 export type ProductItem = {
   imageUrl: string;
   coverImage: string;
@@ -228,17 +222,17 @@ export interface IConfiguredOption {
 export interface IConfiguredProduct {
   id: string | null;
   totalPrice: number;
+  productName: string;
   productId: string;
   productPrice: number;
   configuredPrice: number;
   configured: IConfiguredOption[];
   warranty: boolean;
-  vatIncluded: number
+  vat: number
 }
 
 
 export interface ICompatibleOption {
-  id: string;
   name: string;
   type: string;
   price: number;
@@ -248,8 +242,11 @@ export interface ICompatibleOption {
   isIncluded: boolean;
   isMeasured: boolean;
   baseAmount: number;
-  maxAmount: number; 
-  priceIncrement: number
+  maxAmount: number;
+  priceIncrement: number;
+  attributeId: string;
+  attributeOptionId: string;
+  compatibleOptionId: string
 }
 
 export interface ICategoryOption {
@@ -331,8 +328,10 @@ export type AttributeOption = {
   attribute: {
     name: string;
     id: string;
-    isMeasured: boolean
-  }
+    isMeasured: boolean,
+    unit: string
+  },
+  compatibleOptionId?: string
 }
 
 export type AdditionalInfo = {
@@ -362,3 +361,134 @@ export type AttributeDataResponse = {
     isMeasured: boolean;
   };
 };
+
+export type Configuration = {
+  name: string;
+  config: CategoryConfig[]
+}
+
+export type CategoryAndConfig = {
+  name: string;
+  id: string;
+  config: string[];
+  productCount: number
+}
+
+export type EditConfig = {
+  name: string;
+  config: CategoryEdit[],
+  id: string,
+}
+
+export type ConfigurationEdit = {
+  name: string;
+  config: CategoryConfig[],
+  id: string
+}
+
+export type CategoryEdit = {
+  name: string;
+  type: string;
+  price: number;
+  media: string;
+  unit: string;
+  isCompatible: boolean;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  baseAmount: number;
+  maxAmount: number;
+  priceFactor: number;
+  id?: string
+}
+
+export type AttributeFormGroup = {
+  name: string;
+  price: string;
+  media: string | null; 
+  baseAmount: string;
+  maxAmount: string;
+  priceFactor: string;
+  id: string;
+  coverImage: string;
+}
+
+export type CategoryPayload = {
+  name: string;
+  config: CategoryConfig[]
+}
+
+export type CategoryConfig = {
+  attributeId: string;
+  attributeOptionId: string;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  isCompatible: boolean;
+  size: number;
+  attributeName: string
+}
+
+export type CategoryEditResponse = {
+  compatibleOptionId: string;
+  name: string;
+  type: string;
+  price: number;
+  media: string;
+  unit: string;
+  isCompatible: boolean;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  priceFactor: number;
+  size: number;
+  attributeId: string;
+  attributeOptionId: string;
+  priceIncrement: number;
+  baseAmount: number;
+  maxAmount: number
+}
+
+export type EditConfigResponse = {
+  name: string;
+  id: string;
+  config: CategoryEditResponse[]
+}
+
+export type CartResponse = {
+  configuredProducts: CartProductItem[],
+  count: number;
+}
+
+export type CartProductItem = {
+  id: string;
+  totalPrice: number;
+  productId: string;
+  productName: string;
+  productDescription: string;
+  productCoverImage: string;
+  productPrice: number;
+  configuredPrice: number;
+  configured: Array<ConfiguredProduct>;
+}
+
+export type ConfiguredProduct = {
+  id: string;
+  optionId: string;
+  optionName: string;
+  optionType: string;
+  optionPrice: string;
+  isMeasured: boolean;
+  baseAmount: number;
+  size: string;
+  included: boolean;
+}
+
+export interface IConfigureSelectProps {
+  type: string
+  id: string
+  size: string | number
+}
+
+export interface IdefaultSelectedProps {
+  price: number
+  id: string
+  size: string
+}

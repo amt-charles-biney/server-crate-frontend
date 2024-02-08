@@ -1,25 +1,25 @@
 <article
-  class="flex flex-col gap-2 max-w-xs rounded-lg shadow-lg p-3 border"
+  class="flex flex-col w-[318px] rounded-lg shadow-lg py-3 px-[11px] border"
 >
-  <div class="flex justify-around gap-3">
+  <div class="flex gap-3">
     <img
-      class="w-[142px] h-[68px]"
+      class="w-[121px] h-[68px]"
       [ngSrc]="product.coverImage"
       height="68"
-      width="142"
+      width="121"
       priority
       [alt]="'image of ' + product.productName"
     />
-    <div class="flex flex-col w-32">
+    <div class="flex flex-col w-[168px]">
       <h2 class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productName }}</h2>
-      <p class="text-gray-500 text-sm text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productBrand }}</p>
-      <p class="text-sm font-[500] text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productPrice | currency }}</p>
+      <p class="text-product-text font-[500] text-sm text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productBrand }}</p>
+      <p class="text-sm font-[500] text-[#0D121A] text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productPrice | currency }}</p>
     </div>
   </div>
-  <div class="flex justify-between mx-auto w-9/12 text-sm font-[500]">
-    <div class="flex items-center gap-2 justify-between">
-      <p>Sales</p>
-      <div class="flex gap-1 items-center text-figma-green">
+  <div class="flex mt-[17px] text-sm font-[500]">
+    <div class="flex items-center border-r pr-[4px] mr-[5px]">
+      <p class="mr-[7px]">Sales</p>
+      <div class="flex gap-[4px] items-center text-figma-green">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -35,18 +35,17 @@
             d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
           />
         </svg>
-        <p>11.01</p>
+        <p>11.01%</p>
         <!-- <p>{{ product.sales | percent }}</p> -->
       </div>
     </div>
-    <div class="h-6 border border-gray-100 bg-black"></div>
-    <div class="flex items-center gap-2 justify-between">
+    <div class="flex items-center gap-[7px] justify-between">
       <p class="whitespace-nowrap">In stock</p>
       <p class="text-figma-green">{{ product.inStock }}</p>
     </div>
   </div>
-  <div class="flex justify-between items-center">
-    <button class="flex items-center w-fit px-3 gap-2 text-figma-green">
+  <div class="flex mt-[11px] justify-between items-center">
+    <button class="flex items-center w-fit gap-2 text-figma-green">
       <a
         [routerLink]="['/admin/add-product', product.id]"
         class="text-sm font-[500]"

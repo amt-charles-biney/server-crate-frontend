@@ -1,0 +1,55 @@
+<span class="mt-4 mb-4">{{ label }}</span>
+@if (isMultipleSelect) {
+<mat-select
+  panelClass="myPanel"
+  #matSelect
+  [placeholder]="placeholder"
+  [ngClass]="{
+    'bg-attr-button': isDisabled,
+    'mt-4': noMargin
+  }"
+  class="flex-1 border-[1.5px] h-[42px] rounded-md"
+  [formControl]="control"
+  multiple
+  (selectionChange)="select($event)"
+  [disabled]="isDisabled"
+>
+  <button
+    (click)="toggleAllSelection()"
+    [ngClass]="allSelected ? 'bg-[#E8EAEB66]' : ''"
+    class="flex min-h-[48px] pl-4 pr-[11px] text-sm w-full justify-between items-center"
+  >
+    <p>All Variants</p>
+  </button>
+  @for (option of options; track option) {
+  <mat-option
+    class="flex-row-reverse !text-sm !pr-[11px] myOption"
+    (onSelectionChange)="optionClick()"
+    [value]="option"
+    >{{ option.optionName ?? option }}</mat-option
+  >
+  }
+</mat-select>
+} @else {
+<mat-select
+  [required]="isRequired"
+  panelClass="myPanel"
+  [placeholder]="placeholder"
+  [ngClass]="{
+    'bg-attr-button': isDisabled,
+    'mt-6': noMargin
+  }"
+  class="flex-1 border-[1.5px] h-[42px] rounded-md"
+  [formControl]="control"
+  (selectionChange)="select($event)"
+  [disabled]="isDisabled"
+  [compareWith]="compareFn"
+  [value]="control.value"
+>
+  @for (option of options; track option;) {
+  <mat-option class="flex-row !text-sm !pr-[11px] myOption" [value]="option">{{
+    option.optionName ?? option.attributeName ?? option
+  }}</mat-option>
+  }
+</mat-select>
+}

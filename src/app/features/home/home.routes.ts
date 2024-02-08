@@ -12,6 +12,9 @@ import { configurationFeature } from '../../store/admin/products/configuration.r
 import { categoryFeature } from '../../store/admin/products/categories.reducers';
 import { Routes } from '@angular/router';
 import { UserEffect } from '../../store/users/users.effects';
+import { CartComponent } from '../cart/cart.component';
+import { cartFeature } from '../../store/cart/cart.reducers';
+import { CartEffects } from '../../store/cart/cart.effects';
 
 export const route: Routes = [
     {
@@ -55,12 +58,20 @@ export const route: Routes = [
                 ]
             },
             {
+                path: 'cart',
+                component: CartComponent,
+                providers: [
+                    provideState(cartFeature),
+                    provideEffects(CartEffects)
+                ]
+            },
+            {
                 path: 'compare',
                 loadComponent: () => import('../compare/compare.component').then(m => m.CompareComponent),
-                providers: [
-                    provideEffects(CategoryEffect),
-                    provideState(configurationFeature)
-                ]
+                // providers: [
+                //     provideEffects(CategoryEffect),
+                //     provideState(configurationFeature)
+                // ]
             }
         ],
         component: HomeComponent

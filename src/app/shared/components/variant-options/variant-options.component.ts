@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Attribute, AttributeOption } from '../../../types';
 import { Store } from '@ngrx/store';
 import { deleteAttributeOption } from '../../../store/category-management/attributes/attributes.actions';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-variant-options',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './variant-options.component.html',
   styleUrl: './variant-options.component.scss',
 })

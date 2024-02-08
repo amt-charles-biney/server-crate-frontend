@@ -1,22 +1,22 @@
 <main class="relative min-h-screen">
    <app-header />
-   <section class="md:pb-[330px] mt-5 pb-[770px] w-11/12 mx-auto">
+   <section class="md:pb-[330px] mt-5 pb-[770px] w-full max-w-[1239px] px-14 lg:px-0  mx-auto">
       <ng-container *ngIf="product$ | async as product">
-         <div class="text-sm font-medium flex flex-row gap-1 items-center text-gray-600">
+         <div class="text-[13px] font-normal flex flex-row gap-1 items-center text-[#999999]">
             <span [routerLink]="['/']" class="hover:underline cursor-pointer hover:text-green-600">Home</span>
             <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
-            <span [routerLink]="['/product']" class="hover:underline cursor-pointer hover:text-green-600">Product</span>
+            <span (click)="gotoProduct()" class="hover:underline cursor-pointer hover:text-green-600">Product</span>
             <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
-            <span class="text-xs md:text-sm">{{ product.productName || '...' }}</span>
+            <span class="text-[13px]">{{ product.productName || '...' }}</span>
             <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
             <span class="text-green-600">Configure</span>
          </div>
 
          <div>{{ loading ? "loading..." : ""}}</div>
 
-         <div class="w-full mt-10 flex gap-4 flex-row flex-wrap mx-auto justify-between items-start">
-            <div class="flex flex-col lg:flex-row items-start gap-4 flex-1 w-full">
-               <div class="flex flex-row lg:flex-col gap-8 items-center">
+         <div class="w-full mt-10 flex gap-[97px] flex-row flex-wrap mx-auto justify-between items-start">
+            <div class="flex flex-col lg:flex-row items-start gap-4 flex-1 w-full mb-20">
+               <div class="flex flex-row lg:flex-col gap-[49px] items-center">
                   <div *ngFor="let image of product.imageUrl; let i = index"
                      class="border-[2px] hover:border-[#3CB043] border-[#E6E6E6] rounded-lg w-full max-w-[130px] p-4">
                      <img [src]="image" alt="Product Image {{ i + 1 }}" class="w-full" />
@@ -25,25 +25,25 @@
                <div
                   class="max-w-[690px] min-w-[200px] w-full max-h-[480px] flex flex-row items-center h-full border-[2px] border-[#E6E6E6] rounded-lg p-2">
                   <img [src]="product.coverImage" alt="Product coverImage"
-                     class="max-h-[400px] max-w-[600px] w-full h-full" />
+                     class="max-h-[360px] max-w-[548px] w-full h-full" />
                </div>
             </div>
 
-            <div class="max-w-md flex flex-col gap-6 w-full">
-               <div class="flex flex-col gap-4">
-                  <h2 class="font-bold text-xl">{{ product.productName }}</h2>
-                  <p class="text-sm font-medium">{{ product.productDescription }}</p>
+            <div class="max-w-[488px] flex flex-col gap-6 w-full">
+               <div class="flex flex-col gap-[20px]">
+                  <h2 class="font-bold text-[20px]">{{ product.productName }}</h2>
+                  <p class="text-[13px] font-normal">{{ product.productDescription }}</p>
 
-                  <div class="flex flex-col gap-3 w-full max-w-xs mt-5">
+                  <div class="flex flex-col gap-3 w-full max-w-md mt-5">
                      <div class="flex flex-row items-center w-full justify-between">
-                        <h1 class="text-xs font-light text-[#737373]">Brand</h1>
-                        <p class="text-xs font-normals">{{ product.productBrand }}</p>
+                        <h1 class="text-xs font-light text-[#737373] w-1/2">Brand : </h1>
+                        <p class="text-[13px] font-light text-[#000] w-1/2">{{ product.productBrand }}</p>
                      </div>
                      <div *ngFor="let option of productConfigItem.configured"
                         class="flex flex-row items-center w-full justify-between">
 
-                        <h1 class="text-xs font-light text-[#737373]">{{ option.optionType }}</h1>
-                        <p class="text-xs font-normals">{{ option.optionName }} <span>{{ option?.isMeasured ?
+                        <h1 class="text-[13px] font-light text-[#737373] w-1/2">{{ option.optionType }} : </h1>
+                        <p class="text-[13px] font-light text-[#000] w-1/2">{{ option.optionName }} <span>{{ option?.isMeasured ?
                               option?.size : ""}}</span></p>
                      </div>
                   </div>
@@ -66,7 +66,7 @@
                      </div>
                   </div>
 
-                  <div class="w-full bg-gray-100 p-4 rounded-sm">
+                  <div class="w-full p-4 rounded-lg bg-gray-300 bg-opacity-10">
                      <div class="font-normal text-sm">
                         Technical support: by e-mail and components or the whole system
                         will be repaired or replaced subsequently to reshipment, we will
@@ -83,15 +83,15 @@
 
       <div class="w-full flex gap-4 mb-20 flex-row flex-wrap mx-auto justify-between items-start">
          <div class="flex-1 w-full">
-            <div class="mb-5 mt-10">
+            <div class="mb-5">
                <h2 class="text-xl font-bold">Configurations</h2>
             </div>
             <ng-container *ngIf="productConfig$ | async as productConfig">
-               <nav class="w-full max-w-4xl" mat-tab-nav-bar [tabPanel]="tabPanel">
+               <nav class="w-full max-w-[710px]" mat-tab-nav-bar [tabPanel]="tabPanel">
                   <a *ngFor="let attribute of configKeys; let i = index" [active]="activeLink === attribute"
                      (click)="setActiveLink(attribute)" mat-tab-link>
                      <div class="flex items-center gap-3">
-                        <p class="mt-0.5">{{ attribute }}</p>
+                        <p [ngClass]="activeLink === attribute ? 'text-figma-green' : 'text-table-text'" class="mt-0.5 text-[14px] font-inter font-[400px]">{{ attribute }}</p>
                      </div>
                   </a>
                </nav>
@@ -105,40 +105,48 @@
                         class="hover:underline cursor-pointer mb-4 flex flex-row gap-2 items-center text-sm text-[#3CB043]">
                            <span>Reset to default </span>
                            <span>
-                              <img 
+                              <img
                               src="/assets/reset.svg"
                               alt="reset default"
                               />
                            </span>
                         </button>
-                         <div class="flex flex-row w-full justify-start gap-4">
-                            <select #selectConfig
-                               (change)="onSizeableOptionChange({ type: activeLink, id: selectConfig.value, size: selectSize.value })"
-                               class="p-2 border-[2px] px-8 border-gray-300 rounded-md w-full flex-1 max-w-lg"
-                               aria-placeholder="select a variant option">
-                               class="p-2 border-[2px] px-8 border-gray-300 rounded-md w-full flex-1 max-w-lg"
-                               aria-placeholder="select a variant option"
-                               >
-                               <option [value]="attributeProduct.id"
-                                  *ngFor="let attributeProduct of productConfig.options[activeLink]">
-                                  {{ attributeProduct.name }}
-                               </option>
-                            </select>
-    
-                            <select #selectSize
-                               (change)="onSizeableOptionChange({ type: activeLink, id: selectConfig.value, size: selectSize.value })"
-                               class="p-2 border-[2px] px-8 border-gray-300 rounded-md w-full flex-1 max-w-lg"
-                               aria-placeholder="select a variant option">
-                               class="p-2 border-[2px] px-8 border-gray-300 rounded-md w-full flex-1 max-w-lg"
-                               aria-placeholder="select a variant option"
-                               >
-                               <option [value]="sizes"
-                                  *ngFor="let sizes of generateStorageSizes(productConfig.options[activeLink])">
-                                  {{ sizes }}
-                               </option>
-                            </select>
+                         <div class="flex flex-row w-full justify-start gap-[90px]">
+                           <div class="max-w-[247px] w-full ">
+                              <mat-select
+                               [(value)]="defaultSelectedValues[activeLink].id"
+                               [panelClass]="'mt-4 -ml-2 rounded-md'"
+                               (selectionChange)="onSelectVariantSizableChange({ type: activeLink, id: $event.value, size: defaultSelectedValues[activeLink].size})"
+                                 class="py-2 x-2  h-[42px] p-2 border-[2px] border-[#E8EAEB] focus:outline-none rounded-md w-full flex-1 max-w-lg appearance-none"
+                              >
+                                 <mat-option [value]="attributeProduct.compatibleOptionId"
+                                    *ngFor="let attributeProduct of productConfig.options[activeLink]">
+                                    {{ attributeProduct.name }}
+                                 </mat-option>
+                              </mat-select>
+                             </div>
+
+                           <div class="flex flex-row items-center gap-[54px] w-full">
+                            <div class="relative max-w-[247px] w-full">
+                              <mat-select
+                                [(value)]="defaultSelectedValues[activeLink].size"
+                                [panelClass]="'mt-4 -ml-2 rounded-md'"
+                                (selectionChange)="onSizeableOptionChange({ type: activeLink, id: defaultSelectedValues[activeLink].id, size: $event.value })"
+                                class="py-2 x-2  h-[42px] p-2 border-[2px] border-[#E8EAEB] focus:outline-none rounded-md w-full flex-1 max-w-lg appearance-none"
+                              >
+                                <mat-option class="hover" [value]="sizes" [disabled]="" *ngFor="let sizes of generateStorageSizes(defaultSelectedValues[activeLink].id, productConfig.options[activeLink])">
+                                  {{ sizes }} {{ unit }}
+                                </mat-option>
+                              </mat-select>
+                            </div>
+
+                            <div class="font-medium text-[20px]">
+                              {{defaultSelectedValues[activeLink].price === 0 ? "included" : "$" + defaultSelectedValues[activeLink].price}}
+                            </div>
+                           </div>
+
                          </div>
-                         
+
                       </div>
 
                      }
@@ -149,28 +157,32 @@
                            class="hover:underline cursor-pointer mb-4 flex flex-row gap-2 items-center text-sm text-[#3CB043]">
                               <span>Reset to default </span>
                               <span>
-                                 <img 
+                                 <img
                                  src="/assets/reset.svg"
                                  alt="reset default"
                                  />
                               </span>
                            </button>
-                           <div class="w-full flex flex-row gap-4">
+                           <div class="w-full flex flex-row flex-wrap gap-[70px]">
                      <div *ngFor="
                         let attributeProduct of productConfig.options[activeLink];
                         let i = index
                       ">
                         <div
-                           (click)="updateConfigQueryParam({ type: attributeProduct.type, id: attributeProduct.id, size: attributeProduct.baseAmount})"
-                           class="cursor-pointer border-[2px] relative hover:border-[#3CB043] {{ isActiveSelectedOption({ type: attributeProduct.type, id: attributeProduct.id, size: attributeProduct.baseAmount }) ? 'border-green-600 border-2' : '' }} flex flex-col justify-between gap-2 border-[#E6E6E6] rounded-lg w-[150px] h-[180px] p-4">
+                           (click)="updateConfigQueryParam({ type: attributeProduct.type, id: attributeProduct.compatibleOptionId, size: '0' })"
+                           class="cursor-pointer border-[2px] relative hover:border-[#3CB043] {{ isActiveSelectedOption({ type: attributeProduct.type, id: attributeProduct.compatibleOptionId, size: attributeProduct.baseAmount }) ? 'border-green-600 border-2' : '' }} flex flex-col border-[#E6E6E6] rounded-lg w-[190px] h-[170px] p-4">
                            <img
-                              *ngIf="isActiveSelectedOption({ type: attributeProduct.type, id: attributeProduct.id, size: attributeProduct.baseAmount})"
-                              src="/assets/option.svg" [alt]="attributeProduct.id"
+                           title="attribute-check"
+                              *ngIf="isActiveSelectedOption({ type: attributeProduct.type, id: attributeProduct.compatibleOptionId, size: attributeProduct.baseAmount})"
+                              src="/assets/option.svg" [alt]="attributeProduct.compatibleOptionId"
                               class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3" />
-                           <img [src]="attributeProduct.media" [alt]="attributeProduct.media" class="w-20 h-20" />
+
+                           <div class="w-full flex flex-row items-center justify-center max-h-[140px] h-full">
+                              <img title="attribte-media" [src]="attributeProduct.media" [alt]="attributeProduct.media" class="w-24 h-24" />
+                           </div>
                            <div>
-                              <div class="font-bold text-xs">{{ attributeProduct.name }}</div>
-                              <div class="font-bold text-sm">
+                              <div class="font-bold text-[13px]">{{ attributeProduct.name }}</div>
+                              <div class="font-semibold text-[16px]">
                                  $ {{ attributeProduct.price }}
                               </div>
                            </div>
@@ -186,34 +198,7 @@
          </div>
 
 
-         <div
-            class="border-[1px] w-full flex-1 h-[327px] max-w-md mt-5 flex flex-col p-4 rounded-md justify-between border-[#E6E6E6]">
-            <div class="w-full gap-4 flex flex-col">
-               <h2 class="font-semibold text-lg">Order Summary</h2>
-               <span class="flex flex-row justify-between w-full items-center">
-                  <span class="text-xs font-normal">{{ "sample"}}</span>
-                  <span class="font-medium text-xs">$ {{productConfigItem.productPrice}}</span>
-               </span>
-               <span class="flex flex-row justify-between w-full items-center">
-                  <span class="text-xs font-normal">Configurations</span>
-                  <span class="font-medium text-xs">$ {{productConfigItem.configuredPrice}}</span>
-               </span>
-            </div>
-
-            <div class="w-full gap-4 flex flex-col">
-               <span class="flex flex-row justify-between w-full items-center">
-                  <span class="text-xs font-normal">Total(2)</span>
-                  <span class="font-medium text-xs">$ {{productConfigItem.totalPrice}}</span>
-               </span>
-               <span class="flex flex-row justify-between w-full items-center">
-                  <span class="text-xs font-normal">(Incl. VAT)</span>
-                  <span class="font-medium text-xs">{{productConfigItem.vatIncluded}}</span>
-               </span>
-               <button class="bg-[#3CB043] hover:bg-green-500 w-full p-2 rounded-md text-white font-semibold">
-                  Add to cart
-               </button>
-            </div>
-         </div>
+         <app-order-summary [productId]="productId" [warranty]="warranty" [components]="queryMapper" [productConfigItem]="productConfigItem"></app-order-summary>
       </div>
    </section>
    <app-footer />

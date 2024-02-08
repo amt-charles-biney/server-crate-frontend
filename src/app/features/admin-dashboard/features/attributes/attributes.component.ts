@@ -9,7 +9,7 @@ import {
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { AttributeModalComponent } from '../../../attribute-modal/attribute-modal.component';
+import { AttributeModalComponent } from './features/attribute-modal/attribute-modal.component';
 import { Store } from '@ngrx/store';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { Attribute } from '../../../../types';
@@ -21,10 +21,10 @@ import { VariantOptionsComponent } from '../../../../shared/components/variant-o
 import {
   deleteAll,
   deleteAttribute,
-  deleteMultipleAttributes,
   resetAttributeCreation,
 } from '../../../../store/category-management/attributes/attributes.actions';
-
+import {CdkAccordionModule} from '@angular/cdk/accordion';
+import { ExpandableComponent } from '../../../../shared/components/expandable/expandable.component';
 @Component({
   selector: 'app-attributes',
   standalone: true,
@@ -36,6 +36,8 @@ import {
     MatDialogModule,
     MatExpansionModule,
     VariantOptionsComponent,
+    CdkAccordionModule,
+    ExpandableComponent
   ],
   templateUrl: './attributes.component.html',
   styleUrl: './attributes.component.scss',
@@ -75,6 +77,7 @@ export class AttributesComponent implements OnInit, AfterViewInit {
     );
     if (someValuesSelected) {
       this.clearSelected();
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
     } else {
       Object.keys(this.selectForm.value).forEach((value) => {
         this.selectForm.patchValue({ [value]: true });
@@ -101,17 +104,36 @@ export class AttributesComponent implements OnInit, AfterViewInit {
     } else {
       this.attributesTodelete.add(id);
     }
-    this.indeterminateCheckbox.indeterminate = Object.values(
+    const allSelected = Object.values(
+      this.selectForm.value
+    ).every((value) => value);
+    const someSelected = Object.values(
       this.selectForm.value
     ).some((value) => value);
+    if (allSelected) {
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox-all-selected'
+      this.indeterminateCheckbox.indeterminate = false
+    } else if (someSelected) {
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
+      this.indeterminateCheckbox.indeterminate = true
+    } else {
+      this.indeterminateCheckbox.indeterminate = false
+    }    
   }
 
   deleteAttributes() {
     const deleteList = Array.from(this.attributesTodelete);
+    if (deleteList.length === 0) {
+      return
+    }
     this.store.dispatch(deleteAll({ deleteList }));
 
     this.attributesTodelete.clear();
     this.indeterminateCheckbox.indeterminate = false;
+  }
+
+  deleteAttribute({ id }: { id: string }) {
+    this.store.dispatch(deleteAttribute({attributeId: id }))
   }
 
   editOption(attribute: Attribute) {

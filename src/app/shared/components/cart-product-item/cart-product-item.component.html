@@ -1,0 +1,48 @@
+<article class="grid grid-cols-2 gap-6 w-[677px] h-[159px]">
+  <img
+    class="h-[159px] border rounded-2xl"
+    [ngSrc]="product.productCoverImage"
+    height="159"
+    width="297"
+    priority
+    [alt]="'image of ' + product.productName"
+  />
+  <div class="flex flex-col gap-5 ">
+    <div class="flex items-center justify-between">
+      <p class="font-bold text-xl">{{ product.productName }}</p>
+      <p
+        class="text-sm font-[500] text-[#0D121A] text-ellipsis overflow-hidden whitespace-nowrap"
+      >
+        {{ product.totalPrice | currency }}
+      </p>
+    </div>
+    <div class="text-[13px] overflow-hidden whitespace-nowrap text-ellipsis">
+      {{ product.productDescription }}
+    </div>
+    <div>
+      <div class="text-[13px] flex justify-between text-[#737373] mb-[10px]">
+        <span>Includes:</span>
+        <div>
+          <span class="text-black ml-2" *ngFor="let option of product.configured"
+            >{{ option.optionName }},</span
+          >
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-sm">
+        <p>QTY</p>
+        <div class="flex items-center text-[13px] gap-3 bg-[#E8EAEB80] rounded-3xl px-2">
+          <button (click)="decrementQuantity()">-</button>
+          <p class="text-sm">{{quantity}}</p>
+          <button (click)="incrementQuantity()">+</button>
+        </div>
+      </div>
+  
+      <button
+        (click)="deleteCartItem(product.id)"
+        class="self-start text-xs underline text-red-color"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+</article>

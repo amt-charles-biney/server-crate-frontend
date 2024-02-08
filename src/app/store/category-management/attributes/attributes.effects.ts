@@ -16,6 +16,7 @@ import { AdminService } from '../../../core/services/admin/admin.service';
 import { resetLoader, setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { GetAttribute } from '../../../types';
 import { Store } from '@ngrx/store';
+import { errorHandler } from '../../../core/utils/helpers';
 
 @Injectable()
 export class AttributeEffect {
@@ -60,6 +61,9 @@ export class AttributeEffect {
               message: 'Added attribute successfully',
               status: false
             }))
+            setTimeout(() => {
+              this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
+            }, 1500);
             return gotAttributes({ attributes: props.data });
           }),
           timeout(5000),
@@ -71,7 +75,7 @@ export class AttributeEffect {
             }, 5000);
             return of(setLoadingSpinner({
               isError: true,
-              message: 'Waiting for backend error message for adding attributes',
+              message: 'Fix: Adding attributes',
               status: false
             }));
           })
@@ -118,6 +122,9 @@ export class AttributeEffect {
                 message: 'Deleted attribute successfully',
                 status: false
               }))
+              setTimeout(() => {
+                this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
+              }, 1500);
               return getAttributes();
             }),
             catchError((err) => {
@@ -145,13 +152,23 @@ export class AttributeEffect {
                 message: 'Updated attribute successfully',
                 status: false
               }))
+              setTimeout(() => {
+                this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
+              }, 1500);
               return getAttributes();
             }),
             catchError((err) => {
+              setTimeout(() => {
+                this.store.dispatch(resetLoader({
+                  isError: true,
+                  message: '',
+                  status: false
+                }))
+              }, 1500);
               return of(
                 setLoadingSpinner({
                   isError: true,
-                  message: err.error.detail,
+                  message: errorHandler(err),
                   status: false,
                 })
               );
@@ -172,6 +189,9 @@ export class AttributeEffect {
                 message: 'Deleted attribute',
                 status: false
               }))
+              setTimeout(() => {
+                this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
+              }, 1500);
               return getAttributes();
             }),
             catchError((err) => {
@@ -193,13 +213,16 @@ export class AttributeEffect {
         exhaustMap((props) => {
           return this.adminService.deleteAll(props.deleteList).pipe(
             map(() => {
+              setTimeout(() => {
+                this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
+              }, 1500);
               return getAttributes();
             }),
             catchError((err) => {
               return of(
                 setLoadingSpinner({
                   isError: true,
-                  message: err.error.detail,
+                  message: errorHandler(err),
                   status: false,
                 })
               );

@@ -19,6 +19,8 @@ import { AttributesComponent } from './features/attributes/attributes.component'
 import { AddCategoryComponent } from './features/add-category/add-category.component';
 import { AttributeEffect } from '../../store/category-management/attributes/attributes.effects';
 import { attributeCreationFeature, attributesFeature } from '../../store/category-management/attributes/attributes.reducers';
+import { ConfigEffect } from '../../store/category-management/attributes/config/config.effects';
+import { configFeature, editConfigFeature } from '../../store/category-management/attributes/config/config.reducers';
 
 export const route: Routes = [
   {
@@ -51,6 +53,7 @@ export const route: Routes = [
         component: AddProductComponent,
         providers: [
           provideEffects(CategoryEffect),
+          provideState(productsFeature),
           provideState(categoryFeature),
           provideState(configurationFeature),
         ]
@@ -58,6 +61,17 @@ export const route: Routes = [
       {
         path: 'add-category',
         component: AddCategoryComponent,
+        providers: [
+          provideEffects(ConfigEffect)
+        ]
+      },
+      {
+        path: 'add-category/:id',
+        component: AddCategoryComponent,
+        providers: [
+          provideEffects(ConfigEffect),
+          provideState(editConfigFeature)
+        ]
       },
       {
         path: 'dashboard',
@@ -65,7 +79,11 @@ export const route: Routes = [
       },
       {
         path: 'category-management',
-        component: CategoryManagementComponent
+        component: CategoryManagementComponent,
+        providers: [
+          provideEffects(ConfigEffect),
+          provideState(configFeature),
+        ]
       },
       {
         path: 'attributes',
@@ -90,7 +108,7 @@ export const route: Routes = [
       },
       {
         path: 'settings',
-        component: SettingsComponent
+        loadChildren: () => import('./features/settings/settings.routes').then(m => m.route),
       }
     ],
   },

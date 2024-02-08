@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap');
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -7,7 +9,8 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 html,
@@ -16,27 +19,27 @@ body {
 }
 body {
   margin: 0;
-  font-family: 'Roboto', "Helvetica Neue", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 input[type="checkbox"] {
   display: grid;
   place-content: center;
   appearance: none;
   border: 1px solid #c5c5c5;
-  border-radius: 2px;
-  width: 15px;
-  height: 15px;
+  border-radius: 4px;
+  width: 20px;
+  height: 20px;
   transform: translateY(-0.075em);
   background-color: white;
   margin: 0;
 }
 input[type="checkbox"]:checked {
-    background-color: #3cb043;
-    border-color: #3cb043;
+  background-color: #3cb043;
+  border-color: #3cb043;
 }
 input[type="checkbox"]:indeterminate .indeterminateCheckbox {
-    border-color: #3cb043;
-    appearance: auto;
+  border-color: #3cb043;
+  appearance: auto;
 }
 
 input[type="checkbox"].indeterminateCheckbox {
@@ -44,18 +47,22 @@ input[type="checkbox"].indeterminateCheckbox {
   height: 20px;
   border-radius: 4px;
   border-color: #3cb043;
+  background-color: #ECF7EC80
+}
+input[type="checkbox"].indeterminateCheckbox-all-selected {
+  background-color: #3cb043;
 }
 
-input[type=checkbox]:indeterminate::after {
-    content: "";
-    display: block;
-    width: 12px;
-    border: solid #3cb043;
-    border-width: 3px 0 0 0;
-    border-radius: 8px;
-    position: absolute;
-    top: 8px;
-    left: 3px;
+input[type="checkbox"]:indeterminate::after {
+  content: "";
+  display: block;
+  width: 12px;
+  border: solid #3cb043;
+  border-width: 3px 0 0 0;
+  border-radius: 8px;
+  position: absolute;
+  top: 8px;
+  left: 3px;
 }
 input[type="checkbox"]::before {
   content: "";
@@ -72,38 +79,58 @@ input[type="checkbox"]:checked::before {
   background-color: white;
 }
 
-app-account-settings .mdc-tab--active {
+app-account-settings  .mdc-tab--active {
   background-color: #ecf7ec;
-  transition: all 1s
+}
+app-settings  .mdc-tab--active {
+  background-color: #ecf7ec;
 }
 // input.ng-invalid:not(form) {
 //   border: 1px solid red;
 // }
 app-account-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-  color: #3cb043
+  color: #3cb043;
+}
+app-settings .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043;
 }
 
-app-product-configure  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-  color: #3cb043
+app-product-configure .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043;
 }
 
-app-account-settings .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
-  color: #3cb043
+app-account-settings
+  .mat-mdc-tab-link.mdc-tab--active:focus
+  .mdc-tab__text-label {
+  color: #3cb043;
+}
+app-settings
+  .mat-mdc-tab-link.mdc-tab--active:focus
+  .mdc-tab__text-label {
+  color: #3cb043;
 }
 
-app-product-configure .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
-  color: #3cb043
+app-product-configure
+  .mat-mdc-tab-link.mdc-tab--active:focus
+  .mdc-tab__text-label {
+  color: #3cb043;
 }
 
-app-account-settings .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
-  color: #3cb043
+app-account-settings .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043;
+}
+app-settings .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043;
 }
 
-app-product-configure .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
-  color: #3cb043
+app-product-configure .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
+  color: #3cb043;
 }
 
 app-account-settings .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+app-settings .mat-mdc-tab .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
 
@@ -111,28 +138,80 @@ app-product-configure .mat-mdc-tab .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
 
-app-account-settings .mat-mdc-tab.mdc-tab--active:focus .mdc-tab-indicator__content--underline {
+app-account-settings
+  .mat-mdc-tab.mdc-tab--active:focus
+  .mdc-tab-indicator__content--underline {
+  border-color: #3cb043;
+}
+app-settings
+  .mat-mdc-tab.mdc-tab--active:focus
+  .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
 
-app-product-configure .mdc-tab-indicator__content .mdc-tab-indicator__content--underline {
+app-product-configure
+  .mdc-tab-indicator__content
+  .mdc-tab-indicator__content--underline {
   border-color: #3cb043;
 }
 
 app-account-settings .mat-mdc-tab-body {
-  background-color: white
+  background-color: white;
+}
+app-settings .mat-mdc-tab-body {
+  background-color: white;
+}
+app-settings .mat-mdc-tab-body {
+  background-color: white;
 }
 
-app-account-settings .mat-mdc-tab-header{
+app-account-settings .mat-mdc-tab-header {
+  background-color: #fbfbfb;
+}
+app-settings .mat-mdc-tab-header {
+  background-color: #fbfbfb;
+}
+app-settings .mat-mdc-tab-header {
   background-color: #fbfbfb;
 }
 
-app-product-configure .mat-mdc-tab-header{
-  background-color: #fbfbfb;
+
+app-product-configure .mat-mdc-tab-header {
+  background-color: white;
+}
+
+app-product-configure .mat-mdc-tab-links {
+  border-bottom: 1px solid #E8EAEB;
+}
+app-account-settings .mat-mdc-tab-links {
+  border-bottom: 1px solid #E8EAEB;
+}
+app-settings .mat-mdc-tab-links {
+  border-bottom: 1px solid #E8EAEB;
+}
+
+app-account-settings .mdc-tab--active {
+  background-color: #ECF7EC;
+  border-bottom: 2px solid #3CB043;
+}
+app-settings .mdc-tab--active {
+  background-color: #ECF7EC;
+  border-bottom: 2px solid #3CB043;
+}
+
+
+app-account-settings .mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link {
+  flex-grow: 0;
+}
+app-settings .mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link {
+  flex-grow: 0;
 }
 
 
 app-account-settings .mdc-tab-indicator {
+  display: none;
+}
+app-settings .mdc-tab-indicator {
   display: none;
 }
 
@@ -149,7 +228,7 @@ app-payment-details .mat-mdc-tab-header {
   border-radius: 8px;
 }
 
-app-payment-details  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+app-payment-details .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: white;
 }
 
@@ -157,9 +236,9 @@ app-payment-details .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
   color: white;
 }
 
-app-payment-details  .mdc-tab--active {
+app-payment-details .mdc-tab--active {
   background-color: #3cb043;
-  transition: all 1s
+  transition: all 1s;
 }
 app-payment-details .mdc-tab {
   padding-right: 0;
@@ -176,55 +255,24 @@ app-payment-details .mat-mdc-tab-group {
   max-width: 120%;
 }
 
-app-admin-dashboard .mat-mdc-tab-links {
-  flex-direction: column;
-  gap: 5px;
+
+
+app-settings .mat-mdc-tab-links {
+  flex-direction: row;
 }
 
-app-admin-dashboard .mdc-tab {
-  justify-content: start;
-}
-
-app-admin-dashboard .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-  color: #3cb043;
-}
-app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label  {
-  color: #3cb043;
-}
-app-admin-dashboard .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label  {
-  color: #3cb043;
-}
-
-app-admin-dashboard  .mdc-tab--active {
+app-settings .mdc-tab--active {
   background-color: #f7fcf7;
   transition: all 1s;
-  border-radius: 12px;
+  border-radius: 0;
 }
 
-app-product-configure  .mdc-tab--active {
-  background-color: #f7fcf7;
-  transition: all 1s;
-  border-radius: 12px;
-}
-
-
-app-admin-dashboard  .mdc-tab:hover {
-  border-radius: 12px;
-  background-color: #f7fcf7;
-}
-
-app-admin-dashboard .mdc-tab-indicator {
-  display: none;
+app-product-configure .mdc-tab--active {
+  background-color: #ECF7EC;
+  border-bottom: 2px solid #3CB043;
 }
 
 
-// .iti {
-//   width: 100%;
-// }
-
-// app-custom-input .cdk-overlay-pane {
-//   width: 53px;
-// }
 .custom-panel {
   width: fit-content;
 }
@@ -241,10 +289,90 @@ app-admin-dashboard .mdc-tab-indicator {
 }
 .iti__country-list {
   width: 410px;
+  margin-top: 8px;
 }
 
 app-preference-selection .mat-expansion-indicator:after {
   border-color: black;
+}
+
+app-custom-select .mat-mdc-select-arrow {
+  border-left: 15px solid transparent !important;
+  border-right: none !important;
+  border-top: 15px solid transparent !important;
+  border-image-source: url("./assets/chevron-down.svg") !important;
+  border-image-repeat: stretch !important;
+}
+app-custom-select .mat-mdc-select-arrow:focus {
+  transform: rotate(180deg);
+}
+app-custom-select .mat-mdc-select-arrow svg {
+  display: none;
+}
+app-custom-select .mat-mdc-select {
+  display: flex;
+}
+
+app-custom-select .mat-mdc-select-required.mat-mdc-select-invalid {
+  border-color: red;
+}
+app-custom-select .mat-mdc-select-arrow-wrapper {
+  margin-right: 10px;
+}
+
+app-custom-select .mat-mdc-select-placeholder {
+  margin-left: 10px;
+  color: #b9bdc2;
+}
+app-custom-select .mat-mdc-option .mat-icon,
+.mat-mdc-option .mat-pseudo-checkbox-full {
+  width: 20px !important;
+  height: 20px !important;
+  margin-right: 0px !important;
+  border-radius: 6px;
+  border: 1.5px solid #d0d5dd;
+}
+app-custom-select .mat-mdc-option .mat-icon,
+.mat-mdc-option .mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked {
+  background-color: #3cb043;
+}
+
+app-custom-select .mat-mdc-option .mat-icon,
+.mat-mdc-option .mat-pseudo-checkbox-minimal {
+  margin-left: 0px !important;
+}
+app-custom-select .mat-mdc-option .mat-icon,
+.mat-mdc-option
+  .mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after {
+  color: #3cb043 !important;
+}
+
+.myPanel {
+  margin-block: 10px;
+  border-radius: 4px !important;
+}
+app-custom-select .mat-mdc-select-value-text {
+  margin-left: 10px;
+}
+
+.myOption.mdc-list-item--selected:not(.mdc-list-item--disabled)
+  .mdc-list-item__primary-text {
+  color: #3cb043 !important;
+}
+
+app-category-management  {
+  padding-block: 4px !important;
+}
+.mat-mdc-menu-content {
+  padding: 0px !important;
+}
+
+.cdk-overlay-dark-backdrop {
+  backdrop-filter: blur(4px) !important;
+  background: none;
+  background-color: rgba(228 ,228 ,228 ,0.10);
+  box-shadow: 0px 10px 15px 10px rgba(0 ,0 ,0 ,0.15);
+
 }
 
 @media only screen and (max-width: 768px) {
@@ -255,3 +383,14 @@ app-preference-selection .mat-expansion-indicator:after {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class UserProductItemComponent {
   @Input() product!: ProductItem;
+  @Input() isGrid: boolean = true
   @Output() selectorEmitter = new EventEmitter<ProductItem>();
   isSelected: boolean = false;
 

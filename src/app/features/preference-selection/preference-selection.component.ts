@@ -51,6 +51,7 @@ export class PreferenceSelectionComponent implements OnInit {
   page: number = 0;
   brands$!: Observable<Select[]>;
   search: string = ''
+  isGridMode: boolean = true
   constructor(
     private store: Store,
     public dialog: MatDialog,
@@ -138,7 +139,7 @@ export class PreferenceSelectionComponent implements OnInit {
 
   clearFilters() {
     this.onLoad();
-    this.router.navigateByUrl('/servers')
+    // this.router.navigateByUrl('/servers')
     const params = this.buildParams(this.queryParams);
     this.store.dispatch(filter({ params, page: 0 }));
   }

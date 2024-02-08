@@ -9,6 +9,12 @@ import {
   BulkAttribute,
   GetAttribute,
   UpdateAttribute,
+  CategoryConfig,
+  Configuration,
+  CategoryAndConfig,
+  EditConfig,
+  ConfigurationEdit,
+  EditConfigResponse,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -96,11 +102,31 @@ export class AdminService {
     return this.http.put(`${this.baseUrl}/admin/attributes/bulk`, attribute)
   }
 
-  deleteAll(deleteList: string[]) {
-    console.log('deleteList', deleteList);
-    
+  deleteAll(deleteList: string[]) {    
     return this.http.delete(`${this.baseUrl}/admin/attributes/all`, {
       body: deleteList
     })
+  }
+
+  createCategoryConfig(categoryConfig: Configuration) {
+    return this.http.post(`${this.baseUrl}/admin/category/config`, categoryConfig)
+  }
+
+  getCategoriesAndConfig() {
+    return this.http.get<CategoryAndConfig[]>(`${this.baseUrl}/admin/category/config`)
+  }
+
+  getSingleCategory(id: string) {
+    return this.http.get<EditConfigResponse>(`${ this.baseUrl }/admin/category/config/${id}`)
+  }
+
+  deleteCategories(deleteList: string[]) {
+    return this.http.delete(`${this.baseUrl}/admin/category/config`, {
+      body: deleteList
+    })
+  }
+
+  editCategory(id: string, categoryConfig: ConfigurationEdit) {
+    return this.http.put(`${this.baseUrl}/admin/category/config/${id}`, categoryConfig)
   }
 }

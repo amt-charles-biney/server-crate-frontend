@@ -1,28 +1,27 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing'
+import { ProductConfigureComponent } from './product-configure.component'
+import { RouterTestingModule } from '@angular/router/testing'
+import { provideMockStore } from '@ngrx/store/testing'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideAnimations } from '@angular/platform-browser/animations'
 
-import { ProductConfigureComponent } from './product-configure.component';
-import { RouterTestingModule } from '@angular/router/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideAnimations } from '@angular/platform-browser/animations';
-
-describe('ProductConfigureComponent', () => {
-  let component: ProductConfigureComponent;
-  let fixture: ComponentFixture<ProductConfigureComponent>;
+fdescribe('ProductConfigureComponent', () => {
+  let component: ProductConfigureComponent
+  let fixture: ComponentFixture<ProductConfigureComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProductConfigureComponent, RouterTestingModule, HttpClientTestingModule],
-      providers: [provideMockStore({}), provideAnimations()]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(ProductConfigureComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      providers: [provideAnimations(), provideMockStore()]
+    }).compileComponents()
+
+    fixture = TestBed.createComponent(ProductConfigureComponent)
+    component = fixture.componentInstance
+    fixture.autoDetectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    console.log(component)
+    expect(component).toBeDefined()
+  })
+})

@@ -15,6 +15,12 @@ export interface ProductConfigItemState {
   productConfigItem: IConfiguredProduct | null
 }
 
+export interface ProductCartItemState {
+  productCartItem: IConfiguredProduct | null,
+  productCartItemLoading: boolean,
+  productCartItemError: any
+}
+
 export const initialState: ProductConfigState = {
   product: null,
   productConfig: null,
@@ -28,19 +34,24 @@ export const ProductConfigInitialState : ProductConfigItemState =  {
   productConfigItem: null
 }
 
-export const productConfigFeature = createFeature({
-    name: 'productconfig',
-    reducer: createReducer(
-        initialState,
-        on(ProductConfigActions.loadProduct, state => ({ ...state, loading: true, error: null })),
-        on(ProductConfigActions.loadProductSuccess, (state, { product }) => ({ ...state, product, loading: false })),
-        on(ProductConfigActions.loadProductFailure, (state, { error }) => ({ ...state, error, loading: false })),
-        on(ProductConfigActions.loadProductConfig, state => ({ ...state, loading: true, error: null })),
-        on(ProductConfigActions.loadProductConfigSuccess, (state, { productConfig }) => ({ ...state, productConfig, loading: false })),
-        on(ProductConfigActions.loadProductConfigFailure, (state, { error }) => ({ ...state, error, loading: false }))
-        )
-})
+export const ProductCartInitialState: ProductCartItemState = {
+  productCartItem: null,
+  productCartItemLoading: false,
+  productCartItemError: null
+}
 
+export const productConfigFeature = createFeature({
+  name: 'productconfig',
+  reducer: createReducer(
+    initialState,
+    on(ProductConfigActions.loadProduct, state => ({ ...state, loading: true, error: null })),
+    on(ProductConfigActions.loadProductSuccess, (state, { product }) => ({ ...state, product, loading: false })),
+    on(ProductConfigActions.loadProductFailure, (state, { error }) => ({ ...state, error, loading: false })),
+    on(ProductConfigActions.loadProductConfig, state => ({ ...state, loading: true, error: null })),
+    on(ProductConfigActions.loadProductConfigSuccess, (state, { productConfig }) => ({ ...state, productConfig, loading: false })),
+    on(ProductConfigActions.loadProductConfigFailure, (state, { error }) => ({ ...state, error, loading: false }))
+)
+})
 
 export const productConfigItemFeature = createFeature({
   name: 'productConfigItem',
@@ -52,21 +63,38 @@ export const productConfigItemFeature = createFeature({
   )
 })
 
+export const productCartItemFeature = createFeature({
+  name: 'productCartItem',
+  reducer: createReducer(
+    ProductCartInitialState,
+    on(ProductConfigActions.addToCartItem, state => ({...state, loading: true, error: null})),
+    on(ProductConfigActions.addToCartItemSuccess, (state, { productCartItem }) => ({...state, productCartItem, loading: false})),
+    on(ProductConfigActions.addToCartItemFailure, (state, { error }) => ({...state, error, loading: false }))
+
+  )
+})
 
 export const {
-    name,
-    reducer,
-    selectProductconfigState,
-    selectError,
-    selectLoading,
-    selectProductConfig,
-    selectProduct
+  name,
+  reducer,
+  selectProductconfigState,
+  selectError,
+  selectLoading,
+  selectProductConfig,
+  selectProduct
 } = productConfigFeature
-
 
 export const {
   selectProductConfigItemState,
   selectProductConfigItem,
   selectProductConfigItemLoading,
   selectProductConfigItemError
-} =  productConfigItemFeature
+} = productConfigItemFeature
+
+export const {
+  selectProductCartItem,
+  selectProductCartItemError,
+  selectProductCartItemLoading,
+  selectProductCartItemState
+
+} = productCartItemFeature
