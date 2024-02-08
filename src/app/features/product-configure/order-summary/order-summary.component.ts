@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core'
 import { type IParamConfigOptions, type IConfiguredProduct } from '../../../types'
 import { Store } from '@ngrx/store'
 import { addToCartItem } from '../../../store/product-spec/product-spec.action'
+import { Router } from 'express'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'app-order-summary',
@@ -12,16 +14,13 @@ import { addToCartItem } from '../../../store/product-spec/product-spec.action'
 export class OrderSummaryComponent {
   @Input() productConfigItem!: IConfiguredProduct
   @Input() warranty: any = false
-  @Input() components!: (Record<string, string>)
   @Input() productId!: string
+  @Input() querySnapShot!: IParamConfigOptions
 
-  constructor (private store: Store) {}
+  constructor (private store: Store, private router: ActivatedRoute) {}
 
   addProductToCart (): void {
-    const queryComponents = Object.values(this.components).join(',')
-    const configOptions: IParamConfigOptions = { warranty: this.warranty, components: queryComponents }
-
-    console.log('config options ', configOptions)
-    this.store.dispatch(addToCartItem({ productId: this.productId, configOptions }))
+    console.log('config options ', this.querySnapShot)
+    this.store.dispatch(addToCartItem({ productId: this.productId, configOptions: this.querySnapShot  }))
   }
 }
