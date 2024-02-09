@@ -196,7 +196,6 @@ export class ProductConfigureComponent {
       components: joinQuery
     }
     const navigationExtras: NavigationExtras = { queryParams: currentParams, queryParamsHandling: 'merge' }
-    console.log("navigation extra ", navigationExtras)
     void this.router.navigate([], navigationExtras)
   }
 

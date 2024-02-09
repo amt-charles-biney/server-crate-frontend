@@ -2,22 +2,26 @@
     <img alt="img-spinner" src="/assets/spinner.svg" class="w-16 h-16" />
 </ng-container>
 
-<ng-container class="flex flex-col gap-3 max-w-sm" *ngIf="productConfigItemError || productCartItemError || productError">
-    <div class="w-full rounded-md bg-red-100 text-red-400 p-4">
-        {{ productCartItemError}}
-    </div>
+<div *ngIf="productCartItemError$ | async as productCartItemError"
+    class="w-full rounded-md bg-red-100 text-red-400 p-4">
+    {{ productCartItemError }}
+</div>
 
-    <div class="w-full rounded-md bg-red-100 text-red-400 p-4">
-        {{ productConfigItemError }}
-    </div>
+<div *ngIf="productConfigItemError$ | async as productConfigItemError"
+    class="w-full rounded-md bg-red-100 text-red-400 p-4">
+    {{ productConfigItemError }}
+</div>
 
-    <div class="w-full rounded-md bg-red-100 text-red-400 p-4">
-        {{ productError }}
-    </div>
-</ng-container>
+<div *ngIf="productError$ | async as productError" class="w-full rounded-md bg-red-100 text-red-400 p-4">
+    {{ productError }}
+</div>
 
-<ng-container class="flex flex-col gap-3 max-w-sm" *ngIf="addToCartMessage !== null&& productCartItemLoading === false">
-    <div class="w-full rounded-md bg-green-100 text-green-400 font-bold p-4">
-        {{ addToCartMessage }}
-    </div>
-</ng-container>
+<div class="bg-[#bfe4bf] text-figma-green" *ngIf="cartMsg$ | async as cartMsg"
+    class="flex items-center justify-center mx-auto mt-4 gap-4 text-sm p-3 rounded-lg w-3/4">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <p>{{ cartMsg }}</p>
+</div>

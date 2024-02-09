@@ -24,7 +24,19 @@ class="border-[1px] flex-1 h-[327px] max-w-[486px] w-[486px] mt-5 flex flex-col 
    <button 
    (click)="addProductToCart()"
    class="bg-[#3CB043] hover:bg-green-500 w-full p-2 rounded-xl text-white font-[500px] text-[20px]">
-      Add to cart
+      <div *ngIf="loader$ | async as loading; else cart" >
+         @if (loading) {
+            <img 
+            alt="product spinner"
+            src="/assets/spinner.svg"
+            class="w-8 h-8 text-white"
+           />
+         }
+      </div>
    </button>
 </div>
 </div>
+
+<ng-template #cart>
+   Add to Cart
+</ng-template>

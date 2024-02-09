@@ -6,6 +6,7 @@ import { ProductService } from "../../core/services/product/product.service";
 import { addToCartItem, addToCartItemFailure, addToCartItemSuccess, loadProduct, loadProductConfig, loadProductConfigFailure, loadProductConfigItem, loadProductConfigItemFailure, loadProductConfigItemSuccess, loadProductConfigSuccess, loadProductFailure, loadProductSuccess } from "./product-spec.action";
 import { ICategoryConfig, IConfiguredProduct, IParamConfigOptions, ProductItem } from "../../types";
 import { getCartItems } from "../cart/cart.actions";
+import { Store } from "@ngrx/store";
 
 @Injectable()
 export class ProductSpecEffects {
@@ -77,9 +78,9 @@ export class ProductSpecEffects {
       exhaustMap((props: { productId: string, configOptions: IParamConfigOptions }) => {
         return this.productService.addProductToCart(props.productId, props.configOptions)
         .pipe(
-          map((productCartItem: IConfiguredProduct) => {
-            console.log("load cart item posted success ", productCartItem)
-            return getCartItems()
+          map((props: { message: string, configuration: IConfiguredProduct}) => {
+            this.store.dispatch(getCartItems())
+            return addToCartItemSuccess({ message: props.message, configuration: props.configuration })
           }),
           catchError((error: any) => {
             console.log("load cart item posted error ", error)
@@ -92,5 +93,5 @@ export class ProductSpecEffects {
   })
 
   
-  constructor(private action$: Actions, private productService: ProductService) {}
+  constructor(private action$: Actions, private productService: ProductService, private store: Store) {}
 }
