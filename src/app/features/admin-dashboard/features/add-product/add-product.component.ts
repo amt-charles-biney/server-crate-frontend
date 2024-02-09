@@ -47,6 +47,7 @@ import { selectLoaderState } from '../../../../store/loader/reducers/loader.redu
 import { selectConfigurationState } from '../../../../store/admin/products/configuration.reducers';
 import { selectProduct } from '../../../../store/admin/products/products.reducers';
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
+import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
 
 @Component({
   selector: 'app-add-product',
@@ -115,7 +116,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       ],
       productId: `${getUniqueId(2)}`,
       productBrand: '',
-      category: '',
+      category: ['', categoryIsNotUnassigned()],
       inStock: [
         0,
         RxwebValidators.required({
@@ -128,6 +129,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
     };
     this.addProductForm = <RxFormGroup>this.fb.group(this.formGroup);
     if (this.id) {
+      this.addProductForm.markAllAsTouched()
       this.store.dispatch(getProduct({ id: this.id }));
       this.store
         .select(selectProduct)
