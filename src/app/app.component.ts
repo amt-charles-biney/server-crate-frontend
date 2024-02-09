@@ -5,10 +5,11 @@ import { Store } from '@ngrx/store';
 import { resetLoader } from './store/loader/actions/loader.actions';
 import { environment } from '../environments/environment';
 import { getCartItems } from './store/cart/cart.actions';
+import { CookieConsentComponent } from './features/cookie-consent/cookie-consent.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule],
+  imports: [CommonModule, RouterOutlet, RouterModule, CookieConsentComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
