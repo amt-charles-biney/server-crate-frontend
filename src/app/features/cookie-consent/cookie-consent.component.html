@@ -1,31 +1,39 @@
 <main
-*ngIf="isCookiePolicyAccepted === false"
-  class="fixed bottom-0 z-50 w-screen mx-auto bg-white shadow-md"
+  *ngIf="isCookiePolicyAccepted === false"
+  [ngClass]="isCookiePolicyAccepted ? '' : 'cdk-overlay-dark-backdrop'"
+  class="fixed bottom-0 z-50 min-h-screen w-screen flex flex-col justify-end mx-auto shadow-md"
   [@slideInBottom]
 >
-    <div class="flex flex-col gap-6 w-[1239px] mx-auto px-4 pt-4">
-
-        <section class="flex items-center gap-4">
-          <img src="/assets/cookie.svg" alt="image of cookie" />
-          <h2 class="text-2xl font-semibold">Cookies</h2>
-        </section>
-        <div class="flex flex-col px-2 gap-10">
-            <blockquote>
-              Welcome to our GPU Server Configurator website! We use cookies to enhance
-              your browsing experience and provide personalized recommendations tailored
-              to your preferences. These cookies allow us to analyze website traffic,
-              customize content, and improve our services.
-            </blockquote>
-            <blockquote>
-              Please note that these cookies are essential for the functionality of our
-              website and cannot be disabled. However, rest assured that we prioritize
-              your privacy and only collect and process data in accordance with our
-              Privacy Policy.
-            </blockquote>
-        </div>
-        <button (click)="removeCookie()" class="flex items-center gap-2 text-figma-green text-sm self-end  mb-4">
-          <img src="/assets/arrow-up-left.svg" alt="arrow icon">
+  <div class="w-screen bg-white customShadow">
+    <div
+      class="flex flex-col justify-end gap-6 w-[1239px] mx-auto pt-4"
+    >
+      <section class="flex items-center gap-4">
+        <img src="/assets/cookie.svg" alt="image of cookie" />
+        <h2 class="text-2xl font-semibold">Cookies</h2>
+      </section>
+      <div class="flex flex-col gap-10 px-5">
+        <blockquote>
+          Welcome to our GPU Server Configurator website! We use cookies to
+          enhance your browsing experience and provide personalized
+          recommendations tailored to your preferences. These cookies allow us
+          to analyze website traffic, customize content, and improve our
+          services.
+        </blockquote>
+        <blockquote>
+          Please note that these cookies are essential for the functionality of
+          our website and cannot be disabled. However, rest assured that we
+          prioritize your privacy and only collect and process data in
+          accordance with our Privacy Policy.
+        </blockquote>
+        <button
+          (click)="removeCookie()"
+          class="flex items-center gap-2 text-figma-green text-sm self-end mb-4"
+        >
+          <img src="/assets/arrow-up-left.svg" alt="arrow icon" />
           <span class="underline">I Understand</span>
         </button>
+      </div>
     </div>
+  </div>
 </main>
