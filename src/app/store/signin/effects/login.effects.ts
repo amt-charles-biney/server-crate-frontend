@@ -9,6 +9,7 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { ProfileService } from '../../../core/services/user-profile/profile.service';
 import { errorHandler } from '../../../core/utils/helpers';
+import { getCartItems } from '../../cart/cart.actions';
 
 @Injectable()
 export class LoginEffect {
@@ -27,11 +28,7 @@ export class LoginEffect {
             } else {
               this.router.navigateByUrl('/settings', { replaceUrl: true });
             }
-            return setLoadingSpinner({
-              status: false,
-              message: 'Login Successful',
-              isError: false,
-            });
+            return getCartItems()
           }),
           catchError((err) => {
             return of(
