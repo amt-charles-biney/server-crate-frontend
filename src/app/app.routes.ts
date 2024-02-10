@@ -8,6 +8,10 @@ import { SignUpEffect } from './store/signup/effects/signup.effects';
 import { VerifyEffect } from './store/signup/effects/verify.effects';
 import { ResetEffect } from './store/reset/effects/reset.effects';
 import { otpFeature } from './store/otp/otp.reducers';
+import { settingsGuard } from './core/guards/settings.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
     {
@@ -17,6 +21,18 @@ export const routes: Routes = [
             provideState(signUpFeature),
             provideEffects(SignUpEffect),
         ],
+    },
+    {
+        path: 'admin',
+        loadChildren: () => import('./features/admin-dashboard/admin-dashboard.routes').then(m => m.route),
+        canActivate: [
+            settingsGuard,
+            adminGuard,
+            authGuard
+        ],
+        providers: [
+            provideEffects(GeneralInfoEffect)
+        ]
     },
     {
         path: 'otp',
