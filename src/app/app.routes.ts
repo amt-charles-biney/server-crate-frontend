@@ -41,4 +41,8 @@ export const routes: Routes = [
             provideState(otpFeature)
         ]
     },
+    {
+        path: '',
+        loadChildren: () => import('./features/home/home.routes').then(m => m.route),
+    }
 ];

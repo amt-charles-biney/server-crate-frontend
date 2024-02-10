@@ -6,11 +6,13 @@ import {
   ResetPassword,
   SignIn,
   Success,
+  TokenPayload,
   UserSignUp,
   VerifiedUser,
   Verify,
   VerifyOtp,
 } from '../../../types';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -62,6 +64,19 @@ export class AuthService {
   }
   setEmail(email: string) {
     localStorage.setItem('server-crate-email', email);
+  }
+  isAdmin() {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken = jwtDecode<TokenPayload>(token);
+      return decodedToken.role === 'ADMIN'
+    }
+    return false
+  }
+  isAuthenticated() {
+    const token = this.getToken();
+    if (token) return true;
+    return false;
   }
   
   setToken(token: string) {
