@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {  Username } from '../../../types';
+import {  ChangeContact, GeneralInfo, Success, Username } from '../../../types';
 import { environment } from '../../../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 
@@ -12,6 +12,13 @@ export class ProfileService {
   private initials: BehaviorSubject<Username> = new BehaviorSubject<Username>(this.getUsername());
 
   constructor(private http: HttpClient) { }
+  getGeneralInfo() {
+    return this.http.get<GeneralInfo>(`${this.baseUrl}/profile/basic-info`)
+  }
+
+  updateGeneralInfo(form: ChangeContact) {
+    return this.http.put<Success>(`${this.baseUrl}/profile/basic-info`, form)
+  }
 
   getUsername() {
     let user = localStorage.getItem('server-crate-user')

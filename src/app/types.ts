@@ -73,3 +73,32 @@ export type VerifiedUser = {
   export type ResetLink = {
     email: string;
   };
+  export type Contact = {
+    phoneNumber: string;
+    country: string;
+    iso2Code: string;
+    dialCode: string;
+  };
+  export type GeneralInfo = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    contact: Contact;
+    role: string;
+  };
+  export type ChangeContact = {
+    firstName: string;
+    lastName: string;
+    contact: Contact;
+  };
+  export type TokenPayload = {
+    role: string;
+    sub: string;
+    iat: number;
+    exp: number;
+  };
+  export type Link = {
+    label: string;
+    link: string;
+    index: number;
+  };

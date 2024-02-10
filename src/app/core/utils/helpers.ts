@@ -7,3 +7,8 @@ export function errorHandler(err: any): string {
   }
   return errorMessage
 }
+export const logout = () => {
+  localStorage.clear();
+  sessionStorage.clear()
+  window.location.reload();
+};
