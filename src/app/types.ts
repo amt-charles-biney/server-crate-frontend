@@ -49,3 +49,27 @@ export type VerifiedUser = {
     email: string;
     code: string;
   };
+  export type ResendOtp = {
+    email: string;
+    otpType: string;
+  };
+  export type OtpResend = {
+    email: string;
+    type: string;
+  };
+  export type SetOtp = {
+    otp: string;
+  };
+  export type ResetPassword = {
+    email: string;
+    otpCode: string;
+    newPassword: string;
+    confirmNewPassword: string;
+  };
+  export type VerifyOtp = {
+    email: string;
+    otpCode: string;
+  };
+  export type ResetLink = {
+    email: string;
+  };
