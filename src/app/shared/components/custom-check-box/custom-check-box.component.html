@@ -1,0 +1,4 @@
+<label class="flex items-center gap-3 select-none" [for]="randomId + label | lowercase">
+  <input [formControl]="formControl" #inputState type="checkbox" [id]="randomId + label | lowercase" />
+  <span>{{ label }}</span>
+</label>

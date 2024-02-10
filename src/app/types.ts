@@ -102,3 +102,45 @@ export type VerifiedUser = {
     link: string;
     index: number;
   };
+  export type ChangePassword = {
+    currentPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
+  };
+  export type AttributeOption = {
+    id: string;
+    optionName: string;
+    additionalInfo: AdditionalInfo;
+    optionPrice: number;
+    optionMedia: string;
+    attribute: {
+      name: string;
+      id: string;
+      isMeasured: boolean,
+      unit: string
+    },
+    compatibleOptionId?: string
+  }
+  export type AdditionalInfo = {
+    baseAmount: number;
+    maxAmount: number;
+    priceFactor: number;
+  }
+  export type CategoryEditResponse = {
+    compatibleOptionId: string;
+    name: string;
+    type: string;
+    price: number;
+    media: string;
+    unit: string;
+    isCompatible: boolean;
+    isIncluded: boolean;
+    isMeasured: boolean;
+    priceFactor: number;
+    size: number;
+    attributeId: string;
+    attributeOptionId: string;
+    priceIncrement: number;
+    baseAmount: number;
+    maxAmount: number
+  }
