@@ -5,6 +5,7 @@ import { loginFeature } from './store/signin/reducers/login.reducers';
 import { LoginEffect } from './store/signin/effects/login.effects';
 import { signUpFeature } from './store/signup/reducers/signup.reducers';
 import { SignUpEffect } from './store/signup/effects/signup.effects';
+import { VerifyEffect } from './store/signup/effects/verify.effects';
 
 export const routes: Routes = [
     {
@@ -14,6 +15,13 @@ export const routes: Routes = [
             provideState(signUpFeature),
             provideEffects(SignUpEffect),
         ],
+    },
+    {
+        path: 'otp',
+        loadChildren: () => import('./features/otpsignup/otpsignup.routes').then(m => m.route),
+        providers: [
+            provideEffects(VerifyEffect),
+        ]
     },
     {
         path: 'login',

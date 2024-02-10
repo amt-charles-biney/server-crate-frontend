@@ -1,0 +1,24 @@
+<app-auth-loader [loadingState]="loadingState$" />
+<form
+  (ngSubmit)="verifyEmail()"
+  class="md:p-0 px-4 md:max-w-[500px] mx-auto flex flex-col items-center gap-4"
+>
+  <p class="mt-4 text-[20px] font-[500]">We have sent you a One Time Password on your mobile</p>
+  <ng-container *ngIf="time | async as time">
+    <app-countdown
+      [timeInMinutes]="time"
+    />
+  </ng-container>
+  <ng-otp-input [formCtrl]="otp" [config]="{ length: 6 }"></ng-otp-input>
+  <p>
+    Didn't receive OTP?
+    <button type="button" class="font-semibold underline" (click)="resendOtp()">
+      Resend
+    </button>
+  </p>
+  <div class="[&_button]:px-5">
+    <button class="bg-figma-green rounded-lg text-white px-5 py-2">
+      Verify Email
+    </button>
+  </div>
+</form>
