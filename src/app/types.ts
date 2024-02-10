@@ -31,3 +31,21 @@ export type VerifiedUser = {
     password: string;
   };
   export type Username = { firstName: string; lastName: string };
+  export type Success = {
+    message: string;
+  };
+  export type Failure = {
+    errorMessage: string;
+  };
+  export type VerificationFailure = {
+    errorMessage: string;
+  };
+  export type Verifying = {
+    isLoading: boolean;
+    message: string;
+    isError: boolean;
+  };
+  export type Verify = {
+    email: string;
+    code: string;
+  };
