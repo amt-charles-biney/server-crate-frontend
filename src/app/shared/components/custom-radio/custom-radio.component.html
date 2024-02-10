@@ -1,0 +1,35 @@
+<label [for]="'#' + id" class="flex items-center relative">
+  <input
+    type="radio"
+    [formControl]="formControl"
+    [name]="name"
+    [id]="'#' + id"
+    [value]="value"
+    class="appearance-none"
+  />
+  <div
+    [ngClass]="currentPaymentMethod === value ? 'border-green-600' : 'border-gray-400'"
+    class="border-2 min-w-[80px] flex justify-center p-2 rounded-lg "
+  >
+    <img [src]="imgUrl" alt="icon">
+</div>
+@if (currentPaymentMethod === value) {
+
+  <div class="absolute -top-2 -right-1">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-5 h-5 fill-figma-green text-white"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+  </div>
+}
+</label>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import {
+  ChangePassword,
   OtpResend,
   ResetPassword,
   SignIn,
@@ -48,6 +49,9 @@ export class AuthService {
       `${this.baseUrl}/auth/change-password`,
       newPassword
     );
+  }
+  changePasswordInProfile(password: ChangePassword) {
+    return this.http.post<Success>(`${this.baseUrl}/profile/password`, password);
   }
 
   getToken() {

@@ -1,3 +1,5 @@
+import { AttributeOption, CategoryEditResponse } from "../../types";
+
 export function errorHandler(err: any): string {
   let errorMessage = '';
   if (err && err.error && err.error.detail) {
@@ -12,3 +14,9 @@ export const logout = () => {
   sessionStorage.clear()
   window.location.reload();
 };
+export function isAttributeOption(obj: any): obj is AttributeOption {
+  return obj && typeof obj.id === 'string';
+}
+export function isCategoryEditResponse(obj: any): obj is CategoryEditResponse {
+  return obj && typeof obj.attributeOptionId === 'string';
+}
