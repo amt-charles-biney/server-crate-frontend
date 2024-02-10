@@ -1,0 +1,22 @@
+<app-auth-loader [loadingState]="loadingState$"/>
+<form
+  novalidate
+  [formGroup]="resetForm"
+  (ngSubmit)="sendResetLink()"
+  class="md:p-0 px-4 md:max-w-[500px] mx-auto w-full"
+>
+  <app-custom-input
+    id="email"
+    label="Email"
+    type="email"
+    placeholder="Enter your email"
+    formControlName="email"
+  />
+  @if (email?.invalid && (email?.touched || email?.dirty)) {
+  <span class="text-red-600">Please enter a valid email</span>
+  }
+  <app-custom-button
+    buttonText="Get OTP"
+    [disableButton]="this.resetForm.invalid"
+  />
+</form>
