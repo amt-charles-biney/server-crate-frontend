@@ -13,12 +13,20 @@ import { configurationFeature } from '../../store/admin/products/configuration.r
 import { AttributesComponent } from './features/attributes/attributes.component';
 import { AttributeEffect } from '../../store/category-management/attributes/attributes.effects';
 import { attributeCreationFeature, attributesFeature } from '../../store/category-management/attributes/attributes.reducers';
+import { CategoryManagementComponent } from './features/category-management/category-management.component';
+import { ConfigEffect } from '../../store/category-management/attributes/config/config.effects';
+import { configFeature, editConfigFeature } from '../../store/category-management/attributes/config/config.reducers';
+import { AddCategoryComponent } from './features/add-category/add-category.component';
 
 
 export const route: Routes = [
   {
     path: '',
     component: AdminDashboardComponent,
+    providers: [
+      provideEffects(AttributeEffect),
+      provideState(attributesFeature)
+    ],
     children: [
       {
         path: 'products',
@@ -48,8 +56,31 @@ export const route: Routes = [
         ]
       },
       {
+        path: 'add-category',
+        component: AddCategoryComponent,
+        providers: [
+          provideEffects(ConfigEffect)
+        ]
+      },
+      {
+        path: 'add-category/:id',
+        component: AddCategoryComponent,
+        providers: [
+          provideEffects(ConfigEffect),
+          provideState(editConfigFeature)
+        ]
+      },
+      {
         path: 'dashboard',
         component: DashboardComponent
+      },
+      {
+        path: 'category-management',
+        component: CategoryManagementComponent,
+        providers: [
+          provideEffects(ConfigEffect),
+          provideState(configFeature),
+        ]
       },
       {
         path: 'attributes',

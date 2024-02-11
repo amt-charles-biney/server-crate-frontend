@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { CategoryAndConfig, CategoryConfig, Configuration, ConfigurationEdit, EditConfig, EditConfigResponse } from "../../../../types";
+import { CategoryAndConfig, Configuration, ConfigurationEdit, EditConfigResponse } from "../../../../types";
 
 export const getVariant = createAction('[category] get variant')
 

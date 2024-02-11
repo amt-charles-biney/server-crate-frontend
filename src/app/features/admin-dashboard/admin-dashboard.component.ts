@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 import { Store } from '@ngrx/store';
 import { CURRENT_AD_TAB } from '../../core/utils/constants';
+import { getAttributes } from '../../store/category-management/attributes/attributes.actions';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -15,6 +16,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   activeLink: string = ''
   constructor(private router: Router, private store: Store) {}
   ngOnInit(): void {
+    this.store.dispatch(getAttributes());
     this.activeLink = sessionStorage.getItem(CURRENT_AD_TAB) || 'Dashboard'
   }
   ngOnDestroy(): void {

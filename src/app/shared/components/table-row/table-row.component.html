@@ -1,0 +1,66 @@
+<div class="grid grid-cols-12 py-3 border-b text-sm">
+  <td class="flex items-center gap-9 pr-5 md:col-span-3 2xl:col-span-2">
+    <app-custom-check-box
+      (changeHandler)="itemSelected($event, category.id)"
+      [formControl]="control"
+      [name]="category.name"
+      [value]="category.id"
+    />
+    <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+      {{ category.name }}
+    </p>
+  </td>
+  <td
+    class="relative md:col-span-4 2xl:col-span-5 flex items-center gap-3 text-start"
+  >
+    <div
+      class="flex items-center gap-3 text-start w-[70%] 2xl:w-[50%] overflow-hidden text-ellipsis whitespace-nowrap"
+    >
+      <p class="" *ngFor="let config of category.config | slice : 0 : 3">
+        <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{
+          config
+        }}</span>
+      </p>
+    </div>
+    <button
+      appHover
+      (hoverEmitter)="isHovered=$event"
+      (click)="showCategoryInfo(category.id)"
+      *ngIf="category.config.length > 3"
+      class="bg-light-green text-figma-green rounded-full w-[23px] h-[23px] flex flex-col justify-center items-center text-xs"
+    >
+      +{{ category.config.length - 3 }}
+  </button>
+    <div
+      *ngIf="isHovered"
+      class="flex flex-col absolute z-50 top-5 text-sm rounded shadow-md border w-[252px] bg-white"
+    >
+      <div class="px-4 py-2 font-inter">
+        <h2 class="font-semibold">Base Config</h2>
+        <p class="text-[#667185]">
+          This list contains all base config associated with
+          <span class="break-words">{{ category.name }}</span>
+        </p>
+      </div>
+      <p
+        class="px-4 py-2 text-[#101928] overflow-hidden whitespace-nowrap text-ellipsis"
+        *ngFor="let config of category.config"
+      >
+        <span>{{ config }}</span>
+      </p>
+    </div>
+  </td>
+  <td
+    class="col-span-4 overflow-hidden whitespace-nowrap text-ellipsis self-center"
+  >
+    {{ category.productCount }}
+  </td>
+  <td class="col-span-1 self-center">
+    <button
+      (click)="editCategory(category.id)"
+      class="flex justify-center w-full"
+    >
+      <img src="/assets/edit.svg" alt="edit" />
+    </button>
+  </td>
+</div>

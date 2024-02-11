@@ -260,3 +260,7 @@ export type BasicConfig = {
   id: string;
   category: Select;
 };
+export type CategoryPayload = {
+  name: string;
+  config: CategoryConfig[]
+}
