@@ -68,6 +68,7 @@ import { v4 as uuidv4 } from 'uuid'
     CustomSelectComponent,
   ],
   templateUrl: './attribute-modal.component.html',
+  styleUrl: './attribute-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AttributeModalComponent implements OnInit {
