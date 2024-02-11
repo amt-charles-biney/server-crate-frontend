@@ -8,3 +8,4 @@ export const CLOUD_NAME = 'dah4l2inx'
 
 export const CURRENT_AD_TAB = 'server-crate-current-ad-tab'
 export const CURRENT_INDEX = 'server-crate-current-index'
+export const CURRENT_AD_INDEX = 'server-crate-current-ad-index'
