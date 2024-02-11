@@ -11,6 +11,7 @@ import { categoryFeature } from '../../store/admin/products/categories.reducers'
 import { UserEffect } from '../../store/users/users.effects';
 import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { ProductsEffect } from '../../store/admin/products/products.effects';
+import { CartComponent } from '../cart/cart.component';
 
 export const route: Routes = [
     {
@@ -42,6 +43,10 @@ export const route: Routes = [
                     provideState(productsFeature),
                     provideState(categoryFeature),
                 ]
+            },
+            {
+                path: 'cart',
+                component: CartComponent,
             },
         ],
         component: HomeComponent,

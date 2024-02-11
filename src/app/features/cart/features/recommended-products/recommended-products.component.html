@@ -1,0 +1,60 @@
+<ng-container *ngIf="recommendedProducts$ | async as recommendedProducts">
+  @if(recommendedProducts.length <= 0) {
+  <div>no new products available!!</div>
+  }
+
+  <div class="keen-slider" #recommendedSliderRef>
+    @for (product of recommendedProducts; let i = $index; track i) {
+    <div class="keen-slider__slide w-full mx-auto sm:mx-0 md:max-w-[320px]">
+        <app-user-product-item [product]="product"></app-user-product-item>
+    </div>
+    }
+  </div>
+
+  <div class="flex mt-8 items-center ml-auto justify-between w-1/2">
+    <div class="flex items-center gap-2">
+      <span
+        (click)="recommendedProductSlider.moveToIdx(idx)"
+        *ngFor="let slide of recommendedProducts; let idx = index"
+        class="{{
+          idx === currentRecommendedSlide ? 'border-green-400' : 'border-white'
+        }} border-2 p-1 flex items-center justify-center bg-white rounded-full w-4 h-4 self-center"
+      >
+        <span
+          class="{{
+            idx === currentRecommendedSlide ? ' bg-green-400' : 'bg-gray-400'
+          }} hover:bg-green-400 rounded-full w-2 h-2 p-1"
+        ></span>
+      </span>
+    </div>
+
+    <div class="flex gap-2 items-center">
+      <button
+        (click)="recommendedProductSlider.prev()"
+        [disabled]="currentRecommendedSlide === 0"
+        class="p-2 rounded-full w-[48px] h-[48px] bg-green-200 {{
+          currentRecommendedSlide === 0 ? '' : 'hover:bg-green-100 '
+        }} flex items-center justify-center"
+      >
+        <img
+          alt="chevron-left"
+          src="/assets/chevronleft.svg"
+          width="10"
+          height="10"
+        />
+      </button>
+
+      <button
+        (click)="recommendedProductSlider.next()"
+        class="p-2 rounded-full w-[48px] h-[48px] bg-green-600 hover:bg-green-500 flex items-center justify-center"
+      >
+        <img
+          alt="chevron-left"
+          src="/assets/chevronright.svg"
+          width="10"
+          height="10"
+        />
+      </button>
+    </div>
+  </div>
+</ng-container>
