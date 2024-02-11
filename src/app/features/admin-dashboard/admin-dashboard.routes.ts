@@ -17,6 +17,9 @@ import { CategoryManagementComponent } from './features/category-management/cate
 import { ConfigEffect } from '../../store/category-management/attributes/config/config.effects';
 import { configFeature, editConfigFeature } from '../../store/category-management/attributes/config/config.reducers';
 import { AddCategoryComponent } from './features/add-category/add-category.component';
+import { TransactionsComponent } from './features/transactions/transactions.component';
+import { CustomersComponent } from './features/customers/customers.component';
+import { OrdersComponent } from './features/orders/orders.component';
 
 
 export const route: Routes = [
@@ -90,6 +93,18 @@ export const route: Routes = [
           provideState(attributeCreationFeature),
           provideState(attributesFeature)
         ]
+      },
+      {
+        path: 'orders',
+        component: OrdersComponent
+      },
+      {
+        path: 'transactions',
+        component: TransactionsComponent
+      },
+      {
+        path: 'customers',
+        component: CustomersComponent
       },
       {
         path: 'settings',
