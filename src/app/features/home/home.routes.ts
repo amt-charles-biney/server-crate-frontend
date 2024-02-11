@@ -6,6 +6,11 @@ import { HomeComponent } from './home.component';
 import { Routes } from '@angular/router';
 import { FeaturedProductFeature } from '../../store/product/featured-product/featured-product.reducer';
 import { FeaturedProductEffect } from '../../store/product/featured-product/featured-product.effect';
+import { productsFeature } from '../../store/admin/products/products.reducers';
+import { categoryFeature } from '../../store/admin/products/categories.reducers';
+import { UserEffect } from '../../store/users/users.effects';
+import { CategoryEffect } from '../../store/admin/products/categories.effect';
+import { ProductsEffect } from '../../store/admin/products/products.effects';
 
 export const route: Routes = [
     {
@@ -25,6 +30,17 @@ export const route: Routes = [
                 providers: [
                     provideState(FeaturedProductFeature),
                     provideEffects(FeaturedProductEffect),
+                ]
+            },
+            {
+                path: 'servers',
+                loadComponent: () => import('../preference-selection/preference-selection.component').then(m => m.PreferenceSelectionComponent),
+                providers: [
+                    provideEffects(ProductsEffect),
+                    provideEffects(CategoryEffect),
+                    provideEffects(UserEffect),
+                    provideState(productsFeature),
+                    provideState(categoryFeature),
                 ]
             },
         ],
