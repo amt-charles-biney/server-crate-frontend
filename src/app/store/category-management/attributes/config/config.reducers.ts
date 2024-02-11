@@ -1,7 +1,6 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { CategoryAndConfig, EditConfig, EditConfigResponse } from "../../../../types";
+import { CategoryAndConfig, EditConfigResponse } from "../../../../types";
 import { gotCategoryAndConfig, gotSingleCategory, resetEditState } from "./config.actions";
-import { state } from "@angular/animations";
 
 const initialState: CategoryAndConfig[] = []
 

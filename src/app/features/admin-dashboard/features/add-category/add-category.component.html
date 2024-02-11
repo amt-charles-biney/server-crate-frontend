@@ -1,0 +1,255 @@
+<h2 class="font-bold text-[24px]">Category Details</h2>
+<app-auth-loader [loadingState]="loadingStatus" />
+<ng-container *ngIf="resize$ | async"></ng-container>
+<ng-container *ngIf="attributes | async as attributes">
+  <form
+    [formGroup]="categoryForm"
+    (ngSubmit)="createConfig()"
+    class="flex flex-col gap-10 min-h-screen"
+  >
+    <section class="grid grid-cols-2 gap-x-20">
+      <div>
+        <app-custom-input
+          id="categoryName"
+          label="Category Name"
+          type="text"
+          placeholder="Enter category name"
+          [formControl]="$any(categoryForm.controls['categoryName'])"
+        />
+        @if (categoryName.invalid && (categoryName.touched ||
+        categoryName.dirty)) {
+        <div *ngIf="categoryName?.errors?.['required']">
+          <span class="text-red-600">A category name is required</span>
+        </div>
+        }
+      </div>
+    </section>
+    <section>
+      <h2 class="font-bold font-dm-sans">Incompatible Attributes</h2>
+      <section class="grid grid-cols-6 w-full gap-x-20">
+        <div class="col-span-3 mt-4">
+          <app-custom-select
+            label="Attributes"
+            [control]="$any(categoryForm.controls['attributesInput'])"
+            [options]="localAttributes"
+            (onSelect)="onSelectChange($event)"
+          />
+        </div>
+        <ng-container
+          *ngIf="selectedAttributes | async as variantsForAttribute"
+        >
+          <div class="flex gap-[78px] col-span-3">
+            <div class="flex w-[60%] flex-col gap-0.5 mt-4">
+              <app-custom-select
+                label="Variants"
+                [control]="$any(categoryForm.controls['variants'])"
+                [options]="variantsForAttribute"
+                [isMultipleSelect]="true"
+                [isDisabled]="variantsForAttribute.length === 0"
+              />
+            </div>
+            <button
+              type="button"
+              (click)="addIncompatibleAttribute()"
+              class="text-figma-green font-inter text-xs underline self-end"
+            >
+              Add attribute
+            </button>
+          </div>
+        </ng-container>
+      </section>
+    </section>
+    <section
+      [ngClass]="
+        numOfIncompatibles === 0
+          ? 'bg-white'
+          : 'bg-[#D9D9D91A] pt-[8px] pb-[7px]'
+      "
+      class="flex items-center overflow-auto"
+    >
+      <button
+        *ngIf="isOverflow"
+        type="button"
+        [ngClass]="
+          makeRightButtonGreen
+            ? 'bg-figma-green text-white'
+            : 'bg-attr-button text-[#B0B0B0]'
+        "
+        (click)="sideScroll(contentWrapper, 25, 100, -10)"
+        class="h-6 w-6 mx-[9px] rounded-full p-[6px]"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+        >
+          <path
+            d="M7.5 2.5L4 6L7.5 9.5"
+            stroke="currentColor"
+            stroke-width="0.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <div #contentWrapper class="flex divide-x overflow-auto no-scrollbar">
+        <div
+          class="flex flex-col px-[10px] w-[292px]"
+          *ngFor="let incompatibleAttribute of incompatibleSet | keyvalue"
+        >
+          <p class="font-inter pb-[9px] text-xs">
+            {{ incompatibleAttribute.key }}
+          </p>
+          <div class="flex items-center w-[272px] gap-[9px]">
+            <div class="flex gap-[18px] w-[240px]">
+              <button
+                (click)="removeAttributeOption(attribute)"
+                type="button"
+                class="flex items-center py-[5px] px-[12px] rounded-[70px] w-[111px] bg-attr-button"
+                *ngFor="
+                  let attribute of incompatibleAttribute.value | slice : 0 : 2
+                "
+                [title]="attribute.optionName"
+              >
+                <span
+                  class="whitespace-nowrap overflow-hidden text-ellipsis text-xs w-[59px]"
+                  >{{ attribute.optionName }}</span
+                >
+                <img
+                  class="pl-[12px]"
+                  src="/assets/remove.svg"
+                  alt="remove button"
+                />
+              </button>
+            </div>
+            <button
+              type="button"
+              *ngIf="incompatibleAttribute.value.length > 2"
+              [matMenuTriggerFor]="options"
+              class="bg-light-green text-figma-green rounded-full w-[23px] h-[23px] flex flex-col justify-center items-center text-xs"
+            >
+              +{{ incompatibleAttribute.value.length - 2 }}
+            </button>
+            <mat-menu #options="matMenu" panelClass="customMenu">
+              <button
+                mat-menu-item
+                [disableRipple]="true"
+                (click)="removeAttributeOption(attribute)"
+                type="button"
+                class="flex items-center px-[12px] w-[111px] bg-attr-button"
+                *ngFor="
+                  let attribute of incompatibleAttribute.value | slice : 2
+                "
+                [title]="attribute.optionName"
+              >
+                <span
+                  class="flex whitespace-nowrap overflow-hidden text-ellipsis text-xs"
+                  >{{ attribute.optionName }}
+                  <img
+                    class="pl-[12px]"
+                    src="/assets/remove.svg"
+                    alt="remove button"
+                  />
+                </span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+      <button
+        *ngIf="isOverflow"
+        type="button"
+        [ngClass]="
+          makeLeftButtonGreen
+            ? 'bg-figma-green text-white'
+            : 'bg-attr-button text-[#B0B0B0]'
+        "
+        class="mx-[9px] h-6 w-6 rounded-full p-[6px]"
+        (click)="sideScroll(contentWrapper, 25, 100, 10)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+        >
+          <path
+            d="M4.5 2.5L8 6L4.5 9.5"
+            stroke="currentColor"
+            stroke-width="0.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </section>
+    <section>
+      <h2 class="font-[700] font-dm-sans mb-[34px]">Base Configuration</h2>
+      <section class="grid grid-cols-2 gap-x-20 gap-y-6">
+        @for (attribute of localAttributes; track attribute) { @if
+        (attribute.isMeasured) {
+        <div class="grid grid-cols-2 gap-[13px]">
+          <app-custom-select
+            [label]="attribute.attributeName"
+            [control]="$any(categoryForm.controls[attribute.attributeName])"
+            [options]="attribute.attributeOptions"
+            (onSelect)="onSelectConfigOptions($event, attribute)"
+            [isDisabled]="attribute.attributeOptions.length === 0"
+          />
+          <!-- <app-custom-select
+            [control]="
+              $any(categoryForm.controls[attribute.attributeName + 'Size'])
+            "
+            [noMargin]="true"
+            [options]="sizes[attribute.attributeName]"
+            [isDisabled]="
+              !sizes[attribute.attributeName] ||
+              (sizes[attribute.attributeName] &&
+                sizes[attribute.attributeName].length === 0)
+            "
+            (onSelect)="sizeSelection($event, attribute)"
+          /> -->
+          <app-custom-size-selection
+            [control]="
+              $any(categoryForm.controls[attribute.attributeName + 'Size'])
+            "
+            [options]="sizes[attribute.attributeName] || []"
+            (selectionEmitter)="sizeSelection($event, attribute)"
+            [attribute]="attribute"
+            [isDisabled]="
+              !sizes[attribute.attributeName] ||
+              (sizes[attribute.attributeName] &&
+                sizes[attribute.attributeName].length === 0)"
+          />
+        </div>
+        } @else {
+        <app-custom-select
+          [label]="attribute.attributeName"
+          [control]="$any(categoryForm.controls[attribute.attributeName])"
+          [options]="attribute.attributeOptions"
+          (onSelect)="onSelectConfigOptions($event, attribute)"
+          [isDisabled]="attribute.attributeOptions.length === 0"
+        />
+        } }
+      </section>
+    </section>
+    <section class="flex items-center justify-end mt-10 gap-6">
+      <button
+        type="submit"
+        class="border border-figma-green bg-figma-green text-white rounded-[7px] w-32 py-1 font-[700]"
+      >
+        Save Changes
+      </button>
+      <button
+        (click)="cancel()"
+        type="button"
+        class="border border-figma-green text-figma-green rounded-[7px] w-32 py-1 font-[700]"
+      >
+        Cancel
+      </button>
+    </section>
+  </form>
+</ng-container>

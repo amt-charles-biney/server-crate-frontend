@@ -1,4 +1,4 @@
-import { AttributeOption, CategoryEditResponse } from "../../types";
+import { AttributeOption, CategoryConfig, CategoryEditResponse } from "../../types";
 
 export function errorHandler(err: any): string {
   let errorMessage = '';
@@ -19,4 +19,63 @@ export function isAttributeOption(obj: any): obj is AttributeOption {
 }
 export function isCategoryEditResponse(obj: any): obj is CategoryEditResponse {
   return obj && typeof obj.attributeOptionId === 'string';
+}
+export function convertToAttributeOption(
+  categoryEdit: CategoryEditResponse,
+  attributeId: string,
+  optionId: string
+): AttributeOption {
+  const {
+    baseAmount,
+    isCompatible,
+    isIncluded,
+    isMeasured,
+    maxAmount,
+    media,
+    name,
+    price,
+    priceFactor,
+    type,
+    unit,
+  } = categoryEdit;
+  return {
+    additionalInfo: {
+      baseAmount,
+      maxAmount,
+      priceFactor,
+    },
+    attribute: {
+      id: attributeId,
+      isMeasured,
+      name: type,
+      unit,
+    },
+    id: optionId,
+    optionMedia: media,
+    optionName: name,
+    optionPrice: price,
+    compatibleOptionId: categoryEdit.compatibleOptionId,
+  };
+}
+export function convertToCategoryConfig(
+  categoryEdit: CategoryEditResponse
+): CategoryConfig {
+  const {
+    isCompatible,
+    isIncluded,
+    isMeasured,
+    type,
+    attributeId,
+    attributeOptionId,
+    size,
+  } = categoryEdit;
+  return {
+    attributeId,
+    attributeName: type,
+    attributeOptionId,
+    isCompatible,
+    isIncluded,
+    isMeasured,
+    size,
+  };
 }
