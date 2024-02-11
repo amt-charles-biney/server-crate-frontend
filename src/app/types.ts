@@ -161,3 +161,102 @@ export type VerifiedUser = {
     }
     isFeatured: boolean
   };
+  export type AllProducts = {
+    total: number;
+    products: ProductItem[];
+  };
+  
+  export type UploadResponse = {
+    url: string;
+  };
+  export type BulkAttribute = {
+    attributeName: string;
+    isMeasured: boolean;
+    description: string;
+    variantOptions: StoreVariant[];
+  };
+  
+  export type UpdateAttribute = {
+    id: string;
+    attributeName: string;
+    isMeasured: boolean;
+    description: string;
+    variantOptions: StoreVariant[];
+  }
+  export type StoreVariant = {
+    name: string;
+    price: string;
+    media: string;
+    baseAmount: string;
+    maxAmount: string;
+    priceFactor: string;
+    id: string;
+  };
+  export type GetAttribute = {
+    data: Attribute[];
+    message: string;
+    status: string;
+  }
+  export type Attribute = {
+    id: string;
+    attributeName: string;
+    isMeasured: boolean;
+    unit: string;
+    description: string;
+    attributeOptions: AttributeOption[]
+  }
+  export type ConfigurationEdit = {
+    name: string;
+    config: CategoryConfig[],
+    id: string
+  }
+
+  export type Configuration = {
+    name: string;
+    config: CategoryConfig[]
+  }
+  
+  export type CategoryAndConfig = {
+    name: string;
+    id: string;
+    config: string[];
+    productCount: number
+  }
+
+  
+export type CategoryConfig = {
+  attributeId: string;
+  attributeOptionId: string;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  isCompatible: boolean;
+  size: number;
+  attributeName: string
+}
+
+export type EditConfigResponse = {
+  name: string;
+  id: string;
+  config: CategoryEditResponse[]
+}
+export type Item = {
+  id: string;
+};
+export type Prop = {
+  id: string;
+  name: string;
+  type: string;
+  price: number;
+  media: string;
+  unit: string;
+  isCompatible: boolean;
+  isIncluded: boolean;
+};
+export type Option = {
+  [key: string]: Prop[];
+};
+export type BasicConfig = {
+  options: Option;
+  id: string;
+  category: Select;
+};
