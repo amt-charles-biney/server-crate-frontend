@@ -91,6 +91,10 @@ export const route: Routes = [
           provideState(attributesFeature)
         ]
       },
+      {
+        path: 'settings',
+        loadChildren: () => import('./features/settings/settings.routes').then(m => m.route),
+      }
     ],
   },
 ];
