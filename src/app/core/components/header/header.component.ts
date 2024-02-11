@@ -79,7 +79,7 @@ export class HeaderComponent implements OnInit {
   search() {
     if (this.searchForm.invalid) return ;
     const params = `query=${this.searchValue.value}`
-    this.router.navigateByUrl(`/servers/${params}`)
+    // this.router.navigateByUrl(`/servers`)
     this.store.dispatch(filter({ page: 0, params }))
   }
 
