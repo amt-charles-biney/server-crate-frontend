@@ -11,6 +11,8 @@ import { reducer } from './store/loader/reducers/loader.reducers';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import * as Cart from './store/cart/cart.reducers';
+import { CartEffects } from './store/cart/cart.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +20,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideStore(),
     provideState('loader', reducer),
+    provideState('cart', Cart.reducer),
+    provideEffects(CartEffects),
     provideEffects(),
     provideHttpClient(withInterceptors([loadingInterceptor, authInterceptor])),
     // provideCloudinaryLoader('http://res.cloudinary.com/dqtxt1g06/image/upload/'),
