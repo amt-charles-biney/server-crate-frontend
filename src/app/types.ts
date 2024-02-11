@@ -290,3 +290,69 @@ export type ConfiguredProduct = {
   size: string;
   included: boolean;
 }
+export interface IParamConfigOptions {
+  warranty: boolean,
+  components: string,
+}
+export interface IConfiguredProduct {
+  id: string | null;
+  totalPrice: number;
+  productName: string;
+  productId: string;
+  productPrice: number;
+  configuredPrice: number;
+  configured: IConfiguredOption[];
+  warranty: boolean;
+  vat: number
+}
+// new and improved configurations
+export interface IConfiguredOption {
+  id: string | null;
+  optionId: string;
+  optionName: string;
+  optionType: string;
+  optionPrice: number;
+  isMeasured: boolean,
+  baseAmount: 1.00,
+  size: string,
+  included: true
+}
+export interface ICompatibleOption {
+  name: string;
+  type: string;
+  price: number;
+  media: string;
+  unit: string;
+  isCompatible: boolean;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  baseAmount: number;
+  maxAmount: number;
+  priceIncrement: number;
+  attributeId: string;
+  attributeOptionId: string;
+  compatibleOptionId: string
+}
+export interface ICategoryConfig {
+  id: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  options: ICategoryOption;
+}
+export interface ICategoryOption {
+  [key: string]: ICompatibleOption[];
+}
+
+export interface IConfigureSelectProps {
+  type: string
+  id: string
+  size: string | number
+}
+export interface IdefaultSelectedProps {
+  price: number
+  id: string
+  size: string
+}
+

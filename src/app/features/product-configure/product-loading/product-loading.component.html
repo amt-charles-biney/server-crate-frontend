@@ -1,0 +1,27 @@
+<ng-container *ngIf="productConfigItemLoading || productLoading">
+    <img alt="img-spinner" src="/assets/spinner.svg" class="w-16 h-16" />
+</ng-container>
+
+<div *ngIf="productCartItemError$ | async as productCartItemError"
+    class="w-full rounded-md bg-red-100 text-red-400 p-4">
+    {{ productCartItemError }}
+</div>
+
+<div *ngIf="productConfigItemError$ | async as productConfigItemError"
+    class="w-full rounded-md bg-red-100 text-red-400 p-4">
+    {{ productConfigItemError }}
+</div>
+
+<div *ngIf="productError$ | async as productError" class="w-full rounded-md bg-red-100 text-red-400 p-4">
+    {{ productError }}
+</div>
+
+<div *ngIf="cartMsg$ | async as cartMsg"
+    class="flex items-center justify-center mx-auto mt-4 gap-4 text-sm p-3 rounded-lg w-3/4 bg-[#ecf7ec] text-figma-green">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <p>{{ cartMsg }}</p>
+</div>
