@@ -10,6 +10,9 @@ import { AddProductComponent } from './features/add-product/add-product.componen
 import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { categoryFeature } from '../../store/admin/products/categories.reducers';
 import { configurationFeature } from '../../store/admin/products/configuration.reducers';
+import { AttributesComponent } from './features/attributes/attributes.component';
+import { AttributeEffect } from '../../store/category-management/attributes/attributes.effects';
+import { attributeCreationFeature, attributesFeature } from '../../store/category-management/attributes/attributes.reducers';
 
 
 export const route: Routes = [
@@ -47,6 +50,15 @@ export const route: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent
+      },
+      {
+        path: 'attributes',
+        component: AttributesComponent,
+        providers: [
+          provideEffects(AttributeEffect),
+          provideState(attributeCreationFeature),
+          provideState(attributesFeature)
+        ]
       },
     ],
   },

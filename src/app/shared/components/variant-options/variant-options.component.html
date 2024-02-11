@@ -1,0 +1,91 @@
+<table class="flex flex-col w-full mt-6">
+  <tr
+    class="grid grid-cols-12 py-3 border-b text-table-text bg-table-bg text-xs font-[500]"
+  >
+    <th
+      [ngClass]="isMeasured ? 'col-span-7' : 'col-span-10'"
+      class="flex items-center gap-9 px-6"
+    >
+      Variant
+    </th>
+    @if (isMeasured) {
+    <th
+      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+    >
+      Base Amount
+    </th>
+    } @if (isMeasured) {
+    <th
+      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+    >
+      Max Amount
+    </th>
+    }
+    <th
+      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+    >
+      Price
+    </th>
+    @if (isMeasured) {
+    <th
+      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+    >
+      Price Factor
+    </th>
+    }
+    <th
+      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+    >
+      Action
+    </th>
+  </tr>
+  <section class="h-fit max-h-[220px] overflow-auto">
+    @for (attr of attributeOptions; track $index) {
+    <tr
+      class="grid grid-cols-12 py-3 border-b text-table-text text-sm font-[500]"
+    >
+      <td
+        [ngClass]="isMeasured ? 'col-span-7' : 'col-span-10'"
+        class="flex items-center gap-9 px-6"
+      >
+        <div class="flex items-center gap-2">
+          <img [src]="attr.optionMedia" class="w-[33px] h-5" alt="option image" />
+          <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+            {{ attr.optionName }}
+          </p>
+        </div>
+      </td>
+      @if (attr.attribute.isMeasured) {
+      <td class="col-span-1 text-start self-center">
+        <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+          {{ attr.additionalInfo.baseAmount }}
+        </p>
+      </td>
+      } @if (attr.attribute.isMeasured) {
+      <td class="col-span-1 text-start self-center">
+        <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+          {{ attr.additionalInfo.maxAmount }}
+        </p>
+      </td>
+      }
+      <td class="col-span-1 text-start self-center">
+        <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+          {{ attr.optionPrice }}
+        </p>
+      </td>
+      @if (attr.attribute.isMeasured) {
+      <td class="col-span-1 text-start self-center">
+        <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+          {{ attr.additionalInfo.priceFactor }}
+        </p>
+      </td>
+      }
+      <td class="ml-2">
+        <button (click)="deleteOption(attr.id)">
+          <img src="/assets/trash.svg" alt="delete icon" />
+        </button>
+      </td>
+    </tr>
+  }
+  </section>
+</table>
