@@ -15,6 +15,7 @@
           type="text"
           placeholder="Enter category name"
           [formControl]="$any(categoryForm.controls['categoryName'])"
+          (focusFn)="onFocus(categoryForm)"
         />
         @if (categoryName.invalid && (categoryName.touched ||
         categoryName.dirty)) {

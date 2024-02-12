@@ -89,7 +89,7 @@ export type VerifiedUser = {
   export type ChangeContact = {
     firstName: string;
     lastName: string;
-    contact: Contact;
+    contact: Contact | null;
   };
   export type TokenPayload = {
     role: string;

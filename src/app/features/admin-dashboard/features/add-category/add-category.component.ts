@@ -23,7 +23,7 @@ import {
 } from '../../../../types';
 import { selectAttributesState } from '../../../../store/category-management/attributes/attributes.reducers';
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -159,6 +159,11 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.store.dispatch(resetEditState());
+  }
+  onFocus(control: AbstractControl) {
+    const value = control.value
+    control.reset()
+    control.patchValue(value)
   }
   removeFromLocalAttributes(localAttributes: Attribute[], optionId: string) {
     let newLocalAttributes: Attribute[] = [];

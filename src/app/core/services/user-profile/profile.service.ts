@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {  ChangeContact, GeneralInfo, Success, Username } from '../../../types';
 import { environment } from '../../../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
+import { LOCALSTORAGE_USER } from '../../utils/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class ProfileService {
   }
 
   getUsername() {
-    let user = localStorage.getItem('server-crate-user')
+    let user = localStorage.getItem('')
     if (user) {
       return JSON.parse(user)
     }
@@ -32,7 +33,7 @@ export class ProfileService {
   }
 
   setUser(user: Username) {
-    localStorage.setItem('server-crate-user', JSON.stringify(user))
+    localStorage.setItem(LOCALSTORAGE_USER, JSON.stringify(user))
     this.initials.next(user)
   }
 }

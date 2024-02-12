@@ -9,6 +9,8 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -63,6 +65,7 @@ export class CustomInputComponent
   @Input() isRequired!: boolean
   @Input() optionSelected!: (event: MatAutocompleteSelectedEvent) => void
   @Input() deleteFn!: (event: Event, option: Select) => void
+  @Output() focusFn = new EventEmitter()
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;
 
   formControl!: FormControl;
@@ -116,7 +119,13 @@ export class CustomInputComponent
   }
 
   @HostListener('focusout')
-  onFocusOut() {
+  onFocusOut() {    
     this.onTouched();
+  }
+
+  @HostListener('focusin') onFocus() {
+    if (this.formControl.touched) {
+      this.focusFn.emit()
+    }    
   }
 }

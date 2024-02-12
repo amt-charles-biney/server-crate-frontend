@@ -13,7 +13,6 @@ import {
 } from '@angular/animations';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { filter } from '../../../store/users/users.actions';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {MatBadgeModule} from '@angular/material/badge';
@@ -78,9 +77,7 @@ export class HeaderComponent implements OnInit {
 
   search() {
     if (this.searchForm.invalid) return ;
-    const params = `query=${this.searchValue.value}`
-    // this.router.navigateByUrl(`/servers`)
-    this.store.dispatch(filter({ page: 0, params }))
+    this.router.navigate(['/servers'], { queryParams: { query: `${ this.searchValue.value }`} })
   }
 
   get searchValue() {

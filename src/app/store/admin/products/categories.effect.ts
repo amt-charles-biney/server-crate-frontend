@@ -34,6 +34,7 @@ import { Store } from '@ngrx/store';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { Router } from '@angular/router';
 import { UserService } from '../../../core/services/user/user.service';
+import { errorHandler } from '../../../core/utils/helpers';
 
 @Injectable()
 export class CategoryEffect {
@@ -239,7 +240,11 @@ export class CategoryEffect {
           }),
           catchError((error) => {
             console.log('Doesnt exist');
-            return of();
+            return of(setLoadingSpinner({
+              isError: true,
+              message: errorHandler(error),
+              status: false
+            }));
           })
         );
       })

@@ -2,10 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { passwordRegex } from '../../../../core/utils/constants';
 import { checkIfPasswordsMatch, formValidator } from '../../../../core/utils/validators';
-import { AuthService } from '../../../../core/services/auth/auth.service';
 import { ChangePassword, LoadingStatus } from '../../../../types';
 import { Store } from '@ngrx/store';
 import { changePassword } from '../../../../store/profile/changePassword/changePassword.actions';
@@ -25,15 +24,15 @@ export class PasswordInformationComponent implements OnInit {
   ngOnInit(): void {
     this.passwordForm = new FormGroup({
       currentPwd: new FormControl('', Validators.required),
-      newPwd: new FormControl('', [
+      newPwd: new FormControl('', {validators:[
         Validators.required,
         Validators.minLength(8),
         Validators.pattern(passwordRegex),
-      ]),
-      confirmPwd: new FormControl('', [
+      ], updateOn: 'blur'}),
+      confirmPwd: new FormControl('', {validators: [
         Validators.required,
         checkIfPasswordsMatch(),
-      ])
+      ], updateOn: 'blur'})
     }, formValidator('newPwd', 'confirmPwd'))
     this.loadingState$ = this.store.select(selectLoaderState)
   }
@@ -56,11 +55,17 @@ export class PasswordInformationComponent implements OnInit {
     })
   }
 
+  onFocus(control: AbstractControl) {
+    const value = control.value
+    control.reset()
+    control.patchValue(value)
+  }
+
   get newPwd() {
-    return this.passwordForm.get('newPwd')
+    return this.passwordForm.get('newPwd')!
   }
 
   get confirmPwd() {
-    return this.passwordForm.get('confirmPwd')
+    return this.passwordForm.get('confirmPwd')!
   }
 }

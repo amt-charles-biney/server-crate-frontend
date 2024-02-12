@@ -18,12 +18,12 @@
         formControlName="productName"
         myClass="font-[500]"
       />
-      @if (productName.invalid && (productName.touched || productName.dirty)) {
+      <!-- @if (productName.invalid && (productName.touched || productName.dirty)) {
       <span
         class="text-red-600"
         >{{addProductForm.controls["productName"].errors?.['required'].message }}</span
       >
-      }
+      } -->
       <app-custom-input
         id="productDescription"
         label="Product Description"

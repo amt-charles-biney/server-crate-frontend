@@ -14,6 +14,7 @@ import { Store } from '@ngrx/store';
 import { resendingOTP } from '../../otp/otp.actions';
 import { TimerService } from '../../../core/services/timer/timer.service';
 import { ProfileService } from '../../../core/services/user-profile/profile.service';
+import { LOCALSTORAGE_TOKEN } from '../../../core/utils/constants';
 
 @Injectable()
 export class VerifyEffect {
@@ -24,7 +25,7 @@ export class VerifyEffect {
       exhaustMap((user: Verify) => {
         return this.signUpService.verifyEmail(user).pipe(
           tap((verifiedUser) => {
-            localStorage.setItem('server-crate-token', verifiedUser.token);
+            localStorage.setItem(LOCALSTORAGE_TOKEN, verifiedUser.token);
           }),
           map((verifiedUser: VerifiedUser) => {
             this.store.dispatch(

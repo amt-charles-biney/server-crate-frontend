@@ -1,4 +1,3 @@
-import { search } from './../../store/users/users.actions';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -59,20 +58,23 @@ export class PreferenceSelectionComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {
-    this.search = this.activatedRoute.snapshot.paramMap.get('search')!;
-    this.store.dispatch(getUserBrands());
-    this.onLoad();
-    this.queryParams['query'].add(this.search)
-    this.getPage(1, this.search);
-    this.brands$ = this.store.select(selectBrands)
+    this.activatedRoute.queryParamMap.subscribe((params) => {
+      this.search = params.get('query') || ''
+      this.store.dispatch(getUserBrands());
+      this.onLoad();
+      // preserves the search value to be sent to the backend
+      this.queryParams['query'].add(this.search)      
+      this.getPage(0, this.search);
+      this.brands$ = this.store.select(selectBrands)
+    })
   }
   getPage(pageNumber: number, search: string) {
     this.page = pageNumber;
     const params = this.buildParams(this.queryParams);
     if (!search) {
-      this.store.dispatch(getUserProducts({ page: this.page - 1, params }));
+      this.store.dispatch(getUserProducts({ page: this.page, params }));
     } else {
-      this.store.dispatch(filter({ page: 0, params: search }))
+      this.store.dispatch(filter({ page: 0, params: `query=${this.search}` }))
     }
     this.products = this.store.select(selectProducts);
     this.total = this.store.select(selectTotal);
@@ -101,7 +103,7 @@ export class PreferenceSelectionComponent implements OnInit {
       this.queryParams[selected.name].delete(selected.value);
     }
     const params = this.buildParams(this.queryParams);
-    this.store.dispatch(filter({ params, page: this.page - 1 }));
+    this.store.dispatch(filter({ params, page: this.page }));
     console.log(this.buildParams(this.queryParams));
   }
 

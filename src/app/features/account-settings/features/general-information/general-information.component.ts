@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { Contact, LoadingStatus } from '../../../../types';
 import { Store } from '@ngrx/store';
@@ -11,7 +11,6 @@ import { Observable, Subject, combineLatest, map } from 'rxjs';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 import { ProfileService } from '../../../../core/services/user-profile/profile.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-general-information',
@@ -33,10 +32,10 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.generalInfoForm = new FormGroup({
-      firstName: new FormControl('', [Validators.required]),
-      lastName: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      contact: new FormControl('', [Validators.required]),
+      firstName: new FormControl('', {validators: [Validators.required], updateOn: 'blur'}),
+      lastName: new FormControl('', {validators: [Validators.required], updateOn: 'blur'}),
+      email: new FormControl('', { validators: [Validators.required, Validators.email], updateOn: 'blur'}),
+      contact: new FormControl('', { updateOn: 'blur'}),
     })
     this.generalForm = combineLatest([
       this.store.select(selectFirstName),
@@ -74,7 +73,7 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
       iso2Code: contact.iso2,
       phoneNumber: this.intl?.getNumber()
     }
-    if (!this.intl.isValidNumber()) {
+    if (this.contact.value && !this.intl.isValidNumber()) {
       this.showWarning = 'Please enter a valid phone number'
       setTimeout(() => {
         this.showWarning = ''
@@ -83,21 +82,32 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
     }
     const { firstName, lastName } = this.generalInfoForm.value
     this.profileService.setUser({ firstName, lastName })
-    this.store.dispatch(changeNumber({ contact: contactValue, firstName, lastName }))
+    if (contactValue.phoneNumber) {
+      this.store.dispatch(changeNumber({ contact: contactValue, firstName, lastName }))
+    } else {
+      this.store.dispatch(changeNumber({ contact: null, firstName, lastName }))
+    }
+  }
+
+  
+  onFocus(control: AbstractControl) {
+    const value = control.value
+    control.reset()
+    control.patchValue(value)
   }
 
   get firstName() {
-    return this.generalInfoForm.get('firstName')
+    return this.generalInfoForm.get('firstName')!
   }
   get lastName() {
-    return this.generalInfoForm.get('lastName')
+    return this.generalInfoForm.get('lastName')!
   }
 
   get email() {
-    return this.generalInfoForm.get('email')
+    return this.generalInfoForm.get('email')!
   }
 
   get contact() {
-    return this.generalInfoForm.get('contact')
+    return this.generalInfoForm.get('contact')!
   }
 }

@@ -25,8 +25,9 @@
         type="text"
         placeholder="Enter your first name"
         formControlName="firstName"
+        (focusFn)="onFocus(firstName)"
       />
-      @if (firstName?.invalid && (firstName?.touched || firstName?.dirty)) {
+      @if (firstName.invalid && (firstName.touched || firstName.dirty)) {
 
       <div *ngIf="firstName?.errors?.['required']">
         <span class="text-red-600">A first name is required</span>
@@ -38,8 +39,9 @@
         type="text"
         placeholder="Enter your last name"
         formControlName="lastName"
+        (focusFn)="onFocus(lastName)"
       />
-      @if (lastName?.invalid && (lastName?.touched || lastName?.dirty)) {
+      @if (lastName.invalid && (lastName.touched || lastName.dirty)) {
 
       <div *ngIf="lastName?.errors?.['required']">
         <span class="text-red-600">A last name is required</span>
@@ -51,8 +53,9 @@
         type="email"
         placeholder="Enter your email"
         formControlName="email"
+        (focusFn)="onFocus(email)"
       />
-      @if (email?.invalid && (email?.touched || email?.dirty)) {
+      @if (email.invalid && (email.touched || email.dirty)) {
       <span class="text-red-600">Please enter a valid email</span>
       }
       <app-custom-input
@@ -61,8 +64,9 @@
         type="password"
         placeholder="Enter password"
         formControlName="password"
+        (focusFn)="onFocus(password)"
       />
-      @if (password?.invalid && (password?.touched || password?.dirty)) {
+      @if (password.invalid && (password.touched || password.dirty)) {
       <div *ngIf="password?.errors?.['required']">
         <span class="text-red-600">Please enter a password</span>
       </div>
@@ -85,15 +89,16 @@
         type="password"
         placeholder="Confirm password"
         formControlName="confirmPwd"
+        (focusFn)="onFocus(confirmPwd)"
       />
-      @if (confirmPwd?.invalid && (confirmPwd?.touched || confirmPwd?.dirty)) {
+      @if (confirmPwd.invalid && (confirmPwd.touched || confirmPwd.dirty)) {
       <div *ngIf="password?.errors?.['required']">
         <span class="text-red-600">Please enter a password</span>
       </div>
       <div *ngIf="confirmPwd?.errors?.['confirmPwd']">
         <span
           class="text-red-600"
-          >{{confirmPwd?.errors?.['confirmPwd']?.value}}</span
+          >{{confirmPwd.errors?.['confirmPwd']?.value}}</span
         >
       </div>
       }
