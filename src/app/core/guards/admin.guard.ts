@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../services/auth/auth.service';
 import { TokenPayload } from '../../types';
+import { clearStorage } from '../utils/helpers';
 export const adminGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService)
   const router = inject(Router)
@@ -11,7 +12,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
   if (token) {
     const decodedToken = jwtDecode<TokenPayload>(token)
     if (decodedToken.exp < Date.now() / 1000) {
-      localStorage.clear()
+      clearStorage()
       router.navigateByUrl('/login')
       return false
     }

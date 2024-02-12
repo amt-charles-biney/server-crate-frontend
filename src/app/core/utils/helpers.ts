@@ -1,4 +1,5 @@
 import { AttributeOption, CategoryConfig, CategoryEditResponse } from "../../types";
+import { LOCALSTORAGE_TOKEN, LOCALSTORAGE_USER } from "./constants";
 
 export function errorHandler(err: any): string {
   let errorMessage = '';
@@ -10,10 +11,15 @@ export function errorHandler(err: any): string {
   return errorMessage
 }
 export const logout = () => {
-  localStorage.clear();
+  clearStorage()
   sessionStorage.clear()
   window.location.reload();
 };
+
+export const clearStorage = () => {
+  localStorage.removeItem(LOCALSTORAGE_USER)
+  localStorage.removeItem(LOCALSTORAGE_TOKEN)
+}
 export function isAttributeOption(obj: any): obj is AttributeOption {
   return obj && typeof obj.id === 'string';
 }

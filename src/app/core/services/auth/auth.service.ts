@@ -14,6 +14,7 @@ import {
   VerifyOtp,
 } from '../../../types';
 import { jwtDecode } from 'jwt-decode';
+import { LOCALSTORAGE_TOKEN } from '../../utils/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +56,7 @@ export class AuthService {
   }
 
   getToken() {
-    const token = localStorage.getItem('server-crate-token');
+    const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
     if (token) {
       return token;
     }
@@ -84,6 +85,6 @@ export class AuthService {
   }
   
   setToken(token: string) {
-    localStorage.setItem('server-crate-token', token);
+    localStorage.setItem(LOCALSTORAGE_TOKEN, token);
   }
 }

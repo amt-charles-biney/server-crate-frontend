@@ -5,6 +5,7 @@ import { UserProfileImageComponent } from '../../shared/components/user-profile-
 import { Store } from '@ngrx/store';
 import { CURRENT_AD_TAB } from '../../core/utils/constants';
 import { getAttributes } from '../../store/category-management/attributes/attributes.actions';
+import { clearStorage } from '../../core/utils/helpers';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -31,7 +32,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.activeLink = 'Settings'
   }
   logout() {
-    localStorage.clear()
+    clearStorage()
     this.router.navigateByUrl('/login')
   }
 }
