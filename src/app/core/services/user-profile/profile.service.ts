@@ -22,7 +22,7 @@ export class ProfileService {
   }
 
   getUsername() {
-    let user = localStorage.getItem('')
+    let user = localStorage.getItem(LOCALSTORAGE_USER)
     if (user) {
       return JSON.parse(user)
     }
