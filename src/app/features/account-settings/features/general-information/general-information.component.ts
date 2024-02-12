@@ -36,7 +36,7 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      contact: new FormControl('', [Validators.required]),
+      contact: new FormControl(''),
     })
     this.generalForm = combineLatest([
       this.store.select(selectFirstName),
@@ -74,7 +74,7 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
       iso2Code: contact.iso2,
       phoneNumber: this.intl?.getNumber()
     }
-    if (!this.intl.isValidNumber()) {
+    if (this.contact.value && !this.intl.isValidNumber()) {
       this.showWarning = 'Please enter a valid phone number'
       setTimeout(() => {
         this.showWarning = ''
@@ -98,6 +98,6 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
   }
 
   get contact() {
-    return this.generalInfoForm.get('contact')
+    return this.generalInfoForm.get('contact')!
   }
 }

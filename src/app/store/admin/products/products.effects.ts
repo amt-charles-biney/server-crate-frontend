@@ -11,6 +11,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map, of, shareReplay, switchMap } from 'rxjs';
 import { AllProducts, ProductItem } from '../../../types';
 import { UserService } from '../../../core/services/user/user.service';
+import { setLoadingSpinner } from '../../loader/actions/loader.actions';
+import { errorHandler } from '../../../core/utils/helpers';
 
 @Injectable()
 export class ProductsEffect {
@@ -26,7 +28,11 @@ export class ProductsEffect {
           }),
           shareReplay(1),
           catchError((err) => {
-            return of();
+            return of(setLoadingSpinner({
+              isError: true,
+              message: errorHandler(err),
+              status: false
+            }));
           })
         );
       })
@@ -44,7 +50,11 @@ export class ProductsEffect {
           }),
           shareReplay(1),
           catchError((err) => {
-            return of();
+            return of(setLoadingSpinner({
+              isError: true,
+              message: errorHandler(err),
+              status: false
+            }));
           })
         );
       })
@@ -57,7 +67,11 @@ export class ProductsEffect {
       switchMap(({ id }) => {
         return this.adminService.addToFeature(id).pipe(
           catchError((err) => {
-            return of();
+            return of(setLoadingSpinner({
+              isError: true,
+              message: errorHandler(err),
+              status: false
+            }));
           })
         )
       })
@@ -69,7 +83,11 @@ export class ProductsEffect {
       switchMap(({ id }) => {
         return this.adminService.removeFromFeature(id).pipe(
           catchError((err) => {
-            return of();
+            return of(setLoadingSpinner({
+              isError: true,
+              message: errorHandler(err),
+              status: false
+            }));
           })
         )
       })

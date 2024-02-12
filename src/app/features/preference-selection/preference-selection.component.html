@@ -217,9 +217,13 @@
   </aside>
   <section class="col-span-3 2xl:w-[923px] flex flex-col ">
     <div class="flex items-center w-full justify-between">
-      <p *ngIf="total | async as total; else no_servers">
-        {{ total }} {{ total === 1 ? "Server" : "Servers" }}
-      </p>
+      @if (search) {
+        <p>Search results for "{{search}}"</p>
+      } @else {
+        <p *ngIf="total | async as total; else no_servers">
+          {{ total }} {{ total === 1 ? "Server" : "Servers" }}
+        </p>
+      }
       <ng-template #no_servers>
         <p>0 Servers</p>
       </ng-template>

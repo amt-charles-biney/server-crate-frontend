@@ -8,6 +8,7 @@ import { CustomInputComponent } from '../../shared/components/custom-input/custo
 import { RouterLink } from '@angular/router';
 import { CustomButtonComponent } from '../../shared/components/custom-button/custom-button.component';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
@@ -59,18 +60,18 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {
     this.signUpForm = new FormGroup(
       {
-        firstName: new FormControl('', [Validators.required]),
-        lastName: new FormControl('', [Validators.required]),
-        email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [
+        firstName: new FormControl('', {validators: [Validators.required], updateOn: 'blur'}),
+        lastName: new FormControl('', {validators: [Validators.required], updateOn: 'blur'}),
+        email: new FormControl('', {validators: [Validators.required, Validators.email, ], updateOn: 'blur'}),
+        password: new FormControl('', {validators:[
           Validators.required,
           Validators.minLength(8),
           Validators.pattern(passwordRegex),
-        ]),
-        confirmPwd: new FormControl('', [
+        ], updateOn: 'blur'}),
+        confirmPwd: new FormControl('', {validators: [
           Validators.required,
           checkIfPasswordsMatch(),
-        ]),
+        ], updateOn: 'blur'}),
         acceptTerms: new FormControl(null, [
           Validators.required,
           checkIfTermsAreAccepted(),
@@ -116,24 +117,30 @@ export class SignUpComponent implements OnInit {
       });
   }
 
+  onFocus(control: AbstractControl) {
+    const value = control.value
+    control.reset()
+    control.patchValue(value)
+  }
+  
   get firstName() {
-    return this.signUpForm.get('firstName');
+    return this.signUpForm.get('firstName')!;
   }
 
   get lastName() {
-    return this.signUpForm.get('lastName');
+    return this.signUpForm.get('lastName')!;
   }
 
   get email() {
-    return this.signUpForm.get('email');
+    return this.signUpForm.get('email')!;
   }
 
   get password() {
-    return this.signUpForm.get('password');
+    return this.signUpForm.get('password')!;
   }
 
   get confirmPwd() {
-    return this.signUpForm.get('confirmPwd');
+    return this.signUpForm.get('confirmPwd')!;
   }
 
   get acceptTerms() {
