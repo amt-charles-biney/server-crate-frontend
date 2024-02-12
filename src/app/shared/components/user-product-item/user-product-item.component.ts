@@ -26,7 +26,7 @@ export class UserProductItemComponent {
 
   onNavigateToProduct(event: Event, id: string) {
     event.stopPropagation()
-    this.router.navigate(['/product/configure', id], { replaceUrl: true });
+    this.router.navigate(['/product/configure', id]);
   }
 
   constructor(private router: Router) {}
