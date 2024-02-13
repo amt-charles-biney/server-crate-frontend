@@ -19,7 +19,7 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 export class UserProfileImageComponent implements OnInit {
   @Input() smaller!: boolean
   initials$!: Observable<Username>
-  @Output() adminLinkEmitter = new EventEmitter<void>()
+  @Output() adminLinkEmitter = new EventEmitter<string>()
   constructor(private profileService: ProfileService, private router: Router, private authService: AuthService) {}
   
   ngOnInit(): void {
@@ -29,7 +29,7 @@ export class UserProfileImageComponent implements OnInit {
   
   navigateToSettings() {
     if (this.isAdmin()) {
-      this.adminLinkEmitter.emit()
+      this.adminLinkEmitter.emit('Settings')
       sessionStorage.setItem(CURRENT_AD_TAB, 'Settings')
       if (this.router.url.includes('/settings/')) return
       this.router.navigateByUrl('/admin/settings/general')
@@ -37,6 +37,11 @@ export class UserProfileImageComponent implements OnInit {
     }
     if (this.router.url.includes('/settings/')) return
     this.router.navigateByUrl('/settings/general')
+  }
+  navigateToDashboard() {
+    this.adminLinkEmitter.emit('Dashboard')
+    sessionStorage.setItem(CURRENT_AD_TAB, 'Dashboard')
+    this.router.navigateByUrl('/admin/dashboard')
   }
 
   isAdmin() {
