@@ -61,6 +61,7 @@ import {
   putInLocalAttributes,
   removeFromLocalAttributes,
   updateConfigPayload,
+  updateConfigSizes,
 } from '../../../../core/utils/helpers';
 import { MatMenuModule } from '@angular/material/menu';
 import { CustomSizeSelectionComponent } from '../../../../shared/components/custom-size-selection/custom-size-selection.component';
@@ -92,7 +93,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   attributes = this.attributes$.asObservable();
   selectedAttributes = this.selectedAttribute$.asObservable();
 
-  categoryConfigPayload: CategoryConfig[] = []
+  categoryConfigPayload: Map<string, CategoryConfig[]> = new Map()
 
   loadingStatus!: Observable<LoadingStatus>;
   categoryForm!: FormGroup;
@@ -123,7 +124,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       tap((attrs) => {
         this.localAttributes = attrs;
         this.categoryForm = this.attributeService.toFormGroup(attrs);
-        this.categoryConfigPayload = getConfigPayload(this.localAttributes)        
+        this.categoryConfigPayload = getConfigPayload(this.localAttributes)      
+        console.log('Category Config Payload', this.categoryConfigPayload);
       })
     );
     this.loadingStatus = this.store.select(selectLoaderState);
@@ -133,9 +135,14 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
 
   createConfig() {
+    let categoryConfig: CategoryConfig[] = []
+    this.categoryConfigPayload.forEach((config) => {      
+      categoryConfig = categoryConfig.concat(config)
+    })
+    
     const payload: CategoryPayload = {
       name: this.categoryForm.value['categoryName'],
-      config: this.categoryConfigPayload
+      config: categoryConfig
     };    
 
     scrollTo({ top: 0, behavior: 'smooth' });
@@ -153,23 +160,32 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   }
 
   sizeSelection(event: MatAutocompleteSelectedEvent, attribute: Attribute) {
-    console.log('Selected Size', event);
+    const selectedSize = event.option.value as string;
+    const correspondingAttributeOption: any =
+      this.categoryForm.value[attribute.attributeName];
+    const newBaseAmount = parseInt(selectedSize);
+    if (isCategoryEditResponse(correspondingAttributeOption)) {
+      this.categoryConfigPayload = updateConfigSizes(attribute.attributeName, correspondingAttributeOption.attributeOptionId, this.categoryConfigPayload, newBaseAmount)    
+    } else {      
+      this.categoryConfigPayload = updateConfigSizes(attribute.attributeName, correspondingAttributeOption.id, this.categoryConfigPayload, newBaseAmount)    
+    }
   }
 
-  removeFromPayload(categoryConfigPayload: CategoryConfig[], incompatibleAttributeOptions: AttributeOption[]) {
+  removeFromPayload(categoryConfigPayload: Map<string, CategoryConfig[]>, attributeName: string, incompatibleAttributeOptions: AttributeOption[]) {
     const optionIds = incompatibleAttributeOptions.map((attributeOption) => attributeOption.id)
-    const newCategoryConfigPayload = categoryConfigPayload.filter((categoryConfig) => !optionIds.includes(categoryConfig.attributeOptionId))
+    const newConfig = categoryConfigPayload.get(attributeName)!.filter((categoryConfig) => !optionIds.includes(categoryConfig.attributeOptionId))
+    const newCategoryConfigPayload = categoryConfigPayload.set(attributeName, newConfig)
     return newCategoryConfigPayload
   }
 
-  addIncompatibleAttribute(categoryConfigPayload: CategoryConfig[], incompatibleAttributeOptions: AttributeOption[]) {
-    this.categoryConfigPayload = this.removeFromPayload(categoryConfigPayload, incompatibleAttributeOptions)
+  addIncompatibleAttribute(categoryConfigPayload: Map<string, CategoryConfig[]>, attribute: Attribute, incompatibleAttributeOptions: AttributeOption[]) {    
+    this.categoryConfigPayload = this.removeFromPayload(categoryConfigPayload, attribute.attributeName, incompatibleAttributeOptions)
+    
     const {incompatibleSet, localAttributes} = this.buildIncompatibleTable(incompatibleAttributeOptions, this.incompatibleSet, this.localAttributes)
     this.incompatibleSet = incompatibleSet
     this.localAttributes = localAttributes
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet)
     
-    console.log('New local Attributes', this.localAttributes);
     // Clear involved form fields
     this.selectedAttribute$.next([]);
     this.categoryForm.patchValue({ attributesInput: '', variants: '' });
@@ -177,7 +193,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   }
 
   onSelectConfigOptions(event: MatSelectChange, attribute: Attribute){
-    console.log('Selected option', event.value);
     const selectedAttributeOption = event.value as AttributeOption; 
     if (attribute.isMeasured) {
       this.sizes[attribute.attributeName] = generateSizes(
@@ -186,8 +201,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
         attribute.unit
       );
     }
-    this.categoryConfigPayload = updateConfigPayload(selectedAttributeOption.id, selectedAttributeOption.attribute.id, this.categoryConfigPayload)
-    console.log('Current payload', this.categoryConfigPayload);
+    this.categoryConfigPayload = updateConfigPayload(selectedAttributeOption.id, selectedAttributeOption.attribute.id, selectedAttributeOption.attribute.name, this.categoryConfigPayload)
   }
 
   removeAttributeOption(attributeOption: AttributeOption, options: AttributeOption[]) {

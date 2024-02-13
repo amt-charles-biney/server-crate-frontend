@@ -106,36 +106,68 @@ export function convertAttributeOptionToCategoryConfig(
   };
 }
 
-export function getConfigPayload(attributes: Attribute[]): CategoryConfig[] {
-  const categoryConfig: CategoryConfig[] = []
-  attributes.forEach((attribute) => {
+export function getConfigPayload(
+  attributes: Attribute[]
+): Map<string, CategoryConfig[]> {
+  let categoryConfigMap: Map<string, CategoryConfig[]> = new Map()
+  attributes.forEach((attribute: Attribute) => {
     attribute.attributeOptions.forEach((attributeOption) => {
-      categoryConfig.push(convertAttributeOptionToCategoryConfig(attributeOption, true, false))
-    })
-  })
-  return categoryConfig
+      if (categoryConfigMap.has(attribute.attributeName)) {
+        categoryConfigMap.set(attribute.attributeName, [
+          ...categoryConfigMap.get(attribute.attributeName)!,
+          convertAttributeOptionToCategoryConfig(attributeOption, true, false),
+        ]);
+      } else {
+        categoryConfigMap.set(attribute.attributeName,  [convertAttributeOptionToCategoryConfig(attributeOption, true, false)])
+      }
+    });
+  });
+  return categoryConfigMap;
 }
 
-export function updateConfigPayload(optionId: string, attributeId: string, configPayload: CategoryConfig[]): CategoryConfig[] {
-  const newPayload = configPayload.map((config) => {
+export function updateConfigPayload(
+  optionId: string,
+  attributeId: string,
+  attributeName: string,
+  configPayload: Map<string, CategoryConfig[]>
+): Map<string, CategoryConfig[]>{
+  const newPayload = configPayload.get(attributeName)!.map((config) => {
     if (config.attributeOptionId === optionId) {
       return {
         ...config,
         isIncluded: true,
-        isCompatible: true
-      }
+        isCompatible: true,
+      };
     } else if (config.attributeId === attributeId) {
       return {
         ...config,
         isIncluded: false,
-        isCompatible: true
-      }
+        isCompatible: true,
+      };
     }
-    return config
-  })
-  return newPayload
+    return config;
+  });
+  configPayload.set(attributeName, newPayload)
+  return configPayload;
 }
-export function removeFromLocalAttributes(localAttributes: Attribute[], optionId: string) {
+
+export function updateConfigSizes(attributeName: string, optionId: string, configPayload: Map<string, CategoryConfig[]>, size: number) {
+  const newPayload = configPayload.get(attributeName)!.map((config) => {
+    if (config.attributeOptionId === optionId) {
+      return {
+        ...config,
+        size
+      };
+    } 
+    return config;
+  });
+  configPayload.set(attributeName, newPayload)
+  return configPayload;
+}
+export function removeFromLocalAttributes(
+  localAttributes: Attribute[],
+  optionId: string
+) {
   let newLocalAttributes: Attribute[] = [];
   newLocalAttributes = localAttributes?.map((attribute) => {
     let newLocalAttributeOptions: AttributeOption[] =
@@ -163,11 +195,17 @@ export function putInLocalAttributes(
   return newLocalAttributes;
 }
 
-export function getNumberOfIncompatibles(incompatibleSet: Record<string, AttributeOption[]>) {
+export function getNumberOfIncompatibles(
+  incompatibleSet: Record<string, AttributeOption[]>
+) {
   return Object.values(incompatibleSet).length;
 }
 
-export function generateSizes(baseAmount: number, maxAmount: number, unit: string) {
+export function generateSizes(
+  baseAmount: number,
+  maxAmount: number,
+  unit: string
+) {
   const sizes: string[] = [];
   for (let size = baseAmount; size <= maxAmount; size = size + baseAmount) {
     sizes.push(`${size} ${unit}`);
