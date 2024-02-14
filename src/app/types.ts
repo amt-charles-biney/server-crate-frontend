@@ -219,8 +219,17 @@ export type VerifiedUser = {
   export type CategoryAndConfig = {
     name: string;
     id: string;
-    config: string[];
+    config: Config;
     productCount: number
+  }
+
+  export type Config = {
+    [key: string]: ConfigOptions[]
+  }
+
+  export type ConfigOptions = {
+    name: string;
+    isIncluded: boolean;
   }
 
   

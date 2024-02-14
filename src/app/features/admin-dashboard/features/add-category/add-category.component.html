@@ -51,7 +51,7 @@
             </div>
             <button
               type="button"
-              (click)="addIncompatibleAttribute()"
+              (click)="addIncompatibleAttribute(categoryConfigPayload, attributesInput.value, variants.value || [])"
               class="text-figma-green font-inter text-xs underline self-end"
             >
               Add attribute
@@ -106,7 +106,7 @@
           <div class="flex items-center w-[272px] gap-[9px]">
             <div class="flex gap-[18px] w-[240px]">
               <button
-                (click)="removeAttributeOption(attribute)"
+              (click)="removeAttributeOption(attribute, incompatibleSet[attribute.attribute.name])"
                 type="button"
                 class="flex items-center py-[5px] px-[12px] rounded-[70px] w-[111px] bg-attr-button"
                 *ngFor="
@@ -137,7 +137,7 @@
               <button
                 mat-menu-item
                 [disableRipple]="true"
-                (click)="removeAttributeOption(attribute)"
+                (click)="removeAttributeOption(attribute, incompatibleSet[attribute.attribute.name])"
                 type="button"
                 class="flex items-center px-[12px] w-[111px] bg-attr-button"
                 *ngFor="

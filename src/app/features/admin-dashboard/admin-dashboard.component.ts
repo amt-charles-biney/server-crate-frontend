@@ -28,8 +28,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     sessionStorage.setItem(CURRENT_AD_TAB, currentTab)
     this.activeLink = currentTab
   }
-  setAdminLink() {
-    this.activeLink = 'Settings'
+  setAdminLink(link: string) {
+    this.activeLink = link
   }
   logout() {
     clearStorage()
