@@ -109,12 +109,6 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
       this.indeterminateCheckbox.indeterminate = false
     }    
   }
-  editCategory(id: string) {
-    console.log('Edit', id);
-  }
-  showCategoryInfo(id: string) {
-    console.log('view', id)
-  }
   deleteCategories() {
     const deleteList = Array.from(this.categoriesTodelete);
     if (deleteList.length === 0) {
