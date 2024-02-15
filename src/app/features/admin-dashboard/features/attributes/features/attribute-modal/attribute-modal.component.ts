@@ -233,6 +233,7 @@ export class AttributeModalComponent implements OnInit {
             attributeName: this.attributeForm.value.attributeName,
             description: this.attributeForm.value.description,
             isMeasured,
+            isRequired: this.attributeForm.value.isRequired,
             unit: isMeasured ? this.attributeForm.value.unit : '',
             variantOptions: options,
             id: this.editId

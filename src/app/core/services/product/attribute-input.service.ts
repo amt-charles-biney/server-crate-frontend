@@ -10,26 +10,13 @@ export class AttributeInputService {
   toFormGroup(attributes: Attribute[]) {
     const group: Record<string, FormControl> = {};
     attributes.forEach((attribute) => {
-      // const testAttr: AttributeOption = {
-      //   additionalInfo: {
-      //     baseAmount: 0,
-      //     maxAmount: 0,
-      //     priceFactor: 2,
-      //   },
-      //   attribute: {
-      //     id: '23432',
-      //     isMeasured: false,
-      //     name: 'Motherboard',
-      //   },
-      //   id: '923943',
-      //   optionMedia: 'something',
-      //   optionName: 'Asus ROG Strix B550-F',
-      //   optionPrice: 2300
-      // }
       if (attribute.isMeasured) {
         group[`${attribute.attributeName}Size`] = new FormControl();
       }
       group[attribute.attributeName] = new FormControl('');
+      if (attribute.isRequired) {
+        group[attribute.attributeName].setValidators(Validators.required)
+      }
     });
     group['categoryName'] = new FormControl('', Validators.required);
     group['attributesInput'] = new FormControl('');

@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap");
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -47,7 +47,7 @@ input[type="checkbox"].indeterminateCheckbox {
   height: 20px;
   border-radius: 4px;
   border-color: #3cb043;
-  background-color: #ECF7EC80
+  background-color: #ecf7ec80;
 }
 
 input[type="checkbox"]:indeterminate::after {
@@ -76,10 +76,10 @@ input[type="checkbox"]:checked::before {
   background-color: white;
 }
 
-app-account-settings  .mdc-tab--active {
+app-account-settings .mdc-tab--active {
   background-color: #ecf7ec;
 }
-app-settings  .mdc-tab--active {
+app-settings .mdc-tab--active {
   background-color: #ecf7ec;
 }
 // input.ng-invalid:not(form) {
@@ -101,9 +101,7 @@ app-account-settings
   .mdc-tab__text-label {
   color: #3cb043;
 }
-app-settings
-  .mat-mdc-tab-link.mdc-tab--active:focus
-  .mdc-tab__text-label {
+app-settings .mat-mdc-tab-link.mdc-tab--active:focus .mdc-tab__text-label {
   color: #3cb043;
 }
 
@@ -172,38 +170,39 @@ app-settings .mat-mdc-tab-header {
   background-color: #fbfbfb;
 }
 
-
 app-product-configure .mat-mdc-tab-header {
   background-color: white;
 }
 
 app-product-configure .mat-mdc-tab-links {
-  border-bottom: 1px solid #E8EAEB;
+  border-bottom: 1px solid #e8eaeb;
 }
 app-account-settings .mat-mdc-tab-links {
-  border-bottom: 1px solid #E8EAEB;
+  border-bottom: 1px solid #e8eaeb;
 }
 app-settings .mat-mdc-tab-links {
-  border-bottom: 1px solid #E8EAEB;
+  border-bottom: 1px solid #e8eaeb;
 }
 
 app-account-settings .mdc-tab--active {
-  background-color: #ECF7EC;
-  border-bottom: 2px solid #3CB043;
+  background-color: #ecf7ec;
+  border-bottom: 2px solid #3cb043;
 }
 app-settings .mdc-tab--active {
-  background-color: #ECF7EC;
-  border-bottom: 2px solid #3CB043;
+  background-color: #ecf7ec;
+  border-bottom: 2px solid #3cb043;
 }
 
-
-app-account-settings .mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link {
+app-account-settings
+  .mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs
+  .mat-mdc-tab-link {
   flex-grow: 0;
 }
-app-settings .mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link {
+app-settings
+  .mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs
+  .mat-mdc-tab-link {
   flex-grow: 0;
 }
-
 
 app-account-settings .mdc-tab-indicator {
   display: none;
@@ -252,8 +251,6 @@ app-payment-details .mat-mdc-tab-group {
   max-width: 120%;
 }
 
-
-
 app-settings .mat-mdc-tab-links {
   flex-direction: row;
 }
@@ -265,10 +262,9 @@ app-settings .mdc-tab--active {
 }
 
 app-product-configure .mdc-tab--active {
-  background-color: #ECF7EC;
-  border-bottom: 2px solid #3CB043;
+  background-color: #ecf7ec;
+  border-bottom: 2px solid #3cb043;
 }
-
 
 .custom-panel {
   width: fit-content;
@@ -352,12 +348,38 @@ app-custom-select .mat-mdc-select-value-text {
   margin-left: 10px;
 }
 
+app-custom-select
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+  .mat-mdc-form-field-infix {
+  padding: 0px !important;
+}
+
+app-custom-select .mat-mdc-form-field-infix {
+  min-height: max-content !important;
+}
+app-custom-select .mat-mdc-form-field {
+  display: inline !important;
+  flex-direction: row !important;
+  --mdc-outlined-text-field-outline-color: #e8eaeb;
+  --mdc-outlined-text-field-disabled-outline-color: #e8eaeb;
+  --mdc-outlined-text-field-hover-outline-color: #e8eaeb;
+  --mdc-outlined-text-field-focus-outline-color: #3cb043;
+}
+app-custom-select .mdc-text-field--outlined {
+  padding: 0px !important;
+}
+
+app-custom-select .mat-mdc-form-field-hint-wrapper,
+.mat-mdc-form-field-error-wrapper {
+  padding: 0px !important;
+}
+
 .myOption.mdc-list-item--selected:not(.mdc-list-item--disabled)
   .mdc-list-item__primary-text {
   color: #3cb043 !important;
 }
 
-app-category-management  {
+app-category-management {
   padding-block: 4px !important;
 }
 .mat-mdc-menu-content {
@@ -367,10 +389,12 @@ app-category-management  {
 .cdk-overlay-dark-backdrop {
   backdrop-filter: blur(4px) !important;
   background: none;
-  background-color: rgba(228 ,228 ,228 ,0.10);
-  box-shadow: 0px 10px 15px 10px rgba(0 ,0 ,0 ,0.15);
+  background-color: rgba(228, 228, 228, 0.1);
+  box-shadow: 0px 10px 15px 10px rgba(0, 0, 0, 0.15);
 }
-app-header .mat-badge-small.mat-badge-overlap.mat-badge-after .mat-badge-content {
+app-header
+  .mat-badge-small.mat-badge-overlap.mat-badge-after
+  .mat-badge-content {
   right: 2px;
 }
 
@@ -379,9 +403,9 @@ app-header .mat-badge-small.mat-badge-above .mat-badge-content {
 }
 
 .customShadow {
-  box-shadow: 0px -1px 43px -12px rgba(107,107,107,0.93);
-  -webkit-box-shadow: 0px -1px 43px -12px rgba(107,107,107,0.93);
-  -moz-box-shadow: 0px -1px 43px -12px rgba(107,107,107,0.93);
+  box-shadow: 0px -1px 43px -12px rgba(107, 107, 107, 0.93);
+  -webkit-box-shadow: 0px -1px 43px -12px rgba(107, 107, 107, 0.93);
+  -moz-box-shadow: 0px -1px 43px -12px rgba(107, 107, 107, 0.93);
 }
 @media only screen and (max-width: 768px) {
   app-payment-details .mat-mdc-tab-group {

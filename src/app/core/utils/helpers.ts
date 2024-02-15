@@ -294,43 +294,7 @@ export function getAttributeOptionsFromConfig(config: CategoryEditResponse) {
     )
   );
 }
-export function getMapping(configs: CategoryEditResponse[]) {
-  const mapping: Map<string, AttributeOption[]> = new Map();
-  configs.forEach((config) => {
-    if (mapping.has(config.type)) {
-      mapping.set(config.type, 
-       [ ...mapping.get(config.type)!,
-        getAttributeOptionsFromConfig(config)],
-      );
-    } else {
-      mapping.set(config.type, [
-        getAttributeOptionsFromConfig(config),
-      ]);
-    }
-  });
-  return mapping
-}
-export function convertIncompatiblesToCategoryConfig(
-  incompatibleAttributes: Record<string, AttributeOption[]>
-) {
-  let categoryConfigList: CategoryConfig[] = [];
-  for (let key in incompatibleAttributes) {
-    const incompatibleAttribute = incompatibleAttributes[key];
-    incompatibleAttribute.forEach((attribute) => {
-      const categoryConfig: CategoryConfig = {
-        size: attribute.additionalInfo.baseAmount,
-        isCompatible: false,
-        isIncluded: false,
-        isMeasured: attribute.attribute.isMeasured,
-        attributeId: attribute.id,
-        attributeName: attribute.attribute.name,
-        attributeOptionId: attribute.id,
-      };
-      categoryConfigList.push(categoryConfig);
-    });
-  }
-  return categoryConfigList;
-}
+
 export function removeFromPayload(
   categoryConfigPayload: Map<string, CategoryConfig[]>,
   attributeName: string,

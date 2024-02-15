@@ -51,16 +51,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { selectEditConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
 import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actions';
 import {
-  convertAttributeOptionToCategoryConfig,
-  convertIncompatiblesToCategoryConfig,
-  convertToAttributeOption,
-  convertToCategoryConfig,
   generateIncompatiblesTable,
   generateSizes,
-  getAttributeOptionsFromConfig,
   getConfigPayload,
   getEditConfigPayload,
-  getMapping,
   getNumberOfIncompatibles,
   isCategoryEditResponse,
   putInLocalAttributes,
@@ -181,8 +175,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   }
 
   createConfig() {
-    console.log('Sending Payload', this.categoryConfigPayload);
-
     let categoryConfig: CategoryConfig[] = [];
     this.categoryConfigPayload.forEach((config) => {
       categoryConfig = categoryConfig.concat(config);
@@ -193,24 +185,28 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       config: categoryConfig,
     };
 
-    scrollTo({ top: 0, behavior: 'smooth' });
     if (this.categoryForm.invalid) {
-      this.store.dispatch(
-        setLoadingSpinner({
-          isError: true,
-          message: 'Please provide a category name',
-          status: false,
-        })
-      );
+      // this.store.dispatch(
+      //   setLoadingSpinner({
+      //     isError: true,
+      //     message: 'Please provide a category name',
+      //     status: false,
+      //   })
+      // );
+      const controls = this.categoryForm.controls;
+      for (const name in controls) {
+        this.categoryForm.controls[name].markAsTouched();
+        this.categoryForm.controls[name].updateValueAndValidity();
+      }
+
       return;
     }
+    scrollTo({ top: 0, behavior: 'smooth' });
     if (this.id) {
       const editPayload = {
         ...payload,
         id: this.id,
       };
-      console.log('Edit Payload', editPayload);
-
       this.store.dispatch(
         sendEditedConfig({ configuration: editPayload, id: this.id })
       );
@@ -267,7 +263,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   }
 
   onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
-    const selectedAttributeOption = event.value as AttributeOption;    
+    const selectedAttributeOption = event.value as AttributeOption;
     if (attribute.isMeasured) {
       this.sizes[attribute.attributeName] = generateSizes(
         selectedAttributeOption.additionalInfo.baseAmount,
@@ -280,7 +276,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       this.categoryConfigPayload,
       true
     );
-    console.log('New Payload', this.categoryConfigPayload);
   }
 
   removeAttributeOption(
@@ -304,7 +299,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       attributeOption,
       this.categoryConfigPayload,
       false
-    );    
+    );
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
   }
 
