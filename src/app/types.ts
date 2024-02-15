@@ -363,5 +363,6 @@ export interface IdefaultSelectedProps {
   price: number
   id: string
   size: string
+  isIncluded: boolean
 }
 
