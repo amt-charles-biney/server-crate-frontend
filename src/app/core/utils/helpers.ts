@@ -48,6 +48,9 @@ export function convertToAttributeOption(
     priceFactor,
     type,
     unit,
+    brand,
+    incompatibleAttributeOptions,
+    inStock
   } = categoryEdit;
   return {
     additionalInfo: {
@@ -66,6 +69,10 @@ export function convertToAttributeOption(
     optionName: name,
     optionPrice: price,
     compatibleOptionId: categoryEdit.compatibleOptionId,
+    brand,
+    incompatibleAttributeOptions,
+    inStock
+
   };
 }
 export function convertToCategoryConfig(

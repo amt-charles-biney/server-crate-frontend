@@ -1,7 +1,8 @@
 <div class="flex flex-col mx-auto" *ngIf="loadingState | async as loadingState">
     @if (loadingState.status) {
     <div
-      class="self-center text-figma-green mt-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite]"
+      [ngClass]="size === 'small' ? 'h-5 w-5' : 'h-8 w-8 mt-4'"
+      class="self-center text-figma-green inline-block animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite]"
       role="status"
     >
       <span

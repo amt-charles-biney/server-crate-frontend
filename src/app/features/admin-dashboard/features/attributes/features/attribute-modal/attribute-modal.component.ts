@@ -19,6 +19,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -96,6 +97,7 @@ export class AttributeModalComponent implements OnInit {
         id,
         isMeasured,
         unit,
+        isRequired,
       } = this.data.attribute;
       this.editId = id;
       for (let attr of attributeOptions) {
@@ -108,7 +110,10 @@ export class AttributeModalComponent implements OnInit {
         const priceFactor = attr.additionalInfo.priceFactor
           ? attr.additionalInfo.priceFactor.toString()
           : '';
+        const brand = attr.brand ? attr.brand.toString() : ''
+        const inStock = attr.inStock ? attr.inStock.toString() : ''
         const price = attr.optionPrice ? attr.optionPrice.toString() : '';
+        const incompatibleAttributeOptions = attr.incompatibleAttributeOptions ? attr.incompatibleAttributeOptions : []
         this.store.dispatch(
           addAttributeToStore({
             baseAmount,
@@ -118,6 +123,9 @@ export class AttributeModalComponent implements OnInit {
             name: attr.optionName ? attr.optionName : '',
             price,
             priceFactor,
+            brand,
+            inStock,
+            incompatibleAttributeOptions
           })
         );
       }
@@ -126,6 +134,7 @@ export class AttributeModalComponent implements OnInit {
           attributeName: [attributeName, Validators.required],
           description: [description],
           isMeasured: [isMeasured],
+          isRequired: [isRequired],
           unit: [unit || 'GB', unitRequiredIfMeasured()],
           attributes: this.fb.array(
             attributeOptions.map((attributeOption) =>
@@ -140,6 +149,7 @@ export class AttributeModalComponent implements OnInit {
           attributeName: ['', Validators.required],
           description: [''],
           isMeasured: [false],
+          isRequired: [false],
           unit: ['GB', unitRequiredIfMeasured()],
           attributes: this.fb.array<FormGroup[]>([]),
         },
@@ -155,8 +165,10 @@ export class AttributeModalComponent implements OnInit {
       optionMedia,
       optionName,
       optionPrice,
+      brand,
+      inStock,
+      incompatibleAttributeOptions
     } = attributeOption;
-    
     this.coverImage.push(optionMedia || null);
     return this.fb.group({
       name: [optionName],
@@ -167,6 +179,9 @@ export class AttributeModalComponent implements OnInit {
       priceFactor: additionalInfo.priceFactor,
       id,
       coverImage: optionMedia,
+      brand,
+      inStock,
+      incompatibleAttributeOptions
     });
   }
   replaceImage(
@@ -193,9 +208,9 @@ export class AttributeModalComponent implements OnInit {
     if (this.attributeForm.invalid) {
       this.attributeForm.markAllAsTouched()
       return;
-    }
+    }    
     const validAttributes = this.attributeForm.value.attributes.map(
-      (attr: any) => {
+      (attr: any) => {        
         return {
           ...attr,
           media: null,
@@ -212,7 +227,7 @@ export class AttributeModalComponent implements OnInit {
       this.store
         .select(selectAttributeCreationState)
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((options) => {
+        .subscribe((options) => {          
           const isMeasured = this.attributeForm.value.isMeasured;
           let attribute = {
             attributeName: this.attributeForm.value.attributeName,
@@ -221,8 +236,7 @@ export class AttributeModalComponent implements OnInit {
             unit: isMeasured ? this.attributeForm.value.unit : '',
             variantOptions: options,
             id: this.editId
-          };
-          
+          };          
           this.store.dispatch(updateAttribute(attribute));
         });
       this.dialogRef.close();
@@ -236,48 +250,42 @@ export class AttributeModalComponent implements OnInit {
           attributeName: this.attributeForm.value.attributeName,
           description: this.attributeForm.value.description,
           isMeasured: this.attributeForm.value.isMeasured,
+          isRequired: this.attributeForm.value.isRequired,
           unit: this.attributeForm.value.unit,
           variantOptions: options,
-        };
+        };        
         this.store.dispatch(addAttribute(attribute));
-        
-        // setTimeout(() => {
-
-        // }, 1500);
         this.dialogRef.close();
       });
   }
+
+  updateValidator(controlName: string, validator: ValidatorFn, form: FormGroup) {
+    form.get(controlName)?.setValidators(validator)
+    form.get(controlName)?.updateValueAndValidity()
+  }
+  removeValidator(controlName: string, validator: ValidatorFn | null, form: FormGroup) {
+
+      if (validator !== null ) {
+        form.get(controlName)?.removeValidators(validator)
+      } else {
+        form.get(controlName)?.clearValidators()
+      }
+    form.get(controlName)?.updateValueAndValidity()
+  }
+  
   modifyValidator() {
     this.attributes.controls.forEach((formGroup: AbstractControl) => {
       if (formGroup instanceof FormGroup) {
         if (this.isMeasured.value) {
-          
-
-          formGroup.get('baseAmount')?.setValidators(Validators.required);
-          formGroup.get('baseAmount')?.updateValueAndValidity();
-          formGroup.get('maxAmount')?.setValidators(Validators.required);
-          formGroup.get('maxAmount')?.updateValueAndValidity();
-          formGroup.get('priceFactor')?.setValidators(Validators.required);
-          formGroup.get('priceFactor')?.updateValueAndValidity();
-
-          this.attributeForm.get('unit')?.setValidators(unitRequiredIfMeasured())
-          this.attributeForm.get('unit')?.updateValueAndValidity()
-
-          
+          this.updateValidator('baseAmount', Validators.required, formGroup)
+          this.updateValidator('maxAmount', Validators.required, formGroup)
+          this.updateValidator('priceFactor', Validators.required, formGroup)
+          this.updateValidator('unit', unitRequiredIfMeasured(), formGroup)          
         } else {
-          
-          
-          formGroup.get('baseAmount')?.removeValidators(Validators.required);
-          formGroup.get('baseAmount')?.updateValueAndValidity();
-          formGroup.get('maxAmount')?.removeValidators(Validators.required);
-          formGroup.get('maxAmount')?.updateValueAndValidity();
-
-          formGroup.get('priceFactor')?.removeValidators(Validators.required);
-          formGroup.get('priceFactor')?.updateValueAndValidity();
-          
-          this.attributeForm.get('unit')?.clearValidators()
-          this.attributeForm.get('unit')?.updateValueAndValidity()
-
+          this.removeValidator('baseAmount', Validators.required, formGroup)
+          this.removeValidator('maxAmount', Validators.required, formGroup)
+          this.removeValidator('priceFactor', Validators.required, formGroup)
+          this.removeValidator('unit', null, formGroup)
         }
       }
     });
@@ -287,6 +295,8 @@ export class AttributeModalComponent implements OnInit {
     const id = uuidv4()
     const commonAttributes = {
       name: ['', Validators.required],
+      brand: ['', Validators.required],
+      inStock: ['', Validators.required],
       price: ['', Validators.required],
       media: null,
       baseAmount: this.isMeasured.value ? ['', [Validators.required]] : [''],
@@ -294,6 +304,7 @@ export class AttributeModalComponent implements OnInit {
       priceFactor: this.isMeasured.value ? ['', Validators.required] : [''],
       id,
       coverImage: '',
+      incompatibleAttributeOptions: [[]]
     };
 
     this.attributes.push(
@@ -304,10 +315,6 @@ export class AttributeModalComponent implements OnInit {
       )
     );
 
-    // 
-    // const primitiveFileList: FileList = this.attributeForm.value.media;
-    // 
-
     this.store.dispatch(
       addAttributeToStore({
         name: '',
@@ -316,6 +323,9 @@ export class AttributeModalComponent implements OnInit {
         baseAmount: '',
         maxAmount: '',
         priceFactor: '',
+        brand: '',
+        inStock: '',
+        incompatibleAttributeOptions: [],
         id,
       })
     );
