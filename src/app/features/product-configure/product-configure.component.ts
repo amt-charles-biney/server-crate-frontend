@@ -53,11 +53,12 @@ import { ProductLoadingComponent } from './product-loading/product-loading.compo
 
 export class ProductConfigureComponent {
   defaultSelectedValues: (Record<string, IdefaultSelectedProps>) = {}
+  defaultIncludedPrices: (Record<string, IdefaultSelectedProps>) = {}
 
   product$: Observable<ProductItem | null> = this.store.select(selectProduct)
   productConfig$: Observable<any> = this.store.select(selectProductConfig)
   productConfigItem$: Observable<IConfiguredProduct | null> = this.store.select(selectProductConfigItem)
-  
+
 
   productId: string = ''
   productConfig!: ICategoryConfig
@@ -88,14 +89,14 @@ export class ProductConfigureComponent {
     this.activeLink = active
   }
 
-  constructor (
+  constructor(
     private route: ActivatedRoute,
     private store: Store,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) { }
 
-  ngOnInit (): void {
+  ngOnInit(): void {
     this.productId = this.route.snapshot.paramMap.get('id')?.toString() ?? ''
 
     this.store.dispatch(loadProduct({ id: this.productId }))
@@ -108,8 +109,22 @@ export class ProductConfigureComponent {
 
     this.productConfig$.subscribe((product: ICategoryConfig) => {
       if (product !== null) {
+
         this.productConfig = product
         const keys: string[] = Object.keys(product?.options)
+
+        keys.forEach(key => {
+          const IncludedProduct = product?.options[key]?.find(option => option.isIncluded)
+          if (IncludedProduct) {
+            this.defaultIncludedPrices[key] = {
+              id: IncludedProduct.compatibleOptionId,
+              price: IncludedProduct.price,
+              size: String(IncludedProduct.baseAmount) ?? "0",
+              isIncluded: IncludedProduct.isIncluded
+            }
+          }
+        })
+
         this.configKeys = keys
         this.setActiveLink(keys[0])
       }
@@ -144,7 +159,7 @@ export class ProductConfigureComponent {
     for (const product of this.productConfigItem.configured) {
       this.queryMapper[product.optionType] = `${product.optionId}_${product.isMeasured ? product?.size || product?.baseAmount : 0}`
       if (product?.isMeasured) {
-        this.defaultSelectedValues[product.optionType] = { id: product.optionId, size: product.size || String(product.baseAmount), price: product.optionPrice }
+        this.defaultSelectedValues[product.optionType] = { id: product.optionId, size: product.size || String(product.baseAmount), price: product.optionPrice, isIncluded: product.included }
       }
     }
   }
@@ -207,7 +222,7 @@ export class ProductConfigureComponent {
    * @param productArr
    * @returns
    */
-  generateStorageSizes (attributeId: string, productArr: any[]): string[] {
+  generateStorageSizes(attributeId: string, productArr: any[]): string[] {
     const getProduct = productArr.find(product => product.compatibleOptionId === attributeId)
     const storageSize: string[] = []
 
@@ -226,7 +241,7 @@ export class ProductConfigureComponent {
  * @param type - The type of the product configuration to be reset.
  */
 
-  resetDefault (type: string): void {
+  resetDefault(type: string): void {
     const getIncludedProduct: ICompatibleOption | null = this.productConfig.options[type].find(product => product.isIncluded) ?? null
 
     if (getIncludedProduct !== null) {
@@ -241,13 +256,35 @@ export class ProductConfigureComponent {
     }
   }
 
-/**
-   * Checks if the config options having the same attribute type has a measured field
-   * @param activeLink
-   * @returns
-   */
+  /**
+     * Checks if the config options having the same attribute type has a measured field
+     * @param activeLink
+     * @returns
+     */
 
   isActiveLinkMeasured = (activeLink: string): boolean => { return this.productConfig.options[activeLink].some(item => item.isMeasured) }
 
   gotoProduct = (): void => { void this.router.navigate(['/servers'], { replaceUrl: true }) }
+
+
+  /**
+   * Calculate the price difference and returns a string value if it is positive or not
+   * with the appropiate positioning
+   * eg. + $200, - $100
+   * 
+   * @Param isIncluded
+   * @Param basePrice
+   * 
+   * @returns
+   */
+  getPriceDifference(props: IdefaultSelectedProps): string {
+    const { isIncluded, id, price } = props
+
+    if (isIncluded) return "included"
+
+    let priceDifference = price - this.defaultIncludedPrices[id]?.price
+    let sign = priceDifference > 0 ? "+" : "-";
+
+    return `${sign} $${Math.abs(priceDifference).toFixed(2)}`;
+  }
 }
