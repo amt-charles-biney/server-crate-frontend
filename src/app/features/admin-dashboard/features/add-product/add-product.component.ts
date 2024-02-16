@@ -272,7 +272,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       productDescription: this.productDescription.value,
       serviceCharge: this.serviceCharge.value,
       productId: this.addProductForm.value.productId,
-      category: this.addProductForm.value.category,
+      category: this.addProductForm.value.category.name,
       productCaseId: this.caseId,
       inStock: this.inStock.value
     }
