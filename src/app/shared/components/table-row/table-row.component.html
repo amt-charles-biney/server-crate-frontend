@@ -11,13 +11,13 @@
     </p>
   </td>
   <td
-    class="relative md:col-span-4 2xl:col-span-5 flex items-center gap-3 text-start"
+    class="md:col-span-4 2xl:col-span-5 flex items-center gap-3 text-start"
   >
     <div
       class="flex items-center gap-3 text-start w-[70%] 2xl:w-[50%] overflow-hidden text-ellipsis whitespace-nowrap"
     >
       <p
-        class=""
+        class="" 
         *ngFor="let config of category.config | keyvalue | slice : 0 : 3; let i = index"
       >
         <span class="overflow-hidden whitespace-nowrap text-ellipsis">{{
@@ -31,14 +31,14 @@
       (hoverEmitter)="isHovered = $event"
       (click)="showCategoryInfo(category.id)"
       *ngIf="config.length > 3"
-      class="bg-light-green text-figma-green rounded-full w-[23px] h-[23px] flex flex-col justify-center items-center text-xs"
+      class="relative bg-light-green text-figma-green rounded-full w-[23px] h-[23px]  text-xs"
     >
+    <p>
       + {{ config.length - 3 }}
-    </button>
-  </ng-container>
+    </p>
     <div
       *ngIf="isHovered"
-      class="flex flex-col absolute z-50 top-5 text-sm rounded shadow-md border w-[252px] bg-white"
+      class="flex flex-col absolute right-4 z-50 top-5 text-sm rounded shadow-md border w-[252px] bg-white text-start"
     >
       <div class="px-4 py-2 font-inter">
         <h2 class="font-semibold">Base Config</h2>
@@ -53,7 +53,7 @@
         *ngFor="let config of category.config | keyvalue"
       >
         <h3 class="text-sm text-[#101928]">{{ config.key }}</h3>
-        <div class="text-[10px] text-[#667185] grid grid-flow-col w-fit">
+        <div class="text-xs text-[#667185] grid grid-flow-col w-fit">
           <p
             [ngClass]="{
               'text-figma-green' : c.isIncluded,
@@ -67,6 +67,9 @@
         </div>
       </div>
     </div>
+    </button>
+  </ng-container>
+    
   </td>
   <td
     class="col-span-4 overflow-hidden whitespace-nowrap text-ellipsis self-center"

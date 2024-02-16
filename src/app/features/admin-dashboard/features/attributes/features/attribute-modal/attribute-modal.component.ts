@@ -54,6 +54,7 @@ import {
   unitRequiredIfMeasured,
 } from '../../../../../../core/utils/validators';
 import { v4 as uuidv4 } from 'uuid'
+import { IncompatiblesComponent } from '../../../../../../shared/components/incompatibles/incompatibles.component';
 @Component({
   selector: 'app-attribute-modal',
   standalone: true,
@@ -67,6 +68,7 @@ import { v4 as uuidv4 } from 'uuid'
     CustomImageComponent,
     AuthLoaderComponent,
     CustomSelectComponent,
+    IncompatiblesComponent
   ],
   templateUrl: './attribute-modal.component.html',
   styleUrl: './attribute-modal.component.scss',
@@ -79,13 +81,16 @@ export class AttributeModalComponent implements OnInit {
   loadingStatus$!: Observable<LoadingStatus>;
   id = '';
   editId: string | null = null;
+  incompatibleAttributeOptions: string[] = []
+  incompatibleVariants: AttributeOption[] = []
+  collapsedIndex: number = -1
   constructor(
     public dialogRef: MatDialogRef<AttributeModalComponent>,
     private store: Store,
     private adminService: AdminService,
     private fb: FormBuilder,
     private destroyRef: DestroyRef,
-    @Inject(MAT_DIALOG_DATA) public data: { attribute: Attribute }
+    @Inject(MAT_DIALOG_DATA) public data: { attribute: Attribute, index: number }
   ) {}
   ngOnInit(): void {
     this.loadingStatus$ = this.store.select(selectLoaderState);
@@ -99,6 +104,11 @@ export class AttributeModalComponent implements OnInit {
         unit,
         isRequired,
       } = this.data.attribute;
+      if (this.data.index) {
+        this.collapsedIndex = this.data.index
+        console.log('collaped index', this.collapsedIndex);
+        
+      }
       this.editId = id;
       for (let attr of attributeOptions) {
         const baseAmount = attr.additionalInfo.baseAmount
@@ -114,6 +124,8 @@ export class AttributeModalComponent implements OnInit {
         const inStock = attr.inStock ? attr.inStock.toString() : ''
         const price = attr.optionPrice ? attr.optionPrice.toString() : '';
         const incompatibleAttributeOptions = attr.incompatibleAttributeOptions ? attr.incompatibleAttributeOptions : []
+        this.incompatibleVariants = incompatibleAttributeOptions
+        
         this.store.dispatch(
           addAttributeToStore({
             baseAmount,
@@ -214,6 +226,7 @@ export class AttributeModalComponent implements OnInit {
         return {
           ...attr,
           media: null,
+          incompatibleAttributeOptions: this.incompatibleAttributeOptions
         };
       }
     );
@@ -290,6 +303,12 @@ export class AttributeModalComponent implements OnInit {
         }
       }
     });
+  }
+
+  getIncompatibleAttributeOptions(incompatibleAttributeOptions: string[]) {
+    this.incompatibleAttributeOptions = incompatibleAttributeOptions
+    console.log('Incompatibles', this.incompatibleAttributeOptions);
+    
   }
 
   addAttributeForm() {

@@ -1,40 +1,57 @@
 <table class="flex flex-col w-full mt-6">
   <tr
-    class="grid grid-cols-12 py-3 border-b text-table-text bg-table-bg text-xs font-[500]"
+    class="flex items-center text-table-text bg-table-bg text-xs font-[500] border-b h-10"
   >
     <th
-      [ngClass]="isMeasured ? 'col-span-7' : 'col-span-10'"
-      class="flex items-center gap-9 px-6"
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
+    ></th>
+    <th
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
     >
-      Variant
+      Image
+    </th>
+    <th
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
+    >
+      Brand
+    </th>
+    <th
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
+    >
+      Model
     </th>
     @if (isMeasured) {
     <th
-      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
     >
       Base Amount
     </th>
     } @if (isMeasured) {
     <th
-      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
     >
       Max Amount
     </th>
     }
     <th
-      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
     >
       Price
     </th>
+    <th
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
+    >
+      SKU
+    </th>
     @if (isMeasured) {
     <th
-      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
     >
       Price Factor
     </th>
     }
     <th
-      class="col-span-1 text-start overflow-hidden whitespace-nowrap text-ellipsis"
+      class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
     >
       Action
     </th>
@@ -42,50 +59,62 @@
   <section class="h-fit max-h-[220px] overflow-auto">
     @for (attr of attributeOptions; track $index) {
     <tr
-      class="grid grid-cols-12 py-3 border-b text-table-text text-sm font-[500]"
+      class="flex items-center py-3 border-b text-table-text text-sm font-[500]"
     >
-      <td
-        [ngClass]="isMeasured ? 'col-span-7' : 'col-span-10'"
-        class="flex items-center gap-9 px-6"
-      >
-        <div class="flex items-center gap-2">
-          <img [src]="attr.optionMedia" class="w-[33px] h-5" alt="option image" />
-          <p class="overflow-hidden whitespace-nowrap text-ellipsis">
-            {{ attr.optionName }}
-          </p>
-        </div>
+      <td class="font-[500] text-sm w-[15%] text-center  ">
+        @if (attr.incompatibleAttributeOptions.length > 0) {
+          <button class="text-[#2f8f57] bg-[#ecf8f1] text-xs rounded-2xl px-1 py-1">View incompatibles</button>
+        }
+      </td>
+      <td class="text-gray-500 font-[500] text-sm w-[15%] flex justify-center">
+        <img [src]="attr.optionMedia" class="w-[33px] h-5" alt="option image" />
+      </td>
+      <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
+        <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+          {{ attr.brand }}
+        </p>
+      </td>
+      <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
+        <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+          {{ attr.optionName }}
+        </p>
       </td>
       @if (attr.attribute.isMeasured) {
-      <td class="col-span-1 text-start self-center">
+      <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
         <p class="overflow-hidden whitespace-nowrap text-ellipsis">
           {{ attr.additionalInfo.baseAmount }}
         </p>
       </td>
       } @if (attr.attribute.isMeasured) {
-      <td class="col-span-1 text-start self-center">
+      <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
         <p class="overflow-hidden whitespace-nowrap text-ellipsis">
           {{ attr.additionalInfo.maxAmount }}
         </p>
       </td>
       }
-      <td class="col-span-1 text-start self-center">
+      <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
         <p class="overflow-hidden whitespace-nowrap text-ellipsis">
           {{ attr.optionPrice }}
         </p>
       </td>
+      <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
+        <p class="overflow-hidden whitespace-nowrap text-ellipsis">
+          {{ attr.inStock }}
+        </p>
+      </td>
       @if (attr.attribute.isMeasured) {
-      <td class="col-span-1 text-start self-center">
+      <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
         <p class="overflow-hidden whitespace-nowrap text-ellipsis">
           {{ attr.additionalInfo.priceFactor }}
         </p>
       </td>
       }
-      <td class="ml-2">
+      <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
         <button (click)="deleteOption(attr.id)">
           <img src="/assets/trash.svg" alt="delete icon" />
         </button>
       </td>
     </tr>
-  }
+    }
   </section>
 </table>

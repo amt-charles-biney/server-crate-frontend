@@ -1,6 +1,6 @@
 <main class="relative px-5 py-4">
   <header class="flex items-center justify-between w-full">
-    <h1 class="text-2xl font-[600] font-inter">Create Attribute</h1>
+    <h1 class="text-2xl font-[600] font-inter">{{ editId ? 'Edit Attribute' : 'Create Attribute'}}</h1>
     <button mat-dialog-close type="button">
       <img src="/assets/close.svg" alt="close button" />
     </button>
@@ -36,25 +36,28 @@
           [isRequired]="true"
         />
         }
-        <div class="mt-2">
+      </div>
+    </div>
+    <div class="flex justify-between ">
+      <div class="w-[60%]">
+        <app-custom-input
+          id="description"
+          label="Description"
+          type="textarea"
+          placeholder="Enter description"
+          formControlName="description"
+        />
+      </div>
+      <div class="w-[30%] mt-10">
           <app-custom-check-box
             name="isRequired"
             class="font-[500]"
-            label="required"
+            label="Make Attribute Required"
             formControlName="isRequired"
           />
-        </div>
       </div>
     </div>
-    <div class="w-[60%]">
-      <app-custom-input
-        id="description"
-        label="Description"
-        type="textarea"
-        placeholder="Enter description"
-        formControlName="description"
-      />
-    </div>
+    
     <button
       (click)="addAttributeForm()"
       type="button"
@@ -132,10 +135,11 @@
         </tr>
         <div
           formArrayName="attributes"
+          class="border-b"
           *ngFor="let attrs of attributes.controls; let i = index"
         >
           <ng-container [formGroupName]="i">
-            <tr class="flex items-center border-b h-10">
+            <tr class="flex items-center h-10">
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <div class="flex items-center justify-center gap-2">
                   <button type="button">
@@ -175,9 +179,6 @@
                         </app-custom-image>
                       }
                     </ng-container>
-                    <ng-template #loadingImage>
-                      <p>Loading...</p>
-                    </ng-template>
                   </button>
                 </div>
               </td>
@@ -250,6 +251,7 @@
                 </button>
               </td>
             </tr>
+            <app-incompatibles [incompatibleAttributeOptions]="incompatibleVariants" (incompatibleVariantsEmitter)="getIncompatibleAttributeOptions($event)"/>
           </ng-container>
         </div>
       </table>
@@ -259,7 +261,7 @@
         type="submit"
         class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
       >
-        Save
+        {{ editId ? 'Save Changes' : 'Save' }}
       </button>
       <button
         type="button"

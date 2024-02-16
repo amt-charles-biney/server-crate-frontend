@@ -51,6 +51,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { selectEditConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
 import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actions';
 import {
+  buildIncompatibleTable,
   generateIncompatiblesTable,
   generateSizes,
   getConfigPayload,
@@ -65,7 +66,6 @@ import {
 } from '../../../../core/utils/helpers';
 import { MatMenuModule } from '@angular/material/menu';
 import { CustomSizeSelectionComponent } from '../../../../shared/components/custom-size-selection/custom-size-selection.component';
-import { CompilerConfig } from '@angular/compiler';
 
 @Component({
   selector: 'app-add-category',
@@ -140,6 +140,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
               tap((editConfig: EditConfigResponse) => {
                 const { config, name } = editConfig;
                 this.incompatibleSet = generateIncompatiblesTable(config);
+                this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet)
                 const editFormValues = this.attributeService.editFormGroup(
                   config,
                   name
@@ -248,7 +249,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       incompatibleAttributeOptions
     );
 
-    const { incompatibleSet, localAttributes } = this.buildIncompatibleTable(
+    const { incompatibleSet, localAttributes } = buildIncompatibleTable(
       incompatibleAttributeOptions,
       this.incompatibleSet,
       this.localAttributes
@@ -303,31 +304,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
   }
 
-  buildIncompatibleTable(
-    incompatibleAttributeOptions: AttributeOption[],
-    currentIncompatibleSet: Record<string, AttributeOption[]>,
-    localAttributes: Attribute[]
-  ) {
-    const incompatibleSet: Record<string, AttributeOption[]> =
-      currentIncompatibleSet;
-    incompatibleAttributeOptions.forEach((incompatibleAttribute) => {
-      if (incompatibleSet[incompatibleAttribute.attribute.name]) {
-        incompatibleSet[incompatibleAttribute.attribute.name].push(
-          incompatibleAttribute
-        );
-      } else {
-        incompatibleSet[incompatibleAttribute.attribute.name] = [
-          incompatibleAttribute,
-        ];
-      }
-      localAttributes = removeFromLocalAttributes(
-        localAttributes,
-        incompatibleAttribute.id
-      );
-    });
-
-    return { incompatibleSet, localAttributes };
-  }
+  
 
   onSelectChange(event: MatSelectChange) {
     this.selectedAttribute$.next(event.value.attributeOptions);

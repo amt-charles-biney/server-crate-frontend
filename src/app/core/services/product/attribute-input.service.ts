@@ -14,9 +14,9 @@ export class AttributeInputService {
         group[`${attribute.attributeName}Size`] = new FormControl();
       }
       group[attribute.attributeName] = new FormControl('');
-      if (attribute.isRequired) {
-        group[attribute.attributeName].setValidators(Validators.required)
-      }
+      // if (attribute.isRequired) {
+      //   group[attribute.attributeName].setValidators(Validators.required)
+      // }
     });
     group['categoryName'] = new FormControl('', Validators.required);
     group['attributesInput'] = new FormControl('');

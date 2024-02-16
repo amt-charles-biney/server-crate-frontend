@@ -122,7 +122,7 @@ export type VerifiedUser = {
     compatibleOptionId?: string,
     brand: string;
     inStock: number;
-    incompatibleAttributeOptions: IncompatibleAttributeOptions[]
+    incompatibleAttributeOptions: AttributeOption[]
   }
 
   export type IncompatibleAttributeOptions = Omit<Omit<AttributeOption, 'inStock'>, 'incompatibleAttributes'>
@@ -149,7 +149,7 @@ export type VerifiedUser = {
     baseAmount: number;
     maxAmount: number,
     brand: string,
-    incompatibleAttributeOptions: IncompatibleAttributeOptions[],
+    incompatibleAttributeOptions: AttributeOption[],
     inStock: number
   }
   export type ProductItem = {
@@ -201,7 +201,7 @@ export type VerifiedUser = {
     id: string;
     brand: string;
     inStock: string;
-    incompatibleAttributeOptions: IncompatibleAttributeOptions[]
+    incompatibleAttributeOptions: AttributeOption[]
   };
   export type GetAttribute = {
     data: Attribute[];

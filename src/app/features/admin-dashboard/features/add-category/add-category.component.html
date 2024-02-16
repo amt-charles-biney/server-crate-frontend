@@ -199,6 +199,7 @@
             [options]="attribute.attributeOptions"
             (onSelect)="onSelectConfigOptions($event, attribute)"
             [isDisabled]="attribute.attributeOptions.length === 0"
+            [isRequired]="attribute.isRequired && attribute.attributeOptions.length > 0"
           />
           <!-- <app-custom-select
             [control]="
@@ -233,7 +234,7 @@
           [options]="attribute.attributeOptions"
           (onSelect)="onSelectConfigOptions($event, attribute)"
           [isDisabled]="attribute.attributeOptions.length === 0"
-          [isRequired]="attribute.isRequired"
+          [isRequired]="attribute.isRequired && attribute.attributeOptions.length > 0"
         />
         } }
       </section>

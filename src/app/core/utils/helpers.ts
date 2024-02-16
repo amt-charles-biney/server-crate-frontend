@@ -324,3 +324,47 @@ export function removeFromPayload(
   );
   return newCategoryConfigPayload;
 }
+
+export function generateIncompatibleSet(incompatibleAttributeOptions: AttributeOption[]) {
+  console.log("Edit", incompatibleAttributeOptions);
+  
+  const incompatibleSet: Record<string, AttributeOption[]> =
+    {};
+  incompatibleAttributeOptions.forEach((incompatibleAttribute) => {
+    if (incompatibleSet[incompatibleAttribute.attribute.name]) {
+      incompatibleSet[incompatibleAttribute.attribute.name].push(
+        incompatibleAttribute
+      );
+    } else {
+      incompatibleSet[incompatibleAttribute.attribute.name] = [
+        incompatibleAttribute,
+      ];
+    }
+  })
+  return incompatibleSet
+}
+export function buildIncompatibleTable(
+  incompatibleAttributeOptions: AttributeOption[],
+  currentIncompatibleSet: Record<string, AttributeOption[]>,
+  localAttributes: Attribute[]
+) {
+  const incompatibleSet: Record<string, AttributeOption[]> =
+    currentIncompatibleSet;
+  incompatibleAttributeOptions.forEach((incompatibleAttribute) => {
+    if (incompatibleSet[incompatibleAttribute.attribute.name]) {
+      incompatibleSet[incompatibleAttribute.attribute.name].push(
+        incompatibleAttribute
+      );
+    } else {
+      incompatibleSet[incompatibleAttribute.attribute.name] = [
+        incompatibleAttribute,
+      ];
+    }
+    localAttributes = removeFromLocalAttributes(
+      localAttributes,
+      incompatibleAttribute.id
+    );
+  });
+
+  return { incompatibleSet, localAttributes };
+}
