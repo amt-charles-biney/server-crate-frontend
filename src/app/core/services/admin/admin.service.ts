@@ -30,7 +30,7 @@ export class AdminService {
     return this.http.get<Select[]>(`${this.baseUrl}/admin/brand`);
   }
 
-  addProduct(formData: FormData) {
+  addProduct(formData: any) {
     return this.http.post(`${this.baseUrl}/admin/product`, formData);
   }
 
@@ -52,7 +52,7 @@ export class AdminService {
     return this.http.delete(`${this.baseUrl}/admin/product/${id}`);
   }
 
-  updateProduct(id: string, formData: FormData) {
+  updateProduct(id: string, formData: any) {
     return this.http.patch(`${this.baseUrl}/admin/product/${id}`, formData);
   }
 
