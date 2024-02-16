@@ -92,9 +92,9 @@
             id="price"
             label="Price"
             type="number"
-            placeholder="Enter amount"
+            [placeholder]="(totalPrice | async)?.toString()!"
             formControlName="productPrice"
-            myClass="font-[500]"
+            myClass="font-[500] placeholder:text-black"
             [isReadOnly]="true"
           />
         </div>
@@ -147,7 +147,7 @@
       </div>
       <div class="mt-[31px]">
         <p class="font-dm-sans text-sm">Price Breakdown</p>
-        <div class="overflow-auto rounded-lg mt-2 bg-[#fbfbfb]">
+        <div class="overflow-auto rounded-lg mt-2 py-3 bg-[#fbfbfb]">
           <ul
             class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc"
           >
@@ -155,15 +155,22 @@
                   class="leading-4 w-max px-3 text-[13px]"
                   
                 >
-                  <p>Case Price</p>
+                  <p>Case Price ($)</p>
                   <p class="text-gray-400">{{ price.value }}</p>
                 </li>
                 <li
                   class="leading-4 w-max px-3 text-[13px]"
                   
                 >
-                  <p>Service Charge</p>
+                  <p>Service Charge (%)</p>
                   <p class="text-gray-400">{{ serviceCharge.value }}</p>
+                </li>
+                <li
+                  class="leading-4 w-max px-3 text-[13px]"
+                  
+                >
+                  <p>Base Configuration price ($)</p>
+                  <p class="text-gray-400">{{ configurationPrice === 0 ? 'No selected configuration' : configurationPrice }}</p>
                 </li>
           </ul>
         </div>

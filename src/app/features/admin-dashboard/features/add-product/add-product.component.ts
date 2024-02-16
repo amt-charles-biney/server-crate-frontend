@@ -7,9 +7,9 @@ import {
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Observable, Subject, catchError, map, of, startWith, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, catchError, map, of, startWith, tap } from 'rxjs';
 import { Select, LoadingStatus, ProductItem, BasicConfig, Case } from '../../../../types';
 import { Store } from '@ngrx/store';
 import {
@@ -59,6 +59,7 @@ import { CustomSelectComponent } from '../../../../shared/components/custom-sele
     CustomInputComponent,
     MatSelectModule,
     ReactiveFormsModule,
+    FormsModule,
     CommonModule,
     MatAutocompleteModule,
     RxReactiveFormsModule,
@@ -70,17 +71,20 @@ import { CustomSelectComponent } from '../../../../shared/components/custom-sele
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddProductComponent implements OnInit, OnDestroy {
-  addProductForm!: RxFormGroup;
+  addProductForm!: FormGroup;
   categories$!: Observable<Select[]>;
   cases$!: Observable<Case[]>;
   brands$!: Observable<Select[]>;
   private option$ = new Subject<BasicConfig>();
   private product$ = new Subject<ProductItem>();
+  private totalPrice$ = new BehaviorSubject<number>(-1)
+  totalPrice = this.totalPrice$.asObservable()
   product = this.product$.asObservable();
   options = this.option$.asObservable();
   filteredOptions!: Observable<Select[]>;
   filteredBrandNames!: Observable<Select[]>;
   loadingState$!: Observable<LoadingStatus>;
+  caseId!: string
   url: any = '';
   id: string = '';
   coverImage: string | null = '';
@@ -88,10 +92,10 @@ export class AddProductComponent implements OnInit, OnDestroy {
   image2: string | null = '';
   image3: string | null = '';
   formGroup = {};
-  configurationPrice!: number
+  configurationPrice: number = 0
   constructor(
     private store: Store,
-    private fb: RxFormBuilder,
+    private fb: FormBuilder,
     private adminService: AdminService,
     private destroyRef: DestroyRef,
     private router: Router,
@@ -101,10 +105,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.store.dispatch(getCategories());
     this.store.dispatch(getCases());
-
+    this.totalPrice$.next(0)
     this.formGroup = {
-      file: null,
-      coverImage: null,
       productName: [
         '',
         RxwebValidators.required({ message: 'Please enter a product name' }),
@@ -117,14 +119,12 @@ export class AddProductComponent implements OnInit, OnDestroy {
       ],
       productPrice: [
         '',
-        RxwebValidators.required({ message: 'Please enter a price' }),
       ],
       serviceCharge: [
         '',
         RxwebValidators.required({ message: 'Please enter a charge' }),
       ],
       productId: `${getUniqueId(2)}`,
-      productBrand: '',
       category: ['', categoryIsNotUnassigned()],
       cases: [''],
       inStock: [
@@ -133,11 +133,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
           message: 'Please enter total products available',
         }),
       ],
-      image1: null,
-      image2: null,
-      image3: null,
     };
-    this.addProductForm = <RxFormGroup>this.fb.group(this.formGroup);
+    this.addProductForm = this.fb.group(this.formGroup);
     if (this.id) {
       this.addProductForm.markAllAsTouched()
       this.store.dispatch(getProduct({ id: this.id }));
@@ -154,23 +151,15 @@ export class AddProductComponent implements OnInit, OnDestroy {
               );
             }
             this.formGroup = {
-              file: null,
-              coverImage: null,
               productName: data.productName,
               productDescription: data.productDescription,
               productPrice: data.productPrice,
-              productBrand: {
-                name: data.productBrand,
-              },
               productId: data.productId,
               inStock: data.inStock,
               category: {
                 name: data.category.name,
                 id: data.category.id,
               },
-              image1: null,
-              image2: null,
-              image3: null,
             };
 
             this.coverImage = data.coverImage;
@@ -201,18 +190,19 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
     this.cases$ = this.store.select(selectCaseFeatureState)
 
-    this.brands$ = this.store.select(selectBrands).pipe(
-      tap((brands) => {
-
-        this.filteredBrandNames = this.productBrand.valueChanges.pipe(
-          startWith({ id: '', name: ''}),
-          map((value) => this._filter(value, brands))
-        );
-      })
-    );
-
     this.loadingState$ = this.store.select(selectLoaderState);
-    this.options = this.store.select(selectConfigurationState);
+    this.options = this.store.select(selectConfigurationState).pipe(
+      tap((configuration) => {
+        console.log('Config', configuration);
+        
+        for (let key in configuration.options) {
+          configuration.options[key].forEach((config) => {
+            this.configurationPrice += config.price
+          })
+        }
+        this.totalPrice$.next(this.totalPrice$.value + this.configurationPrice)
+      })
+    )
   }
 
   ngOnDestroy(): void {
@@ -263,7 +253,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
   onSelectCase(event: MatSelectChange) {
     console.log('Selected case', event.value);
-    this.addProductForm.patchValue({ productPrice: event.value.price})
+    this.caseId = event.value.id
+    this.addProductForm.patchValue({ productPrice: this.totalPrice$.value + event.value.price})
   }
 
   addProduct() {
@@ -276,37 +267,18 @@ export class AddProductComponent implements OnInit, OnDestroy {
       })
     );
     scrollTo({ top: 0, behavior: 'smooth' });
-    const formData: FormData = (<FormGroupExtension>(
-      this.addProductForm
-    )).toFormData();
-
-    const coverImage = formData.get('coverImage[0]');
-    const image1 = formData.get('image1[0]');
-    const image2 = formData.get('image2[0]');
-    const image3 = formData.get('image3[0]');
-    const category = formData.get('category[name]');
-    const productBrand = formData.get('productBrand[name]') || formData.get('productBrand');
-    
-    formData.delete('coverImage[0]');
-    formData.delete('image1[0]');
-    formData.delete('image2[0]');
-    formData.delete('image3[0]');
-    formData.delete('category[name]');
-    formData.delete('category[id]');
-    formData.delete('productBrand[name]');
-    formData.delete('productBrand[id]');
-    formData.delete('file[0]');
-
-    formData.set('coverImage', coverImage!);
-    formData.set('category', category!);
-    formData.set('productBrand', productBrand!);
-    formData.append('file', image1!);
-    formData.append('file', image2!);
-    formData.append('file', image3!);
-
+    const product = {
+      productName: this.productName.value,
+      productDescription: this.productDescription.value,
+      serviceCharge: this.serviceCharge.value,
+      productId: this.addProductForm.value.productId,
+      category: this.addProductForm.value.category,
+      productCaseId: this.caseId,
+      inStock: this.inStock.value
+    }
     if (this.id) {
       this.adminService
-        .updateProduct(this.id, formData)
+        .updateProduct(this.id, product)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           error: (err) => {
@@ -334,7 +306,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
         });
     } else {
       this.adminService
-        .addProduct(formData)
+        .addProduct(product)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           error: (err) => {
