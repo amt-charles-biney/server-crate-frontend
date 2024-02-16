@@ -119,8 +119,13 @@ export type VerifiedUser = {
       isMeasured: boolean,
       unit: string
     },
-    compatibleOptionId?: string
+    compatibleOptionId?: string,
+    brand: string;
+    inStock: number;
+    incompatibleAttributeOptions: AttributeOption[]
   }
+
+  export type IncompatibleAttributeOptions = Omit<Omit<AttributeOption, 'inStock'>, 'incompatibleAttributes'>
   export type AdditionalInfo = {
     baseAmount: number;
     maxAmount: number;
@@ -142,7 +147,10 @@ export type VerifiedUser = {
     attributeOptionId: string;
     priceIncrement: number;
     baseAmount: number;
-    maxAmount: number
+    maxAmount: number,
+    brand: string,
+    incompatibleAttributeOptions: AttributeOption[],
+    inStock: number
   }
   export type ProductItem = {
     imageUrl: string;
@@ -161,6 +169,17 @@ export type VerifiedUser = {
     }
     isFeatured: boolean
   };
+
+  
+export type Case = {
+  id: string,
+  name: string,
+  description: string;
+  coverImage: string,
+  imageUrls: string[],
+  price: number,
+  incompatibleVariants: AttributeOption[]
+}
   export type AllProducts = {
     total: number;
     products: ProductItem[];
@@ -191,6 +210,9 @@ export type VerifiedUser = {
     maxAmount: string;
     priceFactor: string;
     id: string;
+    brand: string;
+    inStock: string;
+    incompatibleAttributeOptions: AttributeOption[]
   };
   export type GetAttribute = {
     data: Attribute[];
@@ -203,7 +225,9 @@ export type VerifiedUser = {
     isMeasured: boolean;
     unit: string;
     description: string;
-    attributeOptions: AttributeOption[]
+    attributeOptions: AttributeOption[],
+    isRequired: boolean
+
   }
   export type ConfigurationEdit = {
     name: string;

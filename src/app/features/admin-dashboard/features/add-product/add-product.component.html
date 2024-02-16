@@ -32,12 +32,13 @@
         formControlName="productDescription"
         myClass="font-[500]"
       />
-      @if (productDescription.invalid && (productDescription.touched || productDescription.dirty)) {
-        <span
-          class="text-red-600"
-          >{{addProductForm.controls["productDescription"].errors?.['required'].message }}</span
-        >
-        }
+      @if (productDescription.invalid && (productDescription.touched ||
+      productDescription.dirty)) {
+      <span
+        class="text-red-600"
+        >{{addProductForm.controls["productDescription"].errors?.['required'].message }}</span
+      >
+      }
       <ng-container *ngIf="categories$ | async as categories">
         <app-custom-input
           id="category"
@@ -50,50 +51,25 @@
           [deleteFn]="deleteCategory"
           myClass="font-[500]"
         />
-        <!-- @if (category.invalid ) {
+      </ng-container>
+
+      <ng-container *ngIf="cases$ | async as cases">
+        <app-custom-select
+          [control]="$any(addProductForm.controls['cases'])"
+          [options]="cases"
+          label="Cases"
+          [isRequired]="true"
+          myClass="font-[500]"
+          (onSelect)="onSelectCase($event)"
+        />
+      </ng-container>
+
+      <!-- @if (category.invalid ) {
           <span
             class="text-red-600"
             >{{addProductForm.controls["category"].errors?.['category'].value }}</span
           >
           } -->
-        <div class="flex justify-between">
-          <div class="flex items-center w-[45%] ">
-            <div class="w-[80%]">
-              <ng-container *ngIf="brands$ | async as brands">
-                <app-custom-input
-                  id="brandName"
-                  label="Brand Name"
-                  type="async"
-                  placeholder="Select an option"
-                  formControlName="productBrand"
-                  [filteredOptions]="filteredBrandNames"
-                  [optionSelected]="onBrandSelected"
-                  [deleteFn]="deleteBrand"
-                  myClass="font-[500]"
-                />
-              </ng-container>
-            </div>
-            <button type="button" (click)="addNewBrand()" class="flex justify-center items-center w-[20%] h-[41px] bg-gray-100 mt-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-            </button>
-          </div>
-          <div class="w-[45%]">
-            <app-custom-input
-              id="productId"
-              label="Product ID"
-              type="generator"
-              [isReadOnly]="true"
-              placeholder=""
-              formControlName="productId"
-              [filteredOptions]="filteredOptions"
-              myClass="font-[500]"
-            />
-          </div>
-        </div>
-      </ng-container>
-
       <div class="flex items-center justify-between">
         <div class="w-[45%]">
           <app-custom-input
@@ -105,11 +81,11 @@
             myClass="font-[500]"
           />
           <!-- @if (inStock.invalid && (inStock.touched || inStock.dirty)) {
-            <small
-              class="text-red-600"
-              >{{addProductForm.controls["inStock"].errors?.['required'].message }}</small
-            >
-            } -->
+                <small
+                  class="text-red-600"
+                  >{{addProductForm.controls["inStock"].errors?.['required'].message }}</small
+                >
+                } -->
         </div>
         <div class="w-[45%]">
           <app-custom-input
@@ -119,95 +95,77 @@
             placeholder="Enter amount"
             formControlName="productPrice"
             myClass="font-[500]"
+            [isReadOnly]="true"
+          />
+        </div>
+      </div>
+      <div class="flex justify-between">
+        <div class="w-[45%]">
+          <app-custom-input
+            id="productId"
+            label="Product ID"
+            type="generator"
+            [isReadOnly]="true"
+            placeholder=""
+            formControlName="productId"
+            [filteredOptions]="filteredOptions"
+            myClass="font-[500]"
+          />
+        </div>
+        <div class="w-[45%]">
+          <app-custom-input
+            id="price"
+            label="Service Charge"
+            type="number"
+            placeholder="Enter amount"
+            formControlName="serviceCharge"
+            myClass="font-[500]"
           />
         </div>
       </div>
     </section>
     <section>
-      <app-custom-image
-        formControlName="coverImage"
-        elementId="coverImage"
-        containerClass="relative flex flex-col items-center justify-center border rounded-lg h-full"
-        customClass="flex flex-col mt-4 h-[50%] xl:h-[60%]"
-        previewClass="w-full h-96 object-contain"
-        [previewImage]="coverImage"
-        [editId]="id"
-        label="Cover Image"
-        (removeImageEmitter)="removeImage($event)"
-        (uploadImageEmitter)="replaceImage($event)"
-      >
-        <label
-          for="#coverImage"
-          class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
-        >
-          <img src="/assets/upload.svg" alt="upload" />
-          <p>
-            <span class="text-figma-green">Click to upload an image</span>
-          </p>
-          <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
-        </label>
-      </app-custom-image>
-      <div class="mt-5">
-        <p class="font-[500]">Product Gallery</p>
-        <small class="text-gray-500"
-          >Enhance your product showcase. Add an image to your product
-          gallery.</small
-        >
-        <div class="flex mt-4 gap-10">
-          <app-custom-image
-            formControlName="image1"
-            elementId="image1"
-            containerClass="relative flex flex-col items-center justify-center border w-[119px] h-[85px] rounded-lg"
-            previewClass="w-[119px] h-[85px] object-contain"
-            [previewImage]="image1"
-            [editId]="id"
-            (removeImageEmitter)="removeImage($event)"
-            (uploadImageEmitter)="replaceImage($event)"
+      <div class="py-3">
+        <p class="font-dm-sans text-sm">Base Configuration</p>
+        <div class="overflow-auto rounded-lg mt-2 bg-[#fbfbfb]">
+          <ul
+            class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc"
           >
-            <label
-              for="#image1"
-              class="cursor-pointer flex flex-col items-center gap-1"
-            >
-              <img src="/assets/image-plus.svg" alt="add image" />
-              <small class="text-xs">Add image 1</small>
-            </label>
-          </app-custom-image>
-          <app-custom-image
-            formControlName="image2"
-            elementId="image2"
-            containerClass="relative flex flex-col items-center justify-center border w-[119px] h-[85px] rounded-lg"
-            previewClass="w-[119px] h-[85px] object-contain"
-            [previewImage]="image2"
-            [editId]="id"
-            (removeImageEmitter)="removeImage($event)"
-            (uploadImageEmitter)="replaceImage($event)"
+            <ng-container *ngIf="options | async as options">
+              <ng-container *ngIf="options">
+                <li
+                  class="leading-4 w-max px-3 text-[13px]"
+                  *ngFor="let option of options.options | keyvalue"
+                >
+                  <p>{{ option.key }}</p>
+                  <p class="text-gray-400">{{ option.value[0].name }}</p>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-[31px]">
+        <p class="font-dm-sans text-sm">Price Breakdown</p>
+        <div class="overflow-auto rounded-lg mt-2 bg-[#fbfbfb]">
+          <ul
+            class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc"
           >
-            <label
-              for="#image2"
-              class="cursor-pointer flex flex-col items-center gap-1"
-            >
-              <img src="/assets/image-plus.svg" alt="add image" />
-              <small class="text-xs">Add image 2</small>
-            </label>
-          </app-custom-image>
-          <app-custom-image
-            formControlName="image3"
-            elementId="image3"
-            containerClass="relative flex flex-col items-center justify-center border w-[119px] h-[85px] rounded-lg"
-            previewClass="w-[119px] h-[85px] object-contain"
-            [previewImage]="image3"
-            [editId]="id"
-            (removeImageEmitter)="removeImage($event)"
-            (uploadImageEmitter)="replaceImage($event)"
-          >
-            <label
-              for="#image3"
-              class="cursor-pointer flex flex-col items-center gap-1"
-            >
-              <img src="/assets/image-plus.svg" alt="add image" />
-              <small class="text-xs">Add image 3</small>
-            </label>
-          </app-custom-image>
+                <li
+                  class="leading-4 w-max px-3 text-[13px]"
+                  
+                >
+                  <p>Case Price</p>
+                  <p class="text-gray-400">{{ price.value }}</p>
+                </li>
+                <li
+                  class="leading-4 w-max px-3 text-[13px]"
+                  
+                >
+                  <p>Service Charge</p>
+                  <p class="text-gray-400">{{ serviceCharge.value }}</p>
+                </li>
+          </ul>
         </div>
       </div>
       <section class="flex items-center justify-end mt-10 gap-6 text-sm">
@@ -220,7 +178,7 @@
         >
           Delete
         </button>
-        
+
         <button
           [disabled]="addProductForm.invalid"
           [ngClass]="addProductForm.invalid ? 'cursor-not-allowed' : ''"
@@ -238,20 +196,4 @@
       </section>
     </section>
   </form>
-  <section class="mt-14">
-    <p class="font-dm-sans text-sm">Base Configuration</p>
-    <div class="w-[488px] overflow-auto rounded-lg mt-2 bg-[#fbfbfb]">
-      <ul class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc">
-        <ng-container *ngIf="options | async as options">
-          <ng-container *ngIf="options">
-            <li class="leading-4 w-max px-3 text-[13px]" *ngFor="let option of options.options| keyvalue ">
-              <p>{{ option.key }}</p>
-              <p class="text-gray-400">{{ option.value[0].name }}</p>
-            </li>
-          </ng-container>
-        </ng-container>
-        
-      </ul>
-    </div>
-  </section>
 </main>

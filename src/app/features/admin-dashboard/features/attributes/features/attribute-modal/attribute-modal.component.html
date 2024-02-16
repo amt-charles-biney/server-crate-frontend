@@ -1,11 +1,10 @@
 <main class="relative px-5 py-4">
   <header class="flex items-center justify-between w-full">
-    <h1 class="text-2xl font-[600] font-inter">Create Attribute</h1>
+    <h1 class="text-2xl font-[600] font-inter">{{ editId ? 'Edit Attribute' : 'Create Attribute'}}</h1>
     <button mat-dialog-close type="button">
       <img src="/assets/close.svg" alt="close button" />
     </button>
   </header>
-  <app-auth-loader [loadingState]="loadingStatus$" />
   <form
     [formGroup]="attributeForm"
     (ngSubmit)="addAttribute()"
@@ -22,7 +21,7 @@
           [isRequired]="true"
         />
       </div>
-      <div class="w-[30%]">
+      <div class="flex flex-col w-[30%]">
         <app-custom-check-box
           name="productType"
           class="font-[500]"
@@ -39,15 +38,26 @@
         }
       </div>
     </div>
-    <div class="w-[60%]">
-      <app-custom-input
-        id="description"
-        label="Description"
-        type="textarea"
-        placeholder="Enter description"
-        formControlName="description"
-      />
+    <div class="flex justify-between ">
+      <div class="w-[60%]">
+        <app-custom-input
+          id="description"
+          label="Description"
+          type="textarea"
+          placeholder="Enter description"
+          formControlName="description"
+        />
+      </div>
+      <div class="w-[30%] mt-10">
+          <app-custom-check-box
+            name="isRequired"
+            class="font-[500]"
+            label="Make Attribute Required"
+            formControlName="isRequired"
+          />
+      </div>
     </div>
+    
     <button
       (click)="addAttributeForm()"
       type="button"
@@ -73,120 +83,160 @@
           class="flex items-center text-table-text bg-table-bg text-xs font-[500] border-b h-10"
         >
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[30%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
           >
-            Variant
+            Image
+          </th>
+          <th
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
+          >
+            Brand
+          </th>
+          <th
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
+          >
+            Model
           </th>
           @if (isMeasured.value) {
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
           >
             Base Amount
           </th>
           } @if (isMeasured.value) {
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
           >
             Max Amount
           </th>
           }
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
           >
             Price
           </th>
+          <th
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
+          >
+            SKU
+          </th>
           @if (isMeasured.value) {
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
           >
             Price Factor
           </th>
           }
           <th
-            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[10%] flex justify-center text-start"
+            class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[10%] flex justify-center text-center"
           >
             Action
           </th>
         </tr>
         <div
           formArrayName="attributes"
+          class="border-b"
           *ngFor="let attrs of attributes.controls; let i = index"
         >
           <ng-container [formGroupName]="i">
-            <tr class="flex items-center border-b h-10">
-              <td class="text-gray-500 font-[500] text-sm w-[30%] text-start">
-                <div class="flex items-center gap-2">
+            <tr class="flex items-center h-10">
+              <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
+                <div class="flex items-center justify-center gap-2">
                   <button type="button">
-                    <app-custom-image
-                      formControlName="media"
-                      [elementId]="attrs.value.id + ' coverImage'"
-                      containerClass="relative flex flex-col items-center justify-center h-full"
-                      customClass="flex flex-col h-[50%] xl:h-[60%]"
-                      previewClass="w-[33px] h-5"
-                      [editId]="editId"
-                      [previewImage]="coverImage[i] || null"
-                      (removeImageEmitter)="removeImage($event, i)"
-                      (uploadImageEmitter)="
-                        replaceImage(
-                          $event,
-                          attrs.value.id,
-                          attributes.at(i),
-                          i
-                        )
-                      "
-                    >
-                      <label
-                        [for]="'#' + attrs.value.id + ' coverImage'"
-                        class="flex items-center gap-3 text-figma-green"
-                      >
-                        <img src="/assets/upload-cloud.svg" alt="upload" />
-                        <p
-                          class="text-ellipsis overflow-hidden whitespace-nowrap"
+                    <ng-container *ngIf="loadingStatus$ | async as loadingStatus;">
+                      @if (loadingStatus.status) {
+                          <app-auth-loader size="small" [loadingState]="loadingStatus$" />
+                      } @else {
+                        <app-custom-image
+                          formControlName="media"
+                          [elementId]="attrs.value.id + ' coverImage'"
+                          containerClass="relative flex flex-col items-center justify-center h-full"
+                          customClass="flex flex-col h-[50%] xl:h-[60%]"
+                          previewClass="w-[33px] h-5"
+                          [editId]="editId"
+                          [previewImage]="coverImage[i] || null"
+                          (removeImageEmitter)="removeImage($event, i)"
+                          (uploadImageEmitter)="
+                            replaceImage(
+                              $event,
+                              attrs.value.id,
+                              attributes.at(i),
+                              i
+                            )
+                          "
                         >
-                          Upload cover
-                        </p>
-                      </label>
-                    </app-custom-image>
+                          <label
+                            [for]="'#' + attrs.value.id + ' coverImage'"
+                            class="flex items-center gap-3 text-figma-green"
+                          >
+                            <img src="/assets/upload-cloud.svg" alt="upload" />
+                            <p
+                              class="text-ellipsis overflow-hidden whitespace-nowrap"
+                            >
+                              Upload cover
+                            </p>
+                          </label>
+                        </app-custom-image>
+                      }
+                    </ng-container>
                   </button>
-                  <input
-                    class="w-full outline-none placeholder:text-placeholder"
-                    type="text"
-                    placeholder="Enter variant name"
-                    formControlName="name"
-                  />
                 </div>
               </td>
-              @if (isMeasured.value) {
-              <td class="text-gray-500 font-[500] text-sm w-[15%] text-start">
+              <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <input
-                  class="w-full outline-none placeholder:text-placeholder"
+                    class="w-full outline-none text-center placeholder:text-placeholder"
+                    type="text"
+                    placeholder="Brand name"
+                    formControlName="brand"
+                  />
+              </td>
+              <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
+                <input
+                    class="w-full outline-none text-center placeholder:text-placeholder"
+                    type="text"
+                    placeholder="Model name"
+                    formControlName="name"
+                  />
+              </td>
+              @if (isMeasured.value) {
+              <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
+                <input
+                  class="w-full outline-none text-center placeholder:text-placeholder"
                   type="number"
-                  placeholder="Enter amount"
+                  placeholder="Base amount"
                   formControlName="baseAmount"
                 />
               </td>
               } @if (isMeasured.value) {
-              <td class="text-gray-500 font-[500] text-sm w-[15%] text-start">
+              <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <input
-                  class="w-full outline-none placeholder:text-placeholder"
+                  class="w-full outline-none text-center placeholder:text-placeholder"
                   type="number"
-                  placeholder="Max Amt"
+                  placeholder="Max amount"
                   formControlName="maxAmount"
                 />
               </td>
               }
-              <td class="text-gray-500 font-[500] text-sm w-[15%] text-start">
+              <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <input
-                  class="w-full outline-none placeholder:text-placeholder"
+                  class="w-full outline-none text-center placeholder:text-placeholder"
                   type="number"
-                  placeholder="Enter price"
+                  placeholder="Price"
                   formControlName="price"
                 />
               </td>
-              @if (isMeasured.value) {
-              <td class="text-gray-500 font-[500] text-sm w-[15%] text-start">
+              <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <input
-                  class="w-full outline-none placeholder:text-placeholder"
+                  class="w-full outline-none text-center placeholder:text-placeholder"
+                  type="number"
+                  placeholder="SKU"
+                  formControlName="inStock"
+                />
+              </td>
+              @if (isMeasured.value) {
+              <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
+                <input
+                  class="w-full outline-none text-center placeholder:text-placeholder"
                   type="number"
                   placeholder="Price factor"
                   formControlName="priceFactor"
@@ -201,6 +251,7 @@
                 </button>
               </td>
             </tr>
+            <app-incompatibles [formId]="i" [collapsedIndex]="collapsedIndex" [incompatibleAttributeOptions]="incompatibleVariants[i] || []" (incompatibleVariantsEmitter)="getIncompatibleAttributeOptions($event)"/>
           </ng-container>
         </div>
       </table>
@@ -210,7 +261,7 @@
         type="submit"
         class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
       >
-        Save
+        {{ editId ? 'Save Changes' : 'Save' }}
       </button>
       <button
         type="button"

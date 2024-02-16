@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LoadingStatus } from '../../../types';
 
@@ -12,4 +11,5 @@ import { LoadingStatus } from '../../../types';
 })
 export class AuthLoaderComponent {
   @Input() loadingState!: Observable<LoadingStatus>
+  @Input() size!: 'small'
 }

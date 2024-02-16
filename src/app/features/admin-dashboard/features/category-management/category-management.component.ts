@@ -39,6 +39,8 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
   localAttributes!: CategoryAndConfig[];
   indeterminateCheckbox!: HTMLInputElement;
 
+  toggleCheckbox = false
+
   constructor(
     private store: Store,
     private inputService: AttributeInputService,
@@ -60,22 +62,40 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
     this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
   }
   removeCheck() {
+    this.toggleCheckbox = !this.toggleCheckbox
+    Object.keys(this.selectForm.value).forEach((value) => {
+      this.selectForm.patchValue({ [value]: this.toggleCheckbox });
+    });
     const someValuesSelected = Object.values(this.selectForm.value).some(
       (value) => value
     );
-    if (someValuesSelected) {
+    const allSelected = Object.values(
+      this.selectForm.value
+    ).every((value) => value);
+
+    if (allSelected) {
+      console.log('All Selected');
+      this.indeterminateCheckbox.checked = true;
+      this.check.inputState.nativeElement.className = ''
+      this.indeterminateCheckbox.indeterminate = false
+
+        this.localAttributes.map((attr) => {
+        this.itemSelected({ name: '', isAdded: false, value: '' }, attr.id);
+      });
+    }
+    else if (someValuesSelected) {
       this.clearSelected();
       this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
     } else {
-      Object.keys(this.selectForm.value).forEach((value) => {
-        this.selectForm.patchValue({ [value]: true });
-      });
-      this.localAttributes.map((attr) => {
-        this.itemSelected({ name: '', isAdded: false, value: '' }, attr.id);
-      });
-      this.indeterminateCheckbox.indeterminate = true;
+      console.log('Clear selected');
+      this.clearSelected()
     }
-    this.indeterminateCheckbox.checked = false;
+    // else {
+    //   this.localAttributes.map((attr) => {
+    //     this.itemSelected({ name: '', isAdded: false, value: '' }, attr.id);
+    //   });
+    //   this.indeterminateCheckbox.indeterminate = true;
+    // }
   }
   clearSelected() {
     Object.keys(this.selectForm.value).forEach((value) => {
@@ -100,13 +120,15 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
     ).some((value) => value);
 
     if (allSelected) {
-      this.check.inputState.nativeElement.className = 'indeterminateCheckbox-all-selected'
+      this.indeterminateCheckbox.checked = true
       this.indeterminateCheckbox.indeterminate = false
+      this.check.inputState.nativeElement.className = ''
     } else if (someSelected) {
       this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
       this.indeterminateCheckbox.indeterminate = true
     } else {
       this.indeterminateCheckbox.indeterminate = false
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
     }    
   }
   deleteCategories() {
@@ -122,6 +144,8 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
       if (result) {
         this.categoriesTodelete.clear();
         this.indeterminateCheckbox.indeterminate = false;
+        this.indeterminateCheckbox.checked = false
+        this.toggleCheckbox = false
       }
     });
   }

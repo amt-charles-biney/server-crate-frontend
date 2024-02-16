@@ -48,6 +48,9 @@ export function convertToAttributeOption(
     priceFactor,
     type,
     unit,
+    brand,
+    incompatibleAttributeOptions,
+    inStock
   } = categoryEdit;
   return {
     additionalInfo: {
@@ -66,6 +69,10 @@ export function convertToAttributeOption(
     optionName: name,
     optionPrice: price,
     compatibleOptionId: categoryEdit.compatibleOptionId,
+    brand,
+    incompatibleAttributeOptions,
+    inStock
+
   };
 }
 export function convertToCategoryConfig(
@@ -287,43 +294,7 @@ export function getAttributeOptionsFromConfig(config: CategoryEditResponse) {
     )
   );
 }
-export function getMapping(configs: CategoryEditResponse[]) {
-  const mapping: Map<string, AttributeOption[]> = new Map();
-  configs.forEach((config) => {
-    if (mapping.has(config.type)) {
-      mapping.set(config.type, 
-       [ ...mapping.get(config.type)!,
-        getAttributeOptionsFromConfig(config)],
-      );
-    } else {
-      mapping.set(config.type, [
-        getAttributeOptionsFromConfig(config),
-      ]);
-    }
-  });
-  return mapping
-}
-export function convertIncompatiblesToCategoryConfig(
-  incompatibleAttributes: Record<string, AttributeOption[]>
-) {
-  let categoryConfigList: CategoryConfig[] = [];
-  for (let key in incompatibleAttributes) {
-    const incompatibleAttribute = incompatibleAttributes[key];
-    incompatibleAttribute.forEach((attribute) => {
-      const categoryConfig: CategoryConfig = {
-        size: attribute.additionalInfo.baseAmount,
-        isCompatible: false,
-        isIncluded: false,
-        isMeasured: attribute.attribute.isMeasured,
-        attributeId: attribute.id,
-        attributeName: attribute.attribute.name,
-        attributeOptionId: attribute.id,
-      };
-      categoryConfigList.push(categoryConfig);
-    });
-  }
-  return categoryConfigList;
-}
+
 export function removeFromPayload(
   categoryConfigPayload: Map<string, CategoryConfig[]>,
   attributeName: string,
@@ -352,4 +323,48 @@ export function removeFromPayload(
     newConfig
   );
   return newCategoryConfigPayload;
+}
+
+export function generateIncompatibleSet(incompatibleAttributeOptions: AttributeOption[]) {
+  console.log("Edit", incompatibleAttributeOptions);
+  
+  const incompatibleSet: Record<string, AttributeOption[]> =
+    {};
+  incompatibleAttributeOptions.forEach((incompatibleAttribute) => {
+    if (incompatibleSet[incompatibleAttribute.attribute.name]) {
+      incompatibleSet[incompatibleAttribute.attribute.name].push(
+        incompatibleAttribute
+      );
+    } else {
+      incompatibleSet[incompatibleAttribute.attribute.name] = [
+        incompatibleAttribute,
+      ];
+    }
+  })
+  return incompatibleSet
+}
+export function buildIncompatibleTable(
+  incompatibleAttributeOptions: AttributeOption[],
+  currentIncompatibleSet: Record<string, AttributeOption[]>,
+  localAttributes: Attribute[]
+) {
+  const incompatibleSet: Record<string, AttributeOption[]> =
+    currentIncompatibleSet;
+  incompatibleAttributeOptions.forEach((incompatibleAttribute) => {
+    if (incompatibleSet[incompatibleAttribute.attribute.name]) {
+      incompatibleSet[incompatibleAttribute.attribute.name].push(
+        incompatibleAttribute
+      );
+    } else {
+      incompatibleSet[incompatibleAttribute.attribute.name] = [
+        incompatibleAttribute,
+      ];
+    }
+    localAttributes = removeFromLocalAttributes(
+      localAttributes,
+      incompatibleAttribute.id
+    );
+  });
+
+  return { incompatibleSet, localAttributes };
 }
