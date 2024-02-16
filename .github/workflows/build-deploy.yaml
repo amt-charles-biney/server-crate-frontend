@@ -3,8 +3,8 @@ name: Server Crate Frontend CI/CD
 on:
   push:
     branches: [Presentation]
-  pull_request:
-    branches: [Presentation]
+  # pull_request:
+  #   branches: [Presentation]
 
 jobs:
   build:
