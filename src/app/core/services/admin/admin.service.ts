@@ -12,6 +12,7 @@ import {
   CategoryAndConfig,
   ConfigurationEdit,
   EditConfigResponse,
+  Case,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -125,5 +126,13 @@ export class AdminService {
 
   editCategory(id: string, categoryConfig: ConfigurationEdit) {
     return this.http.put(`${this.baseUrl}/admin/category/config/${id}`, categoryConfig)
+  }
+
+  getCases() {
+    return this.http.get<unknown>(`${this.baseUrl}/admin/cases`)
+  }
+
+  addCase(formData: FormData) {
+    return this.http.post(`${this.baseUrl}/admin/cases`, formData)
   }
 }

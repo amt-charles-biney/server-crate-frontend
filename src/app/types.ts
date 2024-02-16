@@ -169,6 +169,17 @@ export type VerifiedUser = {
     }
     isFeatured: boolean
   };
+
+  
+export type Case = {
+  id: string,
+  name: string,
+  description: string;
+  coverImage: string,
+  imageUrls: string[],
+  price: number,
+  incompatibleVariants: AttributeOption[]
+}
   export type AllProducts = {
     total: number;
     products: ProductItem[];

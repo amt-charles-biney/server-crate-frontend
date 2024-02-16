@@ -52,7 +52,7 @@ export const gotProducts = createAction(
   props<{ products: AllProducts }>()
 );
 
-export const getConfiguration = createAction(
+export const  getConfiguration = createAction(
   '[products] get category config',
   props<Select>()
 );

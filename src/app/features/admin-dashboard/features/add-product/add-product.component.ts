@@ -6,11 +6,11 @@ import {
   OnInit,
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Observable, Subject, catchError, map, of, startWith, tap } from 'rxjs';
-import { Select, LoadingStatus, ProductItem, BasicConfig } from '../../../../types';
+import { Select, LoadingStatus, ProductItem, BasicConfig, Case } from '../../../../types';
 import { Store } from '@ngrx/store';
 import {
   selectBrands,
@@ -48,6 +48,9 @@ import { selectConfigurationState } from '../../../../store/admin/products/confi
 import { selectProduct } from '../../../../store/admin/products/products.reducers';
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
 import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
+import { getCases } from '../../../../store/case/case.actions';
+import { selectCaseFeatureState } from '../../../../store/case/case.reducers';
+import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-add-product',
@@ -61,6 +64,7 @@ import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
     RxReactiveFormsModule,
     AuthLoaderComponent,
     CustomImageComponent,
+    CustomSelectComponent
   ],
   templateUrl: './add-product.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -68,6 +72,7 @@ import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
 export class AddProductComponent implements OnInit, OnDestroy {
   addProductForm!: RxFormGroup;
   categories$!: Observable<Select[]>;
+  cases$!: Observable<Case[]>;
   brands$!: Observable<Select[]>;
   private option$ = new Subject<BasicConfig>();
   private product$ = new Subject<ProductItem>();
@@ -83,6 +88,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   image2: string | null = '';
   image3: string | null = '';
   formGroup = {};
+  configurationPrice!: number
   constructor(
     private store: Store,
     private fb: RxFormBuilder,
@@ -94,7 +100,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.store.dispatch(getCategories());
-    this.store.dispatch(getBrands());
+    this.store.dispatch(getCases());
 
     this.formGroup = {
       file: null,
@@ -113,9 +119,14 @@ export class AddProductComponent implements OnInit, OnDestroy {
         '',
         RxwebValidators.required({ message: 'Please enter a price' }),
       ],
+      serviceCharge: [
+        '',
+        RxwebValidators.required({ message: 'Please enter a charge' }),
+      ],
       productId: `${getUniqueId(2)}`,
       productBrand: '',
       category: ['', categoryIsNotUnassigned()],
+      cases: [''],
       inStock: [
         0,
         RxwebValidators.required({
@@ -188,6 +199,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
       })
     );
 
+    this.cases$ = this.store.select(selectCaseFeatureState)
+
     this.brands$ = this.store.select(selectBrands).pipe(
       tap((brands) => {
 
@@ -246,6 +259,11 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
   onBrandSelected(event: MatAutocompleteSelectedEvent) {
     const selectedCategory: Select = event.option.value;
+  }
+
+  onSelectCase(event: MatSelectChange) {
+    console.log('Selected case', event.value);
+    this.addProductForm.patchValue({ productPrice: event.value.price})
   }
 
   addProduct() {
@@ -413,5 +431,13 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
   get inStock() {
     return this.addProductForm.get('inStock')!;
+  }
+  
+  get price() {
+    return this.addProductForm.get('productPrice')!;
+  }
+  
+  get serviceCharge() {
+    return this.addProductForm.get('serviceCharge')!;
   }
 }

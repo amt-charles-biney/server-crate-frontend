@@ -54,7 +54,16 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 export class IncompatiblesComponent implements OnInit {
   @Input() incompatibleAttributeOptions: AttributeOption[] = [];
-  @Output() incompatibleVariantsEmitter = new EventEmitter<string[]>();
+  @Input() collapsedIndex!: number
+  @Input() formId!: number;
+  @Output() incompatibleVariantsEmitter = new EventEmitter<{
+    index: number;
+    variants: string[];
+  }>();
+  @Output() removalEmitter = new EventEmitter<{
+    index: number;
+    variants: string[];
+  }>();
   private attributes$ = new BehaviorSubject<Attribute[]>([]);
   private selectedAttribute$ = new BehaviorSubject<AttributeOption[]>([]);
   attributes = this.attributes$.asObservable();
@@ -74,10 +83,11 @@ export class IncompatiblesComponent implements OnInit {
 
   constructor(private store: Store) {}
   ngOnInit(): void {
+    this.collapsed = !(this.collapsedIndex === this.formId)    
     this.incompatibleSet = generateIncompatibleSet(
       this.incompatibleAttributeOptions
     );
-    this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet)
+    this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
     this.incompatibleForm = new FormGroup({
       attribute: new FormControl(''),
       attributeVariants: new FormControl(''),
@@ -90,7 +100,7 @@ export class IncompatiblesComponent implements OnInit {
             this.localAttributes,
             attributeOption.id
           );
-          this.incompatibleVariantsArray.push(attributeOption.id)
+          this.incompatibleVariantsArray.push(attributeOption.id);
         });
       })
     );
@@ -114,12 +124,16 @@ export class IncompatiblesComponent implements OnInit {
     this.localAttributes = localAttributes;
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
     this.selectedAttribute$.next([]);
-    this.incompatibleForm.patchValue({ attribute: '', attributeVariants: '' });
+
     this.incompatibleVariantsArray = [
       ...this.incompatibleVariantsArray,
       ...attributeVariants.map((incompatibleVariant) => incompatibleVariant.id),
     ];
-    this.incompatibleVariantsEmitter.emit(this.incompatibleVariantsArray);
+    this.incompatibleVariantsEmitter.emit({
+      index: this.formId,
+      variants: this.incompatibleVariantsArray,
+    });
+    this.incompatibleForm.patchValue({ attribute: '', attributeVariants: '' });
   }
   removeAttributeOption(
     attributeOption: AttributeOption,
@@ -128,12 +142,21 @@ export class IncompatiblesComponent implements OnInit {
     const newAttributeOptions = options.filter(
       (option) => option.id !== attributeOption.id
     );
+
     if (newAttributeOptions.length === 0) {
       delete this.incompatibleSet[attributeOption.attribute.name];
     } else {
       this.incompatibleSet[attributeOption.attribute.name] =
         newAttributeOptions;
     }
+
+    this.incompatibleVariantsArray = this.incompatibleVariantsArray.filter(
+      (option) => !option.includes(attributeOption.id)
+    );
+    this.incompatibleVariantsEmitter.emit({
+      index: this.formId,
+      variants: this.incompatibleVariantsArray,
+    });
     this.localAttributes = putInLocalAttributes(
       this.localAttributes,
       attributeOption

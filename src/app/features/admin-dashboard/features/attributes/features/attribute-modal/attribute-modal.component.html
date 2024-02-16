@@ -251,7 +251,7 @@
                 </button>
               </td>
             </tr>
-            <app-incompatibles [incompatibleAttributeOptions]="incompatibleVariants" (incompatibleVariantsEmitter)="getIncompatibleAttributeOptions($event)"/>
+            <app-incompatibles [formId]="i" [collapsedIndex]="collapsedIndex" [incompatibleAttributeOptions]="incompatibleVariants[i] || []" (incompatibleVariantsEmitter)="getIncompatibleAttributeOptions($event)"/>
           </ng-container>
         </div>
       </table>

@@ -47,6 +47,7 @@ export class CustomSelectComponent {
   @Input() isMultipleSelect = false;
   @Input() isDisabled = false;
   @Input() isRequired = false;
+  @Input() myClass!: string
   @Output() onSelect = new EventEmitter<MatSelectChange>();
   @ViewChild('matSelect') matSelect!: MatSelect;
   allSelected = false;

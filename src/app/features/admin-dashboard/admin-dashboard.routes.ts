@@ -20,6 +20,9 @@ import { AddCategoryComponent } from './features/add-category/add-category.compo
 import { TransactionsComponent } from './features/transactions/transactions.component';
 import { CustomersComponent } from './features/customers/customers.component';
 import { OrdersComponent } from './features/orders/orders.component';
+import { CaseManagementComponent } from './features/case-management/case-management.component';
+import { CaseEffect } from '../../store/case/case.effects';
+import { caseFeature } from '../../store/case/case.reducers';
 
 
 export const route: Routes = [
@@ -40,12 +43,20 @@ export const route: Routes = [
         ]
       },
       {
+        path: 'case-management',
+        component: CaseManagementComponent,
+        providers: [
+        ]
+      },
+      {
         path: 'add-product',
         component: AddProductComponent,
         providers: [
           provideEffects(CategoryEffect),
           provideState(categoryFeature),
-          provideState(configurationFeature)
+          provideState(configurationFeature),
+          provideEffects(CaseEffect),
+          provideState(caseFeature)
         ]
       },
       {
