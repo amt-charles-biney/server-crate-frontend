@@ -15,6 +15,7 @@ import {
 } from '../../../types';
 import { jwtDecode } from 'jwt-decode';
 import { LOCALSTORAGE_TOKEN } from '../../utils/constants';
+import { clearStorage } from '../../utils/helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -80,7 +81,13 @@ export class AuthService {
   }
   isAuthenticated() {
     const token = this.getToken();
-    if (token) return true;
+    if (token) {
+      const decodedToken = jwtDecode<TokenPayload>(token);
+      if (decodedToken.exp > Date.now() / 1000) {
+        return true;
+      }
+    }
+    clearStorage()
     return false;
   }
   

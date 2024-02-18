@@ -23,6 +23,7 @@ import { OrdersComponent } from './features/orders/orders.component';
 import { CaseManagementComponent } from './features/case-management/case-management.component';
 import { CaseEffect } from '../../store/case/case.effects';
 import { caseFeature } from '../../store/case/case.reducers';
+import { authGuard } from '../../core/guards/auth.guard';
 
 
 export const route: Routes = [
@@ -33,6 +34,8 @@ export const route: Routes = [
       provideEffects(AttributeEffect),
       provideState(attributesFeature)
     ],
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       {
         path: 'products',
