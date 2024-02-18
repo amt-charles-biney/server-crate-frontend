@@ -9,7 +9,7 @@ import { CustomInputComponent } from '../../../../shared/components/custom-input
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { BehaviorSubject, Observable, Subject, catchError, map, of, startWith, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map, startWith, tap } from 'rxjs';
 import { Select, LoadingStatus, ProductItem, BasicConfig, Case } from '../../../../types';
 import { Store } from '@ngrx/store';
 import {
@@ -20,7 +20,6 @@ import {
   addBrand,
   deleteBrand,
   deleteProduct,
-  getBrands,
   getCategories,
   getConfiguration,
   getProduct,
@@ -32,9 +31,6 @@ import {
 } from '@angular/material/autocomplete';
 import { getUniqueId } from '../../../../core/utils/settings';
 import {
-  FormGroupExtension,
-  RxFormBuilder,
-  RxFormGroup,
   RxReactiveFormsModule,
   RxwebValidators,
 } from '@rxweb/reactive-form-validators';
@@ -45,12 +41,12 @@ import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actio
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 import { selectConfigurationState } from '../../../../store/admin/products/configuration.reducers';
-import { selectProduct } from '../../../../store/admin/products/products.reducers';
+import { productInitialState, selectProduct } from '../../../../store/admin/products/products.reducers';
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
 import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
-import { getCases } from '../../../../store/case/case.actions';
-import { selectCaseFeatureState } from '../../../../store/case/case.reducers';
+import { getCaseList, getCases } from '../../../../store/case/case.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
+import { selectCases } from '../../../../store/case/case.reducers';
 
 @Component({
   selector: 'app-add-product',
@@ -76,7 +72,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   cases$!: Observable<Case[]>;
   brands$!: Observable<Select[]>;
   private option$ = new Subject<BasicConfig>();
-  private product$ = new Subject<ProductItem>();
+  private product$ = new BehaviorSubject<ProductItem>(productInitialState.product);
   private totalPrice$ = new BehaviorSubject<number>(-1)
   totalPrice = this.totalPrice$.asObservable()
   product = this.product$.asObservable();
@@ -104,7 +100,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.store.dispatch(getCategories());
-    this.store.dispatch(getCases());
+    this.store.dispatch(getCaseList());
     this.totalPrice$.next(0)
     this.formGroup = {
       productName: [
@@ -136,9 +132,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
     };
     this.addProductForm = this.fb.group(this.formGroup);
     if (this.id) {
-      this.addProductForm.markAllAsTouched()
       this.store.dispatch(getProduct({ id: this.id }));
-      this.store
+      this.product = this.store
         .select(selectProduct)
         .pipe(
           tap((data: ProductItem) => {
@@ -154,6 +149,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
               productName: data.productName,
               productDescription: data.productDescription,
               productPrice: data.productPrice,
+              cases: data.productCase,
               productId: data.productId,
               inStock: data.inStock,
               category: {
@@ -161,20 +157,10 @@ export class AddProductComponent implements OnInit, OnDestroy {
                 id: data.category.id,
               },
             };
-
-            this.coverImage = data.coverImage;
-            this.image1 = data.imageUrl[0] || null;
-            this.image2 = data.imageUrl[1] || null;
-            this.image3 = data.imageUrl[2] || null;
-
             this.addProductForm.patchValue({ ...this.formGroup });
+            this.addProductForm.markAllAsTouched()
           }),
-          takeUntilDestroyed(this.destroyRef),
-          catchError((err) => {
-            return of(err);
-          })
         )
-        .subscribe();
     }
     this.categories$ = this.store.select(selectCategories).pipe(
       tap((categories) => {
@@ -188,7 +174,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.cases$ = this.store.select(selectCaseFeatureState)
+    this.cases$ = this.store.select(selectCases)
 
     this.loadingState$ = this.store.select(selectLoaderState);
     this.options = this.store.select(selectConfigurationState).pipe(

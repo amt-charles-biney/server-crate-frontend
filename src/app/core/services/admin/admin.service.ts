@@ -13,6 +13,7 @@ import {
   ConfigurationEdit,
   EditConfigResponse,
   Case,
+  CaseResponse,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -129,7 +130,11 @@ export class AdminService {
   }
 
   getCases() {
-    return this.http.get<unknown>(`${this.baseUrl}/admin/cases`)
+    return this.http.get<CaseResponse>(`${this.baseUrl}/admin/cases`)
+  }
+
+  getCase(id: string) {
+    return this.http.get<Case>(`${this.baseUrl}/admin/cases/${id}`)
   }
 
   addCase(formData: FormData) {

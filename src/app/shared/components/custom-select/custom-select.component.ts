@@ -56,8 +56,8 @@ export class CustomSelectComponent {
     this.onSelect.emit(event);
   }
   compareFn(
-    c1: string | AttributeOption,
-    c2: string | AttributeOption
+    c1: any,
+    c2: any
   ): boolean {
     if (c1 && c2) {
       if (typeof c1 === 'string' && typeof c2 === 'string') {
@@ -70,7 +70,9 @@ export class CustomSelectComponent {
         return c1.id === c2.id;
       }
     }
-    return false;
+    console.log('c1', c1, 'c2', c2);
+    
+    return c1.name === c2;
   }
   toggleAllSelection() {
     this.allSelected = !this.allSelected;

@@ -44,6 +44,7 @@ export class ProductsPageComponent implements OnInit {
   }
 
   getPage(pageNumber: number) {
+    scrollTo({ top: 0, behavior: 'smooth'})
     this.page = pageNumber;
     this.store.dispatch(getProducts({ page: this.page - 1 }));
     this.products = this.store.select(selectProducts);

@@ -158,6 +158,7 @@ export type VerifiedUser = {
     productName: string;
     productBrand: string;
     productPrice: string;
+    productCase: string,
     inStock: number;
     sales: number;
     id: string;
@@ -175,10 +176,14 @@ export type Case = {
   id: string,
   name: string,
   description: string;
-  coverImage: string,
+  coverImageUrl: string,
   imageUrls: string[],
   price: number,
   incompatibleVariants: AttributeOption[]
+}
+export type CaseResponse = {
+  totalElements: number,
+  content: Case[]
 }
   export type AllProducts = {
     total: number;

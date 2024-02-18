@@ -24,6 +24,7 @@ import { CaseManagementComponent } from './features/case-management/case-managem
 import { CaseEffect } from '../../store/case/case.effects';
 import { caseFeature } from '../../store/case/case.reducers';
 import { authGuard } from '../../core/guards/auth.guard';
+import { AddCaseComponent } from './features/case-management/features/add-case/add-case.component';
 
 
 export const route: Routes = [
@@ -32,7 +33,9 @@ export const route: Routes = [
     component: AdminDashboardComponent,
     providers: [
       provideEffects(AttributeEffect),
-      provideState(attributesFeature)
+      provideState(attributesFeature),
+      provideEffects(CaseEffect),
+      provideState(caseFeature)
     ],
     canActivate: [authGuard],
     canActivateChild: [authGuard],
@@ -47,9 +50,15 @@ export const route: Routes = [
       },
       {
         path: 'case-management',
-        component: CaseManagementComponent,
-        providers: [
-        ]
+        component: CaseManagementComponent
+      },
+      {
+        path: 'add-case',
+        component: AddCaseComponent
+      },
+      {
+        path: 'add-case/:id',
+        component: AddCaseComponent
       },
       {
         path: 'add-product',
@@ -58,8 +67,6 @@ export const route: Routes = [
           provideEffects(CategoryEffect),
           provideState(categoryFeature),
           provideState(configurationFeature),
-          provideEffects(CaseEffect),
-          provideState(caseFeature)
         ]
       },
       {

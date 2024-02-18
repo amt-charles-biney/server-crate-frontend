@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { CURRENT_AD_TAB } from '../../core/utils/constants';
 import { getAttributes } from '../../store/category-management/attributes/attributes.actions';
 import { clearStorage } from '../../core/utils/helpers';
+import { getCases } from '../../store/case/case.actions';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -18,6 +19,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private store: Store) {}
   ngOnInit(): void {
     this.store.dispatch(getAttributes());
+    this.store.dispatch(getCases());
     this.activeLink = sessionStorage.getItem(CURRENT_AD_TAB) || 'Dashboard'
   }
   ngOnDestroy(): void {
@@ -25,6 +27,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   setCurrentTab(currentTab: string) {
+    scrollTo({ top: 0, behavior: 'smooth'})
     sessionStorage.setItem(CURRENT_AD_TAB, currentTab)
     this.activeLink = currentTab
   }

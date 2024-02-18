@@ -1,206 +1,214 @@
 <main class="flex flex-col min-h-screen">
   <h1 class="font-bold text-xl">Product Details</h1>
-  <ng-container *ngIf="product | async as product">
-    {{ product | json }}
-  </ng-container>
-  <app-auth-loader [loadingState]="loadingState$" />
-  <form
-    [formGroup]="addProductForm"
-    (ngSubmit)="addProduct()"
-    class="grid grid-cols-2 gap-6 min-h-fit"
-  >
-    <section>
-      <app-custom-input
-        id="productName"
-        label="Product Name"
-        type="text"
-        placeholder="Enter product name"
-        formControlName="productName"
-        myClass="font-[500]"
-      />
-      <!-- @if (productName.invalid && (productName.touched || productName.dirty)) {
+  <ng-container *ngIf="product | async as product; else loadingProduct">
+    <form
+      [formGroup]="addProductForm"
+      (ngSubmit)="addProduct()"
+      class="grid grid-cols-2 gap-6 min-h-fit"
+    >
+      <section>
+        <app-custom-input
+          id="productName"
+          label="Product Name"
+          type="text"
+          placeholder="Enter product name"
+          formControlName="productName"
+          myClass="font-[500]"
+        />
+        <!-- @if (productName.invalid && (productName.touched || productName.dirty)) {
       <span
         class="text-red-600"
         >{{addProductForm.controls["productName"].errors?.['required'].message }}</span
       >
       } -->
-      <app-custom-input
-        id="productDescription"
-        label="Product Description"
-        type="textarea"
-        placeholder="Enter a description"
-        formControlName="productDescription"
-        myClass="font-[500]"
-      />
-      @if (productDescription.invalid && (productDescription.touched ||
-      productDescription.dirty)) {
-      <span
-        class="text-red-600"
-        >{{addProductForm.controls["productDescription"].errors?.['required'].message }}</span
-      >
-      }
-      <ng-container *ngIf="categories$ | async as categories">
         <app-custom-input
-          id="category"
-          label="Category"
-          type="async"
-          placeholder="Select an option"
-          formControlName="category"
-          [filteredOptions]="filteredOptions"
-          [optionSelected]="onCategorySelected"
-          [deleteFn]="deleteCategory"
+          id="productDescription"
+          label="Product Description"
+          type="textarea"
+          placeholder="Enter a description"
+          formControlName="productDescription"
           myClass="font-[500]"
         />
-      </ng-container>
+        @if (productDescription.invalid && (productDescription.touched ||
+        productDescription.dirty)) {
+        <span
+          class="text-red-600"
+          >{{addProductForm.controls["productDescription"].errors?.['required'].message }}</span
+        >
+        }
+        <ng-container *ngIf="categories$ | async as categories">
+          <app-custom-input
+            id="category"
+            label="Category"
+            type="async"
+            placeholder="Select an option"
+            formControlName="category"
+            [filteredOptions]="filteredOptions"
+            [optionSelected]="onCategorySelected"
+            [deleteFn]="deleteCategory"
+            myClass="font-[500]"
+          />
+        </ng-container>
 
-      <ng-container *ngIf="cases$ | async as cases">
-        <app-custom-select
-          [control]="$any(addProductForm.controls['cases'])"
-          [options]="cases"
-          label="Cases"
-          [isRequired]="true"
-          myClass="font-[500]"
-          (onSelect)="onSelectCase($event)"
-        />
-      </ng-container>
+        <ng-container *ngIf="cases$ | async as cases">
+          <app-custom-select
+            [control]="$any(addProductForm.controls['cases'])"
+            [options]="cases"
+            label="Cases"
+            [isRequired]="true"
+            myClass="font-[500]"
+            (onSelect)="onSelectCase($event)"
+          />
+        </ng-container>
 
-      <!-- @if (category.invalid ) {
+        <!-- @if (category.invalid ) {
           <span
             class="text-red-600"
             >{{addProductForm.controls["category"].errors?.['category'].value }}</span
           >
           } -->
-      <div class="flex items-center justify-between">
-        <div class="w-[45%]">
-          <app-custom-input
-            id="inStock"
-            label="In Stock"
-            type="number"
-            placeholder="Enter quantity in stock"
-            formControlName="inStock"
-            myClass="font-[500]"
-          />
-          <!-- @if (inStock.invalid && (inStock.touched || inStock.dirty)) {
-                <small
+        <div class="flex items-center justify-between">
+          <div class="w-[45%]">
+            <app-custom-input
+              id="inStock"
+              label="In Stock"
+              type="number"
+              placeholder="Enter quantity in stock"
+              formControlName="inStock"
+              myClass="font-[500]"
+            />
+            <!-- @if (inStock.invalid && (inStock.touched || inStock.dirty)) {
+            <small
                   class="text-red-600"
                   >{{addProductForm.controls["inStock"].errors?.['required'].message }}</small
                 >
-                } -->
+              } -->
+          </div>
+          <div class="w-[45%]">
+            <app-custom-input
+              id="price"
+              label="Price"
+              type="number"
+              [placeholder]="(totalPrice | async)?.toString()!"
+              formControlName="productPrice"
+              myClass="font-[500] placeholder:text-black"
+              [isReadOnly]="true"
+            />
+          </div>
         </div>
-        <div class="w-[45%]">
-          <app-custom-input
-            id="price"
-            label="Price"
-            type="number"
-            [placeholder]="(totalPrice | async)?.toString()!"
-            formControlName="productPrice"
-            myClass="font-[500] placeholder:text-black"
-            [isReadOnly]="true"
-          />
+        <div class="flex justify-between">
+          <div class="w-[45%]">
+            <app-custom-input
+              id="productId"
+              label="Product ID"
+              type="generator"
+              [isReadOnly]="true"
+              placeholder=""
+              formControlName="productId"
+              [filteredOptions]="filteredOptions"
+              myClass="font-[500]"
+            />
+          </div>
+          <div class="w-[45%]">
+            <app-custom-input
+              id="price"
+              label="Service Charge"
+              type="number"
+              placeholder="Enter amount"
+              formControlName="serviceCharge"
+              myClass="font-[500]"
+            />
+          </div>
         </div>
-      </div>
-      <div class="flex justify-between">
-        <div class="w-[45%]">
-          <app-custom-input
-            id="productId"
-            label="Product ID"
-            type="generator"
-            [isReadOnly]="true"
-            placeholder=""
-            formControlName="productId"
-            [filteredOptions]="filteredOptions"
-            myClass="font-[500]"
-          />
-        </div>
-        <div class="w-[45%]">
-          <app-custom-input
-            id="price"
-            label="Service Charge"
-            type="number"
-            placeholder="Enter amount"
-            formControlName="serviceCharge"
-            myClass="font-[500]"
-          />
-        </div>
-      </div>
-    </section>
-    <section>
-      <div class="py-3">
-        <p class="font-dm-sans text-sm">Base Configuration</p>
-        <div class="overflow-auto rounded-lg mt-2 bg-[#fbfbfb]">
-          <ul
-            class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc"
-          >
-            <ng-container *ngIf="options | async as options">
-              <ng-container *ngIf="options">
-                <li
-                  class="leading-4 w-max px-3 text-[13px]"
-                  *ngFor="let option of options.options | keyvalue"
-                >
-                  <p>{{ option.key }}</p>
-                  <p class="text-gray-400">{{ option.value[0].name }}</p>
-                </li>
-              </ng-container>
-            </ng-container>
-          </ul>
-        </div>
-      </div>
-      <div class="mt-[31px]">
-        <p class="font-dm-sans text-sm">Price Breakdown</p>
-        <div class="overflow-auto rounded-lg mt-2 py-3 bg-[#fbfbfb]">
-          <ul
-            class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc"
-          >
-                <li
-                  class="leading-4 w-max px-3 text-[13px]"
-                  
-                >
-                  <p>Case Price ($)</p>
-                  <p class="text-gray-400">{{ price.value }}</p>
-                </li>
-                <li
-                  class="leading-4 w-max px-3 text-[13px]"
-                  
-                >
-                  <p>Service Charge (%)</p>
-                  <p class="text-gray-400">{{ serviceCharge.value }}</p>
-                </li>
-                <li
-                  class="leading-4 w-max px-3 text-[13px]"
-                  
-                >
-                  <p>Base Configuration price ($)</p>
-                  <p class="text-gray-400">{{ configurationPrice === 0 ? 'No selected configuration' : configurationPrice }}</p>
-                </li>
-          </ul>
-        </div>
-      </div>
-      <section class="flex items-center justify-end mt-10 gap-6 text-sm">
-        <button
-          (click)="deleteProduct(id)"
-          type="button"
-          [ngClass]="id ? 'text-[#EF0816]' : 'text-[#B0B0B0]'"
-          class="font-inter underline text-xs"
-          [disabled]="!id"
-        >
-          Delete
-        </button>
-
-        <button
-          [disabled]="addProductForm.invalid"
-          [ngClass]="addProductForm.invalid ? 'cursor-not-allowed' : ''"
-          class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
-        >
-          {{ id ? "Edit" : "Save" }}
-        </button>
-        <button
-          (click)="cancel()"
-          type="button"
-          class="border border-figma-green text-figma-green rounded w-32 py-1 tracking-wider"
-        >
-          Cancel
-        </button>
       </section>
-    </section>
-  </form>
+      <section>
+        <div class="py-3">
+          <p class="font-dm-sans text-sm">Base Configuration</p>
+          <div class="overflow-auto rounded-lg mt-2 bg-[#fbfbfb]">
+            <ul
+              class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc"
+            >
+              <ng-container *ngIf="options | async as options">
+                <ng-container *ngIf="options">
+                  <li
+                    class="leading-4 w-max px-3 text-[13px]"
+                    *ngFor="let option of options.options | keyvalue"
+                  >
+                    <p>{{ option.key }}</p>
+                    <p class="text-gray-400">{{ option.value[0].name }}</p>
+                  </li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-[31px]">
+          <p class="font-dm-sans text-sm">Price Breakdown</p>
+          <div class="overflow-auto rounded-lg mt-2 py-3 bg-[#fbfbfb]">
+            <ul
+              class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc"
+            >
+              <li class="leading-4 w-max px-3 text-[13px]">
+                <p>Case Price ($)</p>
+                <p class="text-gray-400">{{ price.value }}</p>
+              </li>
+              <li class="leading-4 w-max px-3 text-[13px]">
+                <p>Service Charge (%)</p>
+                <p class="text-gray-400">{{ serviceCharge.value }}</p>
+              </li>
+              <li class="leading-4 w-max px-3 text-[13px]">
+                <p>Base Configuration price ($)</p>
+                <p class="text-gray-400">
+                  {{
+                    configurationPrice === 0
+                      ? "No selected configuration"
+                      : configurationPrice
+                  }}
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <section class="flex items-center justify-end mt-10 gap-6 text-sm">
+          <button
+            (click)="deleteProduct(id)"
+            type="button"
+            [ngClass]="id ? 'text-[#EF0816]' : 'text-[#B0B0B0]'"
+            class="font-inter underline text-xs"
+            [disabled]="!id"
+          >
+            Delete
+          </button>
+
+          <button
+            [disabled]="addProductForm.invalid"
+            [ngClass]="addProductForm.invalid ? 'cursor-not-allowed' : ''"
+            class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
+          >
+            {{ id ? "Edit" : "Save" }}
+          </button>
+          <button
+            (click)="cancel()"
+            type="button"
+            class="border border-figma-green text-figma-green rounded w-32 py-1 tracking-wider"
+          >
+            Cancel
+          </button>
+        </section>
+      </section>
+    </form>
+  </ng-container>
+  <ng-template #loadingProduct>
+    <div class="flex flex-1 flex-col justify-center items-center">
+      <div
+        class="self-center h-20 w-20 text-figma-green inline-block animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status"
+      >
+        <span
+          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+          >Loading...</span
+        >
+      </div>
+    </div>
+  </ng-template>
 </main>
