@@ -168,7 +168,8 @@ export type VerifiedUser = {
       id: string;
       name: string;
     }
-    isFeatured: boolean
+    isFeatured: boolean,
+    serviceCharge: string
   };
 
   
@@ -395,3 +396,12 @@ export interface IdefaultSelectedProps {
   isIncluded: boolean
 }
 
+export type ProductPayload = {
+  productName: string;
+  productDescription: string;
+  serviceCharge: string;
+  productId: string;
+  category: string;
+  productCaseId: string;
+  inStock: string;
+}

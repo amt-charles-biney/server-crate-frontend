@@ -10,7 +10,7 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Observable, Subject, map, startWith, tap } from 'rxjs';
-import { Select, LoadingStatus, ProductItem, BasicConfig, Case } from '../../../../types';
+import { Select, LoadingStatus, ProductItem, BasicConfig, Case, ProductPayload } from '../../../../types';
 import { Store } from '@ngrx/store';
 import {
   selectBrands,
@@ -18,12 +18,15 @@ import {
 } from '../../../../store/admin/products/categories.reducers';
 import {
   addBrand,
+  addProduct,
   deleteBrand,
   deleteProduct,
   getCategories,
   getConfiguration,
   getProduct,
   resetConfiguration,
+  resetProduct,
+  updateProduct,
 } from '../../../../store/admin/products/categories.actions';
 import {
   MatAutocompleteModule,
@@ -156,9 +159,12 @@ export class AddProductComponent implements OnInit, OnDestroy {
                 name: data.category.name,
                 id: data.category.id,
               },
+              serviceCharge: data.serviceCharge
             };
             this.addProductForm.patchValue({ ...this.formGroup });
-            this.addProductForm.markAllAsTouched()
+            setTimeout(() => {
+              this.addProductForm.markAllAsTouched()
+            }, 0);
           }),
         )
     }
@@ -193,6 +199,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.store.dispatch(resetConfiguration())
+    this.store.dispatch(resetProduct())
   }
 
   deleteBrand(event:Event, option: Select) {
@@ -253,7 +260,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       })
     );
     scrollTo({ top: 0, behavior: 'smooth' });
-    const product = {
+    const product: ProductPayload = {
       productName: this.productName.value,
       productDescription: this.productDescription.value,
       serviceCharge: this.serviceCharge.value,
@@ -263,61 +270,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
       inStock: this.inStock.value
     }
     if (this.id) {
-      this.adminService
-        .updateProduct(this.id, product)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          error: (err) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message:
-                  err.error?.detail || 'Server response error',
-                isError: true,
-              })
-            );
-          },
-          complete: () => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message: 'Edited product successfully',
-                isError: false,
-              })
-            );
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/products');
-            }, 1500);
-          },
-        });
+      this.store.dispatch(updateProduct({ id: this.id, product }))
     } else {
-      this.adminService
-        .addProduct(product)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          error: (err) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message:
-                  err.error?.detail || 'Please enter all the required data',
-                isError: true,
-              })
-            );
-          },
-          complete: () => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message: 'Added product successfully',
-                isError: false,
-              })
-            );
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/products');
-            }, 1500);
-          },
-        });
+      this.store.dispatch(addProduct(product))
     }
   }
 

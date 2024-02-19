@@ -54,11 +54,19 @@ export const route: Routes = [
       },
       {
         path: 'add-case',
-        component: AddCaseComponent
+        component: AddCaseComponent,
+        providers: [
+          provideEffects(CaseEffect),
+          provideState(caseFeature)
+        ]
       },
       {
         path: 'add-case/:id',
-        component: AddCaseComponent
+        component: AddCaseComponent,
+        providers: [
+          provideEffects(CaseEffect),
+          provideState(caseFeature)
+        ]
       },
       {
         path: 'add-product',

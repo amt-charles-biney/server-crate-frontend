@@ -11,13 +11,12 @@ import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../../../../core/services/admin/admin.service';
-import { deleteProduct } from '../../../../../../store/admin/products/categories.actions';
 import { selectLoaderState } from '../../../../../../store/loader/reducers/loader.reducers';
 import { setLoadingSpinner } from '../../../../../../store/loader/actions/loader.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CURRENT_AD_TAB } from '../../../../../../core/utils/constants';
 import { caseInitialState, selectCase } from '../../../../../../store/case/case.reducers';
-import { getSingleCase, resetCase } from '../../../../../../store/case/case.actions';
+import { addCase, deleteCase, getSingleCase, resetCase, updateCase } from '../../../../../../store/case/case.actions';
 
 @Component({
   selector: 'app-add-case',
@@ -171,9 +170,9 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     this.image3 = null;
   }
 
-  deleteProduct(id: string) {
+  deleteCase(id: string) {
     scrollTo({ top: 0, behavior: 'smooth' });
-    this.store.dispatch(deleteProduct({ id }));
+    this.store.dispatch(deleteCase({ id }));
   }
 
   getIncompatibleAttributeOptions({index, variants}: {index: number, variants: string[]}) {
@@ -191,7 +190,7 @@ export class AddCaseComponent implements OnInit, OnDestroy {
       })
     );
     scrollTo({ top: 0, behavior: 'smooth' });
-    const formData: FormData = (<FormGroupExtension>(
+    const formData = (<FormGroupExtension>(
       this.caseForm
     )).toFormData();
 
@@ -210,69 +209,46 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     formData.append('images', image1!);
     formData.append('images', image2!);
     formData.append('images', image3!);
-
+    console.log(this.incompatibleAttributeOptions);
+    
     this.incompatibleAttributeOptions.forEach((attributeOption) => {
+      console.log('AttributeOption', attributeOption);
+      
       formData.append('incompatibleVariants', attributeOption)
     })
 
-    if (this.id) {
-      this.adminService
-        .updateProduct(this.id, formData)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          error: (err) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message:
-                  err.error?.detail || 'Server response error',
-                isError: true,
-              })
-            );
-          },
-          complete: () => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message: 'Edited case successfully',
-                isError: false,
-              })
-            );
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/case-management');
-            }, 1500);
-          },
-        });
+    if (this.id) {      
+      this.store.dispatch(updateCase({formData, id: this.id}))
+      // this.adminService
+      //   .updateCase({id: this.id, formData})
+      //   .pipe(takeUntilDestroyed(this.destroyRef))
+      //   .subscribe({
+      //     error: (err) => {
+      //       this.store.dispatch(
+      //         setLoadingSpinner({
+      //           status: false,
+      //           message:
+      //             err.error?.detail || 'Server response error',
+      //           isError: true,
+      //         })
+      //       );
+      //     },
+      //     complete: () => {
+      //       this.store.dispatch(
+      //         setLoadingSpinner({
+      //           status: false,
+      //           message: 'Edited case successfully',
+      //           isError: false,
+      //         })
+      //       );
+      //       setTimeout(() => {
+      //         this.router.navigateByUrl('/admin/case-management');
+      //       }, 1500);
+      //     },
+      //   });
     } else {
-      this.adminService
-        .addCase(formData)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          error: (err) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message:
-                  err.error?.detail || 'Please enter all the required data',
-                isError: true,
-              })
-            );
-          },
-          complete: () => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message: 'Added product successfully',
-                isError: false,
-              })
-            );
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/case-management');
-              sessionStorage.setItem(CURRENT_AD_TAB, 'Dashboard')
-
-            }, 1500);
-          },
-        });
+      console.log('Add case');
+      this.store.dispatch(addCase({formData}))
     }
   }
   get name() {

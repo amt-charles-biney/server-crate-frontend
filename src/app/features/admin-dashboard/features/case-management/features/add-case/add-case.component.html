@@ -143,7 +143,7 @@
         </div>
         <section class="flex items-center justify-end mt-10 gap-6 text-sm">
           <button
-            (click)="deleteProduct(id)"
+            (click)="deleteCase(id)"
             type="button"
             [ngClass]="id ? 'text-[#EF0816]' : 'text-[#B0B0B0]'"
             class="font-inter underline text-xs"
@@ -153,7 +153,6 @@
           </button>
 
           <button
-          type="button"
             [disabled]="caseForm.invalid"
             [ngClass]="caseForm.invalid ? 'cursor-not-allowed' : ''"
             class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
