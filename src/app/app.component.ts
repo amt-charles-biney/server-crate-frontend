@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe((ev) => {
       if (ev instanceof NavigationEnd) { 
         this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
-        scrollTo({top: 0, behavior: 'smooth'})
       }
     });
     console.log(environment.base_url, environment.production);

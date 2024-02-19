@@ -8,6 +8,8 @@ import {
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -19,7 +21,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
-import { Attribute, AttributeOption, CategoryConfig } from '../../../types';
+import { Attribute, AttributeOption } from '../../../types';
 import { MatSelectChange } from '@angular/material/select';
 import { CustomSelectComponent } from '../custom-select/custom-select.component';
 import { Store } from '@ngrx/store';
@@ -45,6 +47,7 @@ import { MatMenuModule } from '@angular/material/menu';
   ],
   templateUrl: './incompatibles.component.html',
   styleUrl: './incompatibles.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('collapse', [
       state('false', style({ height: '*', visibility: '*' })),
@@ -82,14 +85,14 @@ export class IncompatiblesComponent implements OnInit, OnChanges {
 
   incompatibleVariantsArray: string[] = [];
   @ViewChild('contentWrapper') contentWrapper!: ElementRef<HTMLDivElement>;
+  @ViewChild('parent') parent!: ElementRef<HTMLDivElement>;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private changeDetectorRef: ChangeDetectorRef) {}
   ngOnInit(): void {
     this.collapsed = !(this.collapsedIndex === this.formId)    
     this.incompatibleSet = generateIncompatibleSet(
       this.incompatibleAttributeOptions
     );
-    console.log('IncompatibleSet', this.incompatibleSet);
     
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
     this.incompatibleForm = new FormGroup({
@@ -117,10 +120,15 @@ export class IncompatiblesComponent implements OnInit, OnChanges {
       ...this.incompatibleVariantsArray,
       ...incompatibleAttributeOptions.map((incompatibleVariant) => incompatibleVariant.id),
     ];
+    this.checkOverflow()
   }
 
   toggle() {
     this.collapsed = !this.collapsed;
+  }
+
+  isOverflown(): boolean {    
+    return !!(this.contentWrapper.nativeElement.scrollWidth > this.parent.nativeElement.clientWidth)
   }
 
   onSelectChange(event: MatSelectChange) {
@@ -147,6 +155,7 @@ export class IncompatiblesComponent implements OnInit, OnChanges {
       variants: this.incompatibleVariantsArray,
     });
     this.incompatibleForm.patchValue({ attribute: '', attributeVariants: '' });
+    this.checkOverflow()
   }
   removeAttributeOption(
     attributeOption: AttributeOption,
@@ -175,6 +184,15 @@ export class IncompatiblesComponent implements OnInit, OnChanges {
       attributeOption
     );
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
+    this.checkOverflow()
+  }
+
+  checkOverflow() {
+    setTimeout(() => {
+      
+      this.isOverflow = this.isOverflown()
+      this.changeDetectorRef.detectChanges()
+    }, 0);
   }
 
   sideScroll(
