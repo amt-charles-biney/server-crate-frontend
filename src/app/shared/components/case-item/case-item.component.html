@@ -1,5 +1,5 @@
 <article
-  class="flex flex-col gap-[13px] w-[318px] h-[159px] py-3 px-[11px] border rounded-lg"
+  class="flex flex-col gap-[13px] w-[318px] h-[159px] shadow-lg py-3 px-[11px] border rounded-lg"
 >
   <div class="flex gap-[13px]">
     <img
@@ -10,8 +10,8 @@
       height="107"
       width="134"
     />
-    <div class="flex flex-col gap-1">
-      <h2 class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">
+    <div class="flex flex-col gap-1 w-[147px]">
+      <h2 [title]="case.name" class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">
         {{ case.name }}
       </h2>
       <p

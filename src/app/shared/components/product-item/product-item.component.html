@@ -11,7 +11,7 @@
       [alt]="'image of ' + product.productName"
     />
     <div class="flex flex-col w-[168px]">
-      <h2 class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productName }}</h2>
+      <h2 [title]="product.productName" class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productName }}</h2>
       <p class="text-product-text font-[500] text-sm text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productBrand }}</p>
       <p class="text-sm font-[500] text-[#0D121A] text-ellipsis overflow-hidden whitespace-nowrap">{{ product.productPrice | currency }}</p>
     </div>

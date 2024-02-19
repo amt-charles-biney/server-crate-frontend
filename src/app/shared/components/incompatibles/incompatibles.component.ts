@@ -12,8 +12,10 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
@@ -52,7 +54,7 @@ import { MatMenuModule } from '@angular/material/menu';
     ]),
   ],
 })
-export class IncompatiblesComponent implements OnInit {
+export class IncompatiblesComponent implements OnInit, OnChanges {
   @Input() incompatibleAttributeOptions: AttributeOption[] = [];
   @Input() collapsedIndex!: number
   @Input() formId!: number;
@@ -87,6 +89,8 @@ export class IncompatiblesComponent implements OnInit {
     this.incompatibleSet = generateIncompatibleSet(
       this.incompatibleAttributeOptions
     );
+    console.log('IncompatibleSet', this.incompatibleSet);
+    
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
     this.incompatibleForm = new FormGroup({
       attribute: new FormControl(''),
@@ -104,6 +108,15 @@ export class IncompatiblesComponent implements OnInit {
         });
       })
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const incompatibleAttributeOptions: AttributeOption[] = changes['incompatibleAttributeOptions'].currentValue
+    this.incompatibleSet = generateIncompatibleSet(incompatibleAttributeOptions)
+    this.incompatibleVariantsArray = [
+      ...this.incompatibleVariantsArray,
+      ...incompatibleAttributeOptions.map((incompatibleVariant) => incompatibleVariant.id),
+    ];
   }
 
   toggle() {

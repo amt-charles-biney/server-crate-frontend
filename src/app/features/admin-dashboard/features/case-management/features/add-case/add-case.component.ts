@@ -13,8 +13,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../../../../core/services/admin/admin.service';
 import { selectLoaderState } from '../../../../../../store/loader/reducers/loader.reducers';
 import { setLoadingSpinner } from '../../../../../../store/loader/actions/loader.actions';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CURRENT_AD_TAB } from '../../../../../../core/utils/constants';
 import { caseInitialState, selectCase } from '../../../../../../store/case/case.reducers';
 import { addCase, deleteCase, getSingleCase, resetCase, updateCase } from '../../../../../../store/case/case.actions';
 
@@ -85,16 +83,18 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     if (this.id) {
       this.store.dispatch(getSingleCase({ id: this.id }));
       this.case = this.store
-        .select(selectCase)
-        .pipe(
-          tap((data: Case) => {
-            
+      .select(selectCase)
+      .pipe(
+        tap((data: Case) => {
+            this.incompatibleAttributeOptions = data.incompatibleVariants.map((variant) => variant.id)
+            this.incompatibleVariants = data.incompatibleVariants
+            console.log('In edit', data.incompatibleVariants);
             this.formGroup = {
               name: data.name,
               description: data.description,
               price: data.price,
               coverImage: data.coverImageUrl,
-              incompatibleVariants: data.incompatibleVariants,
+              incompatibleVariants: [],
               images: data.imageUrls,
               image1: data.imageUrls[0],
               image2: data.imageUrls[1],
@@ -209,7 +209,6 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     formData.append('images', image1!);
     formData.append('images', image2!);
     formData.append('images', image3!);
-    console.log(this.incompatibleAttributeOptions);
     
     this.incompatibleAttributeOptions.forEach((attributeOption) => {
       console.log('AttributeOption', attributeOption);
@@ -219,33 +218,6 @@ export class AddCaseComponent implements OnInit, OnDestroy {
 
     if (this.id) {      
       this.store.dispatch(updateCase({formData, id: this.id}))
-      // this.adminService
-      //   .updateCase({id: this.id, formData})
-      //   .pipe(takeUntilDestroyed(this.destroyRef))
-      //   .subscribe({
-      //     error: (err) => {
-      //       this.store.dispatch(
-      //         setLoadingSpinner({
-      //           status: false,
-      //           message:
-      //             err.error?.detail || 'Server response error',
-      //           isError: true,
-      //         })
-      //       );
-      //     },
-      //     complete: () => {
-      //       this.store.dispatch(
-      //         setLoadingSpinner({
-      //           status: false,
-      //           message: 'Edited case successfully',
-      //           isError: false,
-      //         })
-      //       );
-      //       setTimeout(() => {
-      //         this.router.navigateByUrl('/admin/case-management');
-      //       }, 1500);
-      //     },
-      //   });
     } else {
       console.log('Add case');
       this.store.dispatch(addCase({formData}))

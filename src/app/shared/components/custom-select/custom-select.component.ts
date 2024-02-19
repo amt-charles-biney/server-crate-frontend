@@ -69,9 +69,7 @@ export class CustomSelectComponent {
       } else if (isAttributeOption(c1) && isAttributeOption(c2)) {
         return c1.id === c2.id;
       }
-    }
-    console.log('c1', c1, 'c2', c2);
-    
+    }    
     return c1.name === c2;
   }
   toggleAllSelection() {

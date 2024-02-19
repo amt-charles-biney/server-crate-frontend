@@ -58,7 +58,7 @@ export class CaseEffect {
   deleteCase$ = createEffect(() => {
     return this.action$.pipe(
       ofType(deleteCase),
-      switchMap(({ id }) => {
+      exhaustMap(({ id }) => {
         return this.adminService.deleteCase(id).pipe(
           map(() => {
             setTimeout(() => {
