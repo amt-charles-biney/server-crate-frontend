@@ -27,7 +27,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   setCurrentTab(currentTab: string) {
-    scrollTo({ top: 0, behavior: 'smooth'})
+    scrollTo({ top: 110, behavior: 'smooth'})
     sessionStorage.setItem(CURRENT_AD_TAB, currentTab)
     this.activeLink = currentTab
   }

@@ -116,9 +116,16 @@ export class IncompatiblesComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const incompatibleAttributeOptions: AttributeOption[] = changes['incompatibleAttributeOptions'].currentValue
     this.incompatibleSet = generateIncompatibleSet(incompatibleAttributeOptions)
+    const incompatibles = incompatibleAttributeOptions.map((incompatibleVariant) => {
+      this.localAttributes = removeFromLocalAttributes(
+        this.localAttributes,
+        incompatibleVariant.id
+      );
+      return incompatibleVariant.id
+    })
     this.incompatibleVariantsArray = [
       ...this.incompatibleVariantsArray,
-      ...incompatibleAttributeOptions.map((incompatibleVariant) => incompatibleVariant.id),
+      ...incompatibles
     ];
     this.checkOverflow()
   }
