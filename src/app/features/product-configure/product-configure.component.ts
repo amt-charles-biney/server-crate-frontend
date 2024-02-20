@@ -226,7 +226,7 @@ export class ProductConfigureComponent {
     const getProduct = productArr.find(product => product.compatibleOptionId === attributeId)
     const storageSize: string[] = []
 
-    for (let size: number = getProduct?.baseAmount ?? 8; size <= getProduct?.maxAmount ?? 2056; size *= 2) {
+    for (let size: number = getProduct?.baseAmount; size <= getProduct?.maxAmount; size *= 2) {
       storageSize.push(String(size))
     }
 
