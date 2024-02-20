@@ -168,9 +168,10 @@ export type VerifiedUser = {
       id: string;
       name: string;
     }
-    isFeatured: boolean,
-    serviceCharge: string
-  };
+    isFeatured: boolean;
+    serviceCharge: string;
+    stockStatus: 'Low Stock' | 'Available' | 'No Stock';
+}
 
   
 export type Case = {

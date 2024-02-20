@@ -22,7 +22,8 @@ export const productInitialState: { products: ProductItem[]; product: ProductIte
       id: '',
     },
     isFeatured: false,
-    serviceCharge: ''
+    serviceCharge: '',
+    stockStatus: 'Available'
   },
 };
 

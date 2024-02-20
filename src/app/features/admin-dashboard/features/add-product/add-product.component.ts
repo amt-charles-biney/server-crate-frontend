@@ -149,12 +149,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       productId: `${getUniqueId(2)}`,
       category: ['', categoryIsNotUnassigned()],
       cases: [''],
-      inStock: [
-        0,
-        RxwebValidators.required({
-          message: 'Please enter total products available',
-        }),
-      ],
+      inStock: [0],
     };
     this.addProductForm = this.fb.group(this.formGroup);
     if (this.id) {
@@ -203,17 +198,16 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.cases$ = this.store.select(selectCases);
 
     this.loadingState$ = this.store.select(selectLoaderState);
-    this.options = this.store.select(selectConfigurationState)
+    this.options = this.store.select(selectConfigurationState);
 
-    combineLatest(
-      [
-      this.addProductForm.controls['cases'].valueChanges.pipe(startWith("")),
-      this.addProductForm.controls['serviceCharge'].valueChanges.pipe(startWith(0)),
-      this.store.select(selectConfigurationState)
-    ]
-    ).subscribe(([caseValue, serviceChargeValue, configuration]) => {
-      console.log(this.addProductForm.value.cases);
-      let configPrice = 0
+    combineLatest([
+      this.addProductForm.controls['cases'].valueChanges.pipe(startWith('')),
+      this.addProductForm.controls['serviceCharge'].valueChanges.pipe(
+        startWith(0)
+      ),
+      this.store.select(selectConfigurationState),
+    ]).subscribe(([caseValue, serviceChargeValue, configuration]) => {
+      let configPrice = 0;
       for (let key in configuration.options) {
         configuration.options[key].forEach((config) => {
           if (config.isIncluded) {
@@ -221,10 +215,11 @@ export class AddProductComponent implements OnInit, OnDestroy {
           }
         });
       }
-      this.configurationPrice = configPrice
-      const productPricing = (caseValue.price || 0) + configPrice
-      const calculatedPrice = ((serviceChargeValue / 100) * (productPricing)) + productPricing 
-      this.price.setValue(calculatedPrice)
+      this.configurationPrice = configPrice;
+      const productPricing = (caseValue.price || 0) + configPrice;
+      const calculatedPrice =
+        (serviceChargeValue / 100) * productPricing + productPricing;
+      this.price.setValue(calculatedPrice);
     });
   }
 
