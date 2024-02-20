@@ -7,10 +7,30 @@ import {
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { BehaviorSubject, Observable, Subject, map, startWith, tap } from 'rxjs';
-import { Select, LoadingStatus, ProductItem, BasicConfig, Case, ProductPayload } from '../../../../types';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  combineLatest,
+  map,
+  startWith,
+  tap,
+} from 'rxjs';
+import {
+  Select,
+  LoadingStatus,
+  ProductItem,
+  BasicConfig,
+  Case,
+  ProductPayload,
+} from '../../../../types';
 import { Store } from '@ngrx/store';
 import {
   selectBrands,
@@ -36,6 +56,7 @@ import { getUniqueId } from '../../../../core/utils/settings';
 import {
   RxReactiveFormsModule,
   RxwebValidators,
+  startsWith,
 } from '@rxweb/reactive-form-validators';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -44,7 +65,10 @@ import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actio
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 import { selectConfigurationState } from '../../../../store/admin/products/configuration.reducers';
-import { productInitialState, selectProduct } from '../../../../store/admin/products/products.reducers';
+import {
+  productInitialState,
+  selectProduct,
+} from '../../../../store/admin/products/products.reducers';
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
 import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
 import { getCaseList, getCases } from '../../../../store/case/case.actions';
@@ -64,7 +88,7 @@ import { selectCases } from '../../../../store/case/case.reducers';
     RxReactiveFormsModule,
     AuthLoaderComponent,
     CustomImageComponent,
-    CustomSelectComponent
+    CustomSelectComponent,
   ],
   templateUrl: './add-product.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,15 +99,16 @@ export class AddProductComponent implements OnInit, OnDestroy {
   cases$!: Observable<Case[]>;
   brands$!: Observable<Select[]>;
   private option$ = new Subject<BasicConfig>();
-  private product$ = new BehaviorSubject<ProductItem>(productInitialState.product);
-  private totalPrice$ = new BehaviorSubject<number>(-1)
-  totalPrice = this.totalPrice$.asObservable()
+  private product$ = new BehaviorSubject<ProductItem>(
+    productInitialState.product
+  );
+  private totalPrice$ = new BehaviorSubject<number>(-1);
   product = this.product$.asObservable();
   options = this.option$.asObservable();
   filteredOptions!: Observable<Select[]>;
   filteredBrandNames!: Observable<Select[]>;
   loadingState$!: Observable<LoadingStatus>;
-  caseId!: string
+  caseId!: string;
   url: any = '';
   id: string = '';
   coverImage: string | null = '';
@@ -91,7 +116,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   image2: string | null = '';
   image3: string | null = '';
   formGroup = {};
-  configurationPrice: number = 0
+  configurationPrice: number = 0;
   constructor(
     private store: Store,
     private fb: FormBuilder,
@@ -104,7 +129,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.store.dispatch(getCategories());
     this.store.dispatch(getCaseList());
-    this.totalPrice$.next(0)
+    this.totalPrice$.next(0);
     this.formGroup = {
       productName: [
         '',
@@ -116,11 +141,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
           message: 'Please enter a product description',
         }),
       ],
-      productPrice: [
-        '',
-      ],
+      productPrice: [''],
       serviceCharge: [
-        '',
+        '0',
         RxwebValidators.required({ message: 'Please enter a charge' }),
       ],
       productId: `${getUniqueId(2)}`,
@@ -136,103 +159,93 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.addProductForm = this.fb.group(this.formGroup);
     if (this.id) {
       this.store.dispatch(getProduct({ id: this.id }));
-      this.product = this.store
-        .select(selectProduct)
-        .pipe(
-          tap((data: ProductItem) => {
-            if (data.category.id) {
-              this.store.dispatch(
-                getConfiguration({
-                  name: data.category.name,
-                  id: data.category.id,
-                })
-              );
-            }
-            this.formGroup = {
-              productName: data.productName,
-              productDescription: data.productDescription,
-              productPrice: data.productPrice,
-              cases: data.productCase,
-              productId: data.productId,
-              inStock: data.inStock,
-              category: {
+      this.product = this.store.select(selectProduct).pipe(
+        tap((data: ProductItem) => {
+          if (data.category.id) {
+            this.store.dispatch(
+              getConfiguration({
                 name: data.category.name,
                 id: data.category.id,
-              },
-              serviceCharge: data.serviceCharge
-            };
-            this.addProductForm.patchValue({ ...this.formGroup });
-            setTimeout(() => {
-              this.addProductForm.markAllAsTouched()
-            }, 0);
-          }),
-        )
+              })
+            );
+          }
+          this.formGroup = {
+            productName: data.productName,
+            productDescription: data.productDescription,
+            productPrice: data.productPrice,
+            cases: data.productCase,
+            productId: data.productId,
+            inStock: data.inStock,
+            category: {
+              name: data.category.name,
+              id: data.category.id,
+            },
+            serviceCharge: data.serviceCharge,
+          };
+          this.addProductForm.patchValue({ ...this.formGroup });
+          setTimeout(() => {
+            this.addProductForm.markAllAsTouched();
+          }, 0);
+        })
+      );
     }
     this.categories$ = this.store.select(selectCategories).pipe(
       tap((categories) => {
-
         this.filteredOptions = this.category.valueChanges.pipe(
-          startWith({ id: '', name: ''}),
+          startWith({ id: '', name: '' }),
           map((value) => {
-            return this._filter(value, categories)
+            return this._filter(value, categories);
           })
         );
       })
     );
 
-    this.cases$ = this.store.select(selectCases)
+    this.cases$ = this.store.select(selectCases);
 
     this.loadingState$ = this.store.select(selectLoaderState);
-    this.options = this.store.select(selectConfigurationState).pipe(
-      tap((configuration) => {
-        console.log('Config', configuration);
-        
-        for (let key in configuration.options) {
-          configuration.options[key].forEach((config) => {
-            this.configurationPrice += config.price
-          })
-        }
-        this.totalPrice$.next(this.totalPrice$.value + this.configurationPrice)
-      })
-    )
+    this.options = this.store.select(selectConfigurationState)
+
+    combineLatest(
+      [
+      this.addProductForm.controls['cases'].valueChanges.pipe(startWith("")),
+      this.addProductForm.controls['serviceCharge'].valueChanges.pipe(startWith(0)),
+      this.store.select(selectConfigurationState)
+    ]
+    ).subscribe(([caseValue, serviceChargeValue, configuration]) => {
+      console.log(this.addProductForm.value.cases);
+      let configPrice = 0
+      for (let key in configuration.options) {
+        configuration.options[key].forEach((config) => {
+          configPrice += config.price;
+        });
+      }
+      this.configurationPrice = configPrice
+      const productPricing = (caseValue.price || 0) + configPrice
+      const calculatedPrice = ((serviceChargeValue / 100) * (productPricing)) + productPricing 
+      this.price.setValue(calculatedPrice)
+    });
   }
 
   ngOnDestroy(): void {
-    this.store.dispatch(resetConfiguration())
-    this.store.dispatch(resetProduct())
+    this.store.dispatch(resetConfiguration());
+    this.store.dispatch(resetProduct());
   }
 
-  deleteBrand(event:Event, option: Select) {
-    event.stopPropagation()
-    this.store.dispatch(deleteBrand({ id: option.id }))
-  }
-  
-  deleteCategory(event:Event, option: Select) {
-    event.stopPropagation()
+  deleteCategory(event: Event, option: Select) {
+    event.stopPropagation();
   }
 
-  private _filter(value: Select | string, filterFrom: Select[]) {     
-    return filterFrom.filter((option: Select) => {      
-        if (typeof(value) !== 'string'){
+  private _filter(value: Select | string, filterFrom: Select[]) {
+    return filterFrom.filter((option: Select) => {
+      if (typeof value !== 'string') {
         return option.name.toLowerCase().includes(value.name.toLowerCase());
       }
       return option.name.toLowerCase().includes(value.toLowerCase());
-      });
+    });
   }
 
   cancel() {
     this.router.navigateByUrl('/admin/products');
-  }
-
-  addNewBrand() {
-    const brandName = this.productBrand.value
-    if (brandName) {
-      if (this.id) {
-        this.store.dispatch(addBrand({ name:  brandName }))
-      } else {
-        this.store.dispatch(addBrand({ name:  brandName }))
-      }
-    }
   }
 
   onCategorySelected(event: MatAutocompleteSelectedEvent) {
@@ -240,14 +253,10 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.store.dispatch(getConfiguration(selectedCategory));
     this.options = this.store.select(selectConfigurationState);
   }
-  onBrandSelected(event: MatAutocompleteSelectedEvent) {
-    const selectedCategory: Select = event.option.value;
-  }
 
   onSelectCase(event: MatSelectChange) {
     console.log('Selected case', event.value);
-    this.caseId = event.value.id
-    this.addProductForm.patchValue({ productPrice: this.totalPrice$.value + event.value.price})
+    this.caseId = event.value.id;
   }
 
   addProduct() {
@@ -267,12 +276,12 @@ export class AddProductComponent implements OnInit, OnDestroy {
       productId: this.addProductForm.value.productId,
       category: this.addProductForm.value.category.name,
       productCaseId: this.caseId,
-      inStock: this.inStock.value
-    }
+      inStock: this.inStock.value,
+    };
     if (this.id) {
-      this.store.dispatch(updateProduct({ id: this.id, product }))
+      this.store.dispatch(updateProduct({ id: this.id, product }));
     } else {
-      this.store.dispatch(addProduct(product))
+      this.store.dispatch(addProduct(product));
     }
   }
 
@@ -297,7 +306,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       setter(obj.imgSrc);
     }
   }
-  removeImage(imageToRemove: string) {    
+  removeImage(imageToRemove: string) {
     if (imageToRemove === 'coverImage') {
       this.removeCoverImage();
     } else if (imageToRemove === 'image1') {
@@ -333,6 +342,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
   get category() {
     return this.addProductForm.get('category')!;
   }
+  get cases() {
+    return this.addProductForm.get('cases')!;
+  }
   get productBrand() {
     return this.addProductForm.get('productBrand')!;
   }
@@ -345,11 +357,11 @@ export class AddProductComponent implements OnInit, OnDestroy {
   get inStock() {
     return this.addProductForm.get('inStock')!;
   }
-  
+
   get price() {
     return this.addProductForm.get('productPrice')!;
   }
-  
+
   get serviceCharge() {
     return this.addProductForm.get('serviceCharge')!;
   }

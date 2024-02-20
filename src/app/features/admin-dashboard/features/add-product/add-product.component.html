@@ -89,7 +89,7 @@
               id="price"
               label="Price"
               type="number"
-              [placeholder]="(totalPrice | async)?.toString()!"
+              placeholder="Price"
               formControlName="productPrice"
               myClass="font-[500] placeholder:text-black"
               [isReadOnly]="true"
@@ -150,7 +150,11 @@
             >
               <li class="leading-4 w-max px-3 text-[13px]">
                 <p>Case Price ($)</p>
-                <p class="text-gray-400">{{ price.value }}</p>
+                <p class="text-gray-400">{{
+                  !cases.value.price
+                    ? "No selected case"
+                    : cases.value.price
+                }}</p>
               </li>
               <li class="leading-4 w-max px-3 text-[13px]">
                 <p>Service Charge (%)</p>
