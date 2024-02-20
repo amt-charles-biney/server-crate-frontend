@@ -76,13 +76,8 @@
               placeholder="Enter quantity in stock"
               formControlName="inStock"
               myClass="font-[500]"
+              [isReadOnly]="true"
             />
-            <!-- @if (inStock.invalid && (inStock.touched || inStock.dirty)) {
-            <small
-                  class="text-red-600"
-                  >{{addProductForm.controls["inStock"].errors?.['required'].message }}</small
-                >
-              } -->
           </div>
           <div class="w-[45%]">
             <app-custom-input
