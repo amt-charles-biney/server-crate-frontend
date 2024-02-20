@@ -1,0 +1,43 @@
+<article class="w-[300px] flex flex-col gap-2 p-2">
+    <div class="h-[166px] w-full rounded-md border-[1px] border-[#E6E6E6] flex flex-col items-center justify-center">
+        <img
+        class="w-[121px] h-[68px]"
+        [ngSrc]="product.coverImage"
+        height="68"
+        width="121"
+        priority
+        [alt]="'image of ' + product.productName"
+      />
+    </div>
+
+    <div class="flex flex-col w-full gap-0">
+        <div class ="flex flex-row items-center w-full justify-between">
+            <span class="text-sm font-semibold">
+                {{product.productName}}
+            </span>
+            <span class="text-figma-green">
+                <svg width="21" height="19" viewBox="0 0 21 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.6 15.55L10.5 15.65L10.39 15.55C5.64 11.24 2.5 8.39 2.5 5.5C2.5 3.5 4 2 6 2C7.54 2 9.04 3 9.57 4.36H11.43C11.96 3 13.46 2 15 2C17 2 18.5 3.5 18.5 5.5C18.5 8.39 15.36 11.24 10.6 15.55ZM15 0C13.26 0 11.59 0.81 10.5 2.08C9.41 0.81 7.74 0 6 0C2.92 0 0.5 2.41 0.5 5.5C0.5 9.27 3.9 12.36 9.05 17.03L10.5 18.35L11.95 17.03C17.1 12.36 20.5 9.27 20.5 5.5C20.5 2.41 18.08 0 15 0Z" fill="#101828"/>
+                </svg>                    
+            </span>
+        </div>
+        <div class="flex flex-row items-center w-full justify-start">
+            <span class="text-sm font-normal text-[#676767] max-w-[200px] truncate overflow-hidden">
+              {{ product.productDescription }}
+            </span>
+          </div>          
+    </div>
+
+    <div class ="flex flex-row items-center w-full justify-between">
+        <span class="text-sm font-medium">
+           $ {{product.productPrice}}
+        </span>
+        <button class="flex items-center w-fit px-3 gap-2 text-figma-green">
+            <a [routerLink]="['/product/configure', product.id]" class="text-sm font-[500]">configure</a>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+            
+          </button>
+    </div>
+</article>
