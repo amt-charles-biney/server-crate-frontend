@@ -216,7 +216,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
       let configPrice = 0
       for (let key in configuration.options) {
         configuration.options[key].forEach((config) => {
-          configPrice += config.price;
+          if (config.isIncluded) {
+            configPrice += config.price;
+          }
         });
       }
       this.configurationPrice = configPrice
