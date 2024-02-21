@@ -21,6 +21,7 @@ export class AttributeInputService {
     group['categoryName'] = new FormControl('', Validators.required);
     group['attributesInput'] = new FormControl('');
     group['variants'] = new FormControl('');
+    group['coverImage'] = new FormControl('')
     return new FormGroup(group);
   }
   editFormGroup(attributes: CategoryEditResponse[], name: string) {    
