@@ -262,7 +262,7 @@ export class CategoryEffect {
               this.router.navigateByUrl('/admin/products', {
                 replaceUrl: true,
               });
-            }, 1500);
+            }, 0);
             return getProducts({ page: 0 });
           }),
           timeout(5000),
@@ -352,7 +352,7 @@ export class CategoryEffect {
           map(() => {
             setTimeout(() => {
               this.router.navigateByUrl('/admin/products')
-            }, 1500);
+            }, 0);
             return setLoadingSpinner({
               isError: false,
               message: 'Added product successfully',
@@ -378,7 +378,7 @@ export class CategoryEffect {
           map(() => {
             setTimeout(() => {
               this.router.navigateByUrl('/admin/products')
-            }, 1500);
+            }, 0);
             return setLoadingSpinner({
               isError: false,
               message: 'Edited product successfully',

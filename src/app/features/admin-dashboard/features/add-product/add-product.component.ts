@@ -168,7 +168,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
             productName: data.productName,
             productDescription: data.productDescription,
             productPrice: data.productPrice,
-            cases: data.productCase,
+            cases: data.productBrand,
             productId: data.productId,
             inStock: data.inStock,
             category: {
@@ -180,7 +180,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
           this.addProductForm.patchValue({ ...this.formGroup });
           setTimeout(() => {
             this.addProductForm.markAllAsTouched();
-          }, 0);
+          }, 1);
         })
       );
     }

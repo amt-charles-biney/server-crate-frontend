@@ -158,7 +158,6 @@ export type VerifiedUser = {
     productName: string;
     productBrand: string;
     productPrice: string;
-    productCase: string,
     inStock: number;
     sales: number;
     id: string;
