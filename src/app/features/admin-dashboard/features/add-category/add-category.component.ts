@@ -1,10 +1,10 @@
 import {
-  CategoryEditResponse,
   CategoryPayload,
   EditConfigResponse,
 } from './../../../../types';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   DestroyRef,
   ElementRef,
@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, fromEvent, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import {
   Attribute,
   AttributeOption,
@@ -37,7 +37,6 @@ import {
 } from '@angular/material/autocomplete';
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { putBackAttributeOptionInStore } from '../../../../store/category-management/attributes/attributes.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 import {
   getSingleCategoryAndConfig,
@@ -49,7 +48,6 @@ import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/a
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { selectEditConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
-import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actions';
 import {
   buildIncompatibleTable,
   generateIncompatiblesTable,
@@ -66,6 +64,7 @@ import {
 } from '../../../../core/utils/helpers';
 import { MatMenuModule } from '@angular/material/menu';
 import { CustomSizeSelectionComponent } from '../../../../shared/components/custom-size-selection/custom-size-selection.component';
+import { IncompatiblesComponent } from '../../../../shared/components/incompatibles/incompatibles.component';
 
 @Component({
   selector: 'app-add-category',
@@ -83,6 +82,7 @@ import { CustomSizeSelectionComponent } from '../../../../shared/components/cust
     AuthLoaderComponent,
     MatMenuModule,
     CustomSizeSelectionComponent,
+    IncompatiblesComponent
   ],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
@@ -99,11 +99,11 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   loadingStatus!: Observable<LoadingStatus>;
   categoryForm!: FormGroup;
   localAttributes: Attribute[] = [];
-  resize$!: Observable<Event>;
   isOverflow = false;
   makeLeftButtonGreen = true;
   makeRightButtonGreen = false;
   @ViewChild('contentWrapper') contentWrapper!: ElementRef<HTMLDivElement>;
+  @ViewChild('parent') parent!: ElementRef<HTMLDivElement>;
 
   incompatibleSet: Record<string, AttributeOption[]> = {};
   numOfIncompatibles = 0;
@@ -116,15 +116,11 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     private attributeService: AttributeInputService,
     private router: Router,
     private destroyRef: DestroyRef,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.resize$ = fromEvent(window, 'resize').pipe(
-      tap(() => {
-        this.isOverflow = this.isOverflown(this.contentWrapper.nativeElement);
-      })
-    );
     this.attributes = this.store.select(selectAttributesState).pipe(
       tap((attrs) => {
         this.localAttributes = attrs;
@@ -187,19 +183,11 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     };
 
     if (this.categoryForm.invalid) {
-      // this.store.dispatch(
-      //   setLoadingSpinner({
-      //     isError: true,
-      //     message: 'Please provide a category name',
-      //     status: false,
-      //   })
-      // );
       const controls = this.categoryForm.controls;
       for (const name in controls) {
         this.categoryForm.controls[name].markAsTouched();
         this.categoryForm.controls[name].updateValueAndValidity();
       }
-
       return;
     }
     scrollTo({ top: 0, behavior: 'smooth' });
@@ -214,6 +202,14 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(sendConfig(payload));
     }
+  }
+
+  checkOverflow() {
+    setTimeout(() => {
+      
+      this.isOverflow = this.isOverflown()
+      this.changeDetectorRef.detectChanges()
+    }, 0);
   }
 
   sizeSelection(event: MatAutocompleteSelectedEvent, attribute: Attribute) {
@@ -249,6 +245,16 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       incompatibleAttributeOptions
     );
 
+    this.reassign(incompatibleAttributeOptions)
+    this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
+
+    // Clear involved form fields
+    this.selectedAttribute$.next([]);
+    this.categoryForm.patchValue({ attributesInput: '', variants: '' });
+    this.checkOverflow()
+  }
+
+  reassign(incompatibleAttributeOptions: AttributeOption[]) {
     const { incompatibleSet, localAttributes } = buildIncompatibleTable(
       incompatibleAttributeOptions,
       this.incompatibleSet,
@@ -256,11 +262,6 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     );
     this.incompatibleSet = incompatibleSet;
     this.localAttributes = localAttributes;
-    this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
-
-    // Clear involved form fields
-    this.selectedAttribute$.next([]);
-    this.categoryForm.patchValue({ attributesInput: '', variants: '' });
   }
 
   onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
@@ -277,6 +278,9 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       this.categoryConfigPayload,
       true
     );
+    this.reassign(selectedAttributeOption.incompatibleAttributeOptions)
+    this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
+    this.checkOverflow()    
   }
 
   removeAttributeOption(
@@ -302,6 +306,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       false
     );
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
+    this.checkOverflow()
   }
 
   
@@ -310,8 +315,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     this.selectedAttribute$.next(event.value.attributeOptions);
   }
 
-  isOverflown(element: HTMLElement) {
-    return element.scrollWidth > element.clientWidth;
+  isOverflown(): boolean {    
+    return !!(this.contentWrapper.nativeElement.scrollWidth > this.parent.nativeElement.clientWidth)
   }
   onFocus(control: AbstractControl) {
     const value = control.value;

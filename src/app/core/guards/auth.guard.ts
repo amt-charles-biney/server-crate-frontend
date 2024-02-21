@@ -8,9 +8,7 @@ import { clearStorage } from '../utils/helpers';
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const token = authService.getToken();
-  console.log('Token', token, router.url);
-  
+  const token = authService.getToken();  
   if (token) {
     const decodedToken = jwtDecode<TokenPayload>(token);
     if (decodedToken.exp > Date.now() / 1000) {
