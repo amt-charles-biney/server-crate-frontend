@@ -82,8 +82,9 @@ export class AttributeModalComponent implements OnInit {
   id = '';
   editId: string | null = null;
   incompatibleAttributeOptions: string[] = []
-  incompatibleVariants: AttributeOption[] = []
-  collapsedIndex: number = -1
+  incompatibleVariants: Record<string, AttributeOption[]> = {}
+  incompatibleSet: Record<string, string[]> = {}
+  collapsedIndex!: number 
   constructor(
     public dialogRef: MatDialogRef<AttributeModalComponent>,
     private store: Store,
@@ -104,13 +105,8 @@ export class AttributeModalComponent implements OnInit {
         unit,
         isRequired,
       } = this.data.attribute;
-      if (this.data.index) {
-        this.collapsedIndex = this.data.index
-        console.log('collaped index', this.collapsedIndex);
-        
-      }
       this.editId = id;
-      for (let attr of attributeOptions) {
+      attributeOptions.forEach((attr, index) => {
         const baseAmount = attr.additionalInfo.baseAmount
           ? attr.additionalInfo.baseAmount.toString()
           : '';
@@ -124,7 +120,8 @@ export class AttributeModalComponent implements OnInit {
         const inStock = attr.inStock ? attr.inStock.toString() : ''
         const price = attr.optionPrice ? attr.optionPrice.toString() : '';
         const incompatibleAttributeOptions = attr.incompatibleAttributeOptions ? attr.incompatibleAttributeOptions : []
-        this.incompatibleVariants = incompatibleAttributeOptions
+        this.incompatibleVariants[index] = incompatibleAttributeOptions
+        this.incompatibleSet[index] = incompatibleAttributeOptions.map((option) => option.id)
         
         this.store.dispatch(
           addAttributeToStore({
@@ -140,7 +137,8 @@ export class AttributeModalComponent implements OnInit {
             incompatibleAttributeOptions
           })
         );
-      }
+      })
+      this.collapsedIndex = this.data.index      
       this.attributeForm = this.fb.group(
         {
           attributeName: [attributeName, Validators.required],
@@ -222,11 +220,11 @@ export class AttributeModalComponent implements OnInit {
       return;
     }    
     const validAttributes = this.attributeForm.value.attributes.map(
-      (attr: any) => {        
+      (attr: any, index: number) => {                
         return {
           ...attr,
           media: null,
-          incompatibleAttributeOptions: this.incompatibleAttributeOptions
+          incompatibleAttributeOptions: this.incompatibleSet[index]
         };
       }
     );
@@ -259,7 +257,7 @@ export class AttributeModalComponent implements OnInit {
     this.store
       .select(selectAttributeCreationState)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((options) => {
+      .subscribe((options) => {        
         let attribute = {
           attributeName: this.attributeForm.value.attributeName,
           description: this.attributeForm.value.description,
@@ -305,10 +303,9 @@ export class AttributeModalComponent implements OnInit {
     });
   }
 
-  getIncompatibleAttributeOptions(incompatibleAttributeOptions: string[]) {
-    this.incompatibleAttributeOptions = incompatibleAttributeOptions
-    console.log('Incompatibles', this.incompatibleAttributeOptions);
-    
+  getIncompatibleAttributeOptions({index, variants}: {index: number, variants: string[]}) {
+    this.incompatibleSet[index] = [...variants]
+    this.incompatibleAttributeOptions = [...this.incompatibleAttributeOptions, ...variants]
   }
 
   addAttributeForm() {

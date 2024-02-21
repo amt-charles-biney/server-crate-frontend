@@ -20,6 +20,11 @@ import { AddCategoryComponent } from './features/add-category/add-category.compo
 import { TransactionsComponent } from './features/transactions/transactions.component';
 import { CustomersComponent } from './features/customers/customers.component';
 import { OrdersComponent } from './features/orders/orders.component';
+import { CaseManagementComponent } from './features/case-management/case-management.component';
+import { CaseEffect } from '../../store/case/case.effects';
+import { caseFeature } from '../../store/case/case.reducers';
+import { authGuard } from '../../core/guards/auth.guard';
+import { AddCaseComponent } from './features/case-management/features/add-case/add-case.component';
 
 
 export const route: Routes = [
@@ -28,8 +33,12 @@ export const route: Routes = [
     component: AdminDashboardComponent,
     providers: [
       provideEffects(AttributeEffect),
-      provideState(attributesFeature)
+      provideState(attributesFeature),
+      provideEffects(CaseEffect),
+      provideState(caseFeature)
     ],
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       {
         path: 'products',
@@ -40,12 +49,32 @@ export const route: Routes = [
         ]
       },
       {
+        path: 'case-management',
+        component: CaseManagementComponent
+      },
+      {
+        path: 'add-case',
+        component: AddCaseComponent,
+        providers: [
+          provideEffects(CaseEffect),
+          provideState(caseFeature)
+        ]
+      },
+      {
+        path: 'add-case/:id',
+        component: AddCaseComponent,
+        providers: [
+          provideEffects(CaseEffect),
+          provideState(caseFeature)
+        ]
+      },
+      {
         path: 'add-product',
         component: AddProductComponent,
         providers: [
           provideEffects(CategoryEffect),
           provideState(categoryFeature),
-          provideState(configurationFeature)
+          provideState(configurationFeature),
         ]
       },
       {

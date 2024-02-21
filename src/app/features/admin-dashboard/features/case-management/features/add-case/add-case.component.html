@@ -1,0 +1,186 @@
+<main class="flex flex-col min-h-screen">
+  <h1 class="font-bold text-xl">Case Details</h1>
+  <!-- <app-auth-loader [loadingState]="loadingState$" /> -->
+  <ng-container *ngIf="(case | async); else loadingCase">
+    <form
+      [formGroup]="caseForm"
+      (ngSubmit)="addCase()"
+      class="grid grid-cols-2 gap-6 min-h-fit"
+    >
+      <section>
+        <app-custom-input
+          id="caseName"
+          label="Case Name"
+          type="text"
+          placeholder="Enter case name"
+          formControlName="name"
+          myClass="font-[500]"
+        />
+        <!-- @if (productName.invalid && (productName.touched || productName.dirty)) {
+            <span
+              class="text-red-600"
+              >{{caseForm.controls["productName"].errors?.['required'].message }}</span
+            >
+            } -->
+        <app-custom-input
+          id="caseDescription"
+          label="Case Description"
+          type="textarea"
+          placeholder="Enter a description"
+          formControlName="description"
+          myClass="font-[500]"
+        />
+        @if (description.invalid && (description.touched || description.dirty))
+        {
+        <span
+          class="text-red-600"
+          >{{caseForm.controls["description"].errors?.['required'].message }}</span
+        >
+        }
+        <app-custom-input
+          id="price"
+          label="Price"
+          type="number"
+          placeholder="Enter amount"
+          formControlName="price"
+          myClass="font-[500]"
+        />
+        <div class="mt-6">
+          <app-incompatibles
+            [incompatibleAttributeOptions]="incompatibleVariants"
+            (incompatibleVariantsEmitter)="
+              getIncompatibleAttributeOptions($event)
+            "
+          />
+        </div>
+      </section>
+      <section class="flex flex-col">
+        <app-custom-image
+          formControlName="coverImage"
+          elementId="coverImage"
+          containerClass="relative flex flex-col  items-center justify-center border rounded-lg h-[243px] border"
+          customClass="flex flex-col mt-4 h-full"
+          previewClass="w-full h-full object-contain"
+          [previewImage]="coverImage"
+          [editId]="id"
+          label="Cover Image"
+          (removeImageEmitter)="removeImage($event)"
+          (uploadImageEmitter)="replaceImage($event)"
+        >
+          <label
+            for="#coverImage"
+            class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
+          >
+            <img src="/assets/upload.svg" alt="upload" />
+            <p>
+              <span class="text-figma-green">Click to upload an image</span>
+            </p>
+            <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
+          </label>
+        </app-custom-image>
+        <div class="mt-1">
+          <p class="font-[500]">Case Gallery</p>
+          <small class="text-gray-500"
+            >Enhance your product showcase. Add an image to your product
+            gallery.</small
+          >
+          <div class="flex mt-4 gap-10">
+            <app-custom-image
+              formControlName="image1"
+              elementId="image1"
+              containerClass="relative flex flex-col items-center justify-center border w-[119px] h-[87px] rounded-lg"
+              previewClass="w-[119px] h-[85px] object-contain"
+              [previewImage]="image1"
+              [editId]="id"
+              (removeImageEmitter)="removeImage($event)"
+              (uploadImageEmitter)="replaceImage($event)"
+            >
+              <label
+                for="#image1"
+                class="cursor-pointer flex flex-col items-center gap-1"
+              >
+                <img src="/assets/image-plus.svg" alt="add image" />
+                <small class="text-xs">Add image 1</small>
+              </label>
+            </app-custom-image>
+            <app-custom-image
+              formControlName="image2"
+              elementId="image2"
+              containerClass="relative flex flex-col items-center justify-center border w-[119px] h-[85px] rounded-lg"
+              previewClass="w-[119px] h-[85px] object-contain"
+              [previewImage]="image2"
+              [editId]="id"
+              (removeImageEmitter)="removeImage($event)"
+              (uploadImageEmitter)="replaceImage($event)"
+            >
+              <label
+                for="#image2"
+                class="cursor-pointer flex flex-col items-center gap-1"
+              >
+                <img src="/assets/image-plus.svg" alt="add image" />
+                <small class="text-xs">Add image 2</small>
+              </label>
+            </app-custom-image>
+            <app-custom-image
+              formControlName="image3"
+              elementId="image3"
+              containerClass="relative flex flex-col items-center justify-center border w-[119px] h-[85px] rounded-lg"
+              previewClass="w-[119px] h-[85px] object-contain"
+              [previewImage]="image3"
+              [editId]="id"
+              (removeImageEmitter)="removeImage($event)"
+              (uploadImageEmitter)="replaceImage($event)"
+            >
+              <label
+                for="#image3"
+                class="cursor-pointer flex flex-col items-center gap-1"
+              >
+                <img src="/assets/image-plus.svg" alt="add image" />
+                <small class="text-xs">Add image 3</small>
+              </label>
+            </app-custom-image>
+          </div>
+        </div>
+        <section class="flex items-center justify-end mt-10 gap-6 text-sm">
+          <button
+            (click)="deleteCase(id)"
+            type="button"
+            [ngClass]="id ? 'text-[#EF0816]' : 'text-[#B0B0B0]'"
+            class="font-inter underline text-xs"
+            [disabled]="!id"
+          >
+            Delete
+          </button>
+
+          <button
+            [disabled]="caseForm.invalid"
+            [ngClass]="caseForm.invalid ? 'cursor-not-allowed' : ''"
+            class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
+          >
+            {{ id ? "Edit" : "Save" }}
+          </button>
+          <button
+            (click)="cancel()"
+            type="button"
+            class="border border-figma-green text-figma-green rounded w-32 py-1 tracking-wider"
+          >
+            Cancel
+          </button>
+        </section>
+      </section>
+    </form>
+  </ng-container>
+  <ng-template #loadingCase>
+    <div class="flex flex-1 flex-col justify-center items-center">
+      <div
+        class="self-center h-20 w-20 text-figma-green inline-block animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status"
+      >
+        <span
+          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+          >Loading...</span
+        >
+      </div>
+    </div>
+  </ng-template>
+</main>

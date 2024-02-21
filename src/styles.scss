@@ -407,6 +407,32 @@ app-header .mat-badge-small.mat-badge-above .mat-badge-content {
   -webkit-box-shadow: 0px -1px 43px -12px rgba(107, 107, 107, 0.93);
   -moz-box-shadow: 0px -1px 43px -12px rgba(107, 107, 107, 0.93);
 }
+
+.myTooltipClass {
+  text-decoration: underline;
+  text-decoration-color: red;
+  border-radius: 6px;
+  width: max-content;
+  box-shadow: 0px 1px 4px 0px rgba(30, 41, 59, 0.25);
+  
+  --mdc-plain-tooltip-supporting-text-line-height: 34px;
+  --mdc-plain-tooltip-container-color: white;
+  --mdc-plain-tooltip-supporting-text-color: red;
+  --mdc-plain-tooltip-supporting-text-size: 14px;
+  --mdc-plain-tooltip-supporting-text-weight: 500;
+}
+.amberToolTip {
+  text-decoration: underline;
+  text-decoration-color: #F2D260;
+  box-shadow: 0px 1px 4px 0px rgba(30, 41, 59, 0.25);
+  border-radius: 6px;
+  
+  --mdc-plain-tooltip-supporting-text-line-height: 34px;
+  --mdc-plain-tooltip-container-color: white;
+  --mdc-plain-tooltip-supporting-text-color: #F2D260;
+  --mdc-plain-tooltip-supporting-text-size: 14px;
+  --mdc-plain-tooltip-supporting-text-weight: 500;
+}
 @media only screen and (max-width: 768px) {
   app-payment-details .mat-mdc-tab-group {
     max-width: 100%;

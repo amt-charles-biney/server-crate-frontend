@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
   addBrand,
+  addProduct,
   categoryFailure,
   deleteBrand,
   deleteProduct,
@@ -17,6 +18,7 @@ import {
   gotCategories,
   gotConfiguration,
   gotProduct,
+  updateProduct,
 } from './categories.actions';
 import {
   catchError,
@@ -31,7 +33,7 @@ import {
 import { AdminService } from '../../../core/services/admin/admin.service';
 import { Select, Item, ProductItem } from '../../../types';
 import { Store } from '@ngrx/store';
-import { setLoadingSpinner } from '../../loader/actions/loader.actions';
+import { resetLoader, setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { Router } from '@angular/router';
 import { UserService } from '../../../core/services/user/user.service';
 import { errorHandler } from '../../../core/utils/helpers';
@@ -336,6 +338,59 @@ export class CategoryEffect {
                 status: false,
               })
             );
+          })
+        )
+      })
+    )
+  })
+
+  addProduct$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(addProduct),
+      exhaustMap((product) => {
+        return this.adminService.addProduct(product).pipe(
+          map(() => {
+            setTimeout(() => {
+              this.router.navigateByUrl('/admin/products')
+            }, 1500);
+            return setLoadingSpinner({
+              isError: false,
+              message: 'Added product successfully',
+              status: false
+            })
+          }),
+          catchError((err) => {
+            return of(setLoadingSpinner({
+              isError: true,
+              message: errorHandler(err),
+              status: false
+            }))
+          })
+        )
+      })
+    )
+  })
+  updateProduct$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(updateProduct),
+      exhaustMap((props) => {
+        return this.adminService.updateProduct(props.id, props.product).pipe(
+          map(() => {
+            setTimeout(() => {
+              this.router.navigateByUrl('/admin/products')
+            }, 1500);
+            return setLoadingSpinner({
+              isError: false,
+              message: 'Edited product successfully',
+              status: false
+            })
+          }),
+          catchError((err) => {
+            return of(setLoadingSpinner({
+              isError: true,
+              message: errorHandler(err),
+              status: false
+            }))
           })
         )
       })

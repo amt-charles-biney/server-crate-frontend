@@ -63,7 +63,7 @@
     >
       <td class="font-[500] text-sm w-[15%] text-center  ">
         @if (attr.incompatibleAttributeOptions.length > 0) {
-          <button class="text-[#2f8f57] bg-[#ecf8f1] text-xs rounded-2xl px-1 py-1">View incompatibles</button>
+          <button type="button" (click)="openModal($index)" class="text-[#2f8f57] bg-[#ecf8f1] text-xs rounded-2xl px-1 py-1">View incompatibles</button>
         }
       </td>
       <td class="text-gray-500 font-[500] text-sm w-[15%] flex justify-center">

@@ -1,6 +1,10 @@
 <cdk-accordion-item #accordionItem="cdkAccordionItem">
   <div class="mt-[2.5px]">
-    <button type="button" (click)="toggle()" class="flex items-center text-xs text-figma-green">
+    <button
+      type="button"
+      (click)="toggle()"
+      class="flex items-center text-xs text-figma-green"
+    >
       <p>Add incompatible variants</p>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -21,164 +25,174 @@
   </div>
   <section [@collapse]="collapsed" class="overflow-hidden w-full">
     <ng-container *ngIf="attributes | async as attributes">
-      <section class="flex gap-[56px] w-full mt-[11px]">
-        <div class="text-xs w-[60%]">
+      <section class="grid grid-cols-5 gap-4 mt-[11px]">
+        <div class="col-span-2 text-xs">
+          <app-custom-select
+            label="Attributes"
+            [control]="$any(incompatibleForm.controls['attribute'])"
+            [options]="localAttributes"
+            (onSelect)="onSelectChange($event)"
+          />
+        </div>
+        <ng-container
+          *ngIf="selectedAttributes | async as variantsForAttribute"
+        >
+          <div class="text-xs col-span-2">
             <app-custom-select
-              label="Attributes"
-              [control]="$any(incompatibleForm.controls['attribute'])"
-              [options]="localAttributes"
-              (onSelect)="onSelectChange($event)"
+              label="Variants"
+              [control]="$any(incompatibleForm.controls['attributeVariants'])"
+              [options]="variantsForAttribute"
+              [isMultipleSelect]="true"
+              [isDisabled]="variantsForAttribute.length === 0"
             />
-        </div>
-        <div class="flex w-full gap-[97px]">
-          <ng-container
-            *ngIf="selectedAttributes | async as variantsForAttribute"
-          >
-          <div class="text-xs w-[60%]">
-              <app-custom-select
-                label="Variants"
-                [control]="$any(incompatibleForm.controls['attributeVariants'])"
-                [options]="variantsForAttribute"
-                [isMultipleSelect]="true"
-                [isDisabled]="variantsForAttribute.length === 0"
-              />
-          </div>
-            <button
-              type="button"
-              (click)="addIncompatibleAttributeOption(attributeVariants.value || [])"
-              class="text-figma-green font-inter text-xs underline mt-6"
-            >
-              Add variant
-            </button>
-          </ng-container>
-        </div>
-      </section>
-    </ng-container>
-    <section
-    [ngClass]="
-      numOfIncompatibles === 0
-        ? 'bg-white'
-        : 'bg-[#D9D9D91A] pt-[8px] pb-[7px]'
-    "
-    class="flex items-center overflow-auto"
-  >
-    <button
-      *ngIf="isOverflow"
-      type="button"
-      [ngClass]="
-        makeRightButtonGreen
-          ? 'bg-figma-green text-white'
-          : 'bg-attr-button text-[#B0B0B0]'
-      "
-      (click)="sideScroll(contentWrapper, 25, 100, -10)"
-      class="h-6 w-6 mx-[9px] rounded-full p-[6px]"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-      >
-        <path
-          d="M7.5 2.5L4 6L7.5 9.5"
-          stroke="currentColor"
-          stroke-width="0.9"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </button>
-    <div #contentWrapper class="flex divide-x overflow-auto no-scrollbar">
-      <div
-        class="flex flex-col px-[10px] w-[292px]"
-        *ngFor="let incompatibleAttribute of incompatibleSet | keyvalue"
-      >
-        <p class="font-inter pb-[9px] text-xs">
-          {{ incompatibleAttribute.key }}
-        </p>
-        <div class="flex items-center w-[272px] gap-[9px]">
-          <div class="flex gap-[18px] w-[240px]">
-            <button
-              type="button"
-              (click)="removeAttributeOption(attributeOption, incompatibleSet[attributeOption.attribute.name])"
-              class="flex items-center py-[5px] px-[12px] rounded-[70px] w-[111px] bg-attr-button"
-              *ngFor="
-                let attributeOption of incompatibleAttribute.value | slice : 0 : 2
-              "
-              [title]="attributeOption.optionName"
-            >
-              <span
-                class="whitespace-nowrap overflow-hidden text-ellipsis text-xs w-[59px]"
-                >{{ attributeOption.optionName }}</span
-              >
-              <img
-                class="pl-[12px]"
-                src="/assets/remove.svg"
-                alt="remove button"
-              />
-            </button>
           </div>
           <button
             type="button"
-            *ngIf="incompatibleAttribute.value.length > 2"
-            [matMenuTriggerFor]="options"
-            class="bg-light-green text-figma-green rounded-full w-[23px] h-[23px] flex flex-col justify-center items-center text-xs"
+            (click)="
+              addIncompatibleAttributeOption(attributeVariants.value || [])
+            "
+            class="text-figma-green font-inter text-xs underline mt-6 col-span-1"
           >
-            +{{ incompatibleAttribute.value.length - 2 }}
+            Add variant
           </button>
-          <mat-menu #options="matMenu" panelClass="customMenu">
-            <button
-              mat-menu-item
-              [disableRipple]="true"
-              type="button"
-              class="flex items-center px-[12px] w-[111px] bg-attr-button"
-              *ngFor="
-                let attribute of incompatibleAttribute.value | slice : 2
-              "
-              [title]="attribute.optionName"
-            >
-              <span
-                class="flex whitespace-nowrap overflow-hidden text-ellipsis text-xs"
-                >{{ attribute.optionName }}
+        </ng-container>
+      </section>
+    </ng-container>
+    <section
+      [ngClass]="
+        numOfIncompatibles === 0
+          ? 'bg-white'
+          : 'bg-[#D9D9D91A] pt-[8px] pb-[7px]'
+      "
+      class="flex items-center overflow-auto"
+      #parent
+    >
+      <button
+        *ngIf="isOverflow"
+        type="button"
+        [ngClass]="
+          makeRightButtonGreen
+            ? 'bg-figma-green text-white'
+            : 'bg-attr-button text-[#B0B0B0]'
+        "
+        (click)="sideScroll(contentWrapper, 25, 100, -10)"
+        class="h-6 w-6 mx-[9px] rounded-full p-[6px]"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+        >
+          <path
+            d="M7.5 2.5L4 6L7.5 9.5"
+            stroke="currentColor"
+            stroke-width="0.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <div
+        #contentWrapper
+        class="flex divide-x overflow-auto no-scrollbar"
+      >
+        <div
+          class="flex flex-col px-[10px] w-[292px]"
+          *ngFor="let incompatibleAttribute of incompatibleSet | keyvalue"
+        >
+          <p class="font-inter pb-[9px] text-xs">
+            {{ incompatibleAttribute.key }}
+          </p>
+          <div class="flex items-center w-[272px] gap-[9px]">
+            <div class="flex gap-[18px] w-[240px]">
+              <button
+                type="button"
+                (click)="
+                  removeAttributeOption(
+                    attributeOption,
+                    incompatibleSet[attributeOption.attribute.name]
+                  )
+                "
+                class="flex items-center py-[5px] px-[12px] rounded-[70px] w-[111px] bg-attr-button"
+                *ngFor="
+                  let attributeOption of incompatibleAttribute.value
+                    | slice : 0 : 2
+                "
+                [title]="attributeOption.optionName"
+              >
+                <span
+                  class="whitespace-nowrap overflow-hidden text-ellipsis text-xs w-[59px]"
+                  >{{ attributeOption.optionName }}</span
+                >
                 <img
                   class="pl-[12px]"
                   src="/assets/remove.svg"
                   alt="remove button"
                 />
-              </span>
+              </button>
+            </div>
+            <button
+              type="button"
+              *ngIf="incompatibleAttribute.value.length > 2"
+              [matMenuTriggerFor]="options"
+              class="bg-light-green text-figma-green rounded-full w-[23px] h-[23px] flex flex-col justify-center items-center text-xs"
+            >
+              +{{ incompatibleAttribute.value.length - 2 }}
             </button>
-          </mat-menu>
+            <mat-menu #options="matMenu" panelClass="customMenu">
+              <button
+                mat-menu-item
+                [disableRipple]="true"
+                type="button"
+                class="flex items-center px-[12px] w-[111px] bg-attr-button"
+                *ngFor="
+                  let attribute of incompatibleAttribute.value | slice : 2
+                "
+                [title]="attribute.optionName"
+              >
+                <span
+                  class="flex whitespace-nowrap overflow-hidden text-ellipsis text-xs"
+                  >{{ attribute.optionName }}
+                  <img
+                    class="pl-[12px]"
+                    src="/assets/remove.svg"
+                    alt="remove button"
+                  />
+                </span>
+              </button>
+            </mat-menu>
+          </div>
         </div>
       </div>
-    </div>
-    <button
-      *ngIf="isOverflow"
-      type="button"
-      [ngClass]="
-        makeLeftButtonGreen
-          ? 'bg-figma-green text-white'
-          : 'bg-attr-button text-[#B0B0B0]'
-      "
-      class="mx-[9px] h-6 w-6 rounded-full p-[6px]"
-      (click)="sideScroll(contentWrapper, 25, 100, 10)"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
+      <button
+        *ngIf="isOverflow"
+        type="button"
+        [ngClass]="
+          makeLeftButtonGreen
+            ? 'bg-figma-green text-white'
+            : 'bg-attr-button text-[#B0B0B0]'
+        "
+        class="mx-[9px] h-6 w-6 rounded-full p-[6px]"
+        (click)="sideScroll(contentWrapper, 25, 100, 10)"
       >
-        <path
-          d="M4.5 2.5L8 6L4.5 9.5"
-          stroke="currentColor"
-          stroke-width="0.9"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </button>
-  </section>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+        >
+          <path
+            d="M4.5 2.5L8 6L4.5 9.5"
+            stroke="currentColor"
+            stroke-width="0.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </section>
   </section>
 </cdk-accordion-item>

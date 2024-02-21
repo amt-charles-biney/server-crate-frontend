@@ -158,6 +158,7 @@ export type VerifiedUser = {
     productName: string;
     productBrand: string;
     productPrice: string;
+    productCase: string,
     inStock: number;
     sales: number;
     id: string;
@@ -167,8 +168,25 @@ export type VerifiedUser = {
       id: string;
       name: string;
     }
-    isFeatured: boolean
-  };
+    isFeatured: boolean;
+    serviceCharge: string;
+    stockStatus: 'Low Stock' | 'Available' | 'No Stock';
+}
+
+  
+export type Case = {
+  id: string,
+  name: string,
+  description: string;
+  coverImageUrl: string,
+  imageUrls: string[],
+  price: number,
+  incompatibleVariants: AttributeOption[]
+}
+export type CaseResponse = {
+  totalElements: number,
+  content: Case[]
+}
   export type AllProducts = {
     total: number;
     products: ProductItem[];
@@ -376,5 +394,15 @@ export interface IdefaultSelectedProps {
   price: number
   id: string
   size: string
+  isIncluded: boolean
 }
 
+export type ProductPayload = {
+  productName: string;
+  productDescription: string;
+  serviceCharge: string;
+  productId: string;
+  category: string;
+  productCaseId: string;
+  inStock: string;
+}

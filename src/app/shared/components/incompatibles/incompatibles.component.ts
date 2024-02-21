@@ -8,16 +8,20 @@ import {
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
-import { Attribute, AttributeOption, CategoryConfig } from '../../../types';
+import { Attribute, AttributeOption } from '../../../types';
 import { MatSelectChange } from '@angular/material/select';
 import { CustomSelectComponent } from '../custom-select/custom-select.component';
 import { Store } from '@ngrx/store';
@@ -43,6 +47,7 @@ import { MatMenuModule } from '@angular/material/menu';
   ],
   templateUrl: './incompatibles.component.html',
   styleUrl: './incompatibles.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('collapse', [
       state('false', style({ height: '*', visibility: '*' })),
@@ -52,9 +57,18 @@ import { MatMenuModule } from '@angular/material/menu';
     ]),
   ],
 })
-export class IncompatiblesComponent implements OnInit {
+export class IncompatiblesComponent implements OnInit, OnChanges {
   @Input() incompatibleAttributeOptions: AttributeOption[] = [];
-  @Output() incompatibleVariantsEmitter = new EventEmitter<string[]>();
+  @Input() collapsedIndex!: number
+  @Input() formId!: number;
+  @Output() incompatibleVariantsEmitter = new EventEmitter<{
+    index: number;
+    variants: string[];
+  }>();
+  @Output() removalEmitter = new EventEmitter<{
+    index: number;
+    variants: string[];
+  }>();
   private attributes$ = new BehaviorSubject<Attribute[]>([]);
   private selectedAttribute$ = new BehaviorSubject<AttributeOption[]>([]);
   attributes = this.attributes$.asObservable();
@@ -71,13 +85,16 @@ export class IncompatiblesComponent implements OnInit {
 
   incompatibleVariantsArray: string[] = [];
   @ViewChild('contentWrapper') contentWrapper!: ElementRef<HTMLDivElement>;
+  @ViewChild('parent') parent!: ElementRef<HTMLDivElement>;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private changeDetectorRef: ChangeDetectorRef) {}
   ngOnInit(): void {
+    this.collapsed = !(this.collapsedIndex === this.formId)    
     this.incompatibleSet = generateIncompatibleSet(
       this.incompatibleAttributeOptions
     );
-    this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet)
+    
+    this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
     this.incompatibleForm = new FormGroup({
       attribute: new FormControl(''),
       attributeVariants: new FormControl(''),
@@ -90,14 +107,35 @@ export class IncompatiblesComponent implements OnInit {
             this.localAttributes,
             attributeOption.id
           );
-          this.incompatibleVariantsArray.push(attributeOption.id)
+          this.incompatibleVariantsArray.push(attributeOption.id);
         });
       })
     );
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    const incompatibleAttributeOptions: AttributeOption[] = changes['incompatibleAttributeOptions'].currentValue
+    this.incompatibleSet = generateIncompatibleSet(incompatibleAttributeOptions)
+    const incompatibles = incompatibleAttributeOptions.map((incompatibleVariant) => {
+      this.localAttributes = removeFromLocalAttributes(
+        this.localAttributes,
+        incompatibleVariant.id
+      );
+      return incompatibleVariant.id
+    })
+    this.incompatibleVariantsArray = [
+      ...this.incompatibleVariantsArray,
+      ...incompatibles
+    ];
+    this.checkOverflow()
+  }
+
   toggle() {
     this.collapsed = !this.collapsed;
+  }
+
+  isOverflown(): boolean {    
+    return !!(this.contentWrapper.nativeElement.scrollWidth > this.parent.nativeElement.clientWidth)
   }
 
   onSelectChange(event: MatSelectChange) {
@@ -114,12 +152,17 @@ export class IncompatiblesComponent implements OnInit {
     this.localAttributes = localAttributes;
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
     this.selectedAttribute$.next([]);
-    this.incompatibleForm.patchValue({ attribute: '', attributeVariants: '' });
+
     this.incompatibleVariantsArray = [
       ...this.incompatibleVariantsArray,
       ...attributeVariants.map((incompatibleVariant) => incompatibleVariant.id),
     ];
-    this.incompatibleVariantsEmitter.emit(this.incompatibleVariantsArray);
+    this.incompatibleVariantsEmitter.emit({
+      index: this.formId,
+      variants: this.incompatibleVariantsArray,
+    });
+    this.incompatibleForm.patchValue({ attribute: '', attributeVariants: '' });
+    this.checkOverflow()
   }
   removeAttributeOption(
     attributeOption: AttributeOption,
@@ -128,17 +171,35 @@ export class IncompatiblesComponent implements OnInit {
     const newAttributeOptions = options.filter(
       (option) => option.id !== attributeOption.id
     );
+
     if (newAttributeOptions.length === 0) {
       delete this.incompatibleSet[attributeOption.attribute.name];
     } else {
       this.incompatibleSet[attributeOption.attribute.name] =
         newAttributeOptions;
     }
+
+    this.incompatibleVariantsArray = this.incompatibleVariantsArray.filter(
+      (option) => !option.includes(attributeOption.id)
+    );
+    this.incompatibleVariantsEmitter.emit({
+      index: this.formId,
+      variants: this.incompatibleVariantsArray,
+    });
     this.localAttributes = putInLocalAttributes(
       this.localAttributes,
       attributeOption
     );
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
+    this.checkOverflow()
+  }
+
+  checkOverflow() {
+    setTimeout(() => {
+      
+      this.isOverflow = this.isOverflown()
+      this.changeDetectorRef.detectChanges()
+    }, 0);
   }
 
   sideScroll(

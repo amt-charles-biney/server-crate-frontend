@@ -12,6 +12,9 @@ import {
   CategoryAndConfig,
   ConfigurationEdit,
   EditConfigResponse,
+  Case,
+  CaseResponse,
+  ProductPayload,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -29,8 +32,8 @@ export class AdminService {
     return this.http.get<Select[]>(`${this.baseUrl}/admin/brand`);
   }
 
-  addProduct(formData: FormData) {
-    return this.http.post(`${this.baseUrl}/admin/product`, formData);
+  addProduct(product: ProductPayload) {
+    return this.http.post(`${this.baseUrl}/admin/product`, product);
   }
 
   getProducts(page: number) {
@@ -51,8 +54,8 @@ export class AdminService {
     return this.http.delete(`${this.baseUrl}/admin/product/${id}`);
   }
 
-  updateProduct(id: string, formData: FormData) {
-    return this.http.patch(`${this.baseUrl}/admin/product/${id}`, formData);
+  updateProduct(id: string, product: ProductPayload) {
+    return this.http.patch(`${this.baseUrl}/admin/product/${id}`, product);
   }
 
   addBrand(name: string) {
@@ -126,4 +129,25 @@ export class AdminService {
   editCategory(id: string, categoryConfig: ConfigurationEdit) {
     return this.http.put(`${this.baseUrl}/admin/category/config/${id}`, categoryConfig)
   }
+
+  getCases() {
+    return this.http.get<CaseResponse>(`${this.baseUrl}/admin/cases`)
+  }
+
+  getCase(id: string) {
+    return this.http.get<Case>(`${this.baseUrl}/admin/cases/${id}`)
+  }
+
+  addCase({formData}: {formData: FormData}) {
+    return this.http.post(`${this.baseUrl}/admin/cases`, formData)
+  }
+  
+  updateCase({formData, id}: {formData: FormData, id: string}) {
+    return this.http.put(`${this.baseUrl}/admin/cases/${id}`, formData)
+  }
+
+  deleteCase(id: string) {
+    return this.http.delete(`${this.baseUrl}/admin/cases/${id}`)
+  }
+
 }

@@ -20,6 +20,7 @@ module.exports = {
         'table-bg': '#FCFCFD',
         'product-text': '#676767',
         'red-color': '#E1000F',
+        'yellow-color': '#F2BF08',
         'sidebar-text': '#1D2939',
         'active-link': '#F7FCF7',
         'profile-text': '#344054'

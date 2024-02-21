@@ -6,11 +6,31 @@ import {
   OnInit,
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
-import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Observable, Subject, catchError, map, of, startWith, tap } from 'rxjs';
-import { Select, LoadingStatus, ProductItem, BasicConfig } from '../../../../types';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  combineLatest,
+  map,
+  startWith,
+  tap,
+} from 'rxjs';
+import {
+  Select,
+  LoadingStatus,
+  ProductItem,
+  BasicConfig,
+  Case,
+  ProductPayload,
+} from '../../../../types';
 import { Store } from '@ngrx/store';
 import {
   selectBrands,
@@ -18,13 +38,15 @@ import {
 } from '../../../../store/admin/products/categories.reducers';
 import {
   addBrand,
+  addProduct,
   deleteBrand,
   deleteProduct,
-  getBrands,
   getCategories,
   getConfiguration,
   getProduct,
   resetConfiguration,
+  resetProduct,
+  updateProduct,
 } from '../../../../store/admin/products/categories.actions';
 import {
   MatAutocompleteModule,
@@ -32,11 +54,9 @@ import {
 } from '@angular/material/autocomplete';
 import { getUniqueId } from '../../../../core/utils/settings';
 import {
-  FormGroupExtension,
-  RxFormBuilder,
-  RxFormGroup,
   RxReactiveFormsModule,
   RxwebValidators,
+  startsWith,
 } from '@rxweb/reactive-form-validators';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -45,9 +65,15 @@ import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actio
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 import { selectConfigurationState } from '../../../../store/admin/products/configuration.reducers';
-import { selectProduct } from '../../../../store/admin/products/products.reducers';
+import {
+  productInitialState,
+  selectProduct,
+} from '../../../../store/admin/products/products.reducers';
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
 import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
+import { getCaseList, getCases } from '../../../../store/case/case.actions';
+import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
+import { selectCases } from '../../../../store/case/case.reducers';
 
 @Component({
   selector: 'app-add-product',
@@ -56,26 +82,33 @@ import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
     CustomInputComponent,
     MatSelectModule,
     ReactiveFormsModule,
+    FormsModule,
     CommonModule,
     MatAutocompleteModule,
     RxReactiveFormsModule,
     AuthLoaderComponent,
     CustomImageComponent,
+    CustomSelectComponent,
   ],
   templateUrl: './add-product.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddProductComponent implements OnInit, OnDestroy {
-  addProductForm!: RxFormGroup;
+  addProductForm!: FormGroup;
   categories$!: Observable<Select[]>;
+  cases$!: Observable<Case[]>;
   brands$!: Observable<Select[]>;
   private option$ = new Subject<BasicConfig>();
-  private product$ = new Subject<ProductItem>();
+  private product$ = new BehaviorSubject<ProductItem>(
+    productInitialState.product
+  );
+  private totalPrice$ = new BehaviorSubject<number>(-1);
   product = this.product$.asObservable();
   options = this.option$.asObservable();
   filteredOptions!: Observable<Select[]>;
   filteredBrandNames!: Observable<Select[]>;
   loadingState$!: Observable<LoadingStatus>;
+  caseId!: string;
   url: any = '';
   id: string = '';
   coverImage: string | null = '';
@@ -83,9 +116,10 @@ export class AddProductComponent implements OnInit, OnDestroy {
   image2: string | null = '';
   image3: string | null = '';
   formGroup = {};
+  configurationPrice: number = 0;
   constructor(
     private store: Store,
-    private fb: RxFormBuilder,
+    private fb: FormBuilder,
     private adminService: AdminService,
     private destroyRef: DestroyRef,
     private router: Router,
@@ -94,11 +128,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.store.dispatch(getCategories());
-    this.store.dispatch(getBrands());
-
+    this.store.dispatch(getCaseList());
+    this.totalPrice$.next(0);
     this.formGroup = {
-      file: null,
-      coverImage: null,
       productName: [
         '',
         RxwebValidators.required({ message: 'Please enter a product name' }),
@@ -109,134 +141,108 @@ export class AddProductComponent implements OnInit, OnDestroy {
           message: 'Please enter a product description',
         }),
       ],
-      productPrice: [
-        '',
-        RxwebValidators.required({ message: 'Please enter a price' }),
+      productPrice: [''],
+      serviceCharge: [
+        '0',
+        RxwebValidators.required({ message: 'Please enter a charge' }),
       ],
       productId: `${getUniqueId(2)}`,
-      productBrand: '',
       category: ['', categoryIsNotUnassigned()],
-      inStock: [
-        0,
-        RxwebValidators.required({
-          message: 'Please enter total products available',
-        }),
-      ],
-      image1: null,
-      image2: null,
-      image3: null,
+      cases: [''],
+      inStock: [0],
     };
-    this.addProductForm = <RxFormGroup>this.fb.group(this.formGroup);
+    this.addProductForm = this.fb.group(this.formGroup);
     if (this.id) {
-      this.addProductForm.markAllAsTouched()
       this.store.dispatch(getProduct({ id: this.id }));
-      this.store
-        .select(selectProduct)
-        .pipe(
-          tap((data: ProductItem) => {
-            if (data.category.id) {
-              this.store.dispatch(
-                getConfiguration({
-                  name: data.category.name,
-                  id: data.category.id,
-                })
-              );
-            }
-            this.formGroup = {
-              file: null,
-              coverImage: null,
-              productName: data.productName,
-              productDescription: data.productDescription,
-              productPrice: data.productPrice,
-              productBrand: {
-                name: data.productBrand,
-              },
-              productId: data.productId,
-              inStock: data.inStock,
-              category: {
+      this.product = this.store.select(selectProduct).pipe(
+        tap((data: ProductItem) => {
+          if (data.category.id) {
+            this.store.dispatch(
+              getConfiguration({
                 name: data.category.name,
                 id: data.category.id,
-              },
-              image1: null,
-              image2: null,
-              image3: null,
-            };
-
-            this.coverImage = data.coverImage;
-            this.image1 = data.imageUrl[0] || null;
-            this.image2 = data.imageUrl[1] || null;
-            this.image3 = data.imageUrl[2] || null;
-
-            this.addProductForm.patchValue({ ...this.formGroup });
-          }),
-          takeUntilDestroyed(this.destroyRef),
-          catchError((err) => {
-            return of(err);
-          })
-        )
-        .subscribe();
+              })
+            );
+          }
+          this.formGroup = {
+            productName: data.productName,
+            productDescription: data.productDescription,
+            productPrice: data.productPrice,
+            cases: data.productCase,
+            productId: data.productId,
+            inStock: data.inStock,
+            category: {
+              name: data.category.name,
+              id: data.category.id,
+            },
+            serviceCharge: data.serviceCharge,
+          };
+          this.addProductForm.patchValue({ ...this.formGroup });
+          setTimeout(() => {
+            this.addProductForm.markAllAsTouched();
+          }, 0);
+        })
+      );
     }
     this.categories$ = this.store.select(selectCategories).pipe(
       tap((categories) => {
-
         this.filteredOptions = this.category.valueChanges.pipe(
-          startWith({ id: '', name: ''}),
+          startWith({ id: '', name: '' }),
           map((value) => {
-            return this._filter(value, categories)
+            return this._filter(value, categories);
           })
         );
       })
     );
 
-    this.brands$ = this.store.select(selectBrands).pipe(
-      tap((brands) => {
-
-        this.filteredBrandNames = this.productBrand.valueChanges.pipe(
-          startWith({ id: '', name: ''}),
-          map((value) => this._filter(value, brands))
-        );
-      })
-    );
+    this.cases$ = this.store.select(selectCases);
 
     this.loadingState$ = this.store.select(selectLoaderState);
     this.options = this.store.select(selectConfigurationState);
+
+    combineLatest([
+      this.addProductForm.controls['cases'].valueChanges.pipe(startWith('')),
+      this.addProductForm.controls['serviceCharge'].valueChanges.pipe(
+        startWith(0)
+      ),
+      this.store.select(selectConfigurationState),
+    ]).subscribe(([caseValue, serviceChargeValue, configuration]) => {
+      let configPrice = 0;
+      for (let key in configuration.options) {
+        configuration.options[key].forEach((config) => {
+          if (config.isIncluded) {
+            configPrice += config.price;
+          }
+        });
+      }
+      this.configurationPrice = configPrice;
+      const productPricing = (caseValue.price || 0) + configPrice;
+      const calculatedPrice =
+        (serviceChargeValue / 100) * productPricing + productPricing;
+      this.price.setValue(calculatedPrice);
+    });
   }
 
   ngOnDestroy(): void {
-    this.store.dispatch(resetConfiguration())
+    this.store.dispatch(resetConfiguration());
+    this.store.dispatch(resetProduct());
   }
 
-  deleteBrand(event:Event, option: Select) {
-    event.stopPropagation()
-    this.store.dispatch(deleteBrand({ id: option.id }))
-  }
-  
-  deleteCategory(event:Event, option: Select) {
-    event.stopPropagation()
+  deleteCategory(event: Event, option: Select) {
+    event.stopPropagation();
   }
 
-  private _filter(value: Select | string, filterFrom: Select[]) {     
-    return filterFrom.filter((option: Select) => {      
-        if (typeof(value) !== 'string'){
+  private _filter(value: Select | string, filterFrom: Select[]) {
+    return filterFrom.filter((option: Select) => {
+      if (typeof value !== 'string') {
         return option.name.toLowerCase().includes(value.name.toLowerCase());
       }
       return option.name.toLowerCase().includes(value.toLowerCase());
-      });
+    });
   }
 
   cancel() {
     this.router.navigateByUrl('/admin/products');
-  }
-
-  addNewBrand() {
-    const brandName = this.productBrand.value
-    if (brandName) {
-      if (this.id) {
-        this.store.dispatch(addBrand({ name:  brandName }))
-      } else {
-        this.store.dispatch(addBrand({ name:  brandName }))
-      }
-    }
   }
 
   onCategorySelected(event: MatAutocompleteSelectedEvent) {
@@ -244,8 +250,10 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.store.dispatch(getConfiguration(selectedCategory));
     this.options = this.store.select(selectConfigurationState);
   }
-  onBrandSelected(event: MatAutocompleteSelectedEvent) {
-    const selectedCategory: Select = event.option.value;
+
+  onSelectCase(event: MatSelectChange) {
+    console.log('Selected case', event.value);
+    this.caseId = event.value.id;
   }
 
   addProduct() {
@@ -258,90 +266,19 @@ export class AddProductComponent implements OnInit, OnDestroy {
       })
     );
     scrollTo({ top: 0, behavior: 'smooth' });
-    const formData: FormData = (<FormGroupExtension>(
-      this.addProductForm
-    )).toFormData();
-
-    const coverImage = formData.get('coverImage[0]');
-    const image1 = formData.get('image1[0]');
-    const image2 = formData.get('image2[0]');
-    const image3 = formData.get('image3[0]');
-    const category = formData.get('category[name]');
-    const productBrand = formData.get('productBrand[name]') || formData.get('productBrand');
-    
-    formData.delete('coverImage[0]');
-    formData.delete('image1[0]');
-    formData.delete('image2[0]');
-    formData.delete('image3[0]');
-    formData.delete('category[name]');
-    formData.delete('category[id]');
-    formData.delete('productBrand[name]');
-    formData.delete('productBrand[id]');
-    formData.delete('file[0]');
-
-    formData.set('coverImage', coverImage!);
-    formData.set('category', category!);
-    formData.set('productBrand', productBrand!);
-    formData.append('file', image1!);
-    formData.append('file', image2!);
-    formData.append('file', image3!);
-
+    const product: ProductPayload = {
+      productName: this.productName.value,
+      productDescription: this.productDescription.value,
+      serviceCharge: this.serviceCharge.value,
+      productId: this.addProductForm.value.productId,
+      category: this.addProductForm.value.category.name,
+      productCaseId: this.caseId,
+      inStock: this.inStock.value,
+    };
     if (this.id) {
-      this.adminService
-        .updateProduct(this.id, formData)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          error: (err) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message:
-                  err.error?.detail || 'Server response error',
-                isError: true,
-              })
-            );
-          },
-          complete: () => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message: 'Edited product successfully',
-                isError: false,
-              })
-            );
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/products');
-            }, 1500);
-          },
-        });
+      this.store.dispatch(updateProduct({ id: this.id, product }));
     } else {
-      this.adminService
-        .addProduct(formData)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          error: (err) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message:
-                  err.error?.detail || 'Please enter all the required data',
-                isError: true,
-              })
-            );
-          },
-          complete: () => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message: 'Added product successfully',
-                isError: false,
-              })
-            );
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/products');
-            }, 1500);
-          },
-        });
+      this.store.dispatch(addProduct(product));
     }
   }
 
@@ -366,7 +303,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       setter(obj.imgSrc);
     }
   }
-  removeImage(imageToRemove: string) {    
+  removeImage(imageToRemove: string) {
     if (imageToRemove === 'coverImage') {
       this.removeCoverImage();
     } else if (imageToRemove === 'image1') {
@@ -402,6 +339,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
   get category() {
     return this.addProductForm.get('category')!;
   }
+  get cases() {
+    return this.addProductForm.get('cases')!;
+  }
   get productBrand() {
     return this.addProductForm.get('productBrand')!;
   }
@@ -413,5 +353,13 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
   get inStock() {
     return this.addProductForm.get('inStock')!;
+  }
+
+  get price() {
+    return this.addProductForm.get('productPrice')!;
+  }
+
+  get serviceCharge() {
+    return this.addProductForm.get('serviceCharge')!;
   }
 }

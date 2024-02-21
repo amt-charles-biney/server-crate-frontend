@@ -4,6 +4,7 @@ import {
   Select,
   Item,
   ProductItem,
+  ProductPayload,
 } from '../../../types';
 
 export const getCategories = createAction('[products] get categories');
@@ -24,8 +25,14 @@ export const categoryFailure = createAction('[products] category failure');
 
 export const addProduct = createAction(
   '[products] add product',
-  props<FormData>()
+  props<ProductPayload>()
 );
+
+export const updateProduct = createAction(
+  '[products] update product',
+  props<{ id: string, product: ProductPayload}>()
+)
+
 
 export const getProduct = createAction(
   '[products] get single product',
@@ -52,7 +59,7 @@ export const gotProducts = createAction(
   props<{ products: AllProducts }>()
 );
 
-export const getConfiguration = createAction(
+export const  getConfiguration = createAction(
   '[products] get category config',
   props<Select>()
 );
@@ -67,6 +74,7 @@ export const gotConfiguration = createAction(
 );
 
 export const resetConfiguration = createAction('[products] reset config');
+export const resetProduct = createAction('[products] reset product')
 
 export const deleteProduct = createAction(
   '[products] delete product',

@@ -1,4 +1,4 @@
-<span class="mt-4 mb-4">{{ label }}</span>
+<span [ngClass]="myClass" class="mt-4 mb-4">{{ label }}</span>
 @if (isMultipleSelect) {
 <mat-select
   panelClass="myPanel"
@@ -50,7 +50,7 @@
     >
       @for (option of options; track option;) {
       <mat-option class="flex-row !text-sm !pr-[11px] myOption" [value]="option">{{
-        option.optionName ?? option.attributeName ?? option
+        option.optionName ?? option.attributeName ?? option.name ?? option
       }}</mat-option>
       }
     </mat-select>

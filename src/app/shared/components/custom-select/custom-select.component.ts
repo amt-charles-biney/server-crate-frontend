@@ -47,6 +47,7 @@ export class CustomSelectComponent {
   @Input() isMultipleSelect = false;
   @Input() isDisabled = false;
   @Input() isRequired = false;
+  @Input() myClass!: string
   @Output() onSelect = new EventEmitter<MatSelectChange>();
   @ViewChild('matSelect') matSelect!: MatSelect;
   allSelected = false;
@@ -55,8 +56,8 @@ export class CustomSelectComponent {
     this.onSelect.emit(event);
   }
   compareFn(
-    c1: string | AttributeOption,
-    c2: string | AttributeOption
+    c1: any,
+    c2: any
   ): boolean {
     if (c1 && c2) {
       if (typeof c1 === 'string' && typeof c2 === 'string') {
@@ -68,8 +69,8 @@ export class CustomSelectComponent {
       } else if (isAttributeOption(c1) && isAttributeOption(c2)) {
         return c1.id === c2.id;
       }
-    }
-    return false;
+    }    
+    return c1.name === c2;
   }
   toggleAllSelection() {
     this.allSelected = !this.allSelected;
