@@ -14,15 +14,7 @@ import { CookieConsentComponent } from './features/cookie-consent/cookie-consent
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  constructor(private router: Router, private store: Store) {
-    this.router.events.subscribe((ev) => {
-      if (ev instanceof NavigationEnd) { 
-        this.store.dispatch(resetLoader({isError: false, message: '', status: false }))
-      }
-    });
-    console.log(environment.base_url, environment.production);
-    
-  }
+  constructor(private router: Router, private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(getCartItems());
