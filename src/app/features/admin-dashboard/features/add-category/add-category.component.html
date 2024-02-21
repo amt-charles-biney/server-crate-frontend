@@ -1,6 +1,5 @@
 <h2 class="font-bold text-[24px]">Category Details</h2>
 <app-auth-loader [loadingState]="loadingStatus" />
-<ng-container *ngIf="resize$ | async"></ng-container>
 <ng-container *ngIf="attributes | async as attributes">
   <form
     [formGroup]="categoryForm"
@@ -27,8 +26,8 @@
     </section>
     <section>
       <h2 class="font-bold font-dm-sans">Incompatible Attributes</h2>
-      <section class="grid grid-cols-6 w-full gap-x-20">
-        <div class="col-span-3 mt-4">
+      <section class="grid grid-cols-12 gap-[78px] mt-4">
+        <div class="col-span-6">
           <app-custom-select
             label="Attributes"
             [control]="$any(categoryForm.controls['attributesInput'])"
@@ -39,24 +38,28 @@
         <ng-container
           *ngIf="selectedAttributes | async as variantsForAttribute"
         >
-          <div class="flex gap-[78px] col-span-3">
-            <div class="flex w-[60%] flex-col gap-0.5 mt-4">
-              <app-custom-select
-                label="Variants"
-                [control]="$any(categoryForm.controls['variants'])"
-                [options]="variantsForAttribute"
-                [isMultipleSelect]="true"
-                [isDisabled]="variantsForAttribute.length === 0"
-              />
-            </div>
-            <button
-              type="button"
-              (click)="addIncompatibleAttribute(categoryConfigPayload, attributesInput.value, variants.value || [])"
-              class="text-figma-green font-inter text-xs underline self-end"
-            >
-              Add attribute
-            </button>
+          <div class="col-span-4">
+            <app-custom-select
+              label="Variants"
+              [control]="$any(categoryForm.controls['variants'])"
+              [options]="variantsForAttribute"
+              [isMultipleSelect]="true"
+              [isDisabled]="variantsForAttribute.length === 0"
+            />
           </div>
+          <button
+            type="button"
+            (click)="
+              addIncompatibleAttribute(
+                categoryConfigPayload,
+                attributesInput.value,
+                variants.value || []
+              )
+            "
+            class="text-figma-green font-inter text-xs underline col-span-2 self-end mb-[22px]"
+          >
+            Add attribute
+          </button>
         </ng-container>
       </section>
     </section>
@@ -66,6 +69,7 @@
           ? 'bg-white'
           : 'bg-[#D9D9D91A] pt-[8px] pb-[7px]'
       "
+      #parent
       class="flex items-center overflow-auto"
     >
       <button
@@ -106,7 +110,12 @@
           <div class="flex items-center w-[272px] gap-[9px]">
             <div class="flex gap-[18px] w-[240px]">
               <button
-              (click)="removeAttributeOption(attribute, incompatibleSet[attribute.attribute.name])"
+                (click)="
+                  removeAttributeOption(
+                    attribute,
+                    incompatibleSet[attribute.attribute.name]
+                  )
+                "
                 type="button"
                 class="flex items-center py-[5px] px-[12px] rounded-[70px] w-[111px] bg-attr-button"
                 *ngFor="
@@ -137,7 +146,12 @@
               <button
                 mat-menu-item
                 [disableRipple]="true"
-                (click)="removeAttributeOption(attribute, incompatibleSet[attribute.attribute.name])"
+                (click)="
+                  removeAttributeOption(
+                    attribute,
+                    incompatibleSet[attribute.attribute.name]
+                  )
+                "
                 type="button"
                 class="flex items-center px-[12px] w-[111px] bg-attr-button"
                 *ngFor="
@@ -199,7 +213,9 @@
             [options]="attribute.attributeOptions"
             (onSelect)="onSelectConfigOptions($event, attribute)"
             [isDisabled]="attribute.attributeOptions.length === 0"
-            [isRequired]="attribute.isRequired && attribute.attributeOptions.length > 0"
+            [isRequired]="
+              attribute.isRequired && attribute.attributeOptions.length > 0
+            "
           />
           <!-- <app-custom-select
             [control]="
@@ -224,7 +240,8 @@
             [isDisabled]="
               !sizes[attribute.attributeName] ||
               (sizes[attribute.attributeName] &&
-                sizes[attribute.attributeName].length === 0)"
+                sizes[attribute.attributeName].length === 0)
+            "
           />
         </div>
         } @else {
@@ -234,7 +251,9 @@
           [options]="attribute.attributeOptions"
           (onSelect)="onSelectConfigOptions($event, attribute)"
           [isDisabled]="attribute.attributeOptions.length === 0"
-          [isRequired]="attribute.isRequired && attribute.attributeOptions.length > 0"
+          [isRequired]="
+            attribute.isRequired && attribute.attributeOptions.length > 0
+          "
         />
         } }
       </section>
