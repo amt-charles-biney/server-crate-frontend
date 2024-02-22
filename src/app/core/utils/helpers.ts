@@ -317,6 +317,28 @@ export function removeFromPayload(
   return newCategoryConfigPayload;
 }
 
+export function removeVariantsFromPayload(
+  configPayload: Map<string, CategoryConfig[]> = new Map(),
+  incompatibleAttributeOptions: AttributeOption[]
+) {
+  incompatibleAttributeOptions.forEach((option) => {
+    const newPayload = configPayload
+      .get(option.attribute.name)!
+      .map((config) => {
+        if (config.attributeOptionId === option.id) {
+          return {
+            ...config,
+            isIncluded: false,
+            isCompatible: false,
+          };
+        } 
+        return config;
+      });
+    configPayload.set(option.attribute.name, newPayload);
+  });
+  return configPayload;
+}
+
 export function generateIncompatibleSet(
   incompatibleAttributeOptions: AttributeOption[]
 ) {
@@ -341,7 +363,9 @@ export function buildIncompatibleTable(
   incompatibleAttributeOptions.forEach((incompatibleAttribute) => {
     const name = incompatibleAttribute.attribute.name;
     if (incompatibleSet[name]) {
-      incompatibleSet[name] = incompatibleSet[name].filter((option) => option.id !== incompatibleAttribute.id)
+      incompatibleSet[name] = incompatibleSet[name].filter(
+        (option) => option.id !== incompatibleAttribute.id
+      );
       incompatibleSet[name].push(incompatibleAttribute);
     } else {
       incompatibleSet[name] = [incompatibleAttribute];

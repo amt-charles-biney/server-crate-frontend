@@ -243,6 +243,7 @@ export type CaseResponse = {
 
   export type Configuration = {
     name: string;
+    thumbnail: string;
     config: CategoryConfig[]
   }
   
@@ -301,6 +302,7 @@ export type BasicConfig = {
 };
 export type CategoryPayload = {
   name: string;
+  thumbnail: string;
   config: CategoryConfig[]
 }
 export type CartResponse = {
