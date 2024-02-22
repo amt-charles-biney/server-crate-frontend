@@ -7,6 +7,7 @@ import {
   deleteBrand,
   deleteProduct,
   getBrands,
+  getCases,
   getCategories,
   getConfiguration,
   getProduct,
@@ -15,6 +16,7 @@ import {
   getUserCategories,
   getUserConfiguration,
   gotBrands,
+  gotCases,
   gotCategories,
   gotConfiguration,
   gotProduct,
@@ -31,7 +33,7 @@ import {
   timeout,
 } from 'rxjs';
 import { AdminService } from '../../../core/services/admin/admin.service';
-import { Select, Item, ProductItem } from '../../../types';
+import { Select, Item, ProductItem, PageAbleResponseData } from '../../../types';
 import { Store } from '@ngrx/store';
 import { resetLoader, setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { Router } from '@angular/router';
@@ -54,7 +56,7 @@ export class CategoryEffect {
                 isError: false,
               })
             );
-            console.log('categories', data);
+
             return gotCategories({ categories: data });
           }),
           timeout(8000),
@@ -89,7 +91,7 @@ export class CategoryEffect {
                 isError: false,
               })
             );
-            console.log('categories', data);
+
             return gotCategories({ categories: data });
           }),
           timeout(8000),
@@ -117,18 +119,9 @@ export class CategoryEffect {
       exhaustMap(() => {
         return this.adminService.getBrands().pipe(
           map((data: Select[]) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                status: false,
-                message: '',
-                isError: false,
-              })
-            );
             return gotBrands({ brands: data });
           }),
-          timeout(5000),
           catchError((err) => {
-            throwError(() => 'Request timed out');
             console.log('Error occured', err);
             return of(categoryFailure());
           })
@@ -391,6 +384,19 @@ export class CategoryEffect {
               message: errorHandler(err),
               status: false
             }))
+          })
+        )
+      })
+    )
+  })
+
+  getCases$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(getCases),
+      exhaustMap(() => {
+        return this.userService.getCases().pipe(
+          map(( response: PageAbleResponseData<Select> ) => {
+            return gotCases({ cases: response.content })
           })
         )
       })
