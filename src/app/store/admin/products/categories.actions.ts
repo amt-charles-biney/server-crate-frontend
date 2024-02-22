@@ -100,3 +100,6 @@ export const removeFromFeature = createAction(
   '[products] remove from feature',
   props<{ id: string }>()
 );
+
+export const gotCases = createAction('[cases] get user cases', props<{ cases: Select[] }>())
+export const getCases = createAction('[cases] get all cases to display for user')

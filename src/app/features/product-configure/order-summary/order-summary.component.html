@@ -14,12 +14,12 @@ class="border-[1px] flex-1 h-[327px] max-w-[486px] w-[486px] mt-5 flex flex-col 
 
 <div class="w-full gap-4 flex flex-col">
    <span class="flex flex-row justify-between w-full items-center">
-      <span class="text-xs font-[400px]">Total(2)</span>
-      <span class="font-medium text-xs">$ {{productConfigItem.totalPrice}}</span>
-   </span>
-   <span class="flex flex-row justify-between w-full items-center">
       <span class="text-xs font-normal">(Incl. VAT)</span>
       <span class="font-medium text-xs">{{productConfigItem.vat}}</span>
+   </span>
+   <span class="flex flex-row justify-between w-full items-center">
+      <span class="text-xs font-[400px]">Total(2)</span>
+      <span class="font-medium text-xs">$ {{productConfigItem.totalPrice}}</span>
    </span>
    <button 
    (click)="addProductToCart()"

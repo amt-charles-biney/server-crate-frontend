@@ -6,7 +6,17 @@ export type LoadingStatus = {
 export type Select = {
   id: string;
   name: string;
+  description?: string,
+  thumbnail?: string
 };
+
+export type defaultSelect =  {
+  id: string,
+  name: string,
+  description?: string,
+  img?: string
+} 
+
 export type OnChange<T> = (value: T) => void;
 export type OnTouch = () => void;
 export type AppState = {
@@ -406,4 +416,38 @@ export type ProductPayload = {
   category: string;
   productCaseId: string;
   inStock: string;
+}
+
+// pageable
+interface Pageable {
+  pageNumber: number;
+  pageSize: number;
+  sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+  };
+  offset: number;
+  paged: boolean;
+  unpaged: boolean;
+}
+
+interface Sort {
+  empty: boolean;
+  sorted: boolean;
+  unsorted: boolean;
+}
+
+export interface PageAbleResponseData<T> {
+  content: T[];
+  pageable?: Pageable;
+  last?: boolean;
+  totalElements?: number;
+  totalPages?: number;
+  size?: number;
+  number?: number;
+  sort?: Sort;
+  numberOfElements?: number;
+  first?: boolean;
+  empty?: boolean;
 }

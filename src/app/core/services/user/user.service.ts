@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { AllProducts, Select } from '../../../types';
+import { AllProducts, PageAbleResponseData, Select } from '../../../types';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl = environment.base_url
+  private baseUrl = environment.base_url
   constructor(private http: HttpClient) { }
 
   getProducts(page: number, filterParams: string) {
@@ -27,5 +28,9 @@ export class UserService {
 
   getSearchResults(searchValue: string) {
     return this.http.get<AllProducts>(`${this.baseUrl}/search/products?query=${searchValue}`)
+  }
+
+  getCases(): Observable<PageAbleResponseData<Select>> {
+    return this.http.get<PageAbleResponseData<Select>>(`${this.baseUrl}/cases`);
   }
 }

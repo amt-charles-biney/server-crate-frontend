@@ -1,10 +1,11 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { Select } from '../../../types';
-import { gotBrands, gotCategories } from './categories.actions';
+import { gotBrands, gotCases, gotCategories } from './categories.actions';
 
-const initialState: { categories: Select[], brands: Select[] } = {
+const initialState: { categories: Select[], brands: Select[], cases: Select[] } = {
   categories: [],
-  brands: []
+  brands: [],
+  cases: []
 };
 export const categoryFeature = createFeature({
   name: 'categories',
@@ -18,6 +19,10 @@ export const categoryFeature = createFeature({
       ...state,
       brands,
     })),
+    on(gotCases, (state, { cases }) => ({
+      ...state,
+      cases
+    }))
   ),
 });
 
@@ -26,5 +31,6 @@ export const {
 reducer,
 selectBrands,
 selectCategories,
-selectCategoriesState
+selectCategoriesState,
+selectCases
 } = categoryFeature
