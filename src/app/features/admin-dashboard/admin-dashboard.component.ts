@@ -7,11 +7,12 @@ import { CURRENT_AD_TAB } from '../../core/utils/constants';
 import { getAttributes } from '../../store/category-management/attributes/attributes.actions';
 import { clearStorage } from '../../core/utils/helpers';
 import { getCases } from '../../store/case/case.actions';
+import { LoaderComponent } from '../../core/components/loader/loader.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [NgOptimizedImage, UserProfileImageComponent, RouterModule, CommonModule],
+  imports: [NgOptimizedImage, UserProfileImageComponent, RouterModule, CommonModule, LoaderComponent],
   templateUrl: './admin-dashboard.component.html',
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
@@ -27,7 +28,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   setCurrentTab(currentTab: string) {
-    scrollTo({ top: 110, behavior: 'smooth'})
     sessionStorage.setItem(CURRENT_AD_TAB, currentTab)
     this.activeLink = currentTab
   }

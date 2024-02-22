@@ -50,7 +50,7 @@ export function convertToAttributeOption(
     unit,
     brand,
     incompatibleAttributeOptions,
-    inStock
+    inStock,
   } = categoryEdit;
   return {
     additionalInfo: {
@@ -71,8 +71,7 @@ export function convertToAttributeOption(
     compatibleOptionId: categoryEdit.compatibleOptionId,
     brand,
     incompatibleAttributeOptions,
-    inStock
-
+    inStock,
   };
 }
 export function convertToCategoryConfig(
@@ -148,47 +147,45 @@ export function updateConfigPayload(
         isCompatible: true,
         isIncluded: included,
         isMeasured: attributeOption.attribute.isMeasured,
-        size: attributeOption.additionalInfo.baseAmount 
-      }
-    ])
+        size: attributeOption.additionalInfo.baseAmount,
+      },
+    ]);
   }
-  const newPayload = configPayload.get(attributeOption.attribute.name)!.map((config) => {
-    if (config.attributeOptionId === attributeOption.id) {      
-      return {
-        ...config,
-        isIncluded: included,
-        isCompatible: true,
-      };
-    } else if (config.attributeId === attributeOption.attribute.id) {
-      return {
-        ...config,
-        isIncluded: false,
-        isCompatible: true,
-      };
-    }
-    return config;
-  });
+  const newPayload = configPayload
+    .get(attributeOption.attribute.name)!
+    .map((config) => {
+      if (config.attributeOptionId === attributeOption.id) {
+        return {
+          ...config,
+          isIncluded: included,
+          isCompatible: true,
+        };
+      } else if (config.attributeId === attributeOption.attribute.id) {
+        return {
+          ...config,
+          isIncluded: false,
+          isCompatible: true,
+        };
+      }
+      return config;
+    });
   configPayload.set(attributeOption.attribute.name, newPayload);
   return configPayload;
 }
-
 
 export function getEditConfigPayload(configs: CategoryEditResponse[]) {
   const mapping: Map<string, CategoryConfig[]> = new Map();
   configs.forEach((config) => {
     if (mapping.has(config.type)) {
-      mapping.set(config.type, 
-       [ ...mapping.get(config.type)!,
-        convertToCategoryConfig(config)],
-      );
-    } else {
       mapping.set(config.type, [
+        ...mapping.get(config.type)!,
         convertToCategoryConfig(config),
       ]);
+    } else {
+      mapping.set(config.type, [convertToCategoryConfig(config)]);
     }
   });
-  return mapping
-
+  return mapping;
 }
 
 export function updateConfigSizes(
@@ -286,17 +283,15 @@ export function generateIncompatiblesTable(config: CategoryEditResponse[]) {
 }
 
 export function getAttributeOptionsFromConfig(config: CategoryEditResponse) {
-  return (
-    convertToAttributeOption(
-      config,
-      config.attributeId,
-      config.attributeOptionId
-    )
+  return convertToAttributeOption(
+    config,
+    config.attributeId,
+    config.attributeOptionId
   );
 }
 
 export function removeFromPayload(
-  categoryConfigPayload: Map<string, CategoryConfig[]>,
+  categoryConfigPayload: Map<string, CategoryConfig[]> = new Map(),
   attributeName: string,
   incompatibleAttributeOptions: AttributeOption[]
 ) {
@@ -305,19 +300,16 @@ export function removeFromPayload(
   );
   const newConfig = categoryConfigPayload
     .get(attributeName)!
-    .map(
-      (categoryConfig) => {
-        if (optionIds.includes(categoryConfig.attributeOptionId)) {
-          return {
-            ...categoryConfig,
-            isCompatible: false,
-            isIncluded: false
-          }
-        }
-        return categoryConfig
+    .map((categoryConfig) => {
+      if (optionIds.includes(categoryConfig.attributeOptionId)) {
+        return {
+          ...categoryConfig,
+          isCompatible: false,
+          isIncluded: false,
+        };
       }
-        
-    );
+      return categoryConfig;
+    });
   const newCategoryConfigPayload = categoryConfigPayload.set(
     attributeName,
     newConfig
@@ -325,23 +317,19 @@ export function removeFromPayload(
   return newCategoryConfigPayload;
 }
 
-export function generateIncompatibleSet(incompatibleAttributeOptions: AttributeOption[]) {
-  console.log("Edit", incompatibleAttributeOptions);
-  
-  const incompatibleSet: Record<string, AttributeOption[]> =
-    {};
+export function generateIncompatibleSet(
+  incompatibleAttributeOptions: AttributeOption[]
+) {
+  const incompatibleSet: Record<string, AttributeOption[]> = {};
   incompatibleAttributeOptions.forEach((incompatibleAttribute) => {
-    if (incompatibleSet[incompatibleAttribute.attribute.name]) {
-      incompatibleSet[incompatibleAttribute.attribute.name].push(
-        incompatibleAttribute
-      );
+    const name = incompatibleAttribute.attribute.name;
+    if (incompatibleSet[name]) {
+      incompatibleSet[name].push(incompatibleAttribute);
     } else {
-      incompatibleSet[incompatibleAttribute.attribute.name] = [
-        incompatibleAttribute,
-      ];
+      incompatibleSet[name] = [incompatibleAttribute];
     }
-  })
-  return incompatibleSet
+  });
+  return incompatibleSet;
 }
 export function buildIncompatibleTable(
   incompatibleAttributeOptions: AttributeOption[],
@@ -351,14 +339,12 @@ export function buildIncompatibleTable(
   const incompatibleSet: Record<string, AttributeOption[]> =
     currentIncompatibleSet;
   incompatibleAttributeOptions.forEach((incompatibleAttribute) => {
-    if (incompatibleSet[incompatibleAttribute.attribute.name]) {
-      incompatibleSet[incompatibleAttribute.attribute.name].push(
-        incompatibleAttribute
-      );
+    const name = incompatibleAttribute.attribute.name;
+    if (incompatibleSet[name]) {
+      incompatibleSet[name] = incompatibleSet[name].filter((option) => option.id !== incompatibleAttribute.id)
+      incompatibleSet[name].push(incompatibleAttribute);
     } else {
-      incompatibleSet[incompatibleAttribute.attribute.name] = [
-        incompatibleAttribute,
-      ];
+      incompatibleSet[name] = [incompatibleAttribute];
     }
     localAttributes = removeFromLocalAttributes(
       localAttributes,
