@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
@@ -18,11 +18,13 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatBadgeModule} from '@angular/material/badge';
 import { Observable } from 'rxjs';
 import { selectCount } from '../../../store/cart/cart.reducers';
+import { MegaMenuComponent } from './mega-menu/mega-menu.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
+    MegaMenuComponent,
     NgOptimizedImage,
     RouterModule,
     CustomButtonComponent,
@@ -57,11 +59,12 @@ import { selectCount } from '../../../store/cart/cart.reducers';
   ],
 })
 export class HeaderComponent implements OnInit {
+  isMegaMenu: boolean = false;
   isAuthenticated!: boolean;
   showSearch: boolean = false;
   searchForm!: FormGroup
   numberOfCartItems$!: Observable<number>
-  constructor(private authService: AuthService, private store: Store, private router: Router) {
+  constructor(private authService: AuthService, private store: Store, private router: Router, private renderer: Renderer2) {
     this.isAuthenticated = this.authService.isAuthenticated();
   }
   ngOnInit(): void {
@@ -82,5 +85,16 @@ export class HeaderComponent implements OnInit {
 
   get searchValue() {
     return this.searchForm.get('searchValue')!
+  }
+
+
+  toggleMenu(menuState: boolean) {
+    this.isMegaMenu = menuState
+    this.blurBackgroundOnToggle(menuState)
+  }
+
+  blurBackgroundOnToggle(shouldBlur: boolean) {
+    if(shouldBlur) this.renderer.addClass(document.body, 'overflow-hidden')
+    else this.renderer.removeClass(document.body, 'overflow-hidden')
   }
 }
