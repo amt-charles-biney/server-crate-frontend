@@ -33,13 +33,10 @@ import {
 } from '../../../../types';
 import { Store } from '@ngrx/store';
 import {
-  selectBrands,
   selectCategories,
 } from '../../../../store/admin/products/categories.reducers';
 import {
-  addBrand,
   addProduct,
-  deleteBrand,
   deleteProduct,
   getCategories,
   getConfiguration,
@@ -56,9 +53,7 @@ import { getUniqueId } from '../../../../core/utils/settings';
 import {
   RxReactiveFormsModule,
   RxwebValidators,
-  startsWith,
 } from '@rxweb/reactive-form-validators';
-import { AdminService } from '../../../../core/services/admin/admin.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actions';
@@ -71,10 +66,12 @@ import {
 } from '../../../../store/admin/products/products.reducers';
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
 import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
-import { getCaseList, getCases } from '../../../../store/case/case.actions';
+import { getCaseList } from '../../../../store/case/case.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 import { selectCases } from '../../../../store/case/case.reducers';
-
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { LoaderComponent } from '../../../../core/components/loader/loader.component';
+import { ErrorComponent } from '../../../../shared/components/error/error.component';
 @Component({
   selector: 'app-add-product',
   standalone: true,
@@ -89,6 +86,9 @@ import { selectCases } from '../../../../store/case/case.reducers';
     AuthLoaderComponent,
     CustomImageComponent,
     CustomSelectComponent,
+    LoaderComponent,
+    NgxUiLoaderModule,
+    ErrorComponent
   ],
   templateUrl: './add-product.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -120,10 +120,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private fb: FormBuilder,
-    private adminService: AdminService,
     private destroyRef: DestroyRef,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
   ) {}
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
@@ -206,21 +205,23 @@ export class AddProductComponent implements OnInit, OnDestroy {
         startWith(0)
       ),
       this.store.select(selectConfigurationState),
-    ]).subscribe(([caseValue, serviceChargeValue, configuration]) => {
-      let configPrice = 0;
-      for (let key in configuration.options) {
-        configuration.options[key].forEach((config) => {
-          if (config.isIncluded) {
-            configPrice += config.price;
-          }
-        });
-      }
-      this.configurationPrice = configPrice;
-      const productPricing = (caseValue.price || 0) + configPrice;
-      const calculatedPrice =
-        (serviceChargeValue / 100) * productPricing + productPricing;
-      this.price.setValue(calculatedPrice);
-    });
+    ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([caseValue, serviceChargeValue, configuration]) => {
+        let configPrice = 0;
+        for (let key in configuration.options) {
+          configuration.options[key].forEach((config) => {
+            if (config.isIncluded) {
+              configPrice += config.price;
+            }
+          });
+        }
+        this.configurationPrice = configPrice;
+        const productPricing = (caseValue.price || 0) + configPrice;
+        const calculatedPrice =
+          (serviceChargeValue / 100) * productPricing + productPricing;
+        this.price.setValue(calculatedPrice);
+      });
   }
 
   ngOnDestroy(): void {
@@ -252,7 +253,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
 
   onSelectCase(event: MatSelectChange) {
-    console.log('Selected case', event.value);
     this.caseId = event.value.id;
   }
 

@@ -1,3 +1,11 @@
+<ng-container *ngIf="loadingState$ | async as loadingState">
+  <ng-container *ngIf="!loadingState.isError">
+    <app-loader loaderId="product" size="none"/>
+  </ng-container>
+  <ng-container *ngIf="loadingState.message">
+    <app-error [message]="loadingState.message" [visible]="true"/>
+  </ng-container>
+</ng-container>
 <main class="flex flex-col min-h-screen">
   <h1 class="font-bold text-xl">Product Details</h1>
   <ng-container *ngIf="product | async as product; else loadingProduct">
@@ -16,11 +24,11 @@
           myClass="font-[500]"
         />
         <!-- @if (productName.invalid && (productName.touched || productName.dirty)) {
-      <span
-        class="text-red-600"
-        >{{addProductForm.controls["productName"].errors?.['required'].message }}</span
-      >
-      } -->
+          <span
+            class="text-red-600"
+            >{{addProductForm.controls["productName"].errors?.['required'].message }}</span
+          >
+          } -->
         <app-custom-input
           id="productDescription"
           label="Product Description"
@@ -62,11 +70,11 @@
         </ng-container>
 
         <!-- @if (category.invalid ) {
-          <span
-            class="text-red-600"
-            >{{addProductForm.controls["category"].errors?.['category'].value }}</span
-          >
-          } -->
+              <span
+                class="text-red-600"
+                >{{addProductForm.controls["category"].errors?.['category'].value }}</span
+              >
+              } -->
         <div class="flex items-center justify-between">
           <div class="w-[45%]">
             <app-custom-input
@@ -119,7 +127,9 @@
       <section>
         <div class="py-3">
           <p class="font-dm-sans text-sm">Base Configuration</p>
-          <div class="overflow-auto rounded-lg mt-2 bg-[#fbfbfb]">
+
+          <div class="relative overflow-auto overflow-y-hidden rounded-lg mt-2 bg-[#fbfbfb]">
+            <app-loader loaderId="getConfig" />
             <ul
               class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc"
             >
@@ -145,11 +155,11 @@
             >
               <li class="leading-4 w-max px-3 text-[13px]">
                 <p>Case Price ($)</p>
-                <p class="text-gray-400">{{
-                  !cases.value.price
-                    ? "No selected case"
-                    : cases.value.price
-                }}</p>
+                <p class="text-gray-400">
+                  {{
+                    !cases.value.price ? "No selected case" : cases.value.price
+                  }}
+                </p>
               </li>
               <li class="leading-4 w-max px-3 text-[13px]">
                 <p>Service Charge (%)</p>
