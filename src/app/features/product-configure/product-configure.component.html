@@ -232,11 +232,7 @@
 
                     <div class="font-medium text-[20px]">
                       {{
-                        defaultSelectedValues[activeLink].id ==
-                          this.defaultIncludedPrices[activeLink].id &&
-                        defaultSelectedValues[activeLink].size ==
-                          this.defaultIncludedPrices[activeLink].size &&
-                        defaultSelectedValues[activeLink].isIncluded
+                          isSizablePricing(activeLink)
                           ? "included"
                           : getPriceDifference({
                               isIncluded: false,
