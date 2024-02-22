@@ -22,14 +22,14 @@ import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
   providedIn: 'root',
 })
 export class AdminService {
-  baseUrl = environment.base_url;
+  private baseUrl = environment.base_url;
   constructor(private http: HttpClient) {}
 
   getCategories() {
     return this.http.get<Select[]>(`${this.baseUrl}/admin/category`);
   }
   getBrands() {
-    return this.http.get<Select[]>(`${this.baseUrl}/admin/brand`);
+    return this.http.get<Select[]>(`${this.baseUrl}/brand`);
   }
 
   addProduct(product: ProductPayload) {

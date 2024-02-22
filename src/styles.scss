@@ -16,6 +16,7 @@ input[type="number"] {
 html,
 body {
   height: 100%;
+  overflow-x: hidden;
 }
 body {
   margin: 0;
@@ -451,4 +452,19 @@ app-header .mat-badge-small.mat-badge-above .mat-badge-content {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+
+.navbar-blur-background{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  // z-index: 1;
+  backdrop-filter: blur(4px); /* For Safari */
+  -webkit-backdrop-filter: blur(4px);
+  background-color: rgba(228, 228, 228, 0);
 }

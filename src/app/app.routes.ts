@@ -14,6 +14,8 @@ import { GeneralInfoEffect } from './store/account-settings/general-info/general
 import { adminGuard } from './core/guards/admin.guard';
 import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from './store/product-spec/product-spec.reducer';
 import { ProductSpecEffects } from './store/product-spec/product-spec.effect';
+import { CategoryEffect } from './store/admin/products/categories.effect';
+import { categoryFeature } from './store/admin/products/categories.reducers';
 
 export const routes: Routes = [
     {
@@ -72,5 +74,9 @@ export const routes: Routes = [
     {
         path: '',
         loadChildren: () => import('./features/home/home.routes').then(m => m.route),
+        providers: [
+            provideState(categoryFeature),
+            provideEffects(CategoryEffect)
+        ]
     }
 ];
