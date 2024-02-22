@@ -8,6 +8,7 @@
     <app-error [message]="loadingState.message" [visible]="true"/>
   </ng-container>
 </ng-container>
+<ng-container *ngIf="categoryImage | async "></ng-container>
 <ng-container *ngIf="attributes | async as attributes">
   <form
     [formGroup]="categoryForm"
@@ -31,6 +32,29 @@
         </div>
         }
       </div>
+      <app-custom-image
+          formControlName="coverImage"
+          elementId="coverImage"
+          containerClass="relative flex flex-col  items-center justify-center border rounded-lg h-[129px] border"
+          customClass="flex flex-col mt-4 h-full"
+          previewClass="w-full h-full object-contain"
+          [previewImage]="coverImage"
+          [editId]="id"
+          label="Cover Image"
+          (removeImageEmitter)="removeImage()"
+          (uploadImageEmitter)="replaceImage($event)"
+        >
+          <label
+            for="#coverImage"
+            class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
+          >
+            <img src="/assets/upload.svg" alt="upload" />
+            <p>
+              <span class="text-figma-green">Click to upload an image</span>
+            </p>
+            <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
+          </label>
+        </app-custom-image>
     </section>
     <section>
       <h2 class="font-bold font-dm-sans">Incompatible Attributes</h2>
@@ -271,7 +295,7 @@
         type="submit"
         class="border border-figma-green bg-figma-green text-white rounded-[7px] w-32 py-1 font-[700]"
       >
-        Save Changes
+        {{ id ? 'Save Changes' : 'Save'}}
       </button>
       <button
         (click)="cancel()"

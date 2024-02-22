@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { CategoryAndConfig, EditConfigResponse } from "../../../../types";
-import { gotCategoryAndConfig, gotSingleCategory, resetEditState } from "./config.actions";
+import { gotCategoryAndConfig, gotCoverImage, gotSingleCategory, resetEditState, resetImage } from "./config.actions";
 
 const initialState: CategoryAndConfig[] = []
 
@@ -39,5 +39,21 @@ export const editConfigFeature = createFeature({
         })
     )
 })
-export const { selectCategoryAndConfigState } = configFeature
-export const { selectConfig, selectName, selectId, selectEditConfigState } = editConfigFeature
+
+const categoryImageState: string = ''
+
+export const categoryImageFeature = createFeature({
+    name: 'categoryImage',
+    reducer: createReducer(
+        categoryImageState,
+        on(gotCoverImage, (_, { url }) => {
+            return url
+        }),
+        on(resetImage, () => {
+            return ""
+        })
+    )
+})
+export const { selectCategoryAndConfigState } = configFeature;
+export const { selectConfig, selectName, selectId, selectEditConfigState } = editConfigFeature;
+export const { selectCategoryImageState } = categoryImageFeature

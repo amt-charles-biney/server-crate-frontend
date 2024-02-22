@@ -41,13 +41,15 @@ import { CustomSelectComponent } from '../../../../shared/components/custom-sele
 import {
   getSingleCategoryAndConfig,
   resetEditState,
+  resetImage,
   sendConfig,
   sendEditedConfig,
+  uploadCoverImage,
 } from '../../../../store/category-management/attributes/config/config.actions';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 import { ActivatedRoute, Router } from '@angular/router';
-import { selectEditConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
+import { selectCategoryImageState, selectEditConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
 import {
   buildIncompatibleTable,
   generateIncompatiblesTable,
@@ -59,6 +61,7 @@ import {
   putInLocalAttributes,
   removeFromLocalAttributes,
   removeFromPayload,
+  removeVariantsFromPayload,
   updateConfigPayload,
   updateConfigSizes,
 } from '../../../../core/utils/helpers';
@@ -67,6 +70,8 @@ import { CustomSizeSelectionComponent } from '../../../../shared/components/cust
 import { IncompatiblesComponent } from '../../../../shared/components/incompatibles/incompatibles.component';
 import { LoaderComponent } from '../../../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../../../shared/components/error/error.component';
+import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
+import { CLOUD_NAME, UPLOAD_PRESET } from '../../../../core/utils/constants';
 
 @Component({
   selector: 'app-add-category',
@@ -86,7 +91,8 @@ import { ErrorComponent } from '../../../../shared/components/error/error.compon
     CustomSizeSelectionComponent,
     IncompatiblesComponent,
     LoaderComponent,
-    ErrorComponent
+    ErrorComponent,
+    CustomImageComponent
   ],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
@@ -95,6 +101,8 @@ import { ErrorComponent } from '../../../../shared/components/error/error.compon
 export class AddCategoryComponent implements OnInit, OnDestroy {
   private attributes$ = new BehaviorSubject<Attribute[]>([]);
   private selectedAttribute$ = new BehaviorSubject<AttributeOption[]>([]);
+  private categoryImage$ = new BehaviorSubject<string>('');
+  categoryImage = this.categoryImage$.asObservable()
   attributes = this.attributes$.asObservable();
   selectedAttributes = this.selectedAttribute$.asObservable();
 
@@ -112,7 +120,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   incompatibleSet: Record<string, AttributeOption[]> = {};
   numOfIncompatibles = 0;
   sizes: Record<string, string[]> = {};
-
+  coverImage!: string | null
   id!: string | null;
 
   constructor(
@@ -170,9 +178,15 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       })
     );
     this.loadingStatus = this.store.select(selectLoaderState);
+    this.store.select(selectCategoryImageState).pipe(
+      tap((imageUrl) => {
+        this.coverImage = imageUrl        
+      })
+    ).subscribe()
   }
   ngOnDestroy(): void {
     this.store.dispatch(resetEditState());
+    this.store.dispatch(resetImage())
   }
 
   createConfig() {
@@ -183,8 +197,9 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
     const payload: CategoryPayload = {
       name: this.categoryForm.value['categoryName'],
+      thumbnail: this.coverImage || '',
       config: categoryConfig,
-    };
+    };    
 
     if (this.categoryForm.invalid) {
       const controls = this.categoryForm.controls;
@@ -281,7 +296,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       selectedAttributeOption,
       this.categoryConfigPayload,
       true
-    );
+    );  
+    this.categoryConfigPayload = removeVariantsFromPayload(this.categoryConfigPayload, selectedAttributeOption.incompatibleAttributeOptions)
     this.reassign(selectedAttributeOption.incompatibleAttributeOptions)
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
     this.checkOverflow()    
@@ -313,7 +329,23 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     this.checkOverflow()
   }
 
-  
+  replaceImage(
+    obj: { imgSrc: string; imageToChange: string; file?: File },
+  ) {
+    const data = new FormData();
+    this.coverImage = obj.imgSrc;
+    if (obj.file) {
+      data.append('file', obj.file);
+      data.append('upload_preset', UPLOAD_PRESET);
+      data.append('cloud_name', CLOUD_NAME);
+      this.store.dispatch(uploadCoverImage({ form: data }));
+    }
+  }
+
+  removeImage() {
+    this.categoryForm.patchValue({ coverImage: null });
+    this.coverImage = null;
+  }
 
   onSelectChange(event: MatSelectChange) {
     this.selectedAttribute$.next(event.value.attributeOptions);

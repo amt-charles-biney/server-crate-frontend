@@ -5,9 +5,11 @@ import {
   getCategoriesAndConfig,
   getSingleCategoryAndConfig,
   gotCategoryAndConfig,
+  gotCoverImage,
   gotSingleCategory,
   sendConfig,
   sendEditedConfig,
+  uploadCoverImage,
 } from './config.actions';
 import { catchError, exhaustMap, finalize, map, of, switchMap } from 'rxjs';
 import { AdminService } from '../../../../core/services/admin/admin.service';
@@ -159,6 +161,40 @@ export class ConfigEffect {
       })
     );
   });
+
+  uploadCategoryImage$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(uploadCoverImage),
+      switchMap((props) => {
+        this.ngxService.startLoader('category')
+        return this.adminService.uploadImage(props.form).pipe(
+          map(({ url }) => {
+            this.store.dispatch(
+              setLoadingSpinner({
+                isError: false,
+                message: 'Picture uploaded',
+                status: false,
+              })
+            );
+            
+            return gotCoverImage({ url });
+          }),
+          catchError((err) => {
+            return of(
+              setLoadingSpinner({
+                isError: true,
+                message: err.error.detail,
+                status: false,
+              })
+            );
+          }),
+          finalize(() => {
+            this.ngxService.stopLoader('category')
+          })
+        )
+      })
+    )
+  })
 
   constructor(
     private action$: Actions,
