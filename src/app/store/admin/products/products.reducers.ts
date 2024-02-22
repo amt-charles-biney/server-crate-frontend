@@ -14,7 +14,6 @@ export const productInitialState: { products: ProductItem[]; product: ProductIte
     id: '',
     imageUrl: '',
     coverImage: '',
-    productCase: '',
     inStock: 0,
     sales: 0,
     category: {

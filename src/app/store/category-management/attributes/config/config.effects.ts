@@ -9,7 +9,7 @@ import {
   sendConfig,
   sendEditedConfig,
 } from './config.actions';
-import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
+import { catchError, exhaustMap, finalize, map, of, switchMap } from 'rxjs';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { Store } from '@ngrx/store';
 import {
@@ -19,6 +19,7 @@ import {
 import { Router } from '@angular/router';
 import { CategoryAndConfig } from '../../../../types';
 import { errorHandler } from '../../../../core/utils/helpers';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Injectable()
 export class ConfigEffect {
@@ -78,6 +79,7 @@ export class ConfigEffect {
     return this.action$.pipe(
       ofType(getSingleCategoryAndConfig),
       switchMap((props) => {
+        this.ngxService.startLoader('category')
         return this.adminService.getSingleCategory(props.id).pipe(
           map((props) => {
             this.store.dispatch(
@@ -93,6 +95,9 @@ export class ConfigEffect {
                 status: false,
               })
             );
+          }),
+          finalize(() => {
+            this.ngxService.stopLoader('category')
           })
         );
       })
@@ -130,9 +135,12 @@ export class ConfigEffect {
     return this.action$.pipe(
       ofType(sendEditedConfig),
       switchMap(({ configuration, id }) => {
+        this.ngxService.startLoader('category')    
         return this.adminService.editCategory(id, configuration).pipe(
           map(() => {
-            this.router.navigateByUrl('/admin/category-management');
+            setTimeout(() => {
+              this.router.navigateByUrl('/admin/category-management');
+            }, 500);
             return resetLoader({ isError: false, message: '', status: false });
           }),
           catchError((err) => {
@@ -143,6 +151,9 @@ export class ConfigEffect {
                 status: false,
               })
             );
+          }),
+          finalize(() => {
+            this.ngxService.stopLoader('category')
           })
         );
       })
@@ -153,6 +164,7 @@ export class ConfigEffect {
     private action$: Actions,
     private store: Store,
     private adminService: AdminService,
-    private router: Router
+    private router: Router,
+    private ngxService: NgxUiLoaderService
   ) {}
 }
