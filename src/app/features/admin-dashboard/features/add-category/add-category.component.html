@@ -1,5 +1,13 @@
+
 <h2 class="font-bold text-[24px]">Category Details</h2>
-<app-auth-loader [loadingState]="loadingStatus" />
+<ng-container *ngIf="loadingStatus | async as loadingState">
+  <ng-container *ngIf="!loadingState.isError">
+    <app-loader loaderId="category" size="none"/>
+  </ng-container>
+  <ng-container *ngIf="loadingState.message">
+    <app-error [message]="loadingState.message" [visible]="true"/>
+  </ng-container>
+</ng-container>
 <ng-container *ngIf="attributes | async as attributes">
   <form
     [formGroup]="categoryForm"

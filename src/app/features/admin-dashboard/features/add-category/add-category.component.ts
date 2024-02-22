@@ -65,6 +65,8 @@ import {
 import { MatMenuModule } from '@angular/material/menu';
 import { CustomSizeSelectionComponent } from '../../../../shared/components/custom-size-selection/custom-size-selection.component';
 import { IncompatiblesComponent } from '../../../../shared/components/incompatibles/incompatibles.component';
+import { LoaderComponent } from '../../../../core/components/loader/loader.component';
+import { ErrorComponent } from '../../../../shared/components/error/error.component';
 
 @Component({
   selector: 'app-add-category',
@@ -82,7 +84,9 @@ import { IncompatiblesComponent } from '../../../../shared/components/incompatib
     AuthLoaderComponent,
     MatMenuModule,
     CustomSizeSelectionComponent,
-    IncompatiblesComponent
+    IncompatiblesComponent,
+    LoaderComponent,
+    ErrorComponent
   ],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
