@@ -15,6 +15,8 @@ import { selectLoaderState } from '../../../../../../store/loader/reducers/loade
 import { setLoadingSpinner } from '../../../../../../store/loader/actions/loader.actions';
 import { caseInitialState, selectCase } from '../../../../../../store/case/case.reducers';
 import { addCase, deleteCase, getSingleCase, resetCase, updateCase } from '../../../../../../store/case/case.actions';
+import { LoaderComponent } from '../../../../../../core/components/loader/loader.component';
+import { ErrorComponent } from '../../../../../../shared/components/error/error.component';
 
 @Component({
   selector: 'app-add-case',
@@ -26,7 +28,9 @@ import { addCase, deleteCase, getSingleCase, resetCase, updateCase } from '../..
     AuthLoaderComponent,
     ReactiveFormsModule,
     RxReactiveFormsModule,
-    IncompatiblesComponent
+    IncompatiblesComponent,
+    LoaderComponent,
+    ErrorComponent
   ],
   templateUrl: './add-case.component.html',
 })

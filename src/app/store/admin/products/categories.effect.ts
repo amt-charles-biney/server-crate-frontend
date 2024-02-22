@@ -34,7 +34,10 @@ import {
 import { AdminService } from '../../../core/services/admin/admin.service';
 import { Select, Item, ProductItem } from '../../../types';
 import { Store } from '@ngrx/store';
-import { resetLoader, setLoadingSpinner } from '../../loader/actions/loader.actions';
+import {
+  resetLoader,
+  setLoadingSpinner,
+} from '../../loader/actions/loader.actions';
 import { Router } from '@angular/router';
 import { UserService } from '../../../core/services/user/user.service';
 import { errorHandler } from '../../../core/utils/helpers';
@@ -169,7 +172,7 @@ export class CategoryEffect {
     return this.action$.pipe(
       ofType(getConfiguration),
       concatMap((selectedCategory: Select) => {
-        this.ngxService.startBackgroundLoader('getConfig')
+        this.ngxService.startBackgroundLoader('getConfig');
         return this.adminService
           .getCategoryConfiguration(selectedCategory.id)
           .pipe(
@@ -183,19 +186,19 @@ export class CategoryEffect {
                 setLoadingSpinner({
                   status: false,
                   message:
-                  error.error.detail || 'Cannot get category configuration',
+                    error.error.detail || 'Cannot get category configuration',
                   isError: true,
                 })
               );
             }),
             finalize(() => {
-              this.ngxService.stopBackgroundLoader('getConfig')
+              this.ngxService.stopBackgroundLoader('getConfig');
             })
           );
       })
     );
   });
-  
+
   getUserCategoryConfig$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getUserConfiguration),
@@ -220,7 +223,7 @@ export class CategoryEffect {
                 setLoadingSpinner({
                   status: false,
                   message:
-                  error.error.detail || 'Cannot get category configuration',
+                    error.error.detail || 'Cannot get category configuration',
                   isError: true,
                 })
               );
@@ -230,26 +233,27 @@ export class CategoryEffect {
     );
   });
 
-
   getProduct$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getProduct),
       exhaustMap((prop: Item) => {
-        this.ngxService.startLoader('product')
+        this.ngxService.startLoader('product');
         return this.adminService.getProduct(prop.id).pipe(
           map((data: ProductItem) => {
             return gotProduct(data);
           }),
           catchError((error) => {
             console.log('Doesnt exist');
-            return of(setLoadingSpinner({
-              isError: true,
-              message: errorHandler(error),
-              status: false
-            }));
+            return of(
+              setLoadingSpinner({
+                isError: true,
+                message: errorHandler(error),
+                status: false,
+              })
+            );
           }),
           finalize(() => {
-            this.ngxService.stopLoader('product')
+            this.ngxService.stopLoader('product');
           })
         );
       })
@@ -259,21 +263,15 @@ export class CategoryEffect {
     return this.action$.pipe(
       ofType(deleteProduct),
       exhaustMap((props) => {
-        this.ngxService.startLoader('product')
+        this.ngxService.startLoader('product');
         return this.adminService.deleteProduct(props.id).pipe(
           map(() => {
-            setTimeout(() => {
-              
-            }, 0);
-            return getProducts({ page: 0 });
-          }),
-          tap(() => {
-            this.ngxService.stopLoader('product')
             setTimeout(() => {
               this.router.navigateByUrl('/admin/products', {
                 replaceUrl: true,
               });
             }, 500);
+            return getProducts({ page: 0 });
           }),
           timeout(5000),
           catchError((err) => {
@@ -288,7 +286,7 @@ export class CategoryEffect {
             );
           }),
           finalize(() => {
-            
+            this.ngxService.stopLoader('product');
           })
         );
       })
@@ -299,17 +297,17 @@ export class CategoryEffect {
     return this.action$.pipe(
       ofType(addProduct),
       exhaustMap((product) => {
-        this.ngxService.startLoader('product')
+        this.ngxService.startLoader('product');
         return this.adminService.addProduct(product).pipe(
           map(() => {
             return setLoadingSpinner({
               isError: false,
               message: 'Added product successfully',
-              status: false
-            })
+              status: false,
+            });
           }),
           tap(() => {
-            this.ngxService.stopLoader('product')
+            this.ngxService.stopLoader('product');
             setTimeout(() => {
               this.router.navigateByUrl('/admin/products', {
                 replaceUrl: true,
@@ -317,34 +315,36 @@ export class CategoryEffect {
             }, 500);
           }),
           catchError((err) => {
-            return of(setLoadingSpinner({
-              isError: true,
-              message: errorHandler(err),
-              status: false
-            }))
+            return of(
+              setLoadingSpinner({
+                isError: true,
+                message: errorHandler(err),
+                status: false,
+              })
+            );
           }),
           finalize(() => {
-            this.ngxService.stopLoader('product')
+            this.ngxService.stopLoader('product');
           })
-        )
+        );
       })
-    )
-  })
+    );
+  });
   updateProduct$ = createEffect(() => {
     return this.action$.pipe(
       ofType(updateProduct),
       exhaustMap((props) => {
-        this.ngxService.startLoader('product')
+        this.ngxService.startLoader('product');
         return this.adminService.updateProduct(props.id, props.product).pipe(
           map(() => {
             return setLoadingSpinner({
               isError: false,
               message: 'Edited product successfully',
-              status: false
-            })
+              status: false,
+            });
           }),
           tap(() => {
-            this.ngxService.stopLoader('product')
+            this.ngxService.stopLoader('product');
             setTimeout(() => {
               this.router.navigateByUrl('/admin/products', {
                 replaceUrl: true,
@@ -352,16 +352,18 @@ export class CategoryEffect {
             }, 500);
           }),
           catchError((err) => {
-            return of(setLoadingSpinner({
-              isError: true,
-              message: errorHandler(err),
-              status: false
-            }))
+            return of(
+              setLoadingSpinner({
+                isError: true,
+                message: errorHandler(err),
+                status: false,
+              })
+            );
           })
-        )
+        );
       })
-    )
-  })
+    );
+  });
   constructor(
     private action$: Actions,
     private adminService: AdminService,
