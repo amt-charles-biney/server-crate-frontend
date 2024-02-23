@@ -69,7 +69,7 @@ export class MegaMenuComponent {
   }
 
   navigateToProductByFilter(product: Select, activeMenu: string) {
-    this.router.navigate(['/servers'], { replaceUrl: true, queryParams: { [this.refineActiveMenuFilter(activeMenu)]: `${product?.name}` } })
+    this.router.navigate(['/servers'], { replaceUrl: true, queryParams: { page: 0, size: 9,  [this.refineActiveMenuFilter(activeMenu)]: `${product?.name}` } })
     this.closeMenu()
   }
 
