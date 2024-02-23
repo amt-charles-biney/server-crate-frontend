@@ -1,6 +1,16 @@
 <main class="relative px-5 py-4">
+  <ng-container *ngIf="loadingStatus$ | async as loadingState">
+    <ng-container *ngIf="!loadingState.isError">
+      <app-loader loaderId="attributes" size="none" />
+    </ng-container>
+    <ng-container *ngIf="loadingState.message">
+      <app-error [message]="loadingState.message" [visible]="true" />
+    </ng-container>
+  </ng-container>
   <header class="flex items-center justify-between w-full">
-    <h1 class="text-2xl font-[600] font-inter">{{ editId ? 'Edit Attribute' : 'Create Attribute'}}</h1>
+    <h1 class="text-2xl font-[600] font-inter">
+      {{ editId ? "Edit Attribute" : "Create Attribute" }}
+    </h1>
     <button mat-dialog-close type="button">
       <img src="/assets/close.svg" alt="close button" />
     </button>
@@ -38,7 +48,7 @@
         }
       </div>
     </div>
-    <div class="flex justify-between ">
+    <div class="flex justify-between">
       <div class="w-[60%]">
         <app-custom-input
           id="description"
@@ -49,15 +59,15 @@
         />
       </div>
       <div class="w-[30%] mt-10">
-          <app-custom-check-box
-            name="isRequired"
-            class="font-[500]"
-            label="Make Attribute Required"
-            formControlName="isRequired"
-          />
+        <app-custom-check-box
+          name="isRequired"
+          class="font-[500]"
+          label="Make Attribute Required"
+          formControlName="isRequired"
+        />
       </div>
     </div>
-    
+
     <button
       (click)="addAttributeForm()"
       type="button"
@@ -143,60 +153,58 @@
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <div class="flex items-center justify-center gap-2">
                   <button type="button">
-                    <ng-container *ngIf="loadingStatus$ | async as loadingStatus;">
-                      @if (loadingStatus.status) {
-                          <app-auth-loader size="small" [loadingState]="loadingStatus$" />
-                      } @else {
-                        <app-custom-image
-                          formControlName="media"
-                          [elementId]="attrs.value.id + ' coverImage'"
-                          containerClass="relative flex flex-col items-center justify-center h-full"
-                          customClass="flex flex-col h-[50%] xl:h-[60%]"
-                          previewClass="w-[33px] h-5"
-                          [editId]="editId"
-                          [previewImage]="coverImage[i] || null"
-                          (removeImageEmitter)="removeImage($event, i)"
-                          (uploadImageEmitter)="
-                            replaceImage(
-                              $event,
-                              attrs.value.id,
-                              attributes.at(i),
-                              i
-                            )
-                          "
+                    <ng-container
+                      *ngIf="loadingStatus$ | async as loadingStatus"
+                    >
+                      <app-custom-image
+                        formControlName="media"
+                        [elementId]="attrs.value.id + ' coverImage'"
+                        containerClass="relative flex flex-col items-center justify-center h-full"
+                        customClass="flex flex-col h-[50%] xl:h-[60%]"
+                        previewClass="w-[33px] h-5"
+                        [editId]="editId"
+                        [previewImage]="coverImage[i] || null"
+                        (removeImageEmitter)="removeImage($event, i)"
+                        (uploadImageEmitter)="
+                          replaceImage(
+                            $event,
+                            attrs.value.id,
+                            attributes.at(i),
+                            i
+                          )
+                        "
+                      >
+                        <label
+                          [for]="'#' + attrs.value.id + ' coverImage'"
+                          class="flex items-center gap-3 text-figma-green"
                         >
-                          <label
-                            [for]="'#' + attrs.value.id + ' coverImage'"
-                            class="flex items-center gap-3 text-figma-green"
+                          <img src="/assets/upload-cloud.svg" alt="upload" />
+                          <p
+                            class="text-ellipsis overflow-hidden whitespace-nowrap"
                           >
-                            <img src="/assets/upload-cloud.svg" alt="upload" />
-                            <p
-                              class="text-ellipsis overflow-hidden whitespace-nowrap"
-                            >
-                              Upload cover
-                            </p>
-                          </label>
-                        </app-custom-image>
-                      }
+                            Upload cover
+                          </p>
+                        </label>
+                      </app-custom-image>
                     </ng-container>
                   </button>
                 </div>
               </td>
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <input
-                    class="w-full outline-none text-center placeholder:text-placeholder"
-                    type="text"
-                    placeholder="Brand name"
-                    formControlName="brand"
-                  />
+                  class="w-full outline-none text-center placeholder:text-placeholder"
+                  type="text"
+                  placeholder="Brand name"
+                  formControlName="brand"
+                />
               </td>
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <input
-                    class="w-full outline-none text-center placeholder:text-placeholder"
-                    type="text"
-                    placeholder="Model name"
-                    formControlName="name"
-                  />
+                  class="w-full outline-none text-center placeholder:text-placeholder"
+                  type="text"
+                  placeholder="Model name"
+                  formControlName="name"
+                />
               </td>
               @if (isMeasured.value) {
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
@@ -251,7 +259,14 @@
                 </button>
               </td>
             </tr>
-            <app-incompatibles [formId]="i" [collapsedIndex]="collapsedIndex" [incompatibleAttributeOptions]="incompatibleVariants[i] || []" (incompatibleVariantsEmitter)="getIncompatibleAttributeOptions($event)"/>
+            <app-incompatibles
+              [formId]="i"
+              [collapsedIndex]="collapsedIndex"
+              [incompatibleAttributeOptions]="incompatibleVariants[i] || []"
+              (incompatibleVariantsEmitter)="
+                getIncompatibleAttributeOptions($event)
+              "
+            />
           </ng-container>
         </div>
       </table>
@@ -261,7 +276,7 @@
         type="submit"
         class="border border-figma-green bg-figma-green text-white rounded w-32 py-1 tracking-wider"
       >
-        {{ editId ? 'Save Changes' : 'Save' }}
+        {{ editId ? "Save Changes" : "Save" }}
       </button>
       <button
         type="button"
