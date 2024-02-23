@@ -46,7 +46,7 @@ export const getProducts = createAction(
 
 export const getUserProducts = createAction(
   '[products] get user products',
-  props<{ page: number; params: string }>()
+  props<{ page: number; params: Record<string, string> }>()
 );
 
 export const gotProduct = createAction(

@@ -15,7 +15,7 @@ import { AttributeEffect } from '../../store/category-management/attributes/attr
 import { attributeCreationFeature, attributesFeature } from '../../store/category-management/attributes/attributes.reducers';
 import { CategoryManagementComponent } from './features/category-management/category-management.component';
 import { ConfigEffect } from '../../store/category-management/attributes/config/config.effects';
-import { configFeature, editConfigFeature } from '../../store/category-management/attributes/config/config.reducers';
+import { categoryImageFeature, configFeature, editConfigFeature } from '../../store/category-management/attributes/config/config.reducers';
 import { AddCategoryComponent } from './features/add-category/add-category.component';
 import { TransactionsComponent } from './features/transactions/transactions.component';
 import { CustomersComponent } from './features/customers/customers.component';
@@ -91,7 +91,8 @@ export const route: Routes = [
         path: 'add-category',
         component: AddCategoryComponent,
         providers: [
-          provideEffects(ConfigEffect)
+          provideEffects(ConfigEffect),
+          provideState(categoryImageFeature)
         ]
       },
       {

@@ -18,3 +18,9 @@ export const deleteCategoriesAndConfig = createAction('[category] delete categor
 export const resetEditState = createAction('[category] reset edit state')
 
 export const sendEditedConfig = createAction('[category] send edited config', props<{id: string, configuration: ConfigurationEdit}>())
+
+export const uploadCoverImage = createAction('[category] upload cover image', props<{ form: FormData }>())
+
+export const gotCoverImage = createAction('[category] got cover image', props<{ url: string }>())
+
+export const resetImage = createAction('[category] reset cover image')
