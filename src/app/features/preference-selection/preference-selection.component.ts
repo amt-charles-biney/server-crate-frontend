@@ -77,6 +77,7 @@ export class PreferenceSelectionComponent implements OnInit {
     if (this.search) {
       this.store.dispatch(filter({ page: 0, params: {...this.initialParams, query: this.search } }))
     }
+    this.brands$ = this.store.select(selectBrands)
   }
   getPage(pageNumber: number, search: string) {
     this.page = pageNumber;
