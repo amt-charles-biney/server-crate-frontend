@@ -15,6 +15,7 @@ import {
   catchError,
   concatMap,
   exhaustMap,
+  finalize,
   map,
   of,
   switchMap,
@@ -38,6 +39,7 @@ export class AttributeEffect {
     return this.action$.pipe(
       ofType(uploadImage),
       switchMap((props) => {
+        this.ngxService.startLoader('attributes')
         return this.adminService.uploadImage(props.form).pipe(
           // tap(data => console.log('Upload response', data)),
           map(({ url }) => {
@@ -59,10 +61,13 @@ export class AttributeEffect {
             return of(
               setLoadingSpinner({
                 isError: true,
-                message: err.error.detail,
+                message: errorHandler(err),
                 status: false,
               })
             );
+          }),
+          finalize(() => {
+            this.ngxService.stopLoader('attributes')
           })
         );
       })

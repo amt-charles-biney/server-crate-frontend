@@ -16,6 +16,7 @@ export const configFeature = createFeature({
 
 const editConfigInitialState: EditConfigResponse = {
     name: '',
+    thumbnail: '',
     config: [],
     id: '',
 }
@@ -23,11 +24,12 @@ export const editConfigFeature = createFeature({
     name: 'editConfig',
     reducer: createReducer(
         editConfigInitialState,
-        on(gotSingleCategory, (state, {config, id, name }) => {
+        on(gotSingleCategory, (state, {config, id, thumbnail, name }) => {
             return {
                 name,
                 id, 
                 config,
+                thumbnail
             }
         }),
         on(resetEditState, () => {
@@ -35,6 +37,7 @@ export const editConfigFeature = createFeature({
                 name: '',
                 config: [],
                 id: '',
+                thumbnail: ''
             }
         })
     )
