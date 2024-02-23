@@ -164,7 +164,6 @@ export function updateConfigPayload(
         return {
           ...config,
           isIncluded: false,
-          isCompatible: true,
         };
       }
       return config;
@@ -319,7 +318,7 @@ export function removeFromPayload(
 
 export function removeVariantsFromPayload(
   configPayload: Map<string, CategoryConfig[]> = new Map(),
-  incompatibleAttributeOptions: AttributeOption[]
+  incompatibleAttributeOptions: AttributeOption[] = []
 ) {
   incompatibleAttributeOptions.forEach((option) => {
     const newPayload = configPayload
@@ -354,8 +353,8 @@ export function generateIncompatibleSet(
   return incompatibleSet;
 }
 export function buildIncompatibleTable(
-  incompatibleAttributeOptions: AttributeOption[],
-  currentIncompatibleSet: Record<string, AttributeOption[]>,
+  incompatibleAttributeOptions: AttributeOption[] = [],
+  currentIncompatibleSet: Record<string, AttributeOption[]> = {},
   localAttributes: Attribute[]
 ) {
   const incompatibleSet: Record<string, AttributeOption[]> =
