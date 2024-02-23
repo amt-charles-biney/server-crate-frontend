@@ -146,7 +146,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
             .select(selectEditConfigState)
             .pipe(
               tap((editConfig: EditConfigResponse) => {
-                const { config, name } = editConfig;
+                const { config, name, thumbnail } = editConfig;
+                this.coverImage = thumbnail
                 this.incompatibleSet = generateIncompatiblesTable(config);
                 this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet)
                 const editFormValues = this.attributeService.editFormGroup(

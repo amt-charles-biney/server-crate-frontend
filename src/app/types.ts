@@ -286,6 +286,7 @@ export type CategoryConfig = {
 
 export type EditConfigResponse = {
   name: string;
+  thumbnail: string;
   id: string;
   config: CategoryEditResponse[]
 }
