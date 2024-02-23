@@ -1,5 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const cookieInterceptor: HttpInterceptorFn = (req, next) => {
-  return next(req);
+  const request = req.clone({
+    withCredentials: true
+  });
+  return next(request)
 };
