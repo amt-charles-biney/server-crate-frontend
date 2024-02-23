@@ -218,9 +218,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
         }
         this.configurationPrice = configPrice;
         const productPricing = (caseValue.price || 0) + configPrice;
-        const calculatedPrice =
+        const calculatedPrice: number =
           (serviceChargeValue / 100) * productPricing + productPricing;
-        this.price.setValue(calculatedPrice);
+        this.price.setValue(calculatedPrice.toFixed(2));
       });
   }
 
