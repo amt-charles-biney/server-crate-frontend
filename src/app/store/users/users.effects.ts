@@ -14,7 +14,7 @@ export class UserEffect {
         return this.action$.pipe(
             ofType(filter),
             switchMap((props) => {
-                return this.userService.getProducts(props.page, props.params).pipe(
+                return this.userService.getProducts(props.page, props.params).pipe(                    
                     map((products: AllProducts) => {
                         console.log('Products', products);
                         

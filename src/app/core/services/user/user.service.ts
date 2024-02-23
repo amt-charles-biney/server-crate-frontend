@@ -7,11 +7,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = environment.base_url
+  baseUrl = environment.base_url
   constructor(private http: HttpClient) { }
 
-  getProducts(page: number, filterParams: string) {
-    return this.http.get<AllProducts>(`${this.baseUrl}/product?page=${page}&size=9&${filterParams}`)
+  getProducts(page: number, filterParams: Record<string, string>) {
+    return this.http.get<AllProducts>(`${this.baseUrl}/product`, { params: filterParams})
   }
 
   getCategories() {

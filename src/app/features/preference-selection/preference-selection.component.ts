@@ -4,11 +4,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { CustomCheckBoxComponent } from '../../shared/components/custom-check-box/custom-check-box.component';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../shared/components/custom-button/custom-button.component';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, startWith, tap } from 'rxjs';
 import { ProductItem, Select } from '../../types';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
-import { getUserBrands, getUserProducts } from '../../store/admin/products/categories.actions';
+import {
+  getUserBrands,
+  getUserProducts,
+} from '../../store/admin/products/categories.actions';
 import {
   selectProducts,
   selectTotal,
@@ -49,8 +52,9 @@ export class PreferenceSelectionComponent implements OnInit {
   total!: Observable<number>;
   page: number = 0;
   brands$!: Observable<Select[]>;
-  search: string = ''
-  isGridMode: boolean = true
+  search: string = '';
+  isGridMode: boolean = true;
+  initialParams: Record<string, string> = { 'page': '0', 'size': '9' }
   constructor(
     private store: Store,
     public dialog: MatDialog,
@@ -58,23 +62,34 @@ export class PreferenceSelectionComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {
-    this.activatedRoute.queryParamMap.subscribe((params) => {
-      this.search = params.get('query') || ''
-      this.store.dispatch(getUserBrands());
-      this.onLoad();
-      // preserves the search value to be sent to the backend
-      this.queryParams['query'].add(this.search)      
-      this.getPage(0, this.search);
-      this.brands$ = this.store.select(selectBrands)
-    })
+    this.onLoad();
+
+    this.store.dispatch(
+      getUserProducts({ page: 0, params: { 'page': '0', 'size': '9' } })
+    );
+    this.products = this.store.select(selectProducts);
+    this.total = this.store.select(selectTotal);
+
+    this.activatedRoute.queryParams
+      .subscribe((params) => {        
+        this.store.dispatch(getUserProducts({ page: 0, params: {...this.initialParams, ...params } }));
+      });
+    if (this.search) {
+      this.store.dispatch(filter({ page: 0, params: {...this.initialParams, query: this.search } }))
+    }
+    this.brands$ = this.store.select(selectBrands)
   }
   getPage(pageNumber: number, search: string) {
     this.page = pageNumber;
     const params = this.buildParams(this.queryParams);
     if (!search) {
-      this.store.dispatch(getUserProducts({ page: this.page, params }));
+      // this.store.dispatch(getUserProducts({ page: this.page, params: { ...params, 'page': this.page.toString() } }));
+      this.router.navigate(['/servers'], {
+        queryParams: { ...params, 'page': (this.page - 1).toString() },
+        replaceUrl: true,
+      });
     } else {
-      this.store.dispatch(filter({ page: 0, params: `query=${this.search}` }))
+      this.store.dispatch(filter({ page: 0, params: {...this.initialParams, query: search } }))
     }
     this.products = this.store.select(selectProducts);
     this.total = this.store.select(selectTotal);
@@ -86,7 +101,7 @@ export class PreferenceSelectionComponent implements OnInit {
       price: new Set(),
       brand: new Set(),
       mounting: new Set(),
-      query: new Set()
+      query: new Set(),
     };
     this.filterForm = new FormGroup({
       productType: new FormControl(''),
@@ -103,8 +118,10 @@ export class PreferenceSelectionComponent implements OnInit {
       this.queryParams[selected.name].delete(selected.value);
     }
     const params = this.buildParams(this.queryParams);
-    this.store.dispatch(filter({ params, page: this.page }));
-    console.log(this.buildParams(this.queryParams));
+    this.router.navigate(['/servers'], {
+      queryParams: params,
+      replaceUrl: true,
+    });
   }
 
   compareEvent() {
@@ -115,7 +132,9 @@ export class PreferenceSelectionComponent implements OnInit {
   }
 
   onSelect(product: ProductItem) {
-    this.selectedProducts = this.selectedProducts.filter((pdt) => product.id !== pdt.id)
+    this.selectedProducts = this.selectedProducts.filter(
+      (pdt) => product.id !== pdt.id
+    );
     this.selectedProducts.push(product);
     if (this.selectedProducts.length === 2) {
       this.router.navigateByUrl('/compare', {
@@ -128,22 +147,28 @@ export class PreferenceSelectionComponent implements OnInit {
   }
 
   buildParams(params: Record<string, Set<string>>) {
-    const keys = ['productType', 'processor', 'price', 'brand', 'mounting', 'query'];
-    let paramArray = [];
+    const keys = [
+      'productType',
+      'processor',
+      'price',
+      'brand',
+      'mounting',
+      'query',
+    ];
+    let paramMap: Record<string, string> = { page: '0', size: '9' };
     for (let key of keys) {
       const keyValues = Array.from(params[key]);
       if (keyValues.length !== 0) {
-        paramArray.push(`${key}=${keyValues.join(',')}`);
+        paramMap[key] = `${keyValues.join(',')}`;
       }
     }
-    return paramArray.join('&');
+    console.log('Before amp', paramMap);
+    return paramMap;
   }
 
   clearFilters() {
     this.onLoad();
-    // this.router.navigateByUrl('/servers')
-    const params = this.buildParams(this.queryParams);
-    this.store.dispatch(filter({ params, page: 0 }));
+    this.router.navigate(['/servers'], { queryParams: this.initialParams})
   }
 
   get productType() {
