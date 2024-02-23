@@ -38,8 +38,6 @@ import { ProductLoadingComponent } from './product-loading/product-loading.compo
   selector: 'app-product-configure',
   standalone: true,
   imports: [
-    HeaderComponent,
-    FooterComponent,
     CommonModule,
     MatTabsModule,
     RouterModule,

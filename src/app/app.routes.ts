@@ -12,8 +12,6 @@ import { settingsGuard } from './core/guards/settings.guard';
 import { authGuard } from './core/guards/auth.guard';
 import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
 import { adminGuard } from './core/guards/admin.guard';
-import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from './store/product-spec/product-spec.reducer';
-import { ProductSpecEffects } from './store/product-spec/product-spec.effect';
 import { CategoryEffect } from './store/admin/products/categories.effect';
 import { categoryFeature } from './store/admin/products/categories.reducers';
 
@@ -51,16 +49,6 @@ export const routes: Routes = [
         providers: [
             provideState(loginFeature),
             provideEffects(LoginEffect)
-        ]
-    },
-    {
-        path: 'product/configure/:id',
-        loadChildren: () => import('./features/product-configure/product-configure.routes').then(m => m.route),
-        providers: [
-            provideState(productConfigFeature),
-            provideEffects(ProductSpecEffects),
-            provideState(productCartItemFeature),
-            provideState(productConfigItemFeature)
         ]
     },
     {
