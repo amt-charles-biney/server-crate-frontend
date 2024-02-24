@@ -1,14 +1,13 @@
-
 <h2 class="font-bold text-[24px]">Category Details</h2>
 <ng-container *ngIf="loadingStatus | async as loadingState">
   <ng-container *ngIf="!loadingState.isError">
-    <app-loader loaderId="category" size="none"/>
+    <app-loader loaderId="category" size="none" />
   </ng-container>
   <ng-container *ngIf="loadingState.message">
-    <app-error [message]="loadingState.message" [visible]="true"/>
+    <app-error [message]="loadingState.message" [visible]="true" />
   </ng-container>
 </ng-container>
-<ng-container *ngIf="categoryImage | async "></ng-container>
+<ng-container *ngIf="categoryImage | async"></ng-container>
 <ng-container *ngIf="attributes | async as attributes">
   <form
     [formGroup]="categoryForm"
@@ -33,28 +32,28 @@
         }
       </div>
       <app-custom-image
-          formControlName="coverImage"
-          elementId="coverImage"
-          containerClass="relative flex flex-col  items-center justify-center border rounded-lg h-[129px] border"
-          customClass="flex flex-col mt-4 h-full"
-          previewClass="w-full h-full object-contain"
-          [previewImage]="coverImage"
-          [editId]="id"
-          label="Cover Image"
-          (removeImageEmitter)="removeImage()"
-          (uploadImageEmitter)="replaceImage($event)"
+        formControlName="coverImage"
+        elementId="coverImage"
+        containerClass="relative flex flex-col  items-center justify-center border rounded-lg h-[129px] border"
+        customClass="flex flex-col mt-4 h-full"
+        previewClass="w-full h-full object-contain"
+        [previewImage]="coverImage"
+        [editId]="id"
+        label="Cover Image"
+        (removeImageEmitter)="removeImage()"
+        (uploadImageEmitter)="replaceImage($event)"
+      >
+        <label
+          for="#coverImage"
+          class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
         >
-          <label
-            for="#coverImage"
-            class="cursor-pointer flex flex-col justify-center items-center text-sm text-figma-gray"
-          >
-            <img src="/assets/upload.svg" alt="upload" />
-            <p>
-              <span class="text-figma-green">Click to upload an image</span>
-            </p>
-            <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
-          </label>
-        </app-custom-image>
+          <img src="/assets/upload.svg" alt="upload" />
+          <p>
+            <span class="text-figma-green">Click to upload an image</span>
+          </p>
+          <p>SVG, PNG, JPG or GIF (max 800x400px)</p>
+        </label>
+      </app-custom-image>
     </section>
     <section>
       <h2 class="font-bold font-dm-sans">Incompatible Attributes</h2>
@@ -133,38 +132,42 @@
       </button>
       <div #contentWrapper class="flex divide-x overflow-auto no-scrollbar">
         <div
-          class="flex flex-col px-[10px] w-[292px]"
+          class="flex flex-col px-[10px]"
           *ngFor="let incompatibleAttribute of incompatibleSet | keyvalue"
         >
           <p class="font-inter pb-[9px] text-xs">
             {{ incompatibleAttribute.key }}
           </p>
-          <div class="flex items-center w-[272px] gap-[9px]">
-            <div class="flex gap-[18px] w-[240px]">
-              <button
-                (click)="
-                  removeAttributeOption(
-                    attribute,
-                    incompatibleSet[attribute.attribute.name]
-                  )
-                "
+          <div class="flex items-center gap-[9px]">
+            <div class="flex gap-[18px] ">
+              <div
                 type="button"
                 class="flex items-center py-[5px] px-[12px] rounded-[70px] w-[111px] bg-attr-button"
                 *ngFor="
                   let attribute of incompatibleAttribute.value | slice : 0 : 2
                 "
-                [title]="attribute.optionName"
+                #tooltip="matTooltip"
+                [matTooltip]="attribute.optionName"
               >
                 <span
                   class="whitespace-nowrap overflow-hidden text-ellipsis text-xs w-[59px]"
                   >{{ attribute.optionName }}</span
                 >
-                <img
-                  class="pl-[12px]"
-                  src="/assets/remove.svg"
-                  alt="remove button"
-                />
-              </button>
+                <button
+                  (click)="
+                    removeAttributeOption(
+                      attribute,
+                      incompatibleSet[attribute.attribute.name]
+                    )
+                  "
+                >
+                  <img
+                    class="pl-[12px]"
+                    src="/assets/remove.svg"
+                    alt="remove button"
+                  />
+                </button>
+              </div>
             </div>
             <button
               type="button"
@@ -178,27 +181,32 @@
               <button
                 mat-menu-item
                 [disableRipple]="true"
-                (click)="
-                  removeAttributeOption(
-                    attribute,
-                    incompatibleSet[attribute.attribute.name]
-                  )
-                "
+                
                 type="button"
                 class="flex items-center px-[12px] w-[111px] bg-attr-button"
                 *ngFor="
                   let attribute of incompatibleAttribute.value | slice : 2
                 "
-                [title]="attribute.optionName"
+                #tooltip="matTooltip"
+                [matTooltip]="attribute.optionName"
               >
                 <span
                   class="flex whitespace-nowrap overflow-hidden text-ellipsis text-xs"
                   >{{ attribute.optionName }}
-                  <img
-                    class="pl-[12px]"
-                    src="/assets/remove.svg"
-                    alt="remove button"
-                  />
+                  <button
+                  (click)="
+                  removeAttributeOption(
+                    attribute,
+                    incompatibleSet[attribute.attribute.name]
+                  )
+                "
+                  >
+                    <img
+                      class="pl-[12px]"
+                      src="/assets/remove.svg"
+                      alt="remove button"
+                    />
+                  </button>
                 </span>
               </button>
             </mat-menu>
@@ -295,7 +303,7 @@
         type="submit"
         class="border border-figma-green bg-figma-green text-white rounded-[7px] w-32 py-1 font-[700]"
       >
-        {{ id ? 'Save Changes' : 'Save'}}
+        {{ id ? "Save Changes" : "Save" }}
       </button>
       <button
         (click)="cancel()"

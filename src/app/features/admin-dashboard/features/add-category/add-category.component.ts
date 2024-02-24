@@ -72,6 +72,7 @@ import { LoaderComponent } from '../../../../core/components/loader/loader.compo
 import { ErrorComponent } from '../../../../shared/components/error/error.component';
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
 import { CLOUD_NAME, UPLOAD_PRESET } from '../../../../core/utils/constants';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-add-category',
@@ -92,7 +93,8 @@ import { CLOUD_NAME, UPLOAD_PRESET } from '../../../../core/utils/constants';
     IncompatiblesComponent,
     LoaderComponent,
     ErrorComponent,
-    CustomImageComponent
+    CustomImageComponent,
+    MatTooltipModule
   ],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
