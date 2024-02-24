@@ -209,6 +209,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([caseValue, serviceChargeValue, configuration]) => {
         let configPrice = 0;
+        this.inStock.setValue(configuration.inStock)
         for (let key in configuration.options) {
           configuration.options[key].forEach((config) => {
             if (config.isIncluded) {
