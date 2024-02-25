@@ -16,6 +16,7 @@ import {
   CaseResponse,
   ProductPayload,
   BasicConfig,
+  ProductResponse,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -34,7 +35,7 @@ export class AdminService {
   }
 
   addProduct(product: ProductPayload) {
-    return this.http.post(`${this.baseUrl}/admin/product`, product);
+    return this.http.post<ProductResponse>(`${this.baseUrl}/admin/product`, product);
   }
 
   getProducts(page: number) {
