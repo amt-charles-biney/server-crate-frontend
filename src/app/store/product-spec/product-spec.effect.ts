@@ -31,7 +31,7 @@ export class ProductSpecEffects {
   loadProductSuccess$ = createEffect(() => {
     return this.action$.pipe(
       ofType(loadProductSuccess),
-      map(action => loadProductConfig({ categoryId: action.product.category.id }))
+      map(action => loadProductConfig({ categoryId: action.product.id }))
     )
   })
 
