@@ -1,7 +1,4 @@
-import {
-  CategoryPayload,
-  EditConfigResponse,
-} from './../../../../types';
+import { CategoryPayload, EditConfigResponse } from './../../../../types';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -49,7 +46,10 @@ import {
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
 import { ActivatedRoute, Router } from '@angular/router';
-import { selectCategoryImageState, selectEditConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
+import {
+  selectCategoryImageState,
+  selectEditConfigState,
+} from '../../../../store/category-management/attributes/config/config.reducers';
 import {
   buildIncompatibleTable,
   generateIncompatiblesTable,
@@ -59,6 +59,7 @@ import {
   getNumberOfIncompatibles,
   isCategoryEditResponse,
   putInLocalAttributes,
+  removeCloudinaryBaseUrl,
   removeFromLocalAttributes,
   removeFromPayload,
   removeVariantsFromPayload,
@@ -94,7 +95,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     LoaderComponent,
     ErrorComponent,
     CustomImageComponent,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './add-category.component.html',
   styleUrl: './add-category.component.scss',
@@ -104,7 +105,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   private attributes$ = new BehaviorSubject<Attribute[]>([]);
   private selectedAttribute$ = new BehaviorSubject<AttributeOption[]>([]);
   private categoryImage$ = new BehaviorSubject<string>('');
-  categoryImage = this.categoryImage$.asObservable()
+  categoryImage = this.categoryImage$.asObservable();
   attributes = this.attributes$.asObservable();
   selectedAttributes = this.selectedAttribute$.asObservable();
 
@@ -122,7 +123,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   incompatibleSet: Record<string, AttributeOption[]> = {};
   numOfIncompatibles = 0;
   sizes: Record<string, string[]> = {};
-  coverImage!: string | null
+  coverImage!: string | null;
   id!: string | null;
 
   constructor(
@@ -149,9 +150,11 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
             .pipe(
               tap((editConfig: EditConfigResponse) => {
                 const { config, name, thumbnail } = editConfig;
-                this.coverImage = thumbnail
+                this.coverImage = removeCloudinaryBaseUrl(thumbnail);
                 this.incompatibleSet = generateIncompatiblesTable(config);
-                this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet)
+                this.numOfIncompatibles = getNumberOfIncompatibles(
+                  this.incompatibleSet
+                );
                 const editFormValues = this.attributeService.editFormGroup(
                   config,
                   name
@@ -181,15 +184,18 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       })
     );
     this.loadingStatus = this.store.select(selectLoaderState);
-    this.store.select(selectCategoryImageState).pipe(
-      tap((imageUrl) => {
-        this.coverImage = imageUrl        
-      })
-    ).subscribe()
+    this.store
+      .select(selectCategoryImageState)
+      .pipe(
+        tap((imageUrl) => {
+          this.coverImage = imageUrl;
+        })
+      )
+      .subscribe();
   }
   ngOnDestroy(): void {
     this.store.dispatch(resetEditState());
-    this.store.dispatch(resetImage())
+    this.store.dispatch(resetImage());
   }
 
   createConfig() {
@@ -202,7 +208,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       name: this.categoryForm.value['categoryName'],
       thumbnail: this.coverImage || '',
       config: categoryConfig,
-    };    
+    };
 
     if (this.categoryForm.invalid) {
       const controls = this.categoryForm.controls;
@@ -228,9 +234,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
   checkOverflow() {
     setTimeout(() => {
-      
-      this.isOverflow = this.isOverflown()
-      this.changeDetectorRef.detectChanges()
+      this.isOverflow = this.isOverflown();
+      this.changeDetectorRef.detectChanges();
     }, 0);
   }
 
@@ -267,13 +272,13 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       incompatibleAttributeOptions
     );
 
-    this.reassign(incompatibleAttributeOptions)
+    this.reassign(incompatibleAttributeOptions);
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
 
     // Clear involved form fields
     this.selectedAttribute$.next([]);
     this.categoryForm.patchValue({ attributesInput: '', variants: '' });
-    this.checkOverflow()
+    this.checkOverflow();
   }
 
   reassign(incompatibleAttributeOptions: AttributeOption[]) {
@@ -299,11 +304,14 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       selectedAttributeOption,
       this.categoryConfigPayload,
       true
-    );  
-    this.categoryConfigPayload = removeVariantsFromPayload(this.categoryConfigPayload, selectedAttributeOption.incompatibleAttributeOptions)
-    this.reassign(selectedAttributeOption.incompatibleAttributeOptions)
+    );
+    this.categoryConfigPayload = removeVariantsFromPayload(
+      this.categoryConfigPayload,
+      selectedAttributeOption.incompatibleAttributeOptions
+    );
+    this.reassign(selectedAttributeOption.incompatibleAttributeOptions);
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
-    this.checkOverflow()    
+    this.checkOverflow();
   }
 
   removeAttributeOption(
@@ -329,12 +337,10 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       false
     );
     this.numOfIncompatibles = getNumberOfIncompatibles(this.incompatibleSet);
-    this.checkOverflow()
+    this.checkOverflow();
   }
 
-  replaceImage(
-    obj: { imgSrc: string; imageToChange: string; file?: File },
-  ) {
+  replaceImage(obj: { imgSrc: string; imageToChange: string; file?: File }) {
     const data = new FormData();
     this.coverImage = obj.imgSrc;
     if (obj.file) {
@@ -354,8 +360,11 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     this.selectedAttribute$.next(event.value.attributeOptions);
   }
 
-  isOverflown(): boolean {    
-    return !!(this.contentWrapper.nativeElement.scrollWidth > this.parent.nativeElement.clientWidth)
+  isOverflown(): boolean {
+    return !!(
+      this.contentWrapper.nativeElement.scrollWidth >
+      this.parent.nativeElement.clientWidth
+    );
   }
   onFocus(control: AbstractControl) {
     const value = control.value;
