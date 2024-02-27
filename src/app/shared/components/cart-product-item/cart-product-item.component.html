@@ -1,12 +1,14 @@
 <article class="grid grid-cols-2 gap-6 w-[677px] h-[159px]">
-  <img
-    class="h-[159px] border rounded-2xl"
-    [ngSrc]="product.productCoverImage"
-    height="159"
-    width="297"
-    priority
-    [alt]="'image of ' + product.productName"
-  />
+  <div class="h-[159px] border rounded-2xl">
+    <img
+      class="object-contain max-w-full max-h-full mx-auto"
+      [ngSrc]="product.productCoverImage | cloudinaryUrl"
+      height="159"
+      width="297"
+      priority
+      [alt]="'image of ' + product.productName"
+    />
+  </div>
   <div class="flex flex-col gap-5 ">
     <div class="flex items-center justify-between">
       <p class="font-bold text-xl">{{ product.productName }}</p>

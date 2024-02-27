@@ -3,11 +3,12 @@ import { CartProductItem } from '../../../types';
 import { CommonModule, CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { deleteCartItem } from '../../../store/cart/cart.actions';
+import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
 
 @Component({
   selector: 'app-cart-product-item',
   standalone: true,
-  imports: [NgOptimizedImage, CurrencyPipe, CommonModule],
+  imports: [NgOptimizedImage, CurrencyPipe, CommonModule, CloudinaryUrlPipe],
   templateUrl: './cart-product-item.component.html',
   styleUrl: './cart-product-item.component.scss'
 })
