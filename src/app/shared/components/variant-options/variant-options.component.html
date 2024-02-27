@@ -67,7 +67,7 @@
         }
       </td>
       <td class="text-gray-500 font-[500] text-sm w-[15%] flex justify-center">
-        <img [src]="attr.optionMedia" class="w-[33px] h-5" alt="option image" />
+        <img [ngSrc]="attr.optionMedia | cloudinaryUrl" width="33" height="33" class="object-contain max-w-full max-h-full" alt="option image" />
       </td>
       <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
         <p class="overflow-hidden whitespace-nowrap text-ellipsis">

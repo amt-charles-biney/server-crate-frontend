@@ -3,7 +3,7 @@
 >
   <img
     class="h-[166px] border rounded-2xl"
-    [ngSrc]="product.coverImage"
+    [ngSrc]="product.coverImage | cloudinaryUrl"
     height="166"
     width="297"
     priority

@@ -377,3 +377,11 @@ export function buildIncompatibleTable(
 
   return { incompatibleSet, localAttributes };
 }
+
+export function removeCloudinaryBaseUrl(url: string) {
+  const prefix = 'http://res.cloudinary.com/dah4l2inx/image/upload/';
+  if (url.startsWith(prefix)) {
+    return url.substring(prefix.length);
+  }
+  return url;
+}

@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProductItem } from '../../../types';
 import { CommonModule, CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
+import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
 
 @Component({
   selector: 'app-user-product-item',
   standalone: true,
-  imports: [CurrencyPipe, NgOptimizedImage, CommonModule],
+  imports: [CurrencyPipe, NgOptimizedImage, CommonModule, CloudinaryUrlPipe],
   templateUrl: './user-product-item.component.html',
 })
 export class UserProductItemComponent {

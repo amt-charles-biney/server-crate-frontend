@@ -35,6 +35,7 @@ import {
 } from '../../../core/utils/helpers';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-incompatibles',
@@ -44,6 +45,7 @@ import { MatMenuModule } from '@angular/material/menu';
     CommonModule,
     CustomSelectComponent,
     MatMenuModule,
+    MatTooltipModule
   ],
   templateUrl: './incompatibles.component.html',
   styleUrl: './incompatibles.component.scss',

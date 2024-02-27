@@ -29,6 +29,8 @@ fdescribe('ProductService', () => {
       imageUrl: 'www/image/com',
       inStock: 0,
       isFeatured: false,
+      serviceCharge: '',
+      stockStatus: 'Available',
       productBrand: 'NVIDEA',
       productDescription: 'product description',
       productId: '1234',

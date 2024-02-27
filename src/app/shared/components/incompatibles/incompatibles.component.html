@@ -94,44 +94,45 @@
           />
         </svg>
       </button>
-      <div
-        #contentWrapper
-        class="flex divide-x overflow-auto no-scrollbar"
-      >
+      <div #contentWrapper class="flex divide-x overflow-auto no-scrollbar">
         <div
-          class="flex flex-col px-[10px] w-[292px]"
+          class="flex flex-col px-[10px]"
           *ngFor="let incompatibleAttribute of incompatibleSet | keyvalue"
         >
           <p class="font-inter pb-[9px] text-xs">
             {{ incompatibleAttribute.key }}
           </p>
-          <div class="flex items-center w-[272px] gap-[9px]">
-            <div class="flex gap-[18px] w-[240px]">
-              <button
+          <div class="flex items-center gap-[9px]">
+            <div class="flex gap-[18px]">
+              <div
                 type="button"
-                (click)="
-                  removeAttributeOption(
-                    attributeOption,
-                    incompatibleSet[attributeOption.attribute.name]
-                  )
-                "
                 class="flex items-center py-[5px] px-[12px] rounded-[70px] w-[111px] bg-attr-button"
                 *ngFor="
                   let attributeOption of incompatibleAttribute.value
                     | slice : 0 : 2
                 "
-                [title]="attributeOption.optionName"
+                #tooltip="matTooltip"
+                [matTooltip]="attributeOption.optionName"
               >
                 <span
                   class="whitespace-nowrap overflow-hidden text-ellipsis text-xs w-[59px]"
                   >{{ attributeOption.optionName }}</span
                 >
-                <img
-                  class="pl-[12px]"
-                  src="/assets/remove.svg"
-                  alt="remove button"
-                />
-              </button>
+                <button
+                  (click)="
+                    removeAttributeOption(
+                      attributeOption,
+                      incompatibleSet[attributeOption.attribute.name]
+                    )
+                  "
+                >
+                  <img
+                    class="pl-[12px]"
+                    src="/assets/remove.svg"
+                    alt="remove button"
+                  />
+                </button>
+              </div>
             </div>
             <button
               type="button"
@@ -150,7 +151,8 @@
                 *ngFor="
                   let attribute of incompatibleAttribute.value | slice : 2
                 "
-                [title]="attribute.optionName"
+                #tooltip="matTooltip"
+                [matTooltip]="attribute.optionName"
               >
                 <span
                   class="flex whitespace-nowrap overflow-hidden text-ellipsis text-xs"

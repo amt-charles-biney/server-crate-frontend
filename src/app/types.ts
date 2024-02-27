@@ -182,7 +182,20 @@ export type VerifiedUser = {
     stockStatus: 'Low Stock' | 'Available' | 'No Stock';
 }
 
-  
+export type ProductResponse = {
+  id: string;
+  productName: string;
+  productDescription: string;
+  productPrice: number;
+  productCasePrice: number;
+  baseConfigPrice: number;
+  productCase: string;
+  productCategory: string;
+  productId: string;
+  imageUrl: string[],
+  coverImage: string;
+  inStock: number
+}
 export type Case = {
   id: string,
   name: string,
@@ -310,6 +323,7 @@ export type BasicConfig = {
   options: Option;
   id: string;
   category: Select;
+  inStock: number;
 };
 export type CategoryPayload = {
   name: string;

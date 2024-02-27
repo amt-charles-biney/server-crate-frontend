@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing'
 import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { provideAnimations } from '@angular/platform-browser/animations'
 
-fdescribe('ProductConfigureComponent', () => {
+describe('ProductConfigureComponent', () => {
   let component: ProductConfigureComponent
   let fixture: ComponentFixture<ProductConfigureComponent>
 
