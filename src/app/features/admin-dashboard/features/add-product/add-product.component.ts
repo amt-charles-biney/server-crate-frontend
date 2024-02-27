@@ -167,7 +167,10 @@ export class AddProductComponent implements OnInit, OnDestroy {
             productName: data.productName,
             productDescription: data.productDescription,
             productPrice: data.productPrice,
-            cases: data.productBrand,
+            cases: {
+              name: data.productBrand.name,
+              price: data.productBrand.price
+            },
             productId: data.productId,
             inStock: data.inStock,
             category: {

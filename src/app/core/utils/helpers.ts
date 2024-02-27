@@ -28,6 +28,9 @@ export const clearStorage = () => {
 export function isAttributeOption(obj: any): obj is AttributeOption {
   return obj && typeof obj.id === 'string';
 }
+export function isProductBrand(obj: any): obj is { name: string, price: number} {
+  return obj && typeof obj.name === 'string' && typeof obj.price === 'number' 
+}
 export function isCategoryEditResponse(obj: any): obj is CategoryEditResponse {
   return obj && typeof obj.attributeOptionId === 'string';
 }

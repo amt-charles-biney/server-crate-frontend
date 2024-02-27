@@ -166,7 +166,10 @@ export type VerifiedUser = {
     imageUrl: string;
     coverImage: string;
     productName: string;
-    productBrand: string;
+    productBrand: {
+      name: string;
+      price: number
+    };
     productPrice: string;
     inStock: number;
     sales: number;
