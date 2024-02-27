@@ -41,14 +41,16 @@
     </svg>
   }
   <div class="flex gap-3">
-    <img
-      class="w-[121px] h-[68px]"
-      [ngSrc]="product.coverImage"
-      height="68"
-      width="121"
-      priority
-      [alt]="'image of ' + product.productName"
-    />
+    <div class="w-[121px] h-[68px]">
+      <img
+        class="object-contain max-w-full max-h-full"
+        [ngSrc]="product.coverImage | cloudinaryUrl"
+        height="121"
+        width="121"
+        priority
+        [alt]="'image of ' + product.productName"
+      />
+    </div>
     <div class="flex flex-col w-[148px]">
       <h2
         [title]="product.productName"

@@ -17,6 +17,8 @@ describe('UserProductItemComponent', () => {
     component.product = {
       category: { id: '', name: ''},
       coverImage: 'ss',
+      serviceCharge: '',
+      stockStatus: 'Available',
       id: '',
       imageUrl: '',
       inStock: 0,

@@ -1,24 +1,28 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Attribute, AttributeOption } from '../../../types';
 import { Store } from '@ngrx/store';
 import { deleteAttributeOption, resetAttributeCreation } from '../../../store/category-management/attributes/attributes.actions';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { AttributeModalComponent } from '../../../features/admin-dashboard/features/attributes/features/attribute-modal/attribute-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
 
 @Component({
   selector: 'app-variant-options',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgOptimizedImage, CloudinaryUrlPipe],
   templateUrl: './variant-options.component.html',
 })
-export class VariantOptionsComponent {
+export class VariantOptionsComponent implements OnInit {
   @Input() attributeOptions!: AttributeOption[];
   @Input() attribute!: Attribute;
   @Input() isMeasured!: boolean;
   @Output() editOption = new EventEmitter<Attribute>();
+  optionMedia!: any
   constructor(private store: Store, private dialog: MatDialog) {}
-
+ngOnInit(): void {
+  this.optionMedia = this.attribute
+}
   deleteOption(optionId: string) {
     this.store.dispatch(deleteAttributeOption({ optionId, attributeId: this.attribute.id }));
   }

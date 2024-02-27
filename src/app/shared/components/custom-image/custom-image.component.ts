@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -26,6 +26,7 @@ import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { OnChange, OnTouch } from '../../../types';
 import { tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { removeCloudinaryBaseUrl } from '../../../core/utils/helpers';
 
 @Component({
   selector: 'app-custom-image',
@@ -35,6 +36,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     RxReactiveFormsModule,
     ReactiveFormsModule,
     FormsModule,
+    NgOptimizedImage,
+    
   ],
   templateUrl: './custom-image.component.html',
   providers: [
@@ -53,11 +56,13 @@ export class CustomImageComponent
   @Input() elementId!: string;
   @Input() label!: string;
   @Input() customClass!: string;
-  @Input() previewClass!: string;
   @Input() containerClass!: string;
   @Input() previewImage: string | null | ArrayBuffer = null;
   @Input() editId!: string | null;
-  localPreview: string | null | ArrayBuffer = null
+  @Input() width!: string;
+  @Input() height!: string;
+  localPreview: string | null = null
+  isCloudinary!: boolean
   @Output() removeImageEmitter = new EventEmitter<string>()
   @Output() uploadImageEmitter = new EventEmitter<{imgSrc: string, imageToChange: string, file?: File}>()
   formControl!: FormControl;
@@ -69,8 +74,9 @@ export class CustomImageComponent
     this.onInit()
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.localPreview = changes['previewImage'].currentValue
+  ngOnChanges(changes: SimpleChanges): void {    
+    this.localPreview = removeCloudinaryBaseUrl(changes['previewImage'].currentValue || '')
+    this.isCloudinary = changes['previewImage'].currentValue?.includes('cloudinary')
   }
 
   onInit() {

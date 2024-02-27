@@ -15,6 +15,8 @@ import {
   Case,
   CaseResponse,
   ProductPayload,
+  BasicConfig,
+  ProductResponse,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -33,7 +35,7 @@ export class AdminService {
   }
 
   addProduct(product: ProductPayload) {
-    return this.http.post(`${this.baseUrl}/admin/product`, product);
+    return this.http.post<ProductResponse>(`${this.baseUrl}/admin/product`, product);
   }
 
   getProducts(page: number) {
@@ -47,7 +49,7 @@ export class AdminService {
   }
 
   getCategoryConfiguration(id: string) {
-    return this.http.get(`${this.baseUrl}/admin/category/${id}/config`);
+    return this.http.get<BasicConfig>(`${this.baseUrl}/admin/category/${id}/config`);
   }
 
   deleteProduct(id: string) {
