@@ -34,10 +34,12 @@
       <app-custom-image
         formControlName="coverImage"
         elementId="coverImage"
-        containerClass="relative flex flex-col  items-center justify-center border rounded-lg h-[129px] border"
+        containerClass="relative flex flex-col  items-center justify-center border rounded-lg h-[129px]"
         customClass="flex flex-col mt-4 h-full"
         [previewImage]="coverImage"
         [editId]="id"
+        width="480"
+        height="129"
         label="Cover Image"
         (removeImageEmitter)="removeImage()"
         (uploadImageEmitter)="replaceImage($event)"

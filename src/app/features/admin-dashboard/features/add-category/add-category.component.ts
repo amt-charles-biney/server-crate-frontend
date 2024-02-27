@@ -150,7 +150,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
             .pipe(
               tap((editConfig: EditConfigResponse) => {
                 const { config, name, thumbnail } = editConfig;
-                this.coverImage = removeCloudinaryBaseUrl(thumbnail);
+                this.coverImage = thumbnail;
                 this.incompatibleSet = generateIncompatiblesTable(config);
                 this.numOfIncompatibles = getNumberOfIncompatibles(
                   this.incompatibleSet

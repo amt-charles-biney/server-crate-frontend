@@ -61,7 +61,7 @@ export class CustomImageComponent
   @Input() editId!: string | null;
   @Input() width!: string;
   @Input() height!: string;
-  localPreview: string | null | ArrayBuffer = null
+  localPreview: string | null = null
   isCloudinary!: boolean
   @Output() removeImageEmitter = new EventEmitter<string>()
   @Output() uploadImageEmitter = new EventEmitter<{imgSrc: string, imageToChange: string, file?: File}>()
@@ -74,7 +74,7 @@ export class CustomImageComponent
     this.onInit()
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges): void {    
     this.localPreview = removeCloudinaryBaseUrl(changes['previewImage'].currentValue || '')
     this.isCloudinary = changes['previewImage'].currentValue?.includes('cloudinary')
   }

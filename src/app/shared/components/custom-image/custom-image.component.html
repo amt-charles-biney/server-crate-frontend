@@ -21,7 +21,11 @@
           <img class="object-contain max-w-full max-h-full" [src]="localPreview" />
         }
       } @else {
-        <img class="object-contain max-w-full max-h-full" [src]="localPreview" />
+        @if (localPreview !== null && localPreview && isCloudinary) {
+          <img class="object-contain max-w-full max-h-full" priority [width]="width" [height]="height" [ngSrc]="localPreview" />
+        } @else {
+          <img class="object-contain max-w-full max-h-full" [src]="localPreview" />
+        }
       }
       <button
       class="group-hover:flex justify-center items-center hidden absolute top-1/2 -translate-y-1/2 h-full w-full bg-gray-100 bg-opacity-50"
