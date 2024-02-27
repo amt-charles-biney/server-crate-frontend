@@ -17,6 +17,7 @@ import { AttributeOption } from '../../../types';
 import {
   isAttributeOption,
   isCategoryEditResponse,
+  isProductBrand,
 } from '../../../core/utils/helpers';
 import { CustomCheckBoxComponent } from '../custom-check-box/custom-check-box.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -68,6 +69,8 @@ export class CustomSelectComponent {
         return parseInt(c1) === c2;
       } else if (isAttributeOption(c1) && isAttributeOption(c2)) {
         return c1.id === c2.id;
+      } else if (c1.name === c2.name) {
+        return c1.name === c2.name
       }
     }    
     return c1.name === c2;
