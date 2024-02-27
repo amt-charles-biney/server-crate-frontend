@@ -209,6 +209,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([caseValue, serviceChargeValue, configuration]) => {
         let configPrice = 0;
+        this.inStock.setValue(configuration.inStock)
         for (let key in configuration.options) {
           configuration.options[key].forEach((config) => {
             if (config.isIncluded) {
@@ -218,9 +219,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
         }
         this.configurationPrice = configPrice;
         const productPricing = (caseValue.price || 0) + configPrice;
-        const calculatedPrice =
+        const calculatedPrice: number =
           (serviceChargeValue / 100) * productPricing + productPricing;
-        this.price.setValue(calculatedPrice);
+        this.price.setValue(calculatedPrice.toFixed(2));
       });
   }
 

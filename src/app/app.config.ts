@@ -13,6 +13,8 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import * as Cart from './store/cart/cart.reducers';
 import { CartEffects } from './store/cart/cart.effects';
+import { cookieInterceptor } from './core/interceptors/cookie.interceptor';
+import { provideCloudinaryLoader } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,8 +25,8 @@ export const appConfig: ApplicationConfig = {
     provideState('cart', Cart.reducer),
     provideEffects(CartEffects),
     provideEffects(),
-    provideHttpClient(withInterceptors([loadingInterceptor, authInterceptor])),
-    // provideCloudinaryLoader('http://res.cloudinary.com/dqtxt1g06/image/upload/'),
+    provideHttpClient(withInterceptors([loadingInterceptor, authInterceptor, cookieInterceptor])),
+    provideCloudinaryLoader('https://res.cloudinary.com/dah4l2inx'),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { disableClose: true } },
   ],

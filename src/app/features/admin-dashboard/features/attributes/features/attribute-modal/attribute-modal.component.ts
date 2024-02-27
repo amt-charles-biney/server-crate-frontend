@@ -55,6 +55,8 @@ import {
 } from '../../../../../../core/utils/validators';
 import { v4 as uuidv4 } from 'uuid'
 import { IncompatiblesComponent } from '../../../../../../shared/components/incompatibles/incompatibles.component';
+import { LoaderComponent } from '../../../../../../core/components/loader/loader.component';
+import { ErrorComponent } from '../../../../../../shared/components/error/error.component';
 @Component({
   selector: 'app-attribute-modal',
   standalone: true,
@@ -68,7 +70,9 @@ import { IncompatiblesComponent } from '../../../../../../shared/components/inco
     CustomImageComponent,
     AuthLoaderComponent,
     CustomSelectComponent,
-    IncompatiblesComponent
+    IncompatiblesComponent,
+    LoaderComponent,
+    ErrorComponent
   ],
   templateUrl: './attribute-modal.component.html',
   styleUrl: './attribute-modal.component.scss',

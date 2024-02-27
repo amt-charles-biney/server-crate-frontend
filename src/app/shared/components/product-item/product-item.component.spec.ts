@@ -21,6 +21,8 @@ describe('ProductItemComponent', () => {
       category: { id: '', name: ''},
       coverImage: 'ss',
       id: '',
+      serviceCharge: '',
+      stockStatus: 'Available',
       imageUrl: '',
       inStock: 0,
       isFeatured: false,

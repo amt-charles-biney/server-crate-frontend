@@ -13,6 +13,7 @@ import {
   addToFeature,
   removeFromFeature,
 } from '../../../store/admin/products/categories.actions';
+import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
 
 @Component({
   selector: 'app-product-item',
@@ -24,6 +25,7 @@ import {
     RouterModule,
     MatTooltipModule,
     CommonModule,
+    CloudinaryUrlPipe
   ],
   templateUrl: './product-item.component.html',
 })

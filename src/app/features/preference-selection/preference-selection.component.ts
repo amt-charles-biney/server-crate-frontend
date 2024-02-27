@@ -63,10 +63,6 @@ export class PreferenceSelectionComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.onLoad();
-
-    this.store.dispatch(
-      getUserProducts({ page: 0, params: { 'page': '0', 'size': '9' } })
-    );
     this.products = this.store.select(selectProducts);
     this.total = this.store.select(selectTotal);
 
@@ -83,7 +79,6 @@ export class PreferenceSelectionComponent implements OnInit {
     this.page = pageNumber;
     const params = this.buildParams(this.queryParams);
     if (!search) {
-      // this.store.dispatch(getUserProducts({ page: this.page, params: { ...params, 'page': this.page.toString() } }));
       this.router.navigate(['/servers'], {
         queryParams: { ...params, 'page': (this.page - 1).toString() },
         replaceUrl: true,

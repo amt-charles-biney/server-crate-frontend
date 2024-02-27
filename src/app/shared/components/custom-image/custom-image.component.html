@@ -13,8 +13,21 @@
       accept=".svg ,.png, .jpg, .jpeg, .gif"
     />
     } @else {
-    <img class="object-contain" [ngClass]="previewClass" [src]="localPreview" />
-    <button
+      @if (editId) {
+        @if (localPreview !== null && localPreview !== '' && isCloudinary) {
+          <img class="object-contain max-w-full max-h-full" priority [width]="width" [height]="height" [ngSrc]="localPreview" />
+        }
+        @else {
+          <img class="object-contain max-w-full max-h-full" [src]="localPreview" />
+        }
+      } @else {
+        @if (localPreview !== null && localPreview && isCloudinary) {
+          <img class="object-contain max-w-full max-h-full" priority [width]="width" [height]="height" [ngSrc]="localPreview" />
+        } @else {
+          <img class="object-contain max-w-full max-h-full" [src]="localPreview" />
+        }
+      }
+      <button
       class="group-hover:flex justify-center items-center hidden absolute top-1/2 -translate-y-1/2 h-full w-full bg-gray-100 bg-opacity-50"
       type="button"
       (click)="removeImage()"

@@ -2,14 +2,16 @@
   class="flex flex-col gap-[13px] w-[318px] h-[159px] shadow-lg py-3 px-[11px] border rounded-lg"
 >
   <div class="flex gap-[13px]">
-    <img
-      [ngSrc]="case.coverImageUrl"
-      [alt]="'image of ' + case.name"
-      class="h-[107px] w-[134px]"
-      priority
-      height="107"
-      width="134"
-    />
+    <div class="h-[107px] w-[134px]">
+      <img
+        [ngSrc]="coverImage"
+        [alt]="'image of ' + case.name"
+        class="object-contain max-w-full max-h-full"
+        priority
+        height="134"
+        width="134"
+      />
+    </div>
     <div class="flex flex-col gap-1 w-[147px]">
       <h2 [title]="case.name" class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">
         {{ case.name }}
