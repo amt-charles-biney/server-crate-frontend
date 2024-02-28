@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import {
   FormControl,
@@ -9,6 +9,7 @@ import {
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { CommonModule } from '@angular/common';
 import { CustomRadioComponent } from '../../../../shared/components/custom-radio/custom-radio.component';
+import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 
 @Component({
   selector: 'app-credit-card-payment',
@@ -19,11 +20,13 @@ import { CustomRadioComponent } from '../../../../shared/components/custom-radio
     CustomButtonComponent,
     CommonModule,
     CustomRadioComponent,
+    CustomCheckBoxComponent
   ],
   templateUrl: './credit-card-payment.component.html',
   styleUrl: './credit-card-payment.component.scss',
 })
 export class CreditCardPaymentComponent implements OnInit {
+  @Input() page: string = 'default'
   creditCardForm!: FormGroup;
 
   ngOnInit(): void {

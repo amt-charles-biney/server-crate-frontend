@@ -4,7 +4,7 @@
   <mat-tab-group>
     <mat-tab>
       <ng-template mat-tab-label>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-[10px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -22,7 +22,7 @@
           <p>Card</p>
         </div>
       </ng-template>
-      <app-credit-card-payment />
+      <app-credit-card-payment [page]="page"/>
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label>
@@ -61,7 +61,7 @@
           <p>Mobile Money</p>
         </div>
       </ng-template>
-      <app-mobile-money-payment />
+      <app-mobile-money-payment [page]="page" [amountToPay]="amountToPay"/>
     </mat-tab>
   </mat-tab-group>
 </section>

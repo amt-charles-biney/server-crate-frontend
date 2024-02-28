@@ -100,9 +100,11 @@
         <section class="flex gap-6">
           <div class="flex-1">
             <h5 class="text-sm font-bold">Payment Method</h5>
-            <app-payment-details />
+            @if (amountToPay) {
+              <app-payment-details page="checkout" [amountToPay]="amountToPay"/>
+            }
           </div>
-          <app-summary [cartItems]="cartItems" title="Order Summary" page="checkout"/>
+          <app-summary [cartItems]="cartItems" (subTotalEmitter)="getSubtotal($event)" title="Order Summary" page="checkout"/>
         </section>
       </cdk-step>
       <cdk-step label="Track Order">

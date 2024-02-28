@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { CartProductItem } from '../../../types';
 import { Store } from '@ngrx/store';
@@ -17,6 +17,7 @@ export class SummaryComponent implements OnInit {
   @Input() cartItems!: Observable<CartProductItem[]>
   @Input() title!: string
   @Input() page!: 'cart' | 'checkout'
+  @Output() subTotalEmitter = new EventEmitter<number>()
   subTotal!: number;
 
   constructor(private store: Store) {}
@@ -28,6 +29,7 @@ export class SummaryComponent implements OnInit {
         cartItems.forEach((item) => {
           this.subTotal += item.totalPrice;
         });
+        this.subTotalEmitter.emit(this.subTotal)
       })
     );
   }

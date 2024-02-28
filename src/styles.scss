@@ -217,7 +217,7 @@ app-product-configure .mdc-tab-indicator {
 }
 
 app-payment-details .mat-mdc-tab:not(.mdc-tab--stacked) {
-  height: 40px;
+  height: 30px;
   border-radius: 8px;
 }
 
@@ -229,12 +229,16 @@ app-payment-details .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: white;
 }
 
+app-payment-details .mdc-tab-indicator__content--underline {
+  border: none
+}
+
 app-payment-details .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
   color: white;
 }
 
 app-payment-details .mdc-tab--active {
-  background-color: #3cb043;
+  background-color: #3cb043 !important;
   transition: all 1s;
 }
 app-payment-details .mdc-tab {
@@ -245,13 +249,27 @@ app-payment-details .mdc-tab {
 app-payment-details .mat-mdc-tab-label-container {
   padding: 8px;
   background-color: #f6f8f8;
+  width: 245px;
+  border-radius: 8px;
+  flex-grow: 0;
+}
+
+app-payment-details .mat-mdc-tab-labels {
+  gap: 10px;
+}
+
+app-payment-details .mdc-tab { 
+  min-width: 81px !important;
+}
+
+app-payment-details .mat-mdc-tab-header {
+ background-color: #fff;
 }
 
 app-payment-details .mat-mdc-tab-group {
-  width: 500px;
-  max-width: 120%;
+  --mat-tab-header-active-focus-label-text-color: white;
+    --mat-tab-header-active-hover-label-text-color: white;
 }
-
 app-settings .mat-mdc-tab-links {
   flex-direction: row;
 }

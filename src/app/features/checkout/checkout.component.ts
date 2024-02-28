@@ -64,7 +64,7 @@ export class CheckoutComponent implements OnInit {
   });
   private cartItems$ = new BehaviorSubject<CartProductItem[]>([]);
   cartItems = this.cartItems$.asObservable();
-  subTotal!: number;
+  amountToPay!: number;
 
   constructor(private _formBuilder: FormBuilder, private store: Store) {}
   ngOnInit(): void {
@@ -78,5 +78,9 @@ export class CheckoutComponent implements OnInit {
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
       });
     }
+  }
+  getSubtotal(amountToPay: number) {
+    this.amountToPay = amountToPay
+    console.log('GetSubtotal', this.amountToPay);    
   }
 }

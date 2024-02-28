@@ -1,5 +1,5 @@
 <form
-  class="flex flex-col mt-4 md:mt-0"
+  class="grid grid-cols-2 gap-x-[35px] mt-4 md:mt-4"
   [formGroup]="mobileMoneyForm"
   (ngSubmit)="addWallet()"
 >
@@ -8,7 +8,7 @@
     [control]="$any(mobileMoneyForm.controls['network'])"
     [options]="['MTN', 'Vodafone']"
   />
-  <label class="flex flex-col gap-0.5 mt-4" for="contact">
+  <label class="flex flex-col " for="contact">
     <span class="">Contact</span>
     <input
       id="contact"
@@ -21,6 +21,20 @@
   @if (showWarning !== '') {
   <span class="text-red-600 text-sm">{{ showWarning }}</span>
   }
-
-  <app-custom-button buttonText="Add Wallet" [isPrimaryButton]="true" />
+  @if (page === 'checkout') {
+    <app-custom-input type="text" [isReadOnly]="true" label="Amount" formControlName="amount"/>
+    <app-custom-input type="text" label="Reference"/>
+    <div class="flex justify-between mt-4">
+      <app-custom-check-box
+        name="save-form"
+        label="Save wallets for future purchase"
+        class="text-table-text text-sm"
+      />
+      <button type="button" class="text-xs text-red-color underline">
+        Clear form
+      </button>
+    </div>
+  } @else {
+    <app-custom-button buttonText="Add Wallet" [isPrimaryButton]="true" />
+  }
 </form>
