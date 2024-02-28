@@ -26,30 +26,26 @@
       <app-product-loading />
 
       <div
-        class="w-full mt-10 flex gap-[97px] flex-row flex-wrap mx-auto justify-between items-start"
+        class="w-full mt-10 flex gap-[97px] flex-wrap mx-auto justify-between items-start"
       >
-        <div
-          class="flex flex-col lg:flex-row items-start gap-4 flex-1 w-full mb-20"
-        >
-          <div class="flex flex-row lg:flex-col gap-[49px] items-center">
+        <div class="flex flex-col lg:flex-row items-start gap-6 flex-1 mb-20">
+          <div class="flex lg:flex-col lg:h-[312px] gap-[49px] items-center">
             <div
               *ngFor="let image of product.imageUrl; let i = index"
-              class="border-[2px] hover:border-[#3CB043] border-[#E6E6E6] rounded-lg w-full max-w-[130px] p-4"
+              class="border hover:border-[#3CB043] border-[#E6E6E6] rounded-lg flex w-[76px] h-[78px]"
             >
               <img
                 [src]="image"
                 alt="Product Image {{ i + 1 }}"
-                class="w-full"
+                class="object-contain max-w-full max-h-full"
               />
             </div>
           </div>
-          <div
-            class="max-w-[690px] min-w-[200px] w-full max-h-[480px] flex flex-row items-center h-full border-[2px] border-[#E6E6E6] rounded-lg p-2"
-          >
+          <div class="w-[548px] h-[312px] border border-[#E6E6E6] rounded-2xl">
             <img
               [src]="product.coverImage"
               alt="Product coverImage"
-              class="max-h-[360px] max-w-[548px] w-full h-full"
+              class="object-contain max-w-full max-h-full mx-auto"
             />
           </div>
         </div>
@@ -231,7 +227,7 @@
 
                     <div class="font-medium text-[20px]">
                       {{
-                          isSizablePricing(activeLink)
+                        isSizablePricing(activeLink)
                           ? "included"
                           : getPriceDifference({
                               isIncluded: false,
@@ -281,19 +277,23 @@
                           : ''
                       }} flex flex-col border-[#E6E6E6] rounded-lg w-[190px] h-[170px] p-4"
                     >
-                      <img
-                        title="attribute-check"
-                        *ngIf="
-                          isActiveSelectedOption({
-                            type: attributeProduct.type,
-                            id: attributeProduct.compatibleOptionId,
-                            size: attributeProduct.baseAmount
-                          })
-                        "
-                        src="/assets/option.svg"
-                        [alt]="attributeProduct.compatibleOptionId"
+                      <div
                         class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3"
-                      />
+                      >
+                        <img
+                          title="attribute-check"
+                          *ngIf="
+                            isActiveSelectedOption({
+                              type: attributeProduct.type,
+                              id: attributeProduct.compatibleOptionId,
+                              size: attributeProduct.baseAmount
+                            })
+                          "
+                          src="/assets/option.svg"
+                          [alt]="attributeProduct.compatibleOptionId"
+                          class="object-contain max-w-full max-h-full"
+                        />
+                      </div>
 
                       <div
                         class="w-full flex flex-row items-center justify-center max-h-[140px] h-full"
