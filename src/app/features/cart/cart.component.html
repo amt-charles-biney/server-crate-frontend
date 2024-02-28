@@ -1,8 +1,8 @@
 <main class="max-w-[1239px] mx-auto mt-[66px]">
   <h1 class="text-2xl font-bold">Shopping Cart</h1>
-  <ng-container *ngIf="cartItems | async as cartItems">
+  <ng-container *ngIf="cartItems | async as cartProducts">
     <section
-      *ngIf="cartItems.length === 0; else has_cartItems"
+      *ngIf="cartProducts.length === 0; else has_cartItems"
       class="mt-14 text-center"
     >
       <img class="mx-auto" src="/assets/cart-empty.svg" alt="cart is empty" />
@@ -15,37 +15,11 @@
     <ng-template #has_cartItems>
       <section class="grid grid-cols-5 mt-[39px]">
         <section class="flex flex-col col-span-3 gap-6 max-h-[708px] overflow-auto">
-          @for (cartItem of cartItems; track cartItem) {
+          @for (cartItem of cartProducts; track cartItem) {
           <app-cart-product-item [product]="cartItem" (quantityEmitter)="getQuantityOfProduct($event, cartItem)"/>
           }
         </section>
-        <div
-          class="flex flex-col gap-5 col-span-2 pt-6 pb-[13px] px-[15px] w-[421px] h-fit ml-auto border-[2px] border-dashed rounded-2xl"
-        >
-          <h2 class="font-bold text-xl">Cart Items</h2>
-          <div class="flex flex-col gap-5 max-h-[420px] overflow-auto">
-            <p
-              class="flex items-center justify-between"
-              *ngFor="let product of cartItems"
-            >
-              <span class="text-[13px]">{{ product.productName }}</span>
-              <span class="text-sm font-[500]">{{
-                product.totalPrice | currency
-              }}</span>
-            </p>
-          </div>
-
-          <p class="flex justify-between items-end mt-[89px]">
-            <span class="text-[13px]">Subtotal({{ cartItems.length }})</span>
-            <span class="text-sm font-[500]">{{ subTotal | currency }}</span>
-          </p>
-          <p class="text-[13px] text-[#737373]">(Incl. VAT)</p>
-          <button
-            class="bg-figma-green hover:bg-green-500 w-full p-[9px] rounded-xl text-white font-[500px] text-[20px]"
-          >
-            Check Out
-          </button>
-        </div>
+        <app-summary [cartItems]="cartItems" title="Cart Summary" page="cart"/>
       </section>
     </ng-template>
   </ng-container>

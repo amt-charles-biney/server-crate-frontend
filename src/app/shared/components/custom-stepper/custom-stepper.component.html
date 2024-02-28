@@ -1,0 +1,51 @@
+<section class="flex justify-between mx-auto w-[436px]">
+  @for (step of steps; track step; let i = $index) {
+  <div
+    [class]="'line-' + i + ' '"
+    [ngClass]="{
+      'flex md:w-full items-center after:content-[\'\'] after:w-full after:h-1 after:border-b-2  after:border-1 after:hidden sm:after:inline-block ':
+        i !== steps.length - 1,
+      'after:border-figma-green': i < selectedIndex
+    }"
+  >
+    <button
+      class="flex relative flex-col items-center justify-center w-[36px] h-[36px] p-4 border-2 rounded-full font-inter"
+      [ngClass]="
+        selectedIndex === i
+          ? 'bg-white text-figma-green border-figma-green stepperShadow'
+          : i < selectedIndex
+          ? 'bg-figma-green text-white border-figma-green'
+          : ''
+      "
+      (click)="selectStepByIndex(i)"
+    >
+      <span class="absolute">{{ i + 1 }}</span>
+      <p class="absolute text-black top-9 whitespace-nowrap">{{ step.label }}</p>
+    </button>
+  </div>
+  }
+</section>
+
+<div class="mt-[87px]" [ngTemplateOutlet]="selected ? selected.content : null"></div>
+@if (selectedIndex < steps.length - 1) {
+
+  <div class="flex gap-[19px] mt-6">
+    <button
+      [ngClass]="
+        selectedIndex !== 0
+          ? 'text-figma-green border-figma-green'
+          : 'text-placeholder'
+      "
+      cdkStepperPrevious
+      class="border font-bold w-[120px] rounded-[7px] h-[34px]"
+    >
+      Previous
+    </button>
+    <button
+      cdkStepperNext
+      class="border font-bold w-[120px] rounded-[7px] h-[34px] bg-figma-green text-white"
+    >
+      {{ nextText }}
+    </button>
+  </div>
+}

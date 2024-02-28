@@ -1,0 +1,125 @@
+<main class="max-w-[1239px] mx-auto mt-[66px]">
+  <h1 class="text-2xl font-bold">Check Out</h1>
+  <app-custom-stepper >
+    <section>
+      <cdk-step [stepControl]="shippingForm" label="Details">
+        <section class="flex gap-6">
+          <div class="flex-1">
+            <h5 class="text-sm font-bold">Details</h5>
+            <form
+              [formGroup]="shippingForm"
+              class="grid grid-cols-2 gap-x-[35px]"
+            >
+              <app-custom-input
+                id="firstName"
+                label="First Name"
+                type="text"
+                placeholder="Enter your first name"
+                formControlName="firstName"
+              />
+              <app-custom-input
+                id="lastName"
+                label="Last Name"
+                type="text"
+                placeholder="Enter your last name"
+                formControlName="lastName"
+              />
+
+              <app-custom-input
+                id="address1"
+                label="Address 1"
+                type="text"
+                placeholder="Address 1"
+                formControlName="address1"
+              />
+              <app-custom-input
+                id="address2"
+                label="Address 2"
+                type="text"
+                placeholder="Address 2"
+                formControlName="address2"
+              />
+
+              <app-custom-input
+                id="country"
+                label="Country"
+                type="text"
+                placeholder="Enter name of country"
+                formControlName="country"
+              />
+              <app-custom-input
+                id="state"
+                label="State"
+                type="text"
+                placeholder="Enter name of state"
+                formControlName="state"
+              />
+              <app-custom-input
+                id="city"
+                label="City"
+                type="text"
+                placeholder="Enter name of city"
+                formControlName="city"
+              />
+              <app-custom-input
+                id="zipCode"
+                label="Zip Code"
+                type="number"
+                placeholder="Enter your zip code"
+                formControlName="zipCode"
+              />
+              <label class="flex flex-col gap-0.5 mt-4" for="contact">
+                <span class="">Contact</span>
+                <input
+                  id="contact"
+                  [ngClass]="showWarning ? 'border-red-600' : ''"
+                  type="tel"
+                  class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
+                  #telInput
+                />
+              </label>
+              @if (showWarning !== '') {
+              <span class="text-red-600 text-sm">{{ showWarning }}</span>
+              }
+            </form>
+            <div class="flex justify-between mt-4">
+              <app-custom-check-box
+                name="save-form"
+                label="Save this information for next time"
+                class="text-table-text text-sm"
+              />
+              <button class="text-xs text-red-color underline">
+                Clear form
+              </button>
+            </div>
+          </div>
+          <app-summary [cartItems]="cartItems" title="Order Summary" page="checkout"/>
+        </section>
+      </cdk-step>
+      <cdk-step label="Payment Method">
+        <section class="flex gap-6">
+          <div class="flex-1">
+            <h5 class="text-sm font-bold">Payment Method</h5>
+            <app-payment-details />
+          </div>
+          <app-summary [cartItems]="cartItems" title="Order Summary" page="checkout"/>
+        </section>
+      </cdk-step>
+      <cdk-step label="Track Order">
+        <section class="flex flex-col items-center justify-center ">
+          <img src="/assets/checkout.svg" alt="tracking your order">
+          <div class="flex flex-col items-center justify-center mt-[39px]">
+            <p class="font-bold text-2xl">Thank You</p>
+            <p class="text-[13px]">Order Confirmed</p>
+            <p class="text-[#737373] text-[13px] mb-[44px]">INSERT [ORDERID]</p>
+          </div>
+          <button
+              class="bg-figma-green hover:bg-green-500 w-[469px] p-[9px] rounded-xl text-white font-[500px] text-[20px]"
+            >
+              Track Order
+            </button>
+        </section>
+      </cdk-step>
+    </section>
+  </app-custom-stepper>
+</main>
