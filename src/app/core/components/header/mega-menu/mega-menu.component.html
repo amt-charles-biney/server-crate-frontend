@@ -1,0 +1,100 @@
+<div class="overflow-y-hidden z-40 absolute h-[387px] mx-auto rounded-[8px] shadow-md max-w-[1365px] flex items-center justify-center w-full bg-white 
+         transition-transform duration-200 ease-in-out
+         {{
+    isMenuOpen
+      ? 'top-[65px] left-1/2 transform translate-y-0 -translate-x-1/2'
+      : '-top-64 left-1/2 transform -translate-y-full -translate-x-1/2'
+  }}"
+>
+  <div
+    class="w-full pt-10 pb-10 flex flex-row items-start px-16 lg:px-0 justify-between max-w-[1240px]"
+  >
+    <div class="flex flex-col h-full gap-[30px]">
+      <button
+        (click)="onMenuOptionSelect(option)"
+        *ngFor="let option of getProductOptionKeys(); let i = index"
+        title="{{ option }}"
+        class="flex flex-row gap-2 items-center"
+      >
+        <ng-container *ngIf="option === activeMenu; else inactiveOption">
+          <img src="/assets/menu-chevron-fill.svg" alt="Active Image" />
+        </ng-container>
+        <span
+          class="hover:text-[#3CB043] text-[24px] hover:underline {{
+            option === activeMenu
+              ? 'text-[#3CB043] underline'
+              : 'text-[#1D2939]'
+          }}"
+          >{{ getMenuOptionsName(option) }}</span
+        >
+      </button>
+
+      <button
+        type="button"
+        (click)="navigateToProductServers()"
+        class="flex rounded-[16px] bg-[#ECF7ECB2] flex-row gap-2 items-center w-[132px] h-[32px] p-[8px]"
+      >
+        <svg
+          width="16"
+          height="8"
+          viewBox="0 0 16 8"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2.01875 5.97793C1.47187 5.43105 1.2 4.76855 1.2 3.99668C1.2 3.25605 1.49687 2.54668 2.01875 2.02168C2.56562 1.4748 3.225 1.20293 4 1.20293H6.8C7.13125 1.20293 7.4 0.93418 7.4 0.60293C7.4 0.27168 7.13125 0.00292969 6.8 0.00292969H4C2.89375 0.00292969 1.95 0.393554 1.16875 1.17168C0.3875 1.9498 0 2.89355 0 3.9998C0 5.10605 0.390625 6.0498 1.16875 6.83105C1.94688 7.6123 2.89375 7.9998 4 7.9998H6.8C7.13125 7.9998 7.4 7.73105 7.4 7.3998C7.4 7.06855 7.13125 6.7998 6.8 6.7998H4.025C3.27188 6.80293 2.55 6.50605 2.01875 5.97793Z"
+            fill="#3CB043"
+          />
+          <path
+            d="M5.49844 3.40039H10.4984C10.8297 3.40039 11.0984 3.66914 11.0984 4.00039C11.0984 4.33164 10.8297 4.60039 10.4984 4.60039H5.49844C5.16719 4.60039 4.89844 4.33164 4.89844 4.00039C4.89844 3.66914 5.16719 3.40039 5.49844 3.40039Z"
+            fill="#3CB043"
+          />
+          <path
+            d="M14.8328 1.16875C14.0516 0.3875 13.1109 0 12.0016 0H9.20156C8.87031 0 8.60156 0.26875 8.60156 0.6C8.60156 0.93125 8.87031 1.2 9.20156 1.2H11.9766C12.7266 1.19687 13.4484 1.49375 13.9828 2.02187C14.5297 2.56875 14.8016 3.23125 14.8016 4.00312C14.8016 4.74375 14.5047 5.45312 13.9828 5.97812C13.4359 6.525 12.7766 6.79687 12.0016 6.79687H9.20156C8.87031 6.79687 8.60156 7.06562 8.60156 7.39687C8.60156 7.72813 8.87031 7.99687 9.20156 7.99687H12.0016C13.1078 7.99687 14.0516 7.60625 14.8328 6.82812C15.6141 6.04687 16.0016 5.10625 16.0016 3.99687C16.0016 2.89375 15.6109 1.95 14.8328 1.16875Z"
+            fill="#3CB043"
+          />
+        </svg>
+
+        <span class="text-xs text-[#3cb043]">All products</span>
+      </button>
+    </div>
+
+    
+    <div *ngIf="productOptions" class="relative grid overflow-y-auto lg:grid-cols-2 border-r-gray-200 mx-auto gap-4 lg:gap-8">
+      <div class="absolute hidden md:flex -left-5 h-[300px] w-[1px] bg-[#CBD5E1]"></div>
+      <div
+        class="transition-all ease-in-out duration-300"
+        (click)="navigateToProductByFilter(option, activeMenu)"
+        (mouseenter)="onHoverMenuOption(option)"
+        *ngFor="let option of productOptions[activeMenu]"
+      >
+        <div class="flex flex-row gap-2 items-center cursor-pointer">
+          <img src="/assets/mega-chevron.svg" alt="Inactive Image" />
+          <span class="text-[#1D2939] hover:underline hover:text-[#3CB043]">{{
+            option.name
+          }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="w-full flex flex-col gap-4 max-w-[300px] lg:max-w-[448px] transition ease-in-out duration-300"
+    >
+      <img
+        *ngIf="defaultMenu.thumbnail !== null || defaultMenu.thumbnail !== ''"
+        title="default"
+        class="md:w-[448px] w-full h-[201px] bg-gray-100 max-h-[201px] rounded-[16px]"
+        [src]="defaultMenu.thumbnail"
+        [alt]="defaultMenu.name"
+      />
+      <div class="text-black space-y-2 h-[100px]">
+        <h1 class="font-semibold text-[16px]">{{ defaultMenu.name }}</h1>
+        <p>{{ defaultMenu.description || "no decription" }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #inactiveOption>
+  <img src="/assets/menu-chevron.svg" alt="Inactive Image" />
+</ng-template>
