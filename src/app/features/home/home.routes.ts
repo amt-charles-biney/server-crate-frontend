@@ -12,6 +12,8 @@ import { UserEffect } from '../../store/users/users.effects';
 import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { ProductsEffect } from '../../store/admin/products/products.effects';
 import { CartComponent } from '../cart/cart.component';
+import { CheckoutEffect } from '../../store/checkout/checkout.effects';
+import { checkoutFeature } from '../../store/checkout/checkout.reducers';
 
 export const route: Routes = [
     {
@@ -47,6 +49,10 @@ export const route: Routes = [
             {
                 path: 'checkout',
                 loadComponent: () => import('../checkout/checkout.component').then(m => m.CheckoutComponent),
+                providers: [
+                    provideEffects(CheckoutEffect),
+                    provideState(checkoutFeature)
+                ]
             },
             {
                 path: 'cart',

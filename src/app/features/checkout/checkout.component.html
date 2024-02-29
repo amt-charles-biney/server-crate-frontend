@@ -27,6 +27,13 @@
               />
 
               <app-custom-input
+                id="email"
+                label="Email"
+                type="email"
+                placeholder="Enter your email"
+                formControlName="email"
+              />
+              <app-custom-input
                 id="address1"
                 label="Address 1"
                 type="text"
@@ -70,7 +77,6 @@
                 formControlName="zipCode"
               />
               <div>
-
                 <label class="flex flex-col gap-0.5 mt-4" for="contact">
                   <span class="">Contact</span>
                   <input
@@ -86,7 +92,7 @@
                 }
               </div>
             </form>
-            
+
             <div class="flex justify-between mt-4">
               <app-custom-check-box
                 name="save-form"
@@ -97,9 +103,12 @@
                 Clear form
               </button>
             </div>
-            
           </div>
-          <app-summary [cartItems]="cartItems" title="Order Summary" page="checkout"/>
+          <app-summary
+            [cartItems]="cartItems"
+            title="Order Summary"
+            page="checkout"
+          />
         </section>
       </cdk-step>
       <cdk-step [completed]="paymentComplete" label="Payment Method">
@@ -107,25 +116,30 @@
           <div class="flex-1">
             <h5 class="text-sm font-bold">Payment Method</h5>
             @if (amountToPay) {
-              <app-payment-details page="checkout" [amountToPay]="amountToPay"/>
+            <app-payment-details page="checkout" [amountToPay]="amountToPay" />
             }
           </div>
-          <app-summary [cartItems]="cartItems" (subTotalEmitter)="getSubtotal($event)" title="Order Summary" page="checkout"/>
+          <app-summary
+            [cartItems]="cartItems"
+            (subTotalEmitter)="getSubtotal($event)"
+            title="Order Summary"
+            page="checkout"
+          />
         </section>
       </cdk-step>
       <cdk-step label="Track Order">
-        <section class="flex flex-col items-center justify-center ">
-          <img src="/assets/checkout.svg" alt="tracking your order">
+        <section class="flex flex-col items-center justify-center">
+          <img src="/assets/checkout.svg" alt="tracking your order" />
           <div class="flex flex-col items-center justify-center mt-[39px]">
             <p class="font-bold text-2xl">Thank You</p>
             <p class="text-[13px]">Order Confirmed</p>
             <p class="text-[#737373] text-[13px] mb-[44px]">INSERT [ORDERID]</p>
           </div>
           <button
-              class="bg-figma-green hover:bg-green-500 w-[469px] p-[9px] rounded-xl text-white font-[500px] text-[20px]"
-            >
-              Track Order
-            </button>
+            class="bg-figma-green hover:bg-green-500 w-[469px] p-[9px] rounded-xl text-white font-[500px] text-[20px]"
+          >
+            Track Order
+          </button>
         </section>
       </cdk-step>
     </section>
@@ -148,12 +162,12 @@
       (click)="next()"
       class="border font-bold w-max px-[19px] rounded-[7px] h-[34px] bg-figma-green text-white"
     >
-    @if (cdkStepper.selectedIndex === 1) {
+      @if (cdkStepper.selectedIndex === 1) {
       <span>Pay {{ amountToPay | currency }} </span>
-    } @else {
+      } @else {
       <span>Next</span>
-    }
+      }
     </button>
   </div>
-}
+  }
 </main>

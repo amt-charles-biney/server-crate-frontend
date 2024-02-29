@@ -18,12 +18,14 @@ import { CustomStepperComponent } from '../../shared/components/custom-stepper/c
 import { CdkStepLabel, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { CustomCheckBoxComponent } from '../../shared/components/custom-check-box/custom-check-box.component';
 import { BehaviorSubject, tap } from 'rxjs';
-import { CartProductItem, Contact } from '../../types';
+import { CartProductItem, Contact, PaymentRequest } from '../../types';
 import { Store } from '@ngrx/store';
 import { selectConfiguredProducts } from '../../store/cart/cart.reducers';
 import { SummaryComponent } from '../../shared/components/summary/summary.component';
 import { PaymentDetailsComponent } from '../account-settings/features/payment-details/payment-details.component';
 import { zipCodeValidator } from '../../core/utils/validators';
+import { sendingPaymentRequest, verifyPayment } from '../../store/checkout/checkout.actions';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -54,6 +56,7 @@ export class CheckoutComponent implements OnInit {
   shippingForm = this._formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
+    email: ['', Validators.required],
     address1: ['', Validators.required],
     address2: [''],
     country: ['', Validators.required],
@@ -66,9 +69,16 @@ export class CheckoutComponent implements OnInit {
   cartItems = this.cartItems$.asObservable();
   amountToPay!: number;
 
-  constructor(private _formBuilder: FormBuilder, private store: Store) {}
+  constructor(private _formBuilder: FormBuilder, private store: Store, private activatedRoute: ActivatedRoute) {}
   ngOnInit(): void {
     this.cartItems = this.store.select(selectConfiguredProducts)
+
+    this.activatedRoute.queryParams.subscribe((params) => {
+      const reference = params['reference']
+      if (reference) {
+        this.store.dispatch(verifyPayment({ reference }))
+      }
+    })
   }
   ngAfterViewInit(): void {
     if (this.telInput) {
@@ -108,9 +118,20 @@ export class CheckoutComponent implements OnInit {
   }
 
   paymentDetails() {
+    this.paymentDetailsComponent.shareForm()
+    const { amount, reference } = this.paymentDetailsComponent.paymentForm
+    const paymentRequest: PaymentRequest = {
+      amount: amount!,
+      channels: ['mobile_money'],
+      email: this.shippingForm.value.email!,
+      reference: reference!,
+      currency: "GHS"
+    }
+    this.store.dispatch(sendingPaymentRequest(paymentRequest))
+
     console.log('Payment details');
-    console.log(this.paymentDetailsComponent.shareForm())
     console.log('Checkout data', this.paymentDetailsComponent.paymentForm) 
+    
   }
 
   next() {
