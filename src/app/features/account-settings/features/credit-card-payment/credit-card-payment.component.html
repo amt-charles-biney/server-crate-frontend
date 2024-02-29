@@ -1,5 +1,5 @@
 <form class="mt-10" [formGroup]="creditCardForm" (ngSubmit)="addCard()">
-  <div class="flex justify-evenly">
+  <section class="flex gap-[25px] w-[432px]">
     <app-custom-radio
       formControlName="paymentMethod"
       [currentPaymentMethod]="creditCardForm.value['paymentMethod']"
@@ -36,108 +36,129 @@
       value="apple pay"
       imgUrl="/assets/applePay.svg"
     />
-  </div>
-
-  <app-custom-input
-    id="name"
-    label="Name"
-    type="text"
-    placeholder="Enter your name on the card"
-    formControlName="name"
-  />
-  @if (name?.invalid && (name?.touched || name?.dirty)) {
-  <span class="text-red-600">A name is required</span>
-  }
-  <app-custom-input
-    id="cardNumber"
-    label="Card Number"
-    type="number"
-    inputmode="numeric"
-    placeholder="Enter card number"
-    formControlName="cardNumber"
-  />
-  @if (cardNumber?.invalid && (cardNumber?.touched || cardNumber?.dirty)) {
-  
-  <div *ngIf="cardNumber?.errors?.['required']">
-    <span class="text-red-600">A card number is required</span>
-  </div>
-  <div *ngIf="cardNumber?.errors?.['minlength']">
-    <span class="text-red-600">Not enough numbers</span>
-  </div>
-  <div *ngIf="cardNumber?.errors?.['maxlength']">
-    <span class="text-red-600">Too many numbers</span>
-  </div>
-  <div *ngIf="cardNumber?.errors?.['pattern']">
-    <span class="text-red-600">Please use only numbers</span>
-  </div>
-  }
-  <app-custom-input
-    id="securityCode"
-    label="Security Code"
-    type="number"
-    placeholder="CVC"
-    formControlName="securityCode"
-  />
-  @if (securityCode?.invalid && (securityCode?.touched || securityCode?.dirty))
-  {
-    <div *ngIf="securityCode?.errors?.['required']">
-      <span class="text-red-600">A security code is required</span>
-    </div>
-    <div *ngIf="securityCode?.errors?.['minlength']">
-      <span class="text-red-600">Not enough numbers</span>
-    </div>
-    <div *ngIf="securityCode?.errors?.['maxlength']">
-      <span class="text-red-600">Too many numbers</span>
-    </div>
-    <div *ngIf="securityCode?.errors?.['pattern']">
-      <span class="text-red-600">Please use only numbers</span>
-    </div>
-  }
-  <label class="flex flex-col gap-0.5 mt-4" for="expiration">
-    Expiration Date
-    <div
-      [ngClass]="
-        (year?.invalid && (year?.touched || year?.dirty)) || month?.invalid &&
-    (month?.touched || month?.dirty)
-          ? 'outline-red-600 border-red-400'
-          : 'focus-within:border-figma-green'
-      "
-      class="flex w-fit border-[1.5px] rounded-md py-2 px-4"
-    >
-      <input
-        id="expiration"
+  </section>
+  <section class="grid grid-cols-2 gap-x-[35px]">
+    <div>
+      <app-custom-input
+        id="name"
+        label="Name"
         type="text"
-        pattern="\d*"
-        name="month"
-        placeholder="MM"
-        formControlName="month"
-        maxlength="2"
-        class="border-0 outline-none text-center"
-        size="2"
+        placeholder="Enter your name on the card"
+        formControlName="name"
       />
-      <span class="mx-2">/</span>
-      <input
-        type="text"
-        pattern="\d*"
-        name="year"
-        placeholder="YY"
-        formControlName="year"
-        maxlength="2"
-        class="border-0 outline-none text-center"
-        size="2"
-      />
+      @if (name?.invalid && (name?.touched || name?.dirty)) {
+      <span class="text-red-600">A name is required</span>
+      }
     </div>
-    @if ((year?.invalid && (year?.touched || year?.dirty)) || month?.invalid &&
-    (month?.touched || month?.dirty)) {
-    <span class="text-red-600">Please enter numbers</span>
-    }
-    <div *ngIf="year?.errors?.['maxlength']">
-      <span class="text-red-600">Please enter 2 digits each</span>
-    </div>
-    <div *ngIf="year?.errors?.['pattern']">
-      <span class="text-red-600">Please use only numbers</span>
-    </div>
-  </label>
+    <div>
 
-  <app-custom-button buttonText="Add Card" [isPrimaryButton]="true" />
+      <app-custom-input
+        id="cardNumber"
+        label="Card Number"
+        type="number"
+        inputmode="numeric"
+        placeholder="Enter card number"
+        formControlName="cardNumber"
+      />
+      @if (cardNumber?.invalid && (cardNumber?.touched || cardNumber?.dirty)) {
+      
+      <div *ngIf="cardNumber?.errors?.['required']">
+        <span class="text-red-600">A card number is required</span>
+      </div>
+      <div *ngIf="cardNumber?.errors?.['minlength']">
+        <span class="text-red-600">Not enough numbers</span>
+      </div>
+      <div *ngIf="cardNumber?.errors?.['maxlength']">
+        <span class="text-red-600">Too many numbers</span>
+      </div>
+      <div *ngIf="cardNumber?.errors?.['pattern']">
+        <span class="text-red-600">Please use only numbers</span>
+      </div>
+      }
+    </div>
+    <div>
+
+      <app-custom-input
+        id="securityCode"
+        label="Security Code"
+        type="number"
+        placeholder="CVC"
+        formControlName="securityCode"
+      />
+      @if (securityCode?.invalid && (securityCode?.touched || securityCode?.dirty))
+      {
+        <div *ngIf="securityCode?.errors?.['required']">
+          <span class="text-red-600">A security code is required</span>
+        </div>
+        <div *ngIf="securityCode?.errors?.['minlength']">
+          <span class="text-red-600">Not enough numbers</span>
+        </div>
+        <div *ngIf="securityCode?.errors?.['maxlength']">
+          <span class="text-red-600">Too many numbers</span>
+        </div>
+        <div *ngIf="securityCode?.errors?.['pattern']">
+          <span class="text-red-600">Please use only numbers</span>
+        </div>
+      }
+    </div>
+    <label class="flex flex-col gap-0.5 mt-4" for="expiration">
+      Expiration Date
+      <div
+        [ngClass]="
+          (year?.invalid && (year?.touched || year?.dirty)) || month?.invalid &&
+      (month?.touched || month?.dirty)
+            ? 'outline-red-600 border-red-400'
+            : 'focus-within:border-figma-green'
+        "
+        class="flex w-full border-[1.5px] rounded-md py-2 px-4"
+      >
+        <input
+          id="expiration"
+          type="text"
+          pattern="\d*"
+          name="month"
+          placeholder="MM"
+          formControlName="month"
+          maxlength="2"
+          class="border-0 outline-none text-center"
+          size="2"
+        />
+        <span class="mx-2">/</span>
+        <input
+          type="text"
+          pattern="\d*"
+          name="year"
+          placeholder="YY"
+          formControlName="year"
+          maxlength="2"
+          class="border-0 outline-none text-center"
+          size="2"
+        />
+      </div>
+      @if ((year?.invalid && (year?.touched || year?.dirty)) || month?.invalid &&
+      (month?.touched || month?.dirty)) {
+      <span class="text-red-600">Please enter numbers</span>
+      }
+      <div *ngIf="year?.errors?.['maxlength']">
+        <span class="text-red-600">Please enter 2 digits each</span>
+      </div>
+      <div *ngIf="year?.errors?.['pattern']">
+        <span class="text-red-600">Please use only numbers</span>
+      </div>
+    </label>
+  </section>
+  @if (page === 'default') {
+    <app-custom-button buttonText="Add Card" [isPrimaryButton]="true" />
+  } @else {
+    <div class="flex justify-between mt-4">
+      <app-custom-check-box
+        name="save-form"
+        label="Save this information for next time"
+        class="text-table-text text-sm"
+      />
+      <button type="button" class="text-xs text-red-color underline">
+        Clear form
+      </button>
+    </div>
+  }
 </form>

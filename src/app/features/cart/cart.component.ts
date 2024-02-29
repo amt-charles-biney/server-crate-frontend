@@ -7,11 +7,13 @@ import { selectConfiguredProducts } from '../../store/cart/cart.reducers';
 import { CommonModule } from '@angular/common';
 import { CartProductItemComponent } from '../../shared/components/cart-product-item/cart-product-item.component';
 import { RecommendedProductsComponent } from './features/recommended-products/recommended-products.component';
+import { RouterModule } from '@angular/router';
+import { SummaryComponent } from '../../shared/components/summary/summary.component';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, CartProductItemComponent, RecommendedProductsComponent],
+  imports: [CommonModule, CartProductItemComponent, RecommendedProductsComponent, RouterModule, SummaryComponent],
   templateUrl: './cart.component.html',
 })
 export class CartComponent implements OnInit {
@@ -20,14 +22,7 @@ export class CartComponent implements OnInit {
   subTotal!: number
   constructor(private store: Store) {}
   ngOnInit(): void {
-    this.cartItems = this.store.select(selectConfiguredProducts).pipe(
-      tap(cartItems => {
-        this.subTotal = 0
-        cartItems.forEach((item) => {
-          this.subTotal += item.totalPrice
-        })
-      }) 
-    )
+    this.cartItems = this.store.select(selectConfiguredProducts)
   }
 
   getQuantityOfProduct(quantity: number, cartItem: CartProductItem) {

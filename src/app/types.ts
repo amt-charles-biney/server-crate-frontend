@@ -469,3 +469,34 @@ export interface PageAbleResponseData<T> {
   first?: boolean;
   empty?: boolean;
 }
+
+export type PaymentForm = {
+  name?: string;
+  cardNumber?: number;
+  securityCode?: number;
+  expirationDate?: string;
+  network?: string;
+  contact?: Contact;
+  amount?: number;
+  reference?: string;
+}
+
+export type PaymentRequest = {
+  email: string;
+  amount: number;
+  reference: string;
+  channels: string[];
+  currency: string;
+}
+
+export type PaymentResponse = {
+  message: string;
+  status: boolean;
+  data: PaymentData
+}
+
+export type PaymentData = {
+  authorization_url: string;
+  access_code: string;
+  reference: string;
+}
