@@ -23,18 +23,21 @@
   }
   @if (page === 'checkout') {
     <app-custom-input type="text" [isReadOnly]="true" label="Amount" formControlName="amount"/>
-    <app-custom-input type="text" label="Reference"/>
-    <div class="flex justify-between mt-4">
-      <app-custom-check-box
-        name="save-form"
-        label="Save wallets for future purchase"
-        class="text-table-text text-sm"
-      />
-      <button type="button" class="text-xs text-red-color underline">
-        Clear form
-      </button>
-    </div>
+    <app-custom-input type="text" label="Reference" placeholder="Enter a reference" formControlName="reference"/>
+    
   } @else {
     <app-custom-button buttonText="Add Wallet" [isPrimaryButton]="true" />
   }
 </form>
+@if (page === 'checkout') {
+  <div class="flex justify-between mt-4">
+    <app-custom-check-box
+      name="save-form"
+      label="Save wallets for future purchase"
+      class="text-table-text text-sm"
+    />
+    <button type="button" class="text-xs text-red-color underline">
+      Clear form
+    </button>
+  </div>
+}

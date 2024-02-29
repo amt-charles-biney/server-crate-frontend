@@ -25,9 +25,8 @@
   </div>
   }
 </section>
-
 <div class="mt-[87px]" [ngTemplateOutlet]="selected ? selected.content : null"></div>
-@if (selectedIndex < steps.length - 1) {
+<!-- @if (selectedIndex < steps.length - 1) {
 
   <div class="flex gap-[19px] mt-6">
     <button
@@ -43,9 +42,14 @@
     </button>
     <button
       cdkStepperNext
+      type="submit"
       class="border font-bold w-[120px] rounded-[7px] h-[34px] bg-figma-green text-white"
     >
-      {{ nextText }}
+    @if (selectedIndex === 1) {
+      <span>Pay {{ price | currency }} </span>
+    } @else {
+      <span>Next</span>
+    }
     </button>
   </div>
-}
+} -->

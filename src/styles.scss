@@ -232,6 +232,9 @@ app-payment-details .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
 app-payment-details .mdc-tab-indicator__content--underline {
   border: none
 }
+app-payment-details .mat-mdc-tab-body-content {
+  overflow: hidden;
+}
 
 app-payment-details .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
   color: white;
@@ -451,6 +454,16 @@ app-header .mat-badge-small.mat-badge-above .mat-badge-content {
   --mdc-plain-tooltip-supporting-text-color: #F2D260;
   --mdc-plain-tooltip-supporting-text-size: 14px;
   --mdc-plain-tooltip-supporting-text-weight: 500;
+}
+
+.myScroll::-webkit-scrollbar {
+  width: 4px;
+  margin-inline: 2px; /* width of the entire scrollbar */
+}
+
+.myScroll::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
 }
 
 @media only screen and (max-width: 768px) {

@@ -65,14 +65,11 @@ export function unitRequiredIfMeasured(): ValidatorFn {
   }
 }
 
-export function requiredWhenIsMeasured(): ValidatorFn {
+export function zipCodeValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const isMeasured = control.parent?.parent?.get('isMeasured')?.value
-    console.log('IsMeasured', isMeasured);
-    
-    if (isMeasured) {
-      return null
+    if (control.value.length < 4) {      
+      return { zipCode: 'Should be more than 3' }
     }
-    return { }
+    return null
   }
 }

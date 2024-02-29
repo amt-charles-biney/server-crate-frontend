@@ -14,12 +14,14 @@
     </section>
     <ng-template #has_cartItems>
       <section class="grid grid-cols-5 mt-[39px]">
-        <section class="flex flex-col col-span-3 gap-6 max-h-[708px] overflow-auto">
+        <section class="flex flex-col col-span-3 gap-6 max-h-[708px] overflow-auto myScroll">
           @for (cartItem of cartProducts; track cartItem) {
           <app-cart-product-item [product]="cartItem" (quantityEmitter)="getQuantityOfProduct($event, cartItem)"/>
           }
         </section>
-        <app-summary [cartItems]="cartItems" title="Cart Summary" page="cart"/>
+        <div class="col-span-2 ml-auto">
+          <app-summary [cartItems]="cartItems" title="Cart Summary" page="cart"/>
+        </div>
       </section>
     </ng-template>
   </ng-container>

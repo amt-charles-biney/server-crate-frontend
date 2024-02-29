@@ -469,3 +469,14 @@ export interface PageAbleResponseData<T> {
   first?: boolean;
   empty?: boolean;
 }
+
+export type PaymentForm = {
+  name?: string;
+  cardNumber?: number;
+  securityCode?: number;
+  expirationDate?: string;
+  network?: string;
+  contact?: Contact;
+  amount?: number;
+  reference?: string;
+}

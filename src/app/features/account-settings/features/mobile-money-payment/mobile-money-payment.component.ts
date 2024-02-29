@@ -53,6 +53,17 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getContact() {
+    const contact = this.intl?.getSelectedCountryData();
+    const contactValue: Contact = {
+      country: contact.name,
+      dialCode: contact.dialCode,
+      iso2Code: contact.iso2,
+      phoneNumber: this.intl?.getNumber(),
+    };
+    return contactValue
+  }
+
   addWallet() {
     console.log('Valid number', this.intl.isValidNumber());
     if (!this.intl.isValidNumber()) {
@@ -62,13 +73,7 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
       }, 3000);
       return;
     }
-    const contact = this.intl?.getSelectedCountryData();
-    const contactValue: Contact = {
-      country: contact.name,
-      dialCode: contact.dialCode,
-      iso2Code: contact.iso2,
-      phoneNumber: this.intl?.getNumber(),
-    };
+    const contactValue = this.getContact()
     this.contact?.setValue(contactValue);
   }
 

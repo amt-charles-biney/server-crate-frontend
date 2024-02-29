@@ -1,6 +1,6 @@
 import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { CommonModule, NgTemplateOutlet } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, ContentChildren, Input, QueryList } from '@angular/core';
 import { matStepperAnimations } from '@angular/material/stepper';
 
 @Component({
@@ -14,10 +14,11 @@ import { matStepperAnimations } from '@angular/material/stepper';
     matStepperAnimations.horizontalStepTransition
   ]
 })
-export class CustomStepperComponent extends CdkStepper {
-  @Input() nextText: string = 'Next'
+export class CustomStepperComponent extends CdkStepper{
+
   @Input() completed!: boolean;
-  selectStepByIndex(index: number): void {
+  @Input() price!: number
+  selectStepByIndex(index: number): void {    
     this.selectedIndex = index;
   }
 }

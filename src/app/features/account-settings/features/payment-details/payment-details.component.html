@@ -1,5 +1,10 @@
-<h2 class="font-bold text-center md:text-start mb-[29px]">Payment</h2>
-<section class="mt-6 md:mt-0 ">
+@if(page === 'default') {
+  <h2 class="font-bold text-center md:text-start mb-[29px]">Payment</h2>
+}
+<section [ngClass]="{
+  'md:mt-0 mt-6': page === 'default',
+  'md:mt-[29px]': page === 'checkout'
+}" class="h-fit">
 
   <mat-tab-group>
     <mat-tab>

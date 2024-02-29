@@ -1,6 +1,6 @@
 <main class="max-w-[1239px] mx-auto mt-[66px]">
   <h1 class="text-2xl font-bold">Check Out</h1>
-  <app-custom-stepper >
+  <app-custom-stepper [price]="amountToPay" #cdkStepper linear>
     <section>
       <cdk-step [stepControl]="shippingForm" label="Details">
         <section class="flex gap-6">
@@ -8,6 +8,7 @@
             <h5 class="text-sm font-bold">Details</h5>
             <form
               [formGroup]="shippingForm"
+              (ngSubmit)="userDetails()"
               class="grid grid-cols-2 gap-x-[35px]"
             >
               <app-custom-input
@@ -68,20 +69,24 @@
                 placeholder="Enter your zip code"
                 formControlName="zipCode"
               />
-              <label class="flex flex-col gap-0.5 mt-4" for="contact">
-                <span class="">Contact</span>
-                <input
-                  id="contact"
-                  [ngClass]="showWarning ? 'border-red-600' : ''"
-                  type="tel"
-                  class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
-                  #telInput
-                />
-              </label>
-              @if (showWarning !== '') {
-              <span class="text-red-600 text-sm">{{ showWarning }}</span>
-              }
+              <div>
+
+                <label class="flex flex-col gap-0.5 mt-4" for="contact">
+                  <span class="">Contact</span>
+                  <input
+                    id="contact"
+                    [ngClass]="showWarning ? 'border-red-600' : ''"
+                    type="tel"
+                    class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
+                    #telInput
+                  />
+                </label>
+                @if (showWarning !== '') {
+                <span class="text-red-600 text-sm">{{ showWarning }}</span>
+                }
+              </div>
             </form>
+            
             <div class="flex justify-between mt-4">
               <app-custom-check-box
                 name="save-form"
@@ -92,11 +97,12 @@
                 Clear form
               </button>
             </div>
+            
           </div>
           <app-summary [cartItems]="cartItems" title="Order Summary" page="checkout"/>
         </section>
       </cdk-step>
-      <cdk-step label="Payment Method">
+      <cdk-step [completed]="paymentComplete" label="Payment Method">
         <section class="flex gap-6">
           <div class="flex-1">
             <h5 class="text-sm font-bold">Payment Method</h5>
@@ -124,4 +130,30 @@
       </cdk-step>
     </section>
   </app-custom-stepper>
+  @if (cdkStepper.selectedIndex !== 2) {
+
+  <div class="flex gap-[19px] mt-6">
+    <button
+      (click)="previous()"
+      [ngClass]="
+        cdkStepper.selectedIndex !== 0
+          ? 'text-figma-green border-figma-green'
+          : 'text-placeholder'
+      "
+      class="border font-bold w-[120px] rounded-[7px] h-[34px]"
+    >
+      Previous
+    </button>
+    <button
+      (click)="next()"
+      class="border font-bold w-max px-[19px] rounded-[7px] h-[34px] bg-figma-green text-white"
+    >
+    @if (cdkStepper.selectedIndex === 1) {
+      <span>Pay {{ amountToPay | currency }} </span>
+    } @else {
+      <span>Next</span>
+    }
+    </button>
+  </div>
+}
 </main>
