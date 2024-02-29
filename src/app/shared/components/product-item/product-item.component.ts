@@ -14,6 +14,7 @@ import {
   removeFromFeature,
 } from '../../../store/admin/products/categories.actions';
 import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
+import { IndicatorsComponent } from '../indicators/indicators.component';
 
 @Component({
   selector: 'app-product-item',
@@ -25,7 +26,8 @@ import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pip
     RouterModule,
     MatTooltipModule,
     CommonModule,
-    CloudinaryUrlPipe
+    CloudinaryUrlPipe,
+    IndicatorsComponent
   ],
   templateUrl: './product-item.component.html',
 })
@@ -33,6 +35,7 @@ export class ProductItemComponent implements OnInit {
   @Input() product!: ProductItem;
   @Input() page!: number;
   isFeatured: boolean = false;
+  showNotification: boolean = false
   notification!: string;
   constructor(private store: Store) {}
   ngOnInit(): void {

@@ -424,10 +424,13 @@ app-header .mat-badge-small.mat-badge-above .mat-badge-content {
   top: 4px;
 }
 
-.customShadow {
+.cookieShadow {
   box-shadow: 0px -1px 43px -12px rgba(107, 107, 107, 0.93);
   -webkit-box-shadow: 0px -1px 43px -12px rgba(107, 107, 107, 0.93);
   -moz-box-shadow: 0px -1px 43px -12px rgba(107, 107, 107, 0.93);
+}
+.customShadow {
+  box-shadow: 0px 1px 4px 0px rgba(30, 41, 59, 0.25);
 }
 
 .myTooltipClass {
