@@ -99,7 +99,7 @@
                 label="Save this information for next time"
                 class="text-table-text text-sm"
               />
-              <button class="text-xs text-red-color underline">
+              <button type="button" (click)="clearShippingForm()" class="text-xs text-red-color underline">
                 Clear form
               </button>
             </div>
@@ -160,7 +160,7 @@
     </button>
     <button
       (click)="next()"
-      class="border font-bold w-max px-[19px] rounded-[7px] h-[34px] bg-figma-green text-white"
+      class="border font-bold w-max min-w-[120px] px-[19px] rounded-[7px] h-[34px] bg-figma-green text-white"
     >
       @if (cdkStepper.selectedIndex === 1) {
       <span>Pay {{ amountToPay | currency }} </span>

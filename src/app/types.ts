@@ -479,6 +479,7 @@ export type PaymentForm = {
   contact?: Contact;
   amount?: number;
   reference?: string;
+  creditCardReference?: string //For testing
 }
 
 export type PaymentRequest = {
@@ -500,3 +501,5 @@ export type PaymentData = {
   access_code: string;
   reference: string;
 }
+
+export type PaymentVerification = { status: number, message: string, isVerified: boolean}
