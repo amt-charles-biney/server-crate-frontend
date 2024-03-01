@@ -67,7 +67,7 @@ export function unitRequiredIfMeasured(): ValidatorFn {
 
 export function zipCodeValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    if (control.value.length < 4) {      
+    if (control && control.value && control.value.length < 4) {      
       return { zipCode: 'Should be more than 3' }
     }
     return null

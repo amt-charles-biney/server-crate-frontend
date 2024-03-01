@@ -1,11 +1,12 @@
+import { verificationFailure } from './../signup/actions/signup.actions';
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { PaymentData,  } from "../../types";
-import { gotPaymentResponse } from "./checkout.actions";
+import { PaymentData, PaymentVerification,  } from "../../types";
+import { gotPaymentResponse, gotPaymentVerification } from "./checkout.actions";
 
 const checkoutInitialState: PaymentData = {
     access_code: '',
     authorization_url: '',
-    reference: ''
+    reference: '',
 }
 
 
@@ -17,8 +18,32 @@ export const checkoutFeature = createFeature({
             return {
                 access_code,
                 authorization_url,
-                reference
+                reference,
             }
         })
     )
 })
+
+const verificationState: PaymentVerification = {
+    isVerified: false,
+    status: 0,
+    message: '',
+}
+
+export const verificationFeature = createFeature({
+    name: 'verification',
+    reducer: createReducer(
+        verificationState,
+        on(gotPaymentVerification, ({ isVerified, message, status}) => {            
+            console.log('In reducer', { isVerified, message, status});
+            
+            return {
+                isVerified,
+                message,
+                status
+            }
+        })
+    )
+})
+
+export const { selectIsVerified } = verificationFeature

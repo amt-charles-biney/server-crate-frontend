@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { gotPaymentResponse, sendingPaymentRequest, verifyPayment } from "./checkout.actions";
+import { gotPaymentResponse, gotPaymentVerification, sendingPaymentRequest, verifyPayment } from "./checkout.actions";
 import { catchError, exhaustMap, map, of, tap } from "rxjs";
 import { PaymentService } from "../../core/services/payment/payment.service";
 import { setLoadingSpinner } from "../loader/actions/loader.actions";
@@ -39,6 +39,9 @@ export class CheckoutEffect {
                 return this.paymentService.verifyPayment(reference).pipe(
                     tap(() => console.log('Verification complete')
                     ),
+                    map((props) => {
+                        return gotPaymentVerification({ isVerified: true, message: props.message, status: props.status})
+                    }),
                     catchError((err) => {
                         return of(setLoadingSpinner({
                             isError: true,
@@ -49,7 +52,7 @@ export class CheckoutEffect {
                 )
             })
         )
-    }, { dispatch: false })
+    })
 
 
     constructor(private actions: Actions, private paymentService: PaymentService) {}

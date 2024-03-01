@@ -45,6 +45,8 @@ export class CreditCardPaymentComponent implements OnInit {
         Validators.maxLength(2),
         Validators.pattern("^[0-9]*$"),
       ]),
+      creditCardReference: new FormControl('')
+
     });
   }
 
@@ -53,6 +55,18 @@ export class CreditCardPaymentComponent implements OnInit {
     const formData = { ...rest, expiration: `${month}/${year}` };
     console.log(this.creditCardForm.value);
     console.log(formData);
+  }
+
+  clearForm() {
+    this.creditCardForm.reset({
+      paymentMethod: 'visa',
+      name: '',
+      cardNumber: '',
+      securityCode: '',
+      month: '',
+      year: '',
+      creditCardReference: ''
+    })
   }
 
   get paymentMethod() {

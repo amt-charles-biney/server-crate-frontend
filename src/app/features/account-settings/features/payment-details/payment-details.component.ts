@@ -21,7 +21,7 @@ export class PaymentDetailsComponent {
   
   shareForm() {
     const { network, amount, reference } = this.mobileMoneyComponent.mobileMoneyForm.value
-    const { name, cardNumber, securityCode, month, year } = this.creditCardComponent.creditCardForm.value
+    const { name, cardNumber, securityCode, month, year, creditCardReference } = this.creditCardComponent.creditCardForm.value
     this.paymentForm = {
       amount,
       cardNumber,
@@ -30,10 +30,8 @@ export class PaymentDetailsComponent {
       name,
       network,
       reference,
-      securityCode
+      securityCode,
+      creditCardReference, //For testing
     }
-
   }
-
-
 }
