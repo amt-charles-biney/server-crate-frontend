@@ -126,7 +126,7 @@ export class CheckoutComponent implements OnInit {
 
     this.shippingForm.patchValue({ contact: contactValue });
     if (
-      this.shippingForm.controls['contact'].value &&
+      
       !this.intl.isValidNumber()
     ) {
       this.showWarning = 'Please enter a valid phone number';
