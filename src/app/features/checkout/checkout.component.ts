@@ -172,13 +172,12 @@ export class CheckoutComponent implements OnInit {
     const selectedIndex = this.cdkStepper.selectedIndex;
     if (selectedIndex === 0) {
       this.userDetails();
-      this.cdkStepper.next();
     } else if (selectedIndex === 1) {
       this.paymentDetails();
       if (this.isVerified) {
-        this.cdkStepper.next();
       }
     }
+    this.cdkStepper.next();
     // console.log('Completed', this.cdkStepper.steps.get(selectedIndex)?.completed);
 
   }
