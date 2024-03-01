@@ -9,7 +9,11 @@ const initialState: BasicConfig = {
   },
   id: '',
   options: {},
-  inStock: 0
+  inStock: {
+    attributeResponse: '',
+    inStock: 0,
+    name: ''
+  }
 }
 export const configurationFeature = createFeature({
   name: 'configuration',
@@ -31,7 +35,11 @@ export const configurationFeature = createFeature({
           },
           id: '',
           options: {},
-          inStock: 0
+          inStock: {
+            attributeResponse: '',
+            inStock: 0,
+            name: ''
+          }
         }
     }),
   ),
