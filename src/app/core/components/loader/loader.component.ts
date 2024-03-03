@@ -10,5 +10,7 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
 })
 export class LoaderComponent {
   @Input() loaderId!: string
+  @Input() text!: string
+  @Input() useDefaultOverlay!: boolean
   @Input() size: 'small' | 'big' | 'none' = 'small'
 }

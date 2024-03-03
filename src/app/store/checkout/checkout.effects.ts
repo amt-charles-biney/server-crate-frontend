@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { gotPaymentResponse, gotPaymentVerification, sendingPaymentRequest, verifyPayment } from "./checkout.actions";
-import { catchError, exhaustMap, map, of, tap } from "rxjs";
+import { catchError, exhaustMap, finalize, map, of, tap } from "rxjs";
 import { PaymentService } from "../../core/services/payment/payment.service";
 import { setLoadingSpinner } from "../loader/actions/loader.actions";
 import { errorHandler } from "../../core/utils/helpers";
 import { Router } from "@angular/router";
+import { NgxUiLoaderService } from "ngx-ui-loader";
 
 @Injectable()
 export class CheckoutEffect {
@@ -13,6 +14,7 @@ export class CheckoutEffect {
         return this.actions.pipe(
             ofType(sendingPaymentRequest),
             exhaustMap((paymentRequest) => {
+                this.ngxService.start()
                 return this.paymentService.postPayment(paymentRequest).pipe(
                     map(({data}) => {
                         window.open(data.authorization_url, '_blank')
@@ -24,7 +26,7 @@ export class CheckoutEffect {
                             message: errorHandler(err),
                             status: false
                         }))
-                    })
+                    }),
                 )
             })
         )
@@ -35,7 +37,7 @@ export class CheckoutEffect {
             ofType(verifyPayment),
             exhaustMap(({ reference }) => {
                 console.log('Refernce', reference);
-                
+                this.ngxService.start()
                 return this.paymentService.verifyPayment(reference).pipe(
                     tap(() => console.log('Verification complete')
                     ),
@@ -48,6 +50,9 @@ export class CheckoutEffect {
                             message: errorHandler(err),
                             status: false
                         }))
+                    }),
+                    finalize(() => {
+                        this.ngxService.stop()
                     })
                 )
             })
@@ -55,5 +60,5 @@ export class CheckoutEffect {
     })
 
 
-    constructor(private actions: Actions, private paymentService: PaymentService) {}
+    constructor(private actions: Actions, private paymentService: PaymentService, private ngxService: NgxUiLoaderService) {}
 }
