@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ProductItem } from '../../../types';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { AttributeModalComponent } from '../../../features/admin-dashboard/featu
   imports: [],
   templateUrl: './indicators.component.html',
   styleUrl: './indicators.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IndicatorsComponent implements OnInit {
   @Input() product!: ProductItem;
@@ -56,7 +57,9 @@ export class IndicatorsComponent implements OnInit {
       this.router.navigate(['/admin/attributes'])
       setTimeout(() => {
         this.dialog.open(AttributeModalComponent, {
-          data: { }
+          data: { },
+          height: '80%',
+          width: '70%'
         })
       }, 0);
     }
