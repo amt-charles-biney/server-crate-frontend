@@ -326,7 +326,11 @@ export type BasicConfig = {
   options: Option;
   id: string;
   category: Select;
-  inStock: number;
+  inStock: {
+    inStock: number;
+    attributeResponse: string;
+    name: string
+  };
 };
 export type CategoryPayload = {
   name: string;
