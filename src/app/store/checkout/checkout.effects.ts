@@ -36,11 +36,8 @@ export class CheckoutEffect {
         return this.actions.pipe(
             ofType(verifyPayment),
             exhaustMap(({ reference }) => {
-                console.log('Refernce', reference);
                 this.ngxService.start()
                 return this.paymentService.verifyPayment(reference).pipe(
-                    tap(() => console.log('Verification complete')
-                    ),
                     map((props) => {
                         return gotPaymentVerification({ isVerified: true, message: props.message, status: props.status})
                     }),

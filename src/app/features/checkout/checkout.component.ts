@@ -1,6 +1,5 @@
 import {
   Component,
-  DestroyRef,
   ElementRef,
   OnInit,
   ViewChild,
@@ -8,7 +7,6 @@ import {
 } from '@angular/core';
 import {
   FormBuilder,
-  FormGroup,
   FormsModule,
   ReactiveFormsModule,
   Validators,
@@ -24,7 +22,7 @@ import {
 } from '@angular/cdk/stepper';
 import { CustomCheckBoxComponent } from '../../shared/components/custom-check-box/custom-check-box.component';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { CartProductItem, Contact, LoadingStatus, PaymentRequest, PaymentVerification, ShippingPayload } from '../../types';
+import { CartProductItem, Contact, LoadingStatus, PaymentRequest, ShippingPayload } from '../../types';
 import { Store } from '@ngrx/store';
 import { selectConfiguredProducts } from '../../store/cart/cart.reducers';
 import { SummaryComponent } from '../../shared/components/summary/summary.component';
@@ -34,15 +32,14 @@ import {
   sendingPaymentRequest,
   verifyPayment,
 } from '../../store/checkout/checkout.actions';
-import { ActivatedRoute } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 import { selectIsVerified } from '../../store/checkout/checkout.reducers';
 import { getShippingDetails } from '../../store/account-settings/general-info/general-info.actions';
 import { selectShippingDetailsState } from '../../store/account-settings/general-info/general-info.reducers';
 import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
 import { LoaderComponent } from '../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../shared/components/error/error.component';
-import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
+import { getCartItems } from '../../store/cart/cart.actions';
 
 @Component({
   selector: 'app-checkout',
@@ -61,10 +58,8 @@ import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
     PaymentDetailsComponent,
     LoaderComponent,
     ErrorComponent,
-    NgxUiLoaderModule
   ],
   templateUrl: './checkout.component.html',
-  styleUrl: './checkout.component.scss',
 })
 export class CheckoutComponent implements OnInit {
   showWarning: string = '';
@@ -100,7 +95,7 @@ export class CheckoutComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private store: Store,
     private activatedRoute: ActivatedRoute,
-    private ngxService: NgxUiLoaderService
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.store.dispatch(getShippingDetails())
@@ -114,9 +109,10 @@ export class CheckoutComponent implements OnInit {
         this.verification$ = this.store.select(selectIsVerified).pipe(
           tap(isVerified => {
             if (isVerified) {
-              console.log('Set to finish');
               this.cdkStepper.linear = false
               this.cdkStepper.selectedIndex = 2
+              this.router.navigateByUrl('/checkout', { replaceUrl: true })
+              this.store.dispatch(getCartItems())
             }
           })
         )
@@ -213,11 +209,7 @@ export class CheckoutComponent implements OnInit {
       this.userDetails();
     } else if (selectedIndex === 1) {
       this.paymentDetails();
-      if (this.isVerified) {
-      }
     }
-    // console.log('Completed', this.cdkStepper.steps.get(selectedIndex)?.completed);
-
   }
   previous() {
     this.cdkStepper.previous();
