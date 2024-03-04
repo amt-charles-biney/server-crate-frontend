@@ -6,7 +6,7 @@
       ? 'border-yellow-color'
       : ''
   "
-  class="relative flex flex-col w-[318px] rounded-lg shadow-lg py-3 px-[11px] border"
+  class="relative flex flex-col w-[318px] h-[159px] rounded-lg shadow-lg py-3 px-[11px] border"
 >
   @if(product.stockStatus !== 'Available' || product.category.name ===
   'unassigned') {
@@ -14,6 +14,7 @@
 
       <button
        class="relative w-4 h-4 "
+       appClickOutside (clickOutside)="outsideClick()"
         (click)="showNotification = !showNotification"
       >
         <svg
@@ -39,7 +40,9 @@
         </svg>
       </button>
       @if (showNotification) {
-        <app-indicators [product]="product" (closeNotification)="showNotification = false"/>
+        <div>
+          <app-indicators [product]="product" (closeNotification)="showNotification = false"/>
+        </div>
       }
     </div>
   }
