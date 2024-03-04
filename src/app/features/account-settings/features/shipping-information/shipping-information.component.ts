@@ -8,6 +8,7 @@ import { Observable, combineLatest, tap } from 'rxjs';
 import { selectShippingDetailsState } from '../../../../store/account-settings/general-info/general-info.reducers';
 import { ShippingPayload } from '../../../../types';
 import { CommonModule } from '@angular/common';
+import { zipCodeValidator } from '../../../../core/utils/validators';
 
 @Component({
   selector: 'app-shipping-information',
@@ -31,7 +32,7 @@ export class ShippingInformationComponent implements OnInit {
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
-      zipCode: new FormControl('', Validators.required),
+      zipCode: new FormControl('', [Validators.required, zipCodeValidator()]),
     })
 
     this.shippingInfoForm$ = this.store.select(selectShippingDetailsState).pipe(
