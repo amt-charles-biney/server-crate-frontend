@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ProductItem } from '../../../types';
 import {
   CommonModule,
@@ -14,6 +14,8 @@ import {
   removeFromFeature,
 } from '../../../store/admin/products/categories.actions';
 import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
+import { IndicatorsComponent } from '../indicators/indicators.component';
+import { ClickOutsideDirective } from '../../directives/click/click-outside.directive';
 
 @Component({
   selector: 'app-product-item',
@@ -25,14 +27,18 @@ import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pip
     RouterModule,
     MatTooltipModule,
     CommonModule,
-    CloudinaryUrlPipe
+    CloudinaryUrlPipe,
+    IndicatorsComponent,
+    ClickOutsideDirective,
   ],
   templateUrl: './product-item.component.html',
 })
 export class ProductItemComponent implements OnInit {
   @Input() product!: ProductItem;
   @Input() page!: number;
+  @Output() closeEvent = new EventEmitter<void>();
   isFeatured: boolean = false;
+  showNotification: boolean = false;
   notification!: string;
   constructor(private store: Store) {}
   ngOnInit(): void {
@@ -52,5 +58,11 @@ export class ProductItemComponent implements OnInit {
       this.store.dispatch(addToFeature({ id }));
       this.isFeatured = true;
     }
+  }
+
+  outsideClick() {
+    console.log('showNotification', this.showNotification);
+
+    this.showNotification = false;
   }
 }

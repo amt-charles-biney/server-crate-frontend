@@ -6,39 +6,45 @@
       ? 'border-yellow-color'
       : ''
   "
-  class="relative flex flex-col w-[318px] rounded-lg shadow-lg py-3 px-[11px] border"
+  class="relative flex flex-col w-[318px] h-[159px] rounded-lg shadow-lg py-3 px-[11px] border"
 >
-  @if(product.stockStatus !== 'Available' || product.category.name === 'unassigned') {
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      [ngClass]="
-        product.stockStatus === 'No Stock' ||
-        product.category.name === 'unassigned'
-          ? 'text-red-color'
-          : product.stockStatus === 'Low Stock'
-          ? 'text-yellow-color'
-          : ''
-      "
-      class="absolute right-[5px] w-4 h-4 top-[13px]"
-      #tooltip="matTooltip"
-      [matTooltip]="notification"
-      [matTooltipClass]="
-        product.stockStatus === 'No Stock' ||
-        product.category.name === 'unassigned'
-          ? 'myTooltipClass'
-          : 'amberToolTip'
-      "
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
-      />
-    </svg>
+  @if(product.stockStatus !== 'Available' || product.category.name ===
+  'unassigned') {
+    <div  class="absolute right-[5px] top-[13px]">
+
+      <button
+       class="relative w-4 h-4 "
+       appClickOutside (clickOutside)="outsideClick()"
+        (click)="showNotification = !showNotification"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          [ngClass]="
+            product.stockStatus === 'No Stock' ||
+            product.category.name === 'unassigned'
+              ? 'text-red-color'
+              : product.stockStatus === 'Low Stock'
+              ? 'text-yellow-color'
+              : ''
+          "
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+          />
+        </svg>
+      </button>
+      @if (showNotification) {
+        <div>
+          <app-indicators [product]="product" (closeNotification)="showNotification = false"/>
+        </div>
+      }
+    </div>
   }
   <div class="flex gap-3">
     <div class="w-[121px] h-[68px]">

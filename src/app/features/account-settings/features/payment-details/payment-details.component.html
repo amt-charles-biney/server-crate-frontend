@@ -1,10 +1,15 @@
-<h2 class="font-bold text-center md:text-start mb-[29px]">Payment</h2>
-<section class="mt-6 md:mt-0 ">
+@if(page === 'default') {
+  <h2 class="font-bold text-center md:text-start mb-[29px]">Payment</h2>
+}
+<section [ngClass]="{
+  'md:mt-0 mt-6': page === 'default',
+  'md:mt-[29px]': page === 'checkout'
+}" class="h-fit">
 
   <mat-tab-group>
     <mat-tab>
       <ng-template mat-tab-label>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-[10px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -22,7 +27,7 @@
           <p>Card</p>
         </div>
       </ng-template>
-      <app-credit-card-payment />
+      <app-credit-card-payment [page]="page"/>
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label>
@@ -61,7 +66,7 @@
           <p>Mobile Money</p>
         </div>
       </ng-template>
-      <app-mobile-money-payment />
+      <app-mobile-money-payment [page]="page" [amountToPay]="amountToPay"/>
     </mat-tab>
   </mat-tab-group>
 </section>

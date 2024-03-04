@@ -90,11 +90,5 @@ export class HeaderComponent implements OnInit {
 
   toggleMenu(menuState: boolean) {
     this.isMegaMenu = menuState
-    this.blurBackgroundOnToggle(menuState)
-  }
-
-  blurBackgroundOnToggle(shouldBlur: boolean) {
-    if(shouldBlur) this.renderer.addClass(document.body, 'overflow-hidden')
-    else this.renderer.removeClass(document.body, 'overflow-hidden')
   }
 }

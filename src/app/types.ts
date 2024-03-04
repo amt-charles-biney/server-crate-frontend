@@ -166,7 +166,10 @@ export type VerifiedUser = {
     imageUrl: string;
     coverImage: string;
     productName: string;
-    productBrand: string;
+    productBrand: {
+      name: string;
+      price: number
+    };
     productPrice: string;
     inStock: number;
     sales: number;
@@ -180,6 +183,7 @@ export type VerifiedUser = {
     isFeatured: boolean;
     serviceCharge: string;
     stockStatus: 'Low Stock' | 'Available' | 'No Stock';
+    totalLeastStock: Attribute[]
 }
 
 export type ProductResponse = {
@@ -323,7 +327,7 @@ export type BasicConfig = {
   options: Option;
   id: string;
   category: Select;
-  inStock: number;
+  inStock: number
 };
 export type CategoryPayload = {
   name: string;
@@ -465,4 +469,15 @@ export interface PageAbleResponseData<T> {
   numberOfElements?: number;
   first?: boolean;
   empty?: boolean;
+}
+
+export type PaymentForm = {
+  name?: string;
+  cardNumber?: number;
+  securityCode?: number;
+  expirationDate?: string;
+  network?: string;
+  contact?: Contact;
+  amount?: number;
+  reference?: string;
 }

@@ -45,6 +45,10 @@ export const route: Routes = [
                 ]
             },
             {
+                path: 'checkout',
+                loadComponent: () => import('../checkout/checkout.component').then(m => m.CheckoutComponent),
+            },
+            {
                 path: 'cart',
                 component: CartComponent,
             },

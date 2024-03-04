@@ -4,7 +4,7 @@ import { CategoryAndConfig } from '../../../types';
 import { CustomCheckBoxComponent } from '../custom-check-box/custom-check-box.component';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HoverDirective } from '../../directives/hover.directive';
+import { HoverDirective } from '../../directives/hover/hover.directive';
 
 @Component({
   selector: 'app-table-row',

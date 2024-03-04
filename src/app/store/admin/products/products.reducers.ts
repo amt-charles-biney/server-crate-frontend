@@ -10,7 +10,10 @@ export const productInitialState: { products: ProductItem[]; product: ProductIte
     productDescription: '',
     productPrice: '',
     productId: `${getUniqueId(2)}`,
-    productBrand: '',
+    productBrand: {
+      name: '',
+      price: 0
+    },
     id: '',
     imageUrl: '',
     coverImage: '',
@@ -22,7 +25,8 @@ export const productInitialState: { products: ProductItem[]; product: ProductIte
     },
     isFeatured: false,
     serviceCharge: '',
-    stockStatus: 'Available'
+    stockStatus: 'Available',
+    totalLeastStock: []
   },
 };
 
