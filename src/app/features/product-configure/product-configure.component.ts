@@ -27,12 +27,13 @@ import {
   loadProduct,
   loadProductConfigItem
 } from '../../store/product-spec/product-spec.action'
-import { CommonModule } from '@angular/common'
+import { CommonModule, NgOptimizedImage } from '@angular/common'
 import { MatTabsModule } from '@angular/material/tabs'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSelectModule } from '@angular/material/select'
 import { OrderSummaryComponent } from './order-summary/order-summary.component'
 import { ProductLoadingComponent } from './product-loading/product-loading.component';
+import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
 
 @Component({
   selector: 'app-product-configure',
@@ -46,7 +47,9 @@ import { ProductLoadingComponent } from './product-loading/product-loading.compo
     MatFormFieldModule,
     MatSelectModule,
     OrderSummaryComponent,
-    ProductLoadingComponent
+    ProductLoadingComponent,
+    NgOptimizedImage,
+    CloudinaryUrlPipe
   ],
   templateUrl: './product-configure.component.html',
 })

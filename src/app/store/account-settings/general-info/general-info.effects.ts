@@ -1,7 +1,7 @@
 import { Success } from './../../../types';
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { changeNumber, getGeneralInfo, gotGeneralInfo } from "./general-info.actions";
+import { changeNumber, getGeneralInfo, getShippingDetails, gotGeneralInfo, gotShippingDetails, saveShippingDetails } from "./general-info.actions";
 import { catchError, exhaustMap, map, of, share, shareReplay } from "rxjs";
 import { ChangeContact, GeneralInfo } from "../../../types";
 import { ProfileService } from "../../../core/services/user-profile/profile.service";
@@ -74,6 +74,32 @@ export class GeneralInfoEffect {
                             })
                           );
                     }),
+                )
+            })
+        )
+    })
+
+    saveShippingDetails$ = createEffect(() => {
+        return this.action$.pipe(
+            ofType(saveShippingDetails),
+            exhaustMap((props) => {
+                return this.profileService.saveShippingDetails(props).pipe(
+                    
+                )
+            })
+        )
+    }, { dispatch: false })
+
+    getShippingDetails$ = createEffect(() => {
+        return this.action$.pipe(
+            ofType(getShippingDetails),
+            exhaustMap(() => {
+                return this.profileService.getShippingDetails().pipe(
+                    map((shippingDetails) => {
+                        console.log('Shiping', shippingDetails);
+                        
+                        return gotShippingDetails(shippingDetails)
+                    })
                 )
             })
         )

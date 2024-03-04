@@ -5,7 +5,7 @@ import { TermsAndConditionsComponent } from "../../shared/components/terms-and-c
 import { provideEffects } from "@ngrx/effects";
 import { GeneralInfoEffect } from "../../store/account-settings/general-info/general-info.effects";
 import { provideState } from "@ngrx/store";
-import { generalInfoFeature } from "../../store/account-settings/general-info/general-info.reducers";
+import { generalInfoFeature, shippingFeature } from "../../store/account-settings/general-info/general-info.reducers";
 import { PasswordInformationComponent } from "./features/password-information/password-information.component";
 import { ChangePasswordEffect } from "../../store/profile/changePassword/changePassword.effects";
 import { ShippingInformationComponent } from "./features/shipping-information/shipping-information.component";
@@ -16,6 +16,10 @@ export const route: Routes = [
     {
         path: '',
         component: AccountSettingsComponent,
+        providers: [
+            
+            provideEffects(GeneralInfoEffect)
+        ],
         children: [
             {
                 path: 'general',
@@ -34,7 +38,10 @@ export const route: Routes = [
             },
             {
                 path: 'shipping',
-                component: ShippingInformationComponent
+                component: ShippingInformationComponent,
+                providers: [
+                    provideState(shippingFeature),
+                ]
             },
             {
                 path: 'payment',
