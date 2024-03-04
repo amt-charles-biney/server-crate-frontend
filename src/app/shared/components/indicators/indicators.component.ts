@@ -13,11 +13,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './indicators.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IndicatorsComponent implements OnInit, AfterViewInit {
+export class IndicatorsComponent implements OnInit {
   @Input() product!: ProductItem;
   @Output() closeNotification = new EventEmitter();
-  @ViewChild('element') element!: ElementRef
-  constructor(private router: Router, private dialog: MatDialog, private cdr: ChangeDetectorRef) {}
+  constructor(private router: Router, private dialog: MatDialog) {}
   categoryIssue: boolean = false;
   stockIssue: boolean = false;
   inViewport!: boolean
@@ -46,28 +45,10 @@ export class IndicatorsComponent implements OnInit, AfterViewInit {
         'This product has an unassigned category. Click on the fix button below to get it resolved.';
     }
   }
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.inViewport = this.isInViewport(this.element.nativeElement)
-      this.cdr.markForCheck()
-      console.log('is in viewport', this.inViewport);
-    }, 0);
-  }
   
   close() {
     this.closeNotification.emit();
   }
-
-  isInViewport(el: HTMLElement) {
-    const rect = el.getBoundingClientRect();
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-
-    );
-}
 
   fix() {
     if (this.categoryIssue) {
