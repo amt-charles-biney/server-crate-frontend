@@ -24,9 +24,16 @@ export class IndicatorsComponent implements OnInit {
   description: string = '';
   ngOnInit(): void {
     if (this.product.inStock === 0) {
-      const listOfNoStockAttributes = this.product.totalLeastStock.filter((attribute) => attribute.attributeOptions.map(option => option.inStock === 0))
+      let setOfNoStockAttributes: Set<string> = new Set()
+      this.product.totalLeastStock.forEach((attribute) =>{ 
+        for (let option of attribute.attributeOptions) {
+          if (option.inStock === 0) {
+            setOfNoStockAttributes.add(option.optionName)
+          }
+        }
+      })
+      const listOfNoStockAttributes = Array.from(setOfNoStockAttributes)
       const isOrAre = this.isOrAre(listOfNoStockAttributes)
-      console.log('list of no', listOfNoStockAttributes);
       
       this.title = 'Finished Variant';
       this.color = 'text-red-color';
@@ -34,7 +41,15 @@ export class IndicatorsComponent implements OnInit {
       this.description = `${listOfNoStockAttributes.join(', ')} ${isOrAre} finished`;
       this.stockIssue = true;
     } else {
-      const listOfLowStockAttributes = this.product.totalLeastStock.map((attribute) => attribute.attributeOptions.filter(option => option.inStock < 5).map((opt) => opt.optionName))
+      let setOfLowStockAttributes: Set<string> = new Set()
+      this.product.totalLeastStock.forEach((attribute) =>{ 
+        for (let option of attribute.attributeOptions) {
+          if (option.inStock < 5) {
+            setOfLowStockAttributes.add(option.optionName)
+          }
+        }
+      })
+      const listOfLowStockAttributes = Array.from(setOfLowStockAttributes)
       const isOrAre = this.isOrAre(listOfLowStockAttributes)
       console.log('list of low', listOfLowStockAttributes);
       this.stockIssue = true;
@@ -46,6 +61,7 @@ export class IndicatorsComponent implements OnInit {
 
     if (this.product.category.name === 'unassigned') {
       this.categoryIssue = true;
+      this.stockIssue = false
       this.title = 'Unassigned Category';
       this.color = 'text-red-color';
       this.description =
