@@ -1,3 +1,4 @@
+<ng-container *ngIf="shippingInfoForm$ | async "></ng-container>
 <h2 class="font-bold text-center md:text-start">Shipping</h2>
 <form [formGroup]="shippingForm" (ngSubmit)="saveShippingDetails()" class="grid grid-cols-2 gap-x-[35px]">
         <app-custom-input

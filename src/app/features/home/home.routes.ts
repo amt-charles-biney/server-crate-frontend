@@ -16,6 +16,8 @@ import { productCartItemFeature, productConfigFeature, productConfigItemFeature 
 import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
 import { CheckoutEffect } from '../../store/checkout/checkout.effects';
 import { checkoutFeature, verificationFeature } from '../../store/checkout/checkout.reducers';
+import { shippingFeature } from '../../store/account-settings/general-info/general-info.reducers';
+import { GeneralInfoEffect } from '../../store/account-settings/general-info/general-info.effects';
 
 export const route: Routes = [
     {
@@ -64,7 +66,9 @@ export const route: Routes = [
                 providers: [
                     provideEffects(CheckoutEffect),
                     provideState(checkoutFeature),
-                    provideState(verificationFeature)
+                    provideState(verificationFeature),
+                    provideState(shippingFeature),
+                    provideEffects(GeneralInfoEffect)
                 ]
             },
             {

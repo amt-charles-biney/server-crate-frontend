@@ -1,3 +1,13 @@
+<ng-container *ngIf="shippingInfoForm$ | async "></ng-container>
+<ng-container *ngIf="verification$ | async "></ng-container>
+<app-loader loaderId="master" [useDefaultOverlay]="true" [text]="loaderText" />
+<ng-container *ngIf="loadingStatus | async as loadingState">
+  <ng-container *ngIf="!loadingState.isError">
+  </ng-container>
+  <ng-container *ngIf="loadingState.message">
+    <app-error [message]="loadingState.message" [visible]="true" />
+  </ng-container>
+</ng-container>
 <main class="max-w-[1239px] mx-auto mt-[66px]">
   <h1 class="text-2xl font-bold">Check Out</h1>
   <app-custom-stepper [price]="amountToPay" #cdkStepper linear>

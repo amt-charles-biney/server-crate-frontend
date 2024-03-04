@@ -3,8 +3,10 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
@@ -30,6 +32,7 @@ import { CustomCheckBoxComponent } from '../../../../shared/components/custom-ch
 export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
   @Input() page: 'default' | 'checkout' = 'default';
   @Input() amountToPay: number = 0
+  @Output() clearEmitter = new EventEmitter()
   mobileMoneyForm!: FormGroup;
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;
   intl!: any;
@@ -61,6 +64,7 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
     })
     this.intl.setNumber('')
     this.intl.setCountry('us');
+    this.clearEmitter.emit()
   }
 
   getContact() {

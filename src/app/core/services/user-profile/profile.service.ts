@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {  ChangeContact, GeneralInfo, Success, Username } from '../../../types';
+import {  ChangeContact, GeneralInfo, ShippingPayload, Success, Username } from '../../../types';
 import { environment } from '../../../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import { LOCALSTORAGE_USER } from '../../utils/constants';
@@ -35,5 +35,13 @@ export class ProfileService {
   setUser(user: Username) {
     localStorage.setItem(LOCALSTORAGE_USER, JSON.stringify(user))
     this.initials.next(user)
+  }
+
+  saveShippingDetails(shippingDetails: ShippingPayload) {
+    return this.http.post(`${this.baseUrl}/profile/shipping-info`, shippingDetails)
+  }
+
+  getShippingDetails() {
+    return this.http.get<ShippingPayload>(`${this.baseUrl}/profile/shipping-info`)
   }
 }

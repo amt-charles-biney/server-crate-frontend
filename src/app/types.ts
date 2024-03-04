@@ -507,3 +507,16 @@ export type PaymentData = {
 }
 
 export type PaymentVerification = { status: number, message: string, isVerified: boolean}
+
+export type ShippingPayload = {
+  firstName: string;
+  lastName: string;
+  address1: string;
+  address2: string;
+  country: string;
+  state: string;
+  city: string;
+  zipCode: string;
+  contact: Contact | null;
+  email: string;
+}

@@ -8,19 +8,22 @@
     [control]="$any(mobileMoneyForm.controls['network'])"
     [options]="['MTN', 'Vodafone']"
   />
-  <label class="flex flex-col " for="contact">
-    <span class="">Contact</span>
-    <input
-      id="contact"
-      [ngClass]="showWarning ? 'border-red-600' : ''"
-      type="tel"
-      class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
-      #telInput
-    />
-  </label>
-  @if (showWarning !== '') {
-  <span class="text-red-600 text-sm">{{ showWarning }}</span>
-  }
+  <div>
+
+    <label class="flex flex-col " for="contact">
+      <span class="">Contact</span>
+      <input
+        id="contact"
+        [ngClass]="showWarning ? 'border-red-600' : ''"
+        type="tel"
+        class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
+        #telInput
+      />
+    </label>
+    @if (showWarning !== '') {
+    <span class="text-red-600 text-sm">{{ showWarning }}</span>
+    }
+  </div>
   @if (page === 'checkout') {
     <app-custom-input type="text" [isReadOnly]="true" label="Amount" formControlName="amount"/>
     <app-custom-input type="text" label="Reference" placeholder="Enter a reference" formControlName="reference"/>
