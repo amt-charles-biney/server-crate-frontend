@@ -183,6 +183,7 @@ export type VerifiedUser = {
     isFeatured: boolean;
     serviceCharge: string;
     stockStatus: 'Low Stock' | 'Available' | 'No Stock';
+    totalLeastStock: Attribute[]
 }
 
 export type ProductResponse = {

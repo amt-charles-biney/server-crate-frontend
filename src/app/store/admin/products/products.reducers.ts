@@ -25,7 +25,8 @@ export const productInitialState: { products: ProductItem[]; product: ProductIte
     },
     isFeatured: false,
     serviceCharge: '',
-    stockStatus: 'Available'
+    stockStatus: 'Available',
+    totalLeastStock: []
   },
 };
 
