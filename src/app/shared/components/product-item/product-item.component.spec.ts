@@ -26,12 +26,16 @@ describe('ProductItemComponent', () => {
       imageUrl: '',
       inStock: 0,
       isFeatured: false,
-      productBrand: '',
+      productBrand: {
+        name: '',
+        price: 0
+      },
       productDescription: '',
       productId: '',
       productName: '',
       productPrice: '',
       sales: 20,
+      totalLeastStock: []
     };
     fixture.detectChanges();
   });

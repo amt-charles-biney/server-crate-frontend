@@ -2,7 +2,7 @@ import { VerifiedUser } from './../../../types';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, map, of, tap } from 'rxjs';
+import { catchError, exhaustMap, map, of } from 'rxjs';
 import { signIn } from '../actions/login.actions';
 import { SignIn } from '../../../types';
 import { AuthService } from '../../../core/services/auth/auth.service';
@@ -16,10 +16,8 @@ export class LoginEffect {
   login$ = createEffect(() => {
     return this.action$.pipe(
       ofType(signIn),
-      tap((x) => console.log('Loggin in', x)),
       exhaustMap((formData: SignIn) => {
         return this.authService.login(formData).pipe(
-          tap((x) => console.log('service---->', x)),
           map((response: VerifiedUser) => {
             this.authService.setToken(response.token);
             this.profileService.setUser({ firstName: response.firstName, lastName: response.lastName})
