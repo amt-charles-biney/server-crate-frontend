@@ -65,9 +65,8 @@ export class CaseEffect {
         this.ngxService.startLoader('case')
         return this.adminService.deleteCase(id).pipe(
           map(() => {
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/case-management');
-            }, 500);
+            document.body.scrollTo({ top: 0, behavior: 'smooth' });
+            this.router.navigateByUrl('/admin/case-management');
             return getCases();
           }),
           catchError((err) => {

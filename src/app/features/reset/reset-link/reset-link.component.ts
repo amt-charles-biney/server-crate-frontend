@@ -55,7 +55,12 @@ export class ResetLinkComponent {
   get email() {
     return this.resetForm.get('email');
   }
-  sendResetLink() {
+
+    /**
+   * Sends the user's email if it's valid
+   * @returns {void}
+   */
+  sendResetLink(): void {
     if (this.resetForm.invalid) return ;
     return this.store.dispatch(sendingResetLink({ email: this.email?.value }));
   }
