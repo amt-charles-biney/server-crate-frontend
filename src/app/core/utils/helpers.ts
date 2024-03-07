@@ -1,3 +1,5 @@
+import { inject } from '@angular/core';
+import { resetLoader } from '../../store/loader/actions/loader.actions';
 import {
   Attribute,
   AttributeOption,
@@ -5,6 +7,16 @@ import {
   CategoryEditResponse,
 } from '../../types';
 import { LOCALSTORAGE_TOKEN, LOCALSTORAGE_USER } from './constants';
+import { Store } from '@ngrx/store';
+
+export function resetLoaderFn() {
+  const store = inject(Store)
+  store.dispatch(resetLoader({
+    isError: false,
+    message: '',
+    status: false
+  }))
+}
 
 export function errorHandler(err: any): string {
   let errorMessage = '';

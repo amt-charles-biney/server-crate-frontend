@@ -1,0 +1,17 @@
+<div class="font-dm-sans" [style.display]="state.value === 'inactive' ? 'none' : ''">
+    <div class="">
+      <div *ngIf="title" class="text-2xl" [attr.aria-label]="title">
+        {{ title }}
+      </div>
+      <div *ngIf="message && options.enableHtml" role="alert"
+        [class]="options.messageClass" [innerHTML]="message">
+      </div>
+      <div *ngIf="message && !options.enableHtml" role="alert"
+        [class]="options.messageClass" [attr.aria-label]="message">
+        {{ message }}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="options.progressBar">
+    <div class="toast-progress" [style.width]="width + '%'"></div>
+  </div>

@@ -51,7 +51,6 @@ export class IndicatorsComponent implements OnInit {
       })
       const listOfLowStockAttributes = Array.from(setOfLowStockAttributes)
       const isOrAre = this.isOrAre(listOfLowStockAttributes)
-      console.log('list of low', listOfLowStockAttributes);
       this.stockIssue = true;
       this.title = this.product.stockStatus;
       this.color = 'text-amber-400';
@@ -81,10 +80,8 @@ export class IndicatorsComponent implements OnInit {
 
   fix() {
     if (this.categoryIssue) {
-      console.log('Category issue');
       this.router.navigate(['/admin/add-product', this.product.id])
     } else {
-      console.log('Stock issue');
       // this.router.navigate(['/admin/attributes'])
       let attributeToCheck: Attribute
       if (this.product.inStock === 0) {

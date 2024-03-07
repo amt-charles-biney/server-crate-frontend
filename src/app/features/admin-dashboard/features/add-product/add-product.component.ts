@@ -269,7 +269,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
         isError: false,
       })
     );
-    scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
     const product: ProductPayload = {
       productName: this.productName.value,
       productDescription: this.productDescription.value,
@@ -336,7 +336,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
 
   deleteProduct(id: string) {
-    scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
     this.store.dispatch(deleteProduct({ id }));
   }
 

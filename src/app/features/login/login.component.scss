@@ -5,3 +5,8 @@
     background-size: cover;
     background-position: center center;
 }
+@media only screen and (max-width: 768px) {
+    .loginImage {
+        display: none;
+    }
+  }

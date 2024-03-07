@@ -41,8 +41,6 @@ export const attributeCreationFeature = createFeature({
       return [...state, newAttribute];
     }),
     on(updateAttributesInStore, (state, props) => {
-      console.log('Props', props);
-
       const newState = props.attributes.map((attr, index) => {
         return {
           ...attr,

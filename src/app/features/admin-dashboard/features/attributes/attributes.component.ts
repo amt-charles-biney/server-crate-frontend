@@ -85,7 +85,6 @@ export class AttributesComponent implements OnInit, AfterViewInit {
     ).every((value) => value);
 
     if (allSelected) {
-      console.log('All Selected');
       this.indeterminateCheckbox.checked = true;
       this.check.inputState.nativeElement.className = ''
       this.indeterminateCheckbox.indeterminate = false
@@ -98,7 +97,6 @@ export class AttributesComponent implements OnInit, AfterViewInit {
       this.clearSelected();
       this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
     } else {
-      console.log('Clear selected');
       this.clearSelected()
     }
     // else {

@@ -1,15 +1,32 @@
 <ngx-ui-loader
   bgsPosition="center-center"
+  fgsPosition="center-center"
   [bgsTemplate]="backgroundSpinner"
+  [fgsTemplate]="foregroundSpinner"
   [loaderId]="loaderId"
+  [text]="text"
   [fgsSize]="size === 'none' ? 0 : 100"
-  overlayColor="#e4e4e41a"
+  [overlayColor]=" useDefaultOverlay ? '#282828cc' : '#e4e4e41a'"
   pbColor="#3cb043"
 ></ngx-ui-loader>
 <ng-template #backgroundSpinner>
   <div class="flex flex-col justify-center items-center">
     <div
       [ngClass]="size === 'small' ? 'h-6 w-6 mt-3' : size === 'none' ? 'h-0 w-0 ' : 'h-20 w-20 border-4 mt-4'"
+      class="text-figma-green inline-block animate-spin rounded-full  border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite]"
+      role="status"
+    >
+      <span
+        class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+        >Loading...</span
+      >
+    </div>
+  </div>
+</ng-template>
+<ng-template #foregroundSpinner>
+  <div class="flex flex-col justify-center items-center">
+    <div
+    [ngClass]="size === 'none' ? 'h-0 w-0 ' : 'h-28 w-28 border-4'"
       class="text-figma-green inline-block animate-spin rounded-full  border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite]"
       role="status"
     >

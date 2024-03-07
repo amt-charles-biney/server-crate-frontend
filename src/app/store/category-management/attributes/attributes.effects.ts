@@ -32,6 +32,7 @@ import { GetAttribute } from '../../../types';
 import { Store } from '@ngrx/store';
 import { errorHandler } from '../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class AttributeEffect {
@@ -41,30 +42,13 @@ export class AttributeEffect {
       switchMap((props) => {
         this.ngxService.startLoader('attributes')
         return this.adminService.uploadImage(props.form).pipe(
-          // tap(data => console.log('Upload response', data)),
           map(({ url }) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                isError: false,
-                message: 'Picture uploaded',
-                status: false,
-              })
-            );
-            setTimeout(() => {
-              this.store.dispatch(
-                resetLoader({ isError: false, message: '', status: false })
-              );
-            }, 1500);
+            this.toast.success('Image upload successfully', 'Success')
             return gotImage({ url, id: props.id });
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: errorHandler(err),
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), 'Error')
+            return of();
           }),
           finalize(() => {
             this.ngxService.stopLoader('attributes')
@@ -79,7 +63,6 @@ export class AttributeEffect {
       ofType(addAttribute),
       switchMap((props) => {
         return this.adminService.addAttribute(props).pipe(
-          tap((data) => console.log('Upload response', props)),
           map((props: GetAttribute) => {
             this.store.dispatch(
               setLoadingSpinner({
@@ -98,7 +81,6 @@ export class AttributeEffect {
           timeout(5000),
           catchError((err) => {
             throwError(() => 'Request timed out');
-            console.log('Could not add');
             setTimeout(() => {
               this.store.dispatch(
                 resetLoader({ isError: false, message: '', status: false })
@@ -289,6 +271,7 @@ export class AttributeEffect {
     private action$: Actions,
     private adminService: AdminService,
     private store: Store,
-    private ngxService: NgxUiLoaderService
+    private ngxService: NgxUiLoaderService,
+    private toast: ToastrService
   ) {}
 }

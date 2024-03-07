@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import {
   FormControl,
@@ -27,6 +27,7 @@ import { CustomCheckBoxComponent } from '../../../../shared/components/custom-ch
 })
 export class CreditCardPaymentComponent implements OnInit {
   @Input() page: string = 'default'
+  @Output() clearEmitter = new EventEmitter()
   creditCardForm!: FormGroup;
 
   ngOnInit(): void {
@@ -45,14 +46,27 @@ export class CreditCardPaymentComponent implements OnInit {
         Validators.maxLength(2),
         Validators.pattern("^[0-9]*$"),
       ]),
+      creditCardReference: new FormControl('', Validators.required)
+
     });
   }
 
   addCard() {
     const { month, year, ...rest } = this.creditCardForm.value;
     const formData = { ...rest, expiration: `${month}/${year}` };
-    console.log(this.creditCardForm.value);
-    console.log(formData);
+  }
+
+  clearForm() {
+    this.creditCardForm.reset({
+      paymentMethod: 'visa',
+      name: '',
+      cardNumber: '',
+      securityCode: '',
+      month: '',
+      year: '',
+      creditCardReference: ''
+    })
+    this.clearEmitter.emit()
   }
 
   get paymentMethod() {

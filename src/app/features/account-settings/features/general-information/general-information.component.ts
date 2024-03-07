@@ -5,7 +5,7 @@ import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validator
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { Contact, LoadingStatus } from '../../../../types';
 import { Store } from '@ngrx/store';
-import { changeNumber, getGeneralInfo } from '../../../../store/account-settings/general-info/general-info.actions';
+import { changeUserInfo, getGeneralInfo } from '../../../../store/account-settings/general-info/general-info.actions';
 import { selectContact, selectEmail, selectFirstName, selectLastName } from '../../../../store/account-settings/general-info/general-info.reducers';
 import { Observable, Subject, combineLatest, map } from 'rxjs';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
@@ -83,9 +83,9 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
     const { firstName, lastName } = this.generalInfoForm.value
     this.profileService.setUser({ firstName, lastName })
     if (contactValue.phoneNumber) {
-      this.store.dispatch(changeNumber({ contact: contactValue, firstName, lastName }))
+      this.store.dispatch(changeUserInfo({ contact: contactValue, firstName, lastName }))
     } else {
-      this.store.dispatch(changeNumber({ contact: null, firstName, lastName }))
+      this.store.dispatch(changeUserInfo({ contact: null, firstName, lastName }))
     }
   }
 

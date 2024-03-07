@@ -29,6 +29,6 @@ export class CaseManagementComponent implements OnInit {
 
   getPage(pageNumber: number) {
     this.page = pageNumber;
-    scrollTo({ top: 0, behavior: 'smooth'})
+    document.body.scrollTo({ top: 0, behavior: 'smooth'})
   }
 }

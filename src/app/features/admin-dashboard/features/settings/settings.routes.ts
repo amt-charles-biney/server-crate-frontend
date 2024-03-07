@@ -7,7 +7,7 @@ import { ShippingInformationComponent } from "../../../account-settings/features
 import { PaymentDetailsComponent } from "../../../account-settings/features/payment-details/payment-details.component";
 import { TermsAndConditionsComponent } from "../../../../shared/components/terms-and-conditions/terms-and-conditions.component";
 import { PrivacyPolicyComponent } from "../../../../shared/components/privacy-policy/privacy-policy.component";
-import { generalInfoFeature } from "../../../../store/account-settings/general-info/general-info.reducers";
+import { generalInfoFeature, shippingFeature } from "../../../../store/account-settings/general-info/general-info.reducers";
 import { GeneralInfoEffect } from "../../../../store/account-settings/general-info/general-info.effects";
 import { Routes } from "@angular/router";
 import { SettingsComponent } from "./settings.component";
@@ -34,7 +34,10 @@ export const route: Routes = [
             },
             {
                 path: 'shipping',
-                component: ShippingInformationComponent
+                component: ShippingInformationComponent,
+                providers: [
+                    provideState(shippingFeature)
+                ]
             },
             {
                 path: 'payment',

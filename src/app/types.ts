@@ -96,7 +96,7 @@ export type VerifiedUser = {
     contact: Contact;
     role: string;
   };
-  export type ChangeContact = {
+  export type UserInfo = {
     firstName: string;
     lastName: string;
     contact: Contact | null;
@@ -480,4 +480,40 @@ export type PaymentForm = {
   contact?: Contact;
   amount?: number;
   reference?: string;
+  creditCardReference?: string //For testing
+}
+
+export type PaymentRequest = {
+  email: string;
+  amount: number;
+  reference: string;
+  channels: string[];
+  currency: string;
+}
+
+export type PaymentResponse = {
+  message: string;
+  status: boolean;
+  data: PaymentData
+}
+
+export type PaymentData = {
+  authorization_url: string;
+  access_code: string;
+  reference: string;
+}
+
+export type PaymentVerification = { status: number, message: string, isVerified: boolean}
+
+export type ShippingPayload = {
+  firstName: string;
+  lastName: string;
+  address1: string;
+  address2: string;
+  country: string;
+  state: string;
+  city: string;
+  zipCode: string;
+  contact: Contact | null;
+  email: string;
 }

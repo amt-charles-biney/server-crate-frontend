@@ -17,23 +17,26 @@ export class PaymentDetailsComponent {
   @Input() amountToPay: number = 0
   @ViewChild(MobileMoneyPaymentComponent) mobileMoneyComponent!: MobileMoneyPaymentComponent
   @ViewChild(CreditCardPaymentComponent) creditCardComponent!: CreditCardPaymentComponent
-  paymentForm!: PaymentForm
+  paymentForm!: PaymentForm | undefined
   
   shareForm() {
+    this.mobileMoneyComponent.addWallet()
+    this.creditCardComponent.creditCardForm.markAllAsTouched()
     const { network, amount, reference } = this.mobileMoneyComponent.mobileMoneyForm.value
-    const { name, cardNumber, securityCode, month, year } = this.creditCardComponent.creditCardForm.value
-    this.paymentForm = {
-      amount,
-      cardNumber,
-      contact: this.mobileMoneyComponent.getContact(),
-      expirationDate: `${month}/${year}`,
-      name,
-      network,
-      reference,
-      securityCode
+    const { name, cardNumber, securityCode, month, year, creditCardReference } = this.creditCardComponent.creditCardForm.value
+    
+    if (this.mobileMoneyComponent.mobileMoneyForm.valid || this.creditCardComponent.creditCardForm.valid ) {
+      this.paymentForm = {
+        amount,
+        cardNumber,
+        contact: this.mobileMoneyComponent.getContact(),
+        expirationDate: `${month}/${year}`,
+        name,
+        network,
+        reference,
+        securityCode,
+        creditCardReference, //For testing
+      }
     }
-
   }
-
-
 }
