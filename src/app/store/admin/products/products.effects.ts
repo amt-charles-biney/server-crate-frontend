@@ -22,8 +22,6 @@ export class ProductsEffect {
       exhaustMap((props) => {
         return this.adminService.getProducts(props.page).pipe(
           map((products: AllProducts) => {
-            console.log('Products', products);
-
             return gotProducts({ products });
           }),
           shareReplay(1),
@@ -44,8 +42,6 @@ export class ProductsEffect {
       exhaustMap((props) => {
         return this.userService.getProducts(props.page, props.params).pipe(
           map((products: AllProducts) => {
-            console.log('Products', products);
-
             return gotProducts({ products });
           }),
           shareReplay(1),

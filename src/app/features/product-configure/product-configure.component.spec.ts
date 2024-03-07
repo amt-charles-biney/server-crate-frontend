@@ -21,7 +21,6 @@ describe('ProductConfigureComponent', () => {
   })
 
   it('should create', () => {
-    console.log(component)
     expect(component).toBeDefined()
   })
 })

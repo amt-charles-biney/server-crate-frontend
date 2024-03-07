@@ -135,11 +135,9 @@ export class CheckoutComponent implements OnInit {
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
       });
     }
-    console.log('Stpper', this.cdkStepper.linear);
   }
   getSubtotal(amountToPay: number) {
     this.amountToPay = amountToPay;
-    console.log('GetSubtotal', this.amountToPay);
   }
 
   userDetails() {
@@ -162,10 +160,6 @@ export class CheckoutComponent implements OnInit {
       }, 2000);
       return;
     }
-    console.log('Shippin details', this.shippingForm.value);
-    console.log('Contact value', contactValue);
-    console.log('Shipping number Valid', this.intl.isValidNumber(), );
-    
     this.cdkStepper.next();
 
   }
@@ -182,7 +176,6 @@ export class CheckoutComponent implements OnInit {
         reference: creditCardReference! ? creditCardReference! : reference!,
         currency: 'GHS',
       };
-      console.log('Request submitted', paymentRequest);
       this.store.dispatch(sendingPaymentRequest(paymentRequest));
     }
   }

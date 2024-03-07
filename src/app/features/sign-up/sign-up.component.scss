@@ -1,1 +1,12 @@
-
+.signupImage {
+    height: 100vh;
+    background-image: url("/assets/signup-pic.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+@media only screen and (max-width: 768px) {
+    .signupImage {
+        display: none;
+    }
+  }

@@ -54,8 +54,6 @@ export class CreditCardPaymentComponent implements OnInit {
   addCard() {
     const { month, year, ...rest } = this.creditCardForm.value;
     const formData = { ...rest, expiration: `${month}/${year}` };
-    console.log(this.creditCardForm.value);
-    console.log(formData);
   }
 
   clearForm() {

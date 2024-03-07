@@ -96,7 +96,7 @@ export type VerifiedUser = {
     contact: Contact;
     role: string;
   };
-  export type ChangeContact = {
+  export type UserInfo = {
     firstName: string;
     lastName: string;
     contact: Contact | null;

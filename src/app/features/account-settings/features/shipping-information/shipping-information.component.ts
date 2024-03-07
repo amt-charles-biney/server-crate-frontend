@@ -60,7 +60,6 @@ export class ShippingInformationComponent implements OnInit {
   }
 
   saveShippingDetails() {
-    console.log('Submitting');
     this.shippingForm.markAllAsTouched()
     if (this.shippingForm.invalid) return ;
     const contact = this.intl?.getSelectedCountryData();
@@ -70,9 +69,7 @@ export class ShippingInformationComponent implements OnInit {
       iso2Code: contact.iso2,
       phoneNumber: this.intl?.getNumber(),
     };
-    this.shippingForm.patchValue({ contact: contactValue})
-    console.log('Submitting', this.shippingForm.value);
-    
+    this.shippingForm.patchValue({ contact: contactValue})    
     this.store.dispatch(saveShippingDetails(this.shippingForm.value))
   }
   

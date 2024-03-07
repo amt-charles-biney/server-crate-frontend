@@ -1,43 +1,40 @@
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AuthService } from "../../../core/services/auth/auth.service";
-import { Store } from "@ngrx/store";
-import { verifyingOtp } from "../actions/reset.actions";
-import { catchError, exhaustMap, map, of, tap } from "rxjs";
-import { Success, VerifyOtp } from "../../../types";
-import { setLoadingSpinner } from "../../loader/actions/loader.actions";
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { verifyingOtp } from '../actions/reset.actions';
+import { catchError, exhaustMap, of, tap } from 'rxjs';
+import { Success, VerifyOtp } from '../../../types';
+import { errorHandler } from '../../../core/utils/helpers';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class VerifyOtpEffects {
-    verifyOtp$ = createEffect(() => {
-        return this.action$.pipe(
-            ofType(verifyingOtp),
-            exhaustMap((data: VerifyOtp) => {
-                return this.signUpService.verifyOtp(data).pipe(
-                    tap(x => console.log('Verifying otp', x)),
-                    map((data: Success) => {
-                        setTimeout(() => {
-                            this.router.navigateByUrl('/forgot-password/reset-password', { replaceUrl: true })
-                        }, 2000);
-                        return setLoadingSpinner({
-                            status: false,
-                            message: data.message,
-                            isError: false,
-                          });
-                    }),
-                    catchError((err) => {
-                        return of(setLoadingSpinner({ status: false, message: err.error.detail ?? '', isError: true}))
-                    })
-                )
-            })
-        )
-    })
+  verifyOtp$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(verifyingOtp),
+      exhaustMap((data: VerifyOtp) => {
+        return this.signUpService.verifyOtp(data).pipe(
+          tap(({ message }: Success) => {
+            this.toast.success(message, 'Success')
+            this.router.navigateByUrl('/forgot-password/reset-password', {
+              replaceUrl: true,
+            });
+          }),
+          catchError((err) => {
+            const errorMessage = errorHandler(err)
+            this.toast.error(errorMessage, 'Error')
+            return of();
+          })
+        );
+      })
+    );
+  }, { dispatch: false });
 
-    constructor(
-        private action$: Actions,
-        private router: Router,
-        private signUpService: AuthService,
-        private store: Store
-      ) {}
+  constructor(
+    private action$: Actions,
+    private router: Router,
+    private signUpService: AuthService,
+    private toast: ToastrService
+  ) {}
 }

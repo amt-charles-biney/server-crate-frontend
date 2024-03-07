@@ -22,7 +22,7 @@ export class OrderSummaryComponent {
   constructor (private store: Store) {}
 
   addProductToCart (): void {
-    scrollTo({ top: 0, behavior: 'smooth' })
+    document.body.scrollTo({ top: 0, behavior: 'smooth' })
     this.store.dispatch(addToCartItem({ productId: this.productId, configOptions: this.querySnapShot  }))
   }
 }

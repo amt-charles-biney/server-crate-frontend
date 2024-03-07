@@ -3,9 +3,6 @@
   <ng-container *ngIf="!loadingState.isError">
     <app-loader loaderId="category" size="none" />
   </ng-container>
-  <ng-container *ngIf="loadingState.message">
-    <app-error [message]="loadingState.message" [visible]="true" />
-  </ng-container>
 </ng-container>
 <ng-container *ngIf="categoryImage | async"></ng-container>
 <ng-container *ngIf="attributes | async as attributes">

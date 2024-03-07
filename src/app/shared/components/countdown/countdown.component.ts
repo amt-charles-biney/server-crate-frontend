@@ -1,13 +1,9 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  Input,
-} from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, Input } from '@angular/core';
 import { map, takeWhile, tap, timer } from 'rxjs';
-import { resetLoader, setLoadingSpinner } from '../../../store/loader/actions/loader.actions';
 import { TimerService } from '../../../core/services/timer/timer.service';
 import { OTP_EXPIRATION } from '../../../core/utils/constants';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-countdown',
@@ -19,27 +15,23 @@ import { OTP_EXPIRATION } from '../../../core/utils/constants';
 export class CountdownComponent {
   @Input() timeInMinutes!: number;
 
-  constructor(private store: Store, private timerService: TimerService) {}
+  constructor(
+    private timerService: TimerService,
+    private toast: ToastrService
+  ) {}
   secondsRemaining$ = timer(0, 1000).pipe(
     map((n) => {
       const time = (this.timeInMinutes * 60 - n) * 1000;
-      sessionStorage.setItem(
-        OTP_EXPIRATION,
-        JSON.stringify(time / 60000)
-      );
+      sessionStorage.setItem(OTP_EXPIRATION, JSON.stringify(time / 60000));
       return time;
     }),
     takeWhile((time) => time >= 0),
     tap((time) => {
       if (time === 0) {
-        this.timerService.setTimer(0)
-        console.log('time', time);
-        this.store.dispatch(
-          setLoadingSpinner({
-            status: false,
-            message: 'OTP is expired. Please click Resend',
-            isError: true,
-          })
+        this.timerService.setTimer(0);
+        this.toast.info(
+          'OTP has expired. Please click Resend',
+          'Time Limit Exceeded'
         );
       }
     })

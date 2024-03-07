@@ -61,7 +61,6 @@ export class ProductItemComponent implements OnInit {
   }
 
   outsideClick() {
-    console.log('showNotification', this.showNotification);
 
     this.showNotification = false;
   }

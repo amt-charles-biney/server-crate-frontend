@@ -7,6 +7,7 @@ import { AllProducts } from "../../types";
 import { gotProducts } from "../admin/products/categories.actions";
 import { setLoadingSpinner } from "../loader/actions/loader.actions";
 import { errorHandler } from "../../core/utils/helpers";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable()
 export class UserEffect {
@@ -15,23 +16,18 @@ export class UserEffect {
             ofType(filter),
             switchMap((props) => {
                 return this.userService.getProducts(props.page, props.params).pipe(                    
-                    map((products: AllProducts) => {
-                        console.log('Products', products);
-                        
+                    map((products: AllProducts) => {                        
                         return gotProducts({ products });
                       }),
                       shareReplay(1),
                       catchError((err) => {
-                        return of(setLoadingSpinner({
-                            isError: true,
-                            message: errorHandler(err),
-                            status: false
-                          }))
+                        this.toast.error(errorHandler(err), 'Error')
+                        return of()
                       })
                 )
             })
         )
     })
 
-    constructor(private action$: Actions, private userService: UserService) {}
+    constructor(private action$: Actions, private userService: UserService, private toast: ToastrService) {}
 }

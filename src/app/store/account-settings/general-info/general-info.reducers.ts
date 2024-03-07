@@ -74,8 +74,6 @@ export const shippingFeature = createFeature({
           email,
         }
       ) => {
-        console.log('Address', address1);
-
         return {
           address1,
           address2,

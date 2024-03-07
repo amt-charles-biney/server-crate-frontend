@@ -92,7 +92,6 @@ export class AddCaseComponent implements OnInit, OnDestroy {
         tap((data: Case) => {
             this.incompatibleAttributeOptions = data.incompatibleVariants.map((variant) => variant.id)
             this.incompatibleVariants = data.incompatibleVariants
-            console.log('In edit', data.incompatibleVariants);
             this.formGroup = {
               name: data.name,
               description: data.description,
@@ -175,14 +174,12 @@ export class AddCaseComponent implements OnInit, OnDestroy {
   }
 
   deleteCase(id: string) {
-    scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
     this.store.dispatch(deleteCase({ id }));
   }
 
   getIncompatibleAttributeOptions({index, variants}: {index: number, variants: string[]}) {
-    this.incompatibleAttributeOptions = variants
-    console.log('Incompatibles', this.incompatibleAttributeOptions);
-    
+    this.incompatibleAttributeOptions = variants    
   }
   addCase() {
     if (this.caseForm.invalid) return;
@@ -193,7 +190,7 @@ export class AddCaseComponent implements OnInit, OnDestroy {
         isError: false,
       })
     );
-    scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
     const formData = (<FormGroupExtension>(
       this.caseForm
     )).toFormData();
@@ -214,16 +211,13 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     formData.append('images', image2!);
     formData.append('images', image3!);
     
-    this.incompatibleAttributeOptions.forEach((attributeOption) => {
-      console.log('AttributeOption', attributeOption);
-      
+    this.incompatibleAttributeOptions.forEach((attributeOption) => {      
       formData.append('incompatibleVariants', attributeOption)
     })
 
     if (this.id) {      
       this.store.dispatch(updateCase({formData, id: this.id}))
     } else {
-      console.log('Add case');
       this.store.dispatch(addCase({formData}))
     }
   }

@@ -26,6 +26,5 @@ export class CartComponent implements OnInit {
   }
 
   getQuantityOfProduct(quantity: number, cartItem: CartProductItem) {
-    console.log(`Quantity: ${quantity} for item: ${cartItem.productName}`);
   }
 }

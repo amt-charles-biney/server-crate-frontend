@@ -31,7 +31,6 @@ import { LoadingStatus, UserSignUp } from '../../types';
 import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-loader.component';
 import { Observable } from 'rxjs';
 import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
-import { setLoadingSpinner } from '../../store/loader/actions/loader.actions';
 @Component({
   selector: 'app-sign-up',
   standalone: true,
@@ -60,18 +59,30 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {
     this.signUpForm = new FormGroup(
       {
-        firstName: new FormControl('', {validators: [Validators.required], updateOn: 'blur'}),
-        lastName: new FormControl('', {validators: [Validators.required], updateOn: 'blur'}),
-        email: new FormControl('', {validators: [Validators.required, Validators.email, ], updateOn: 'blur'}),
-        password: new FormControl('', {validators:[
-          Validators.required,
-          Validators.minLength(8),
-          Validators.pattern(passwordRegex),
-        ], updateOn: 'blur'}),
-        confirmPwd: new FormControl('', {validators: [
-          Validators.required,
-          checkIfPasswordsMatch(),
-        ], updateOn: 'blur'}),
+        firstName: new FormControl('', {
+          validators: [Validators.required],
+          updateOn: 'blur',
+        }),
+        lastName: new FormControl('', {
+          validators: [Validators.required],
+          updateOn: 'blur',
+        }),
+        email: new FormControl('', {
+          validators: [Validators.required, Validators.email],
+          updateOn: 'blur',
+        }),
+        password: new FormControl('', {
+          validators: [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(passwordRegex),
+          ],
+          updateOn: 'blur',
+        }),
+        confirmPwd: new FormControl('', {
+          validators: [Validators.required, checkIfPasswordsMatch()],
+          updateOn: 'blur',
+        }),
         acceptTerms: new FormControl(null, [
           Validators.required,
           checkIfTermsAreAccepted(),
@@ -81,10 +92,14 @@ export class SignUpComponent implements OnInit {
     );
     this.loadingState$ = this.store.select(selectLoaderState);
   }
-
-  submitRegistrationForm() {
+  /**
+   * Submits the signup form if it is valid.
+   * Dispatches a signUp action with the data from the form.
+   * @returns {void}
+   */
+  submitRegistrationForm(): void {
     if (this.signUpForm.invalid) return;
-    scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
     const { firstName, lastName, email, password } = this.signUpForm.value;
     const formData: UserSignUp = {
       firstName,
@@ -99,8 +114,12 @@ export class SignUpComponent implements OnInit {
     );
     this.store.dispatch(signUp(formData));
   }
-
-  openTermsAndConditionsModal() {
+  /**
+   * Opens the terms and conditions modal.
+   * Waits for the modal to be closed and updates the 'acceptTerms' field in the sign-up form accordingly.
+   * @returns {void}
+   */
+  openTermsAndConditionsModal(): void {
     const termsModalResult = this.termsModal.open(TermsModalComponent, {
       width: 'auto',
       autoFocus: false,

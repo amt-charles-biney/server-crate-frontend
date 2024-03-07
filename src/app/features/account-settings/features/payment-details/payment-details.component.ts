@@ -24,8 +24,6 @@ export class PaymentDetailsComponent {
     this.creditCardComponent.creditCardForm.markAllAsTouched()
     const { network, amount, reference } = this.mobileMoneyComponent.mobileMoneyForm.value
     const { name, cardNumber, securityCode, month, year, creditCardReference } = this.creditCardComponent.creditCardForm.value
-    console.log('Momo ', this.mobileMoneyComponent.mobileMoneyForm.valid);
-    console.log('CreditCard ', this.creditCardComponent.creditCardForm.valid);
     
     if (this.mobileMoneyComponent.mobileMoneyForm.valid || this.creditCardComponent.creditCardForm.valid ) {
       this.paymentForm = {
@@ -39,8 +37,6 @@ export class PaymentDetailsComponent {
         securityCode,
         creditCardReference, //For testing
       }
-    } else {
-      console.log('Payment form', this.paymentForm)
     }
   }
 }

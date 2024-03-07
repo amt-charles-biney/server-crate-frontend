@@ -210,8 +210,6 @@ fdescribe('AdminService', () => {
     service.getProduct('a90c71f2-d83d-4a07-a1da-169ebf02e459').subscribe({
       next: () => fail('Product id is invalid'),
       error: (error: HttpErrorResponse) => {
-        console.log('Error', error);
-
         expect(error.status).toBe(404);
         expect(error.statusText).toBe('product not found');
       },

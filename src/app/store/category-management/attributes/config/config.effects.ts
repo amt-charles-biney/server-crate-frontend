@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import { CategoryAndConfig } from '../../../../types';
 import { errorHandler } from '../../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class ConfigEffect {
@@ -140,9 +141,9 @@ export class ConfigEffect {
         this.ngxService.startLoader('category')    
         return this.adminService.editCategory(id, configuration).pipe(
           map(() => {
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/category-management');
-            }, 500);
+            document.body.scrollTo({ top: 0, behavior: 'smooth'})
+            
+            this.router.navigateByUrl('/admin/category-management');
             return resetLoader({ isError: false, message: '', status: false });
           }),
           catchError((err) => {
@@ -166,27 +167,16 @@ export class ConfigEffect {
     return this.action$.pipe(
       ofType(uploadCoverImage),
       switchMap((props) => {
+        this.toast.info('Uploading image to server', 'Upload')
         this.ngxService.startLoader('category')
         return this.adminService.uploadImage(props.form).pipe(
           map(({ url }) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                isError: false,
-                message: 'Picture uploaded',
-                status: false,
-              })
-            );
-            
+            this.toast.success('Uploaded image successfully', 'Success')
             return gotCoverImage({ url });
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: err.error.detail,
-                status: false,
-              })
-            );
+            this.toast.error('Failed to upload image. Please try again', 'Error')
+            return of();
           }),
           finalize(() => {
             this.ngxService.stopLoader('category')
@@ -201,6 +191,7 @@ export class ConfigEffect {
     private store: Store,
     private adminService: AdminService,
     private router: Router,
-    private ngxService: NgxUiLoaderService
+    private ngxService: NgxUiLoaderService,
+    private toast: ToastrService
   ) {}
 }

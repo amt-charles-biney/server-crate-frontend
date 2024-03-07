@@ -15,6 +15,8 @@ import * as Cart from './store/cart/cart.reducers';
 import { CartEffects } from './store/cart/cart.effects';
 import { cookieInterceptor } from './core/interceptors/cookie.interceptor';
 import { provideCloudinaryLoader } from '@angular/common';
+import { provideToastr } from 'ngx-toastr';
+import { CustomToastComponent } from './shared/components/custom-toast/custom-toast.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,5 +31,6 @@ export const appConfig: ApplicationConfig = {
     provideCloudinaryLoader('https://res.cloudinary.com/dah4l2inx'),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { disableClose: true } },
+    provideToastr({toastComponent: CustomToastComponent, progressBar: true, autoDismiss: true, maxOpened: 1 })
   ],
 };

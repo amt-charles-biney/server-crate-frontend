@@ -34,9 +34,7 @@ export const verificationFeature = createFeature({
     name: 'verification',
     reducer: createReducer(
         verificationState,
-        on(gotPaymentVerification, ({ isVerified, message, status}) => {            
-            console.log('In reducer', { isVerified, message, status});
-            
+        on(gotPaymentVerification, ({ isVerified, message, status}) => {                        
             return {
                 isVerified: true,
                 message,

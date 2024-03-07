@@ -27,7 +27,6 @@ import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
     CustomButtonComponent,
     FormsModule,
     ReactiveFormsModule,
-    NgOptimizedImage,
     AuthLoaderComponent
   ],
   templateUrl: './login.component.html',
