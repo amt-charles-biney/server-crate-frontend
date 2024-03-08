@@ -44,7 +44,7 @@ export class IndicatorsComponent implements OnInit {
       let setOfLowStockAttributes: Set<string> = new Set()
       this.product.totalLeastStock.forEach((attribute) =>{ 
         for (let option of attribute.attributeOptions) {
-          if (option.inStock < 5) {
+          if (option.inStock <= 5) {
             setOfLowStockAttributes.add(option.optionName)
           }
         }
@@ -87,8 +87,8 @@ export class IndicatorsComponent implements OnInit {
       if (this.product.inStock === 0) {
         const noStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock === 0))!
         attributeToCheck = noStockAttribute
-      } else if (this.product.inStock < 5) {
-        const lowStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock < 5))!
+      } else if (this.product.inStock <= 5) {
+        const lowStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock <= 5))!
         attributeToCheck = lowStockAttribute
       }
       setTimeout(() => {

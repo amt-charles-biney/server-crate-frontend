@@ -14,7 +14,7 @@ import {
   VerifyOtp,
 } from '../../../types';
 import { jwtDecode } from 'jwt-decode';
-import { LOCALSTORAGE_TOKEN } from '../../utils/constants';
+import { LOCALSTORAGE_EMAIL, LOCALSTORAGE_TOKEN } from '../../utils/constants';
 import { clearStorage } from '../../utils/helpers';
 
 @Injectable({
@@ -64,12 +64,12 @@ export class AuthService {
     return '';
   }
   getEmail() {
-    const email = localStorage.getItem('server-crate-email');
+    const email = localStorage.getItem(LOCALSTORAGE_EMAIL);
     if (!email) return '';
     return email;
   }
   setEmail(email: string) {
-    localStorage.setItem('server-crate-email', email);
+    localStorage.setItem(LOCALSTORAGE_EMAIL, email);
   }
   isAdmin() {
     const token = this.getToken();

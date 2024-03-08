@@ -470,6 +470,49 @@ app-header .mat-badge-small.mat-badge-above .mat-badge-content {
   background-color: #c1c1c1; /* color of the scroll thumb */
   border-radius: 20px; /* roundness of the scroll thumb */
 }
+.customToastClass {
+  
+}
+.toast-success {
+  background-image: url("./assets/toast-success.svg");
+  background-color: #19af66;  
+  background-repeat: no-repeat;
+}
+.toast-error {
+  background-image: url("./assets/toast-error.svg");
+  background-color: #f35746;
+  background-repeat: no-repeat;
+}
+
+.toast-title {
+  font-weight: 600;
+  font-size: 18px;
+  font-family: 'Inter';
+}
+.toast-message {
+  word-wrap: break-word;
+  font-size: 16px;
+  font-family: 'Inter';
+}
+.toast-container .ngx-toastr {
+  box-shadow: 0px 0px 2px 0px #00000026;
+  border-radius: 6px;
+  
+}
+.toast-container .ngx-toastr:hover {
+  box-shadow: none;
+}
+.toast-close-button {
+  position: relative;
+  right: -0.3em;
+  top: -0.3em;
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-shadow: 0 1px 0 #ffffff;
+  /* opacity: 0.8; */
+}
 
 @media only screen and (max-width: 768px) {
   app-payment-details .mat-mdc-tab-group {

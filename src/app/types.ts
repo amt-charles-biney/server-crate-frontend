@@ -348,6 +348,8 @@ export type CartProductItem = {
   productPrice: number;
   configuredPrice: number;
   configured: Array<ConfiguredProduct>;
+  stock: number;
+  quantity: number
 }
 export type ConfiguredProduct = {
   id: string;
@@ -516,4 +518,9 @@ export type ShippingPayload = {
   zipCode: string;
   contact: Contact | null;
   email: string;
+}
+
+export type CartQuantity = {
+  configuredProductId: string;
+  quantity: number
 }
