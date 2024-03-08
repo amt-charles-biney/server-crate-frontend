@@ -16,6 +16,7 @@ import { setLoadingSpinner } from '../loader/actions/loader.actions';
 import { errorHandler } from '../../core/utils/helpers';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class CaseEffect {
@@ -24,9 +25,6 @@ export class CaseEffect {
       ofType(getCases),
       exhaustMap(() => {
         return this.adminService.getCases().pipe(
-          tap((cases: CaseResponse) => {
-            console.log('Cases', cases);
-          }),
           map((response: CaseResponse) => {
             return gotCases({ cases: response });
           })
@@ -67,9 +65,8 @@ export class CaseEffect {
         this.ngxService.startLoader('case')
         return this.adminService.deleteCase(id).pipe(
           map(() => {
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/case-management');
-            }, 500);
+            document.body.scrollTo({ top: 0, behavior: 'smooth' });
+            this.router.navigateByUrl('/admin/case-management');
             return getCases();
           }),
           catchError((err) => {
@@ -102,13 +99,8 @@ export class CaseEffect {
             return getCases();
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                status: false,
-                message: errorHandler(err),
-                isError: true,
-              })
-            );
+            this.toast.error(errorHandler(err), 'Error')
+            return of();
           }),
           finalize(() => {
             this.ngxService.stopLoader('case')
@@ -131,13 +123,8 @@ export class CaseEffect {
             return getCases();
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                status: false,
-                message: errorHandler(err),
-                isError: true,
-              })
-            );
+            this.toast.error(errorHandler(err), 'Error')
+            return of();
           }),
           finalize(() => {
             this.ngxService.stopLoader('case')
@@ -151,6 +138,7 @@ export class CaseEffect {
     private action$: Actions,
     private adminService: AdminService,
     private router: Router,
-    private ngxService: NgxUiLoaderService
+    private ngxService: NgxUiLoaderService,
+    private toast: ToastrService
   ) {}
 }

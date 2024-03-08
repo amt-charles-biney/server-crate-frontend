@@ -7,6 +7,7 @@ import { addToCartItem, addToCartItemFailure, addToCartItemSuccess, loadProduct,
 import { ICategoryConfig, IConfiguredProduct, IParamConfigOptions, ProductItem } from "../../types";
 import { getCartItems } from "../cart/cart.actions";
 import { Store } from "@ngrx/store";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable()
 export class ProductSpecEffects {
@@ -20,7 +21,6 @@ export class ProductSpecEffects {
             return loadProductSuccess({ product })}),
           catchError((error: any) => {
             const getError: string = error["error"]["detail"] ?? "failed"
-            console.log("get product error ", error)
            return of(loadProductFailure({ error: getError }))
           })
         )
@@ -64,7 +64,6 @@ export class ProductSpecEffects {
           }),
           catchError((error: any) => {
             const getError: string = error["error"]["detail"] ?? "failed"
-            console.log("load product config item error ", error["error"]["detail"])
             return of(loadProductConfigItemFailure({ error: getError }))
           })
         )
@@ -79,12 +78,13 @@ export class ProductSpecEffects {
         return this.productService.addProductToCart(props.productId, props.configOptions)
         .pipe(
           map((props: { message: string, configuration: IConfiguredProduct}) => {
+            this.toast.success(props.message, 'Success')
             this.store.dispatch(getCartItems())
             return addToCartItemSuccess({ message: props.message, configuration: props.configuration })
           }),
           catchError((error: any) => {
-            console.log("load cart item posted error ", error)
             const getError: string = error["error"]["detail"] ?? "failed"
+            this.toast.error(getError, 'Error')
             return of(addToCartItemFailure({ error: getError }))
           })
         )
@@ -93,5 +93,5 @@ export class ProductSpecEffects {
   })
 
   
-  constructor(private action$: Actions, private productService: ProductService, private store: Store) {}
+  constructor(private action$: Actions, private productService: ProductService, private store: Store, private toast: ToastrService) {}
 }

@@ -4,17 +4,37 @@ import { CustomInputComponent } from '../../../../../../shared/components/custom
 import { CustomImageComponent } from '../../../../../../shared/components/custom-image/custom-image.component';
 import { AuthLoaderComponent } from '../../../../../../shared/components/auth-loader/auth-loader.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormGroupExtension, RxFormBuilder, RxFormGroup, RxReactiveFormsModule, RxwebValidators } from '@rxweb/reactive-form-validators';
+import {
+  FormGroupExtension,
+  RxFormBuilder,
+  RxFormGroup,
+  RxReactiveFormsModule,
+  RxwebValidators,
+} from '@rxweb/reactive-form-validators';
 import { IncompatiblesComponent } from '../../../../../../shared/components/incompatibles/incompatibles.component';
-import { AttributeOption, BasicConfig, Case, LoadingStatus } from '../../../../../../types';
+import {
+  AttributeOption,
+  BasicConfig,
+  Case,
+  LoadingStatus,
+} from '../../../../../../types';
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../../../../core/services/admin/admin.service';
 import { selectLoaderState } from '../../../../../../store/loader/reducers/loader.reducers';
 import { setLoadingSpinner } from '../../../../../../store/loader/actions/loader.actions';
-import { caseInitialState, selectCase } from '../../../../../../store/case/case.reducers';
-import { addCase, deleteCase, getSingleCase, resetCase, updateCase } from '../../../../../../store/case/case.actions';
+import {
+  caseInitialState,
+  selectCase,
+} from '../../../../../../store/case/case.reducers';
+import {
+  addCase,
+  deleteCase,
+  getSingleCase,
+  resetCase,
+  updateCase,
+} from '../../../../../../store/case/case.actions';
 import { LoaderComponent } from '../../../../../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../../../../../shared/components/error/error.component';
 
@@ -30,17 +50,17 @@ import { ErrorComponent } from '../../../../../../shared/components/error/error.
     RxReactiveFormsModule,
     IncompatiblesComponent,
     LoaderComponent,
-    ErrorComponent
+    ErrorComponent,
   ],
   templateUrl: './add-case.component.html',
 })
 export class AddCaseComponent implements OnInit, OnDestroy {
   private option$ = new Subject<BasicConfig>();
-  private case$ = new BehaviorSubject<Case>(caseInitialState.case)
+  private case$ = new BehaviorSubject<Case>(caseInitialState.case);
   loadingState$!: Observable<LoadingStatus>;
   options = this.option$.asObservable();
   caseForm!: RxFormGroup;
-  case = this.case$.asObservable()
+  case = this.case$.asObservable();
   formGroup = {};
   id: string = '';
   coverImage: string | null = null;
@@ -48,8 +68,8 @@ export class AddCaseComponent implements OnInit, OnDestroy {
   image2: string | null = null;
   image3: string | null = null;
 
-  incompatibleVariants: AttributeOption[] = []
-  incompatibleAttributeOptions: string[] = []
+  incompatibleVariants: AttributeOption[] = [];
+  incompatibleAttributeOptions: string[] = [];
   constructor(
     private fb: RxFormBuilder,
     private store: Store,
@@ -83,45 +103,48 @@ export class AddCaseComponent implements OnInit, OnDestroy {
       incompatibleVariants: null,
     };
     this.caseForm = <RxFormGroup>this.fb.group(this.formGroup);
-    
+
     if (this.id) {
       this.store.dispatch(getSingleCase({ id: this.id }));
-      this.case = this.store
-      .select(selectCase)
-      .pipe(
+      this.case = this.store.select(selectCase).pipe(
         tap((data: Case) => {
-            this.incompatibleAttributeOptions = data.incompatibleVariants.map((variant) => variant.id)
-            this.incompatibleVariants = data.incompatibleVariants
-            console.log('In edit', data.incompatibleVariants);
-            this.formGroup = {
-              name: data.name,
-              description: data.description,
-              price: data.price,
-              coverImage: data.coverImageUrl,
-              incompatibleVariants: [],
-              images: data.imageUrls,
-              image1: data.imageUrls[0],
-              image2: data.imageUrls[1],
-              image3: data.imageUrls[2]
-              
-            };
+          this.incompatibleAttributeOptions = data.incompatibleVariants.map(
+            (variant) => variant.id
+          );
+          this.incompatibleVariants = data.incompatibleVariants;
+          this.formGroup = {
+            name: data.name,
+            description: data.description,
+            price: data.price,
+            coverImage: data.coverImageUrl,
+            incompatibleVariants: [],
+            images: data.imageUrls,
+            image1: data.imageUrls[0],
+            image2: data.imageUrls[1],
+            image3: data.imageUrls[2],
+          };
 
-            this.coverImage = data.coverImageUrl;
-            this.image1 = data.imageUrls[0] || null;
-            this.image2 = data.imageUrls[1] || null;
-            this.image3 = data.imageUrls[2] || null;
+          this.coverImage = data.coverImageUrl;
+          this.image1 = data.imageUrls[0] || null;
+          this.image2 = data.imageUrls[1] || null;
+          this.image3 = data.imageUrls[2] || null;
 
-            this.caseForm.patchValue({ ...this.formGroup });
-          })
-        )
+          this.caseForm.patchValue({ ...this.formGroup });
+        })
+      );
     }
     this.loadingState$ = this.store.select(selectLoaderState);
   }
 
   ngOnDestroy(): void {
-    this.store.dispatch(resetCase())
+    this.store.dispatch(resetCase());
   }
 
+  /**
+   * The function `replaceImage` replaces an image source based on the specified image
+   * key.
+   * @param obj consists of the image source and the image to be changed - ```typescript
+   */
   replaceImage(obj: { imgSrc: string; imageToChange: string }) {
     const setterFunctions: Record<string, (src: string) => void> = {
       coverImage: (src: string) => {
@@ -146,6 +169,15 @@ export class AddCaseComponent implements OnInit, OnDestroy {
   cancel() {
     this.router.navigateByUrl('/admin/case-management');
   }
+
+  /**
+   * The function `removeImage` takes a string parameter and calls a specific method based on the value
+   * of the parameter.
+   * @param {string} imageToRemove - The `imageToRemove` parameter in the `removeImage` function is a
+   * string that specifies which image to remove. It can have one of the following values:
+   * 'coverImage', 'image1', 'image2', or any other value that would indicate removing a different
+   * image, for our requirements, image3
+   */
   removeImage(imageToRemove: string) {
     if (imageToRemove === 'coverImage') {
       this.removeCoverImage();
@@ -157,32 +189,60 @@ export class AddCaseComponent implements OnInit, OnDestroy {
       this.removeImage3();
     }
   }
+
+  /**
+ * The `removeCoverImage` function clears the cover image value in a form and sets it to null.
+ */
   removeCoverImage() {
     this.caseForm.patchValue({ coverImage: null });
     this.coverImage = null;
   }
+
+  /**
+ * The `removeImage1` function in TypeScript removes the value of `image1` from a form and sets it to
+ * null.
+ */
   removeImage1() {
     this.caseForm.patchValue({ image1: null });
     this.image1 = null;
   }
+
+  /**
+ * The `removeImage2` function removes the value of `image2` from the `addProductForm` and sets it to
+ * null.
+ */
   removeImage2() {
     this.caseForm.patchValue({ image2: null });
     this.image2 = null;
   }
+
+  /**
+ * The `removeImage3` function in TypeScript removes the value of `image3` from the `addProductForm`
+ * and sets it to null.
+ */
   removeImage3() {
     this.caseForm.patchValue({ image3: null });
     this.image3 = null;
   }
 
+/**
+ * The `deleteCase` function dispatches an action to delete a case
+ * with the specified ID.
+ * @param {string} id - The `id` parameter in the `deleteCase` function is a string that represents the
+ * unique identifier of the case that needs to be deleted.
+ */
   deleteCase(id: string) {
-    scrollTo({ top: 0, behavior: 'smooth' });
     this.store.dispatch(deleteCase({ id }));
   }
 
-  getIncompatibleAttributeOptions({index, variants}: {index: number, variants: string[]}) {
-    this.incompatibleAttributeOptions = variants
-    console.log('Incompatibles', this.incompatibleAttributeOptions);
-    
+  getIncompatibleAttributeOptions({
+    index,
+    variants,
+  }: {
+    index: number;
+    variants: string[];
+  }) {
+    this.incompatibleAttributeOptions = variants;
   }
   addCase() {
     if (this.caseForm.invalid) return;
@@ -193,16 +253,14 @@ export class AddCaseComponent implements OnInit, OnDestroy {
         isError: false,
       })
     );
-    scrollTo({ top: 0, behavior: 'smooth' });
-    const formData = (<FormGroupExtension>(
-      this.caseForm
-    )).toFormData();
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
+    const formData = (<FormGroupExtension>this.caseForm).toFormData();
 
     const coverImage = formData.get('coverImage[0]');
     const image1 = formData.get('image1[0]');
     const image2 = formData.get('image2[0]');
     const image3 = formData.get('image3[0]');
-    
+
     formData.delete('coverImage[0]');
     formData.delete('image1[0]');
     formData.delete('image2[0]');
@@ -213,18 +271,15 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     formData.append('images', image1!);
     formData.append('images', image2!);
     formData.append('images', image3!);
-    
-    this.incompatibleAttributeOptions.forEach((attributeOption) => {
-      console.log('AttributeOption', attributeOption);
-      
-      formData.append('incompatibleVariants', attributeOption)
-    })
 
-    if (this.id) {      
-      this.store.dispatch(updateCase({formData, id: this.id}))
+    this.incompatibleAttributeOptions.forEach((attributeOption) => {
+      formData.append('incompatibleVariants', attributeOption);
+    });
+
+    if (this.id) {
+      this.store.dispatch(updateCase({ formData, id: this.id }));
     } else {
-      console.log('Add case');
-      this.store.dispatch(addCase({formData}))
+      this.store.dispatch(addCase({ formData }));
     }
   }
   get name() {

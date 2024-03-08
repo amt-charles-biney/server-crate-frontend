@@ -31,7 +31,10 @@ fdescribe('ProductService', () => {
       isFeatured: false,
       serviceCharge: '',
       stockStatus: 'Available',
-      productBrand: 'NVIDEA',
+      productBrand: {
+        name: 'NVIDEA',
+        price: 200
+      },
       productDescription: 'product description',
       productId: '1234',
       productPrice: '234',
@@ -40,7 +43,8 @@ fdescribe('ProductService', () => {
       category: {
         id: '12',
         name: 'category 1'
-      }
+      },
+      totalLeastStock: []
     }
 
     service.getProduct(String(productId)).subscribe((product: ProductItem) => {

@@ -1,10 +1,22 @@
+import { inject } from '@angular/core';
+import { resetLoader } from '../../store/loader/actions/loader.actions';
 import {
   Attribute,
   AttributeOption,
   CategoryConfig,
   CategoryEditResponse,
 } from '../../types';
-import { LOCALSTORAGE_TOKEN, LOCALSTORAGE_USER } from './constants';
+import { LOCALSTORAGE_EMAIL, LOCALSTORAGE_TOKEN, LOCALSTORAGE_USER } from './constants';
+import { Store } from '@ngrx/store';
+
+export function resetLoaderFn() {
+  const store = inject(Store)
+  store.dispatch(resetLoader({
+    isError: false,
+    message: '',
+    status: false
+  }))
+}
 
 export function errorHandler(err: any): string {
   let errorMessage = '';
@@ -24,6 +36,8 @@ export const logout = () => {
 export const clearStorage = () => {
   localStorage.removeItem(LOCALSTORAGE_USER);
   localStorage.removeItem(LOCALSTORAGE_TOKEN);
+  localStorage.removeItem(LOCALSTORAGE_EMAIL);
+  sessionStorage.clear()
 };
 export function isAttributeOption(obj: any): obj is AttributeOption {
   return obj && typeof obj.id === 'string';

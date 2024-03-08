@@ -13,19 +13,26 @@ import { SummaryComponent } from '../../shared/components/summary/summary.compon
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, CartProductItemComponent, RecommendedProductsComponent, RouterModule, SummaryComponent],
+  imports: [
+    CommonModule,
+    CartProductItemComponent,
+    RecommendedProductsComponent,
+    RouterModule,
+    SummaryComponent,
+  ],
   templateUrl: './cart.component.html',
 })
 export class CartComponent implements OnInit {
-  private cartItems$ = new BehaviorSubject<CartProductItem[]>([])
-  cartItems = this.cartItems$.asObservable()
-  subTotal!: number
+  private cartItems$ = new BehaviorSubject<CartProductItem[]>([]);
+  cartItems = this.cartItems$.asObservable();
+  subTotal!: number;
+  quantity: number = 1
   constructor(private store: Store) {}
   ngOnInit(): void {
-    this.cartItems = this.store.select(selectConfiguredProducts)
+    this.cartItems = this.store.select(selectConfiguredProducts);
   }
 
   getQuantityOfProduct(quantity: number, cartItem: CartProductItem) {
-    console.log(`Quantity: ${quantity} for item: ${cartItem.productName}`);
+    this.quantity = quantity
   }
 }

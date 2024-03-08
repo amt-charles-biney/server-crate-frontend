@@ -27,7 +27,6 @@ import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
     CustomButtonComponent,
     FormsModule,
     ReactiveFormsModule,
-    NgOptimizedImage,
     AuthLoaderComponent
   ],
   templateUrl: './login.component.html',
@@ -48,25 +47,16 @@ export class LoginComponent implements OnInit {
     this.loadingState$ = this.store.select(selectLoaderState)
   }
 
-  constructor(private store: Store) {
+  constructor(private store: Store) {}
 
-  }
-
-  submitRegistrationForm() {
-    console.log('Form Data', this.loginForm.value);
+  /**
+   * Submits the login form if it is valid.
+   * Dispatches a sign-in action with the email and password from the form.
+   * @returns {void}
+   */
+  submitLoginForm(): void {
     if (this.loginForm.invalid) return;    
-    console.log(
-      'Form Data Submitted',
-      this.loginForm.value,
-    );
     const { email, password } = this.loginForm.value
     this.store.dispatch(signIn({ email, password }))
-  }
-
-  get email() {
-    return this.loginForm.get('email');
-  }
-  get password() {
-    return this.loginForm.get('password');
   }
 }

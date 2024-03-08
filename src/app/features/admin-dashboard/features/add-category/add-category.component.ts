@@ -218,7 +218,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       }
       return;
     }
-    scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
     if (this.id) {
       const editPayload = {
         ...payload,

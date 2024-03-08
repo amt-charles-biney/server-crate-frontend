@@ -237,7 +237,14 @@ export class AddProductComponent implements OnInit, OnDestroy {
     event.stopPropagation();
   }
 
-  private _filter(value: Select | string, filterFrom: Select[]) {
+/**
+ * The `_filter` function filters an array of `Select` objects based on a provided value.
+ * @param {Select | string} value - The `value` parameter can be either of type `Select` or `string`.
+ * @param {Select[]} filterFrom - The `filterFrom` parameter is an array of objects of type `Select`.
+ * @returns {Select[]} The `_filter` function returns an array of `Select` objects that match the filter criteria
+ * based on the `value` parameter.
+ */
+  private _filter(value: Select | string, filterFrom: Select[]): Select[] {
     return filterFrom.filter((option: Select) => {
       if (typeof value !== 'string') {
         return option.name.toLowerCase().includes(value.name.toLowerCase());
@@ -246,20 +253,45 @@ export class AddProductComponent implements OnInit, OnDestroy {
     });
   }
 
-  cancel() {
+/**
+ * The `cancel()` function navigates to the '/admin/products' route using Angular's router.
+ * @returns {void}
+ */
+  cancel(): void {
     this.router.navigateByUrl('/admin/products');
   }
 
-  onCategorySelected(event: MatAutocompleteSelectedEvent) {
+ /**
+  * The function `onCategorySelected` is triggered when a category is selected, dispatches an action to
+  * get configuration data based on the selected category, and updates the options with the
+  * configuration state.
+  * @param {MatAutocompleteSelectedEvent} event - The `event` parameter in the `onCategorySelected`
+  * function is of type `MatAutocompleteSelectedEvent`. This event is triggered when a user selects an
+  * option from a material autocomplete dropdown.
+  * @returns {void}
+  */
+  onCategorySelected(event: MatAutocompleteSelectedEvent): void {
     const selectedCategory: Select = event.option.value;
     this.store.dispatch(getConfiguration(selectedCategory));
     this.options = this.store.select(selectConfigurationState);
   }
 
-  onSelectCase(event: MatSelectChange) {
+ /**
+  * The function `onSelectCase` assigns the selected case ID from a Material Select component to the
+  * `caseId` property.
+  * @param {MatSelectChange} event - The `event` parameter in the `onSelectCase` function is of type
+  * `MatSelectChange`, which is an event emitted when the selected value of a `MatSelect` component
+  * changes.
+  * @returns {void}
+  */
+  onSelectCase(event: MatSelectChange): void {
     this.caseId = event.value.id;
   }
 
+  /**
+   * The `addProduct` function adds a new product to the store with the provided product
+   * details.
+   */
   addProduct() {
     if (this.addProductForm.invalid) return;
     this.store.dispatch(
@@ -269,7 +301,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
         isError: false,
       })
     );
-    scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
     const product: ProductPayload = {
       productName: this.productName.value,
       productDescription: this.productDescription.value,
@@ -286,57 +318,14 @@ export class AddProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  replaceImage(obj: { imgSrc: string; imageToChange: string }) {
-    const setterFunctions: Record<string, (src: string) => void> = {
-      coverImage: (src: string) => {
-        this.coverImage = src;
-      },
-      image1: (src: string) => {
-        this.image1 = src;
-      },
-      image2: (src: string) => {
-        this.image2 = src;
-      },
-      image3: (src: string) => {
-        this.image3 = src;
-      },
-    };
-
-    const setter = setterFunctions[obj.imageToChange];
-    if (setter) {
-      setter(obj.imgSrc);
-    }
-  }
-  removeImage(imageToRemove: string) {
-    if (imageToRemove === 'coverImage') {
-      this.removeCoverImage();
-    } else if (imageToRemove === 'image1') {
-      this.removeImage1();
-    } else if (imageToRemove === 'image2') {
-      this.removeImage2();
-    } else {
-      this.removeImage3();
-    }
-  }
-  removeCoverImage() {
-    this.addProductForm.patchValue({ coverImage: null });
-    this.coverImage = null;
-  }
-  removeImage1() {
-    this.addProductForm.patchValue({ image1: null });
-    this.image1 = null;
-  }
-  removeImage2() {
-    this.addProductForm.patchValue({ image2: null });
-    this.image2 = null;
-  }
-  removeImage3() {
-    this.addProductForm.patchValue({ image3: null });
-    this.image3 = null;
-  }
-
+  /**
+   * The `deleteProduct` function scrolls to the top of the page smoothly and dispatches an action to
+   * delete a product with the specified ID.
+   * @param {string} id - The `id` parameter in the `deleteProduct` function is a string that
+   * represents the unique identifier of the product that needs to be deleted.
+   */
   deleteProduct(id: string) {
-    scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
     this.store.dispatch(deleteProduct({ id }));
   }
 
@@ -358,11 +347,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
   get inStock() {
     return this.addProductForm.get('inStock')!;
   }
-
   get price() {
     return this.addProductForm.get('productPrice')!;
   }
-
   get serviceCharge() {
     return this.addProductForm.get('serviceCharge')!;
   }

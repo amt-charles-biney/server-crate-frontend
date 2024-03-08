@@ -1,0 +1,16 @@
+<div class="font-dm-sans" [style.display]="state.value === 'inactive' ? 'none' : ''">
+      <div *ngIf="title" [class]="options.titleClass" [attr.aria-label]="title">
+        {{ title }}
+      </div>
+      <div *ngIf="message && options.enableHtml" role="alert"
+        [class]="options.messageClass" [innerHTML]="message">
+      </div>
+      <div *ngIf="message && !options.enableHtml" role="alert"
+        [class]="options.messageClass" [attr.aria-label]="message">
+        {{ message }}
+      </div>
+      <img class="absolute top-4 right-6" src="/assets/close-white.svg" alt="close">
+    </div>
+  <div *ngIf="options.progressBar">
+    <div class="toast-progress" [style.width]="width + '%'"></div>
+  </div>

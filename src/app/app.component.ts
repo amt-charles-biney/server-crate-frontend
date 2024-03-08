@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterModule, NavigationEnd, Router } from '@angular/router';
+import { RouterOutlet, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { resetLoader } from './store/loader/actions/loader.actions';
-import { environment } from '../environments/environment';
 import { getCartItems } from './store/cart/cart.actions';
 import { CookieConsentComponent } from './features/cookie-consent/cookie-consent.component';
 @Component({
@@ -14,7 +12,7 @@ import { CookieConsentComponent } from './features/cookie-consent/cookie-consent
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  constructor(private router: Router, private store: Store) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(getCartItems());

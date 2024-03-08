@@ -45,14 +45,13 @@ export class IndicatorsComponent implements OnInit {
       let setOfLowStockAttributes: Set<string> = new Set()
       this.product.totalLeastStock.forEach((attribute) =>{ 
         for (let option of attribute.attributeOptions) {
-          if (option.inStock < 5) {
+          if (option.inStock <= 5) {
             setOfLowStockAttributes.add(option.optionName)
           }
         }
       })
       const listOfLowStockAttributes = Array.from(setOfLowStockAttributes)
       const isOrAre = this.isOrAre(listOfLowStockAttributes)
-      console.log('list of low', listOfLowStockAttributes);
       this.stockIssue = true;
       this.title = this.product.stockStatus;
       this.color = 'text-amber-400';
@@ -83,17 +82,15 @@ export class IndicatorsComponent implements OnInit {
 
   fix() {
     if (this.categoryIssue) {
-      console.log('Category issue');
       this.router.navigate(['/admin/add-product', this.product.id])
     } else {
-      console.log('Stock issue');
       // this.router.navigate(['/admin/attributes'])
       let attributeToCheck: Attribute
       if (this.product.inStock === 0) {
         const noStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock === 0))!
         attributeToCheck = noStockAttribute
-      } else if (this.product.inStock < 5) {
-        const lowStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock < 5))!
+      } else if (this.product.inStock <= 5) {
+        const lowStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock <= 5))!
         attributeToCheck = lowStockAttribute
       }
       setTimeout(() => {

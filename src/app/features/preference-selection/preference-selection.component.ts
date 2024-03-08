@@ -120,7 +120,6 @@ export class PreferenceSelectionComponent implements OnInit {
   }
 
   compareEvent() {
-    console.log('Open');
     if (this.selectedProducts.length < 2) {
       this.dialog.open(CompareDialogComponent);
     }
@@ -157,7 +156,6 @@ export class PreferenceSelectionComponent implements OnInit {
         paramMap[key] = `${keyValues.join(',')}`;
       }
     }
-    console.log('Before amp', paramMap);
     return paramMap;
   }
 

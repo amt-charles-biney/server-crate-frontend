@@ -59,14 +59,12 @@ export class OTPComponent implements OnInit, OnDestroy {
   }
   verifyEmail() {
     if (this.otp.invalid) {
-      console.log('Invalid');
       return;
     }
     const email = this.signUpService.getEmail();
     const otp = this.otp.value ?? '';
     this.store.dispatch(setOtp({ otp }));
     const currentUrl = this.router.url;
-    console.log('Current url', currentUrl);
     // this.store.dispatch(
     //   setLoadingSpinner({ status: true, message: '', isError: false })
     // );
@@ -75,7 +73,6 @@ export class OTPComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(verifyingOtp({ otpCode: otp, email: email }));
     }
-    console.log('/email and code', email, otp);
   }
 
   resendOtp() {

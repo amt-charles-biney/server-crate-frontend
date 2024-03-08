@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {  ChangeContact, GeneralInfo, ShippingPayload, Success, Username } from '../../../types';
+import {  UserInfo, GeneralInfo, ShippingPayload, Success, Username } from '../../../types';
 import { environment } from '../../../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import { LOCALSTORAGE_USER } from '../../utils/constants';
@@ -17,7 +17,7 @@ export class ProfileService {
     return this.http.get<GeneralInfo>(`${this.baseUrl}/profile/basic-info`)
   }
 
-  updateGeneralInfo(form: ChangeContact) {
+  updateGeneralInfo(form: UserInfo) {
     return this.http.put<Success>(`${this.baseUrl}/profile/basic-info`, form)
   }
 

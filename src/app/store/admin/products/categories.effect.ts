@@ -44,13 +44,13 @@ import { Router } from '@angular/router';
 import { UserService } from '../../../core/services/user/user.service';
 import { errorHandler } from '../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class CategoryEffect {
   getCategory$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getCategories),
-      tap((x) => console.log('Fetch categories', x)),
       exhaustMap(() => {
         return this.adminService.getCategories().pipe(
           map((data: Select[]) => {
@@ -67,7 +67,6 @@ export class CategoryEffect {
           timeout(8000),
           catchError((err) => {
             throwError(() => 'Request timed out');
-            console.log('Error occured', err);
             this.store.dispatch(
               setLoadingSpinner({
                 status: false,
@@ -85,7 +84,6 @@ export class CategoryEffect {
   getUserCategories$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getUserCategories),
-      tap((x) => console.log('Fetch categories', x)),
       exhaustMap(() => {
         return this.userService.getCategories().pipe(
           map((data: Select[]) => {
@@ -102,12 +100,10 @@ export class CategoryEffect {
           timeout(8000),
           catchError((err) => {
             throwError(() => 'Request timed out');
-            console.log('Error occured', err);
             this.store.dispatch(
               setLoadingSpinner({
                 status: false,
-                message:
-                  err.error.detail || 'Cannot fetch categories from server',
+                message: errorHandler(err),
                 isError: true,
               })
             );
@@ -120,14 +116,12 @@ export class CategoryEffect {
   getBrands$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getBrands),
-      tap((x) => console.log('Fetch categories', x)),
       exhaustMap(() => {
         return this.adminService.getBrands().pipe(
           map((data: Select[]) => {
             return gotBrands({ brands: data });
           }),
           catchError((err) => {
-            console.log('Error occured', err);
             return of(categoryFailure());
           })
         );
@@ -137,7 +131,6 @@ export class CategoryEffect {
   getUserBrands$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getUserBrands),
-      tap((x) => console.log('Fetch categories', x)),
       exhaustMap(() => {
         return this.userService.getBrands().pipe(
           map((data: Select[]) => {
@@ -153,7 +146,6 @@ export class CategoryEffect {
           timeout(5000),
           catchError((err) => {
             throwError(() => 'Request timed out');
-            console.log('Error occured', err);
             return of(categoryFailure());
           })
         );
@@ -236,7 +228,6 @@ export class CategoryEffect {
             return gotProduct(data);
           }),
           catchError((error) => {
-            console.log('Doesnt exist');
             return of(
               setLoadingSpinner({
                 isError: true,
@@ -293,11 +284,7 @@ export class CategoryEffect {
         this.ngxService.startLoader('product');
         return this.adminService.addProduct(product).pipe(
           map(() => {
-            return setLoadingSpinner({
-              isError: false,
-              message: 'Added product successfully',
-              status: false,
-            });
+            this.toast.success('Added product successfully', 'Success')
           }),
           tap(() => {
             this.ngxService.stopLoader('product');
@@ -308,13 +295,8 @@ export class CategoryEffect {
             }, 500);
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: errorHandler(err),
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), 'Error')
+            return of();
           }),
           finalize(() => {
             this.ngxService.stopLoader('product');
@@ -322,7 +304,7 @@ export class CategoryEffect {
         );
       })
     );
-  });
+  }, { dispatch: false });
   updateProduct$ = createEffect(() => {
     return this.action$.pipe(
       ofType(updateProduct),
@@ -376,6 +358,7 @@ export class CategoryEffect {
     private userService: UserService,
     private store: Store,
     private router: Router,
-    private ngxService: NgxUiLoaderService
+    private ngxService: NgxUiLoaderService,
+    private toast: ToastrService
   ) {}
 }

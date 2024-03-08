@@ -1,38 +1,37 @@
-<ng-container *ngIf="cartItems | async as cartItems">
+@if (cartItem) {
   <div
     [ngClass]="{
-        'pt-6 pb-[13px] w-[421px] h-fit': page === 'cart',
-        'pt-[10px] pb-[51px] w-[410px] max-h-[448px]': page === 'checkout' 
+      'pt-6 pb-[13px] w-[421px] h-fit': page === 'cart',
+      'pt-[10px] pb-[51px] w-[410px] max-h-[448px]': page === 'checkout'
     }"
     class="flex flex-col gap-5 px-[15px] border-[2px] border-dashed rounded-2xl"
   >
     <h2 class="font-bold text-xl">{{ title }}</h2>
     <div class="flex flex-col gap-5 max-h-[420px] pr-2 overflow-auto myScroll">
-      <p
-        class="flex items-center justify-between"
-        *ngFor="let product of cartItems"
-      >
-        <span class="text-[13px]">{{ product.productName }}</span>
+      <p class="flex items-center justify-between">
+        <span class="text-[13px]">{{ cartItem.productName }} ({{ quantity }})</span>
         <span class="text-sm font-[500]">{{
-          product.totalPrice | currency
+          cartItem.totalPrice | currency
         }}</span>
       </p>
     </div>
-
+  
     <p class="flex justify-between items-end mt-[79px]">
-      <span class="text-[13px]">Subtotal({{ cartItems.length }})</span>
+      <span class="text-[13px]">Subtotal({{ quantity }})</span>
       <span class="text-sm font-[500]">{{ subTotal | currency }}</span>
     </p>
     <p class="text-[13px] text-[#737373]">(Incl. VAT)</p>
     @if (page === 'cart') {
     <button
-      routerLink="/checkout"
+      (click)="goToCheckout()"
       class="bg-figma-green hover:bg-green-500 w-full p-[9px] rounded-xl text-white font-[500px] text-[20px]"
     >
       Check Out
     </button>
     } @else {
-        <p class="text-figma-green underline text-xs font-inter">Have a discount code?</p>
+    <p class="text-figma-green underline text-xs font-inter">
+      Have a discount code?
+    </p>
     }
   </div>
-</ng-container>
+}

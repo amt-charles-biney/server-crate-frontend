@@ -10,7 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { passwordRegex } from '../../../core/utils/constants';
+import { LOCALSTORAGE_EMAIL, passwordRegex } from '../../../core/utils/constants';
 import { checkIfPasswordsMatch, formValidator } from '../../../core/utils/validators';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -72,7 +72,7 @@ export class ResetPasswordComponent implements OnInit{
 
   resetPassword() {
     if (this.resetPasswordForm.invalid) return ;
-    const email = localStorage.getItem('server-crate-email') ?? ''
+    const email = localStorage.getItem(LOCALSTORAGE_EMAIL) ?? ''
     const { password, confirmPwd } = this.resetPasswordForm.value
     const changePassword: ResetPassword = {
       email,

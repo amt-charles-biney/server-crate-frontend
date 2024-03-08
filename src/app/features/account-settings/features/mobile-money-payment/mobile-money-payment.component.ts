@@ -79,7 +79,6 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
   }
 
   addWallet() {
-    console.log('Valid number', this.intl.isValidNumber());
     if (!this.intl.isValidNumber()) {
       this.showWarning = 'Please enter a valid phone number';
       setTimeout(() => {
