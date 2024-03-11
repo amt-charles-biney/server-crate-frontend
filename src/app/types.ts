@@ -163,14 +163,14 @@ export type VerifiedUser = {
     inStock: number
   }
   export type ProductItem = {
-    imageUrl: string;
+    imageUrl: string[];
     coverImage: string;
     productName: string;
     productBrand: {
       name: string;
       price: number
     };
-    productPrice: string;
+    productPrice: number;
     inStock: number;
     sales: number;
     id: string;
@@ -181,8 +181,8 @@ export type VerifiedUser = {
       name: string;
     }
     isFeatured: boolean;
-    serviceCharge: string;
-    stockStatus: 'Low Stock' | 'Available' | 'No Stock';
+    serviceCharge: number;
+    stockStatus: string;
     totalLeastStock: Attribute[]
 }
 

@@ -17,10 +17,10 @@ describe('UserProductItemComponent', () => {
     component.product = {
       category: { id: '', name: ''},
       coverImage: 'ss',
-      serviceCharge: '',
+      serviceCharge: 0,
       stockStatus: 'Available',
       id: '',
-      imageUrl: '',
+      imageUrl: [],
       inStock: 0,
       isFeatured: false,
       productBrand: {
@@ -30,7 +30,7 @@ describe('UserProductItemComponent', () => {
       productDescription: '',
       productId: '',
       productName: '',
-      productPrice: '',
+      productPrice: 0,
       sales: 20,
       totalLeastStock: []
     };
