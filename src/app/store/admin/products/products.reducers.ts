@@ -8,14 +8,14 @@ export const productInitialState: { products: ProductItem[]; product: ProductIte
   product: {
     productName: '',
     productDescription: '',
-    productPrice: '',
+    productPrice: 0,
     productId: `${getUniqueId(2)}`,
     productBrand: {
       name: '',
       price: 0
     },
     id: '',
-    imageUrl: '',
+    imageUrl: [],
     coverImage: '',
     inStock: 0,
     sales: 0,
@@ -24,7 +24,7 @@ export const productInitialState: { products: ProductItem[]; product: ProductIte
       id: '',
     },
     isFeatured: false,
-    serviceCharge: '',
+    serviceCharge: 0,
     stockStatus: 'Available',
     totalLeastStock: []
   },

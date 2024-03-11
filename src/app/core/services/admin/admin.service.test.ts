@@ -75,7 +75,10 @@ export const PRODUCTS = {
                 "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708705140/xvvgae0dphxkco3fddat.png",
                 "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708705141/iykwqjrz89dl3ygukg2c.png"
             ],
-            "productBrand": "Racket Case",
+            "productBrand":  {
+                "name": "Racket Case",
+                "price": 200.00
+            },
             "coverImage": "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708705136/jnjgivo9z6mzezvmnvl1.jpg",
             "productId": "5789df1b",
             "category": {
@@ -83,11 +86,41 @@ export const PRODUCTS = {
                 "id": "dac610e1-cbfb-4e72-9586-dde681a97576"
             },
             "productDescription": "Assumenda voluptatem",
-            "serviceCharge": null,
+            "serviceCharge": 0,
             "isFeatured": false,
             "productAvailability": false,
             "inStock": 1,
-            "stockStatus": "Low Stock"
+            "stockStatus": "Low Stock",
+            "totalLeastStock": [],
+            "sales": 10
+        },
+        {
+            "id": "f66909b6-0dcd-4374-ba76-e854a47f475a",
+            "productName": "Product B",
+            "productPrice": 1044.00,
+            "imageUrl": [
+                "http://res.cloudinary.com/dah4l2inx/image/upload/v1708935531/inu4htkytcikgt4dgzd9.png",
+                "http://res.cloudinary.com/dah4l2inx/image/upload/v1708935532/mknxf4tgwtdyyz1dc2w0.png",
+                "http://res.cloudinary.com/dah4l2inx/image/upload/v1708935534/hknpinmzxv2izxhrdtmy.png"
+            ],
+            "productBrand":  {
+                "name": "Case A",
+                "price": 200.00
+            },
+            "coverImage": "http://res.cloudinary.com/dah4l2inx/image/upload/v1708935529/tkudhr1g1hokbbzwjkbk.jpg",
+            "productId": "180bb801",
+            "category": {
+                "name": "Category C",
+                "id": "af8fb903-3f57-49fa-b81b-1027011244a2"
+            },
+            "productDescription": "Product B",
+            "serviceCharge": 20.0,
+            "isFeatured": false,
+            "productAvailability": false,
+            "inStock": 6,
+            "stockStatus": "Available",
+            "totalLeastStock": [],
+            "sales": 10
         },
         {
             "id": "7a670b17-c9b7-4519-be8b-20a0bd69fc37",
@@ -98,7 +131,10 @@ export const PRODUCTS = {
                 "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708763883/el6anccrtii8hwnyopji.png",
                 "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708763886/fbe5us0mj1ppan1dqaxa.jpg"
             ],
-            "productBrand": "ASUS Case",
+            "productBrand":  {
+                "name": "Asus Case",
+                "price": 200.00
+            },
             "coverImage": "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708763878/jzk2xttgkddvzwsc7cmp.png",
             "productId": "f144fec7",
             "category": {
@@ -106,11 +142,13 @@ export const PRODUCTS = {
                 "id": "d251ac81-b108-4380-95fe-ae72137eff06"
             },
             "productDescription": "Product C",
-            "serviceCharge": null,
+            "serviceCharge": 0,
             "isFeatured": false,
             "productAvailability": false,
             "inStock": 3,
-            "stockStatus": "Low Stock"
+            "stockStatus": "Low Stock",
+            "totalLeastStock": [],
+            "sales": 10
         },
         {
             "id": "38bed736-745f-4da5-b8e5-d6ef5aa7968f",
@@ -121,7 +159,10 @@ export const PRODUCTS = {
                 "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708763883/el6anccrtii8hwnyopji.png",
                 "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708763886/fbe5us0mj1ppan1dqaxa.jpg"
             ],
-            "productBrand": "ASUS Case",
+            "productBrand":  {
+                "name": "Asus Case",
+                "price": 200.00
+            },
             "coverImage": "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708763878/jzk2xttgkddvzwsc7cmp.png",
             "productId": "52de17cd",
             "category": {
@@ -129,11 +170,13 @@ export const PRODUCTS = {
                 "id": "ab80f291-e4b2-4901-bcee-bc3fe64adfb9"
             },
             "productDescription": "Fiverr",
-            "serviceCharge": null,
+            "serviceCharge": 0,
             "isFeatured": false,
             "productAvailability": false,
             "inStock": 3,
-            "stockStatus": "Low Stock"
+            "stockStatus": "Low Stock",
+            "totalLeastStock": [],
+            "sales": 10
         },
         {
             "id": "99f45ea2-5873-4651-8a0b-34b50a184534",
@@ -144,7 +187,10 @@ export const PRODUCTS = {
                 "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708705140/xvvgae0dphxkco3fddat.png",
                 "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708705141/iykwqjrz89dl3ygukg2c.png"
             ],
-            "productBrand": "Racket Case",
+            "productBrand":  {
+                "name": "Racket Case",
+                "price": 200.00
+            },
             "coverImage": "http://res.cloudinary.com/dqtxt1g06/image/upload/v1708705136/jnjgivo9z6mzezvmnvl1.jpg",
             "productId": "fbdd90b5",
             "category": {
@@ -152,12 +198,14 @@ export const PRODUCTS = {
                 "id": "74bef6bc-d0b3-4ba5-821d-b7be8f244bd0"
             },
             "productDescription": "Something about Product A",
-            "serviceCharge": null,
+            "serviceCharge": 0,
             "isFeatured": false,
             "productAvailability": false,
             "inStock": 23,
-            "stockStatus": "Available"
+            "stockStatus": "Available",
+            "totalLeastStock": [],
+            "sales": 10
         }
     ],
-    "total": 4
+    "total": 5
 }

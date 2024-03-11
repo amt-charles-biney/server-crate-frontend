@@ -21,9 +21,9 @@ describe('ProductItemComponent', () => {
       category: { id: '', name: ''},
       coverImage: 'ss',
       id: '',
-      serviceCharge: '',
+      serviceCharge: 0,
       stockStatus: 'Available',
-      imageUrl: '',
+      imageUrl: [],
       inStock: 0,
       isFeatured: false,
       productBrand: {
@@ -33,7 +33,7 @@ describe('ProductItemComponent', () => {
       productDescription: '',
       productId: '',
       productName: '',
-      productPrice: '',
+      productPrice: 0,
       sales: 20,
       totalLeastStock: []
     };

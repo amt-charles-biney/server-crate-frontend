@@ -21,7 +21,7 @@ import { filter } from '../../store/users/users.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { CompareDialogComponent } from '../../shared/components/compare-dialog/compare-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { selectBrands } from '../../store/admin/products/categories.reducers';
+import { selectBrands, selectCategories, selectCases } from '../../store/admin/products/categories.reducers';
 
 @Component({
   selector: 'app-preference-selection',
@@ -52,6 +52,8 @@ export class PreferenceSelectionComponent implements OnInit {
   total!: Observable<number>;
   page: number = 0;
   brands$!: Observable<Select[]>;
+  categories$!: Observable<Select[]>
+  cases$!: Observable<Select[]>
   search: string = '';
   isGridMode: boolean = true;
   initialParams: Record<string, string> = { 'page': '0', 'size': '9' }
@@ -74,6 +76,8 @@ export class PreferenceSelectionComponent implements OnInit {
       this.store.dispatch(filter({ page: 0, params: {...this.initialParams, query: this.search } }))
     }
     this.brands$ = this.store.select(selectBrands)
+    this.categories$ = this.store.select(selectCategories)
+    this.cases$ = this.store.select(selectCases).pipe(tap((cases) => console.log(cases)))
   }
   getPage(pageNumber: number, search: string) {
     this.page = pageNumber;
@@ -95,6 +99,8 @@ export class PreferenceSelectionComponent implements OnInit {
       processor: new Set(),
       price: new Set(),
       brand: new Set(),
+      categories: new Set(),
+      productCase: new Set(),
       mounting: new Set(),
       query: new Set(),
     };
@@ -103,6 +109,8 @@ export class PreferenceSelectionComponent implements OnInit {
       processor: new FormControl(''),
       price: new FormControl(''),
       brand: new FormControl(''),
+      categories: new FormControl(''),
+      productCase: new FormControl(''),
       mounting: new FormControl(''),
     });
   }
@@ -117,6 +125,8 @@ export class PreferenceSelectionComponent implements OnInit {
       queryParams: params,
       replaceUrl: true,
     });
+    console.log('FilterForm', this.filterForm.value);
+
   }
 
   compareEvent() {
@@ -146,6 +156,8 @@ export class PreferenceSelectionComponent implements OnInit {
       'processor',
       'price',
       'brand',
+      'categories',
+      'productCase',
       'mounting',
       'query',
     ];

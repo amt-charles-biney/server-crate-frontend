@@ -14,98 +14,6 @@
       <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
-            <mat-panel-title>
-              <p class="text-[16px]">Product Type</p>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <ul class="flex flex-col gap-2">
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="productType"
-                name="productType"
-                label="Network"
-                value="Network"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="productType"
-                name="productType"
-                label="GPU"
-                value="GPU"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="productType"
-                name="productType"
-                label="Storage"
-                value="Storage"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="productType"
-                name="productType"
-                label="Console"
-                value="Console"
-              />
-            </li>
-          </ul>
-        </mat-expansion-panel>
-      </mat-accordion>
-      <mat-accordion class="border-b">
-        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="text-[16px]"> Processor </mat-panel-title>
-          </mat-expansion-panel-header>
-          <ul class="flex flex-col gap-2">
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="processor"
-                name="processor"
-                label="Intel Xeon Silver"
-                value="Intel Xeon Silver"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="processor"
-                name="processor"
-                label="AMD Frieren"
-                value="AMD Frieren"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="processor"
-                name="processor"
-                label="Ryzen Allergy 32"
-                value="Ryzen Allergy 32"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="processor"
-                name="processor"
-                label="Intel Core"
-                value="Intel Core"
-              />
-            </li>
-          </ul>
-        </mat-expansion-panel>
-      </mat-accordion>
-      <mat-accordion class="border-b">
-        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
-          <mat-expansion-panel-header>
             <mat-panel-title class="text-[16px]">
               Shop By Price
             </mat-panel-title>
@@ -163,6 +71,42 @@
                 name="brand"
                 [value]="brand.name"
                 [label]="brand.name"
+              />
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion class="border-b">
+        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="text-[16px]"> Categories </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul class="flex flex-col gap-2" *ngIf="categories$ | async as categories">
+            <li *ngFor="let category of categories">
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="categories"
+                name="categories"
+                [value]="category.name"
+                [label]="category.name"
+              />
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion class="border-b">
+        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="text-[16px]"> Cases </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul class="flex flex-col gap-2" *ngIf="cases$ | async as cases">
+            <li *ngFor="let case of cases">
+              <app-custom-check-box
+                (changeHandler)="itemSelected($event)"
+                formControlName="productCase"
+                name="productCase"
+                [value]="case.name"
+                [label]="case.name"
               />
             </li>
           </ul>

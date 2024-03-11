@@ -159,8 +159,8 @@ fdescribe('AdminService', () => {
 
   it('should get all products', () => {
     service.getProducts(0).subscribe(({ products, total }) => {
-      expect(products.length).toBe(4);
-      expect(total).toBe(4);
+      expect(products.length).toBe(PRODUCTS.products.length);
+      expect(total).toBe(PRODUCTS.total);
     });
 
     const req = httpTestingController.expectOne(
