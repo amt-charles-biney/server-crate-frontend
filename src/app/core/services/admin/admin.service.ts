@@ -17,6 +17,7 @@ import {
   ProductPayload,
   BasicConfig,
   ProductResponse,
+  AllOrders,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -150,6 +151,20 @@ export class AdminService {
 
   deleteCase(id: string) {
     return this.http.delete(`${this.baseUrl}/admin/cases/${id}`)
+  }
+
+  getAdminOrders(params?: Record<string, string>) {
+    return this.http.get<AllOrders>(`${this.baseUrl}/admin/orders`, { params })
+  }
+
+  deleteAdminOrder(id: string) {
+    return this.http.delete(`${this.baseUrl}/admin/orders/${id}`)
+  }
+  
+  deleteAllAdminOrders(deleteList: string[]) {
+    return this.http.delete(`${this.baseUrl}/admin/orders/all`, {
+      body: deleteList
+    })
   }
 
 }

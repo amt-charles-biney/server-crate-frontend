@@ -1,0 +1,33 @@
+<div class="flex items-center text-sidebar-text text-sm border-b h-[44px] font-[400]">
+
+    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[5%] ml-3">
+    
+        <app-custom-check-box
+        (changeHandler)="itemSelected($event, order.orderId)"
+        [formControl]="control"
+        [name]="order.productName"
+        [value]="order.orderId"
+      />
+    </th>
+    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start">
+        <div class="flex items-center gap-3">
+            <div class="w-[33px] h-5">
+                <img [ngSrc]="order.productCoverImage | cloudinaryUrl" height="20" width="33" class="max-w-full max-h-full object-contain" alt="product image">
+            </div>
+            <p>{{order.productName}}</p>
+        </div>
+    </th>
+    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.orderId}}</th>
+    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.customerName}}</th>
+    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.paymentMethod}}</th>
+    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">
+        <app-shipping-status [status]="order.status"/>
+    </th>
+    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.date | date}}</th>
+    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.totalPrice | currency }}</th>
+    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[8%] text-start">
+        <button class="flex justify-center w-fit mx-auto">
+            <img src="/assets/ellipses.svg" alt="ellipses" />
+          </button>
+    </th>
+</div>

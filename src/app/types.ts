@@ -6,16 +6,16 @@ export type LoadingStatus = {
 export type Select = {
   id: string;
   name: string;
-  description?: string,
-  thumbnail?: string
+  description?: string;
+  thumbnail?: string;
 };
 
-export type defaultSelect =  {
-  id: string,
-  name: string,
-  description?: string,
-  img?: string
-} 
+export type defaultSelect = {
+  id: string;
+  name: string;
+  description?: string;
+  img?: string;
+};
 
 export type OnChange<T> = (value: T) => void;
 export type OnTouch = () => void;
@@ -30,161 +30,164 @@ export type UserSignUp = {
   password: string;
 };
 export type VerifiedUser = {
-    token: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    role: string;
-  };
-  export type SignIn = {
-    email: string;
-    password: string;
-  };
-  export type Username = { firstName: string; lastName: string };
-  export type Success = {
-    message: string;
-  };
-  export type Failure = {
-    errorMessage: string;
-  };
-  export type VerificationFailure = {
-    errorMessage: string;
-  };
-  export type Verifying = {
-    isLoading: boolean;
-    message: string;
-    isError: boolean;
-  };
-  export type Verify = {
-    email: string;
-    code: string;
-  };
-  export type ResendOtp = {
-    email: string;
-    otpType: string;
-  };
-  export type OtpResend = {
-    email: string;
-    type: string;
-  };
-  export type SetOtp = {
-    otp: string;
-  };
-  export type ResetPassword = {
-    email: string;
-    otpCode: string;
-    newPassword: string;
-    confirmNewPassword: string;
-  };
-  export type VerifyOtp = {
-    email: string;
-    otpCode: string;
-  };
-  export type ResetLink = {
-    email: string;
-  };
-  export type Contact = {
-    phoneNumber: string;
-    country: string;
-    iso2Code: string;
-    dialCode: string;
-  };
-  export type GeneralInfo = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    contact: Contact;
-    role: string;
-  };
-  export type UserInfo = {
-    firstName: string;
-    lastName: string;
-    contact: Contact | null;
-  };
-  export type TokenPayload = {
-    role: string;
-    sub: string;
-    iat: number;
-    exp: number;
-  };
-  export type Link = {
-    label: string;
-    link: string;
-    index: number;
-  };
-  export type ChangePassword = {
-    currentPassword: string;
-    newPassword: string;
-    confirmNewPassword: string;
-  };
-  export type AttributeOption = {
-    id: string;
-    optionName: string;
-    additionalInfo: AdditionalInfo;
-    optionPrice: number;
-    optionMedia: string;
-    attribute: {
-      name: string;
-      id: string;
-      isMeasured: boolean,
-      unit: string
-    },
-    compatibleOptionId?: string,
-    brand: string;
-    inStock: number;
-    incompatibleAttributeOptions: AttributeOption[]
-  }
-
-  export type IncompatibleAttributeOptions = Omit<Omit<AttributeOption, 'inStock'>, 'incompatibleAttributes'>
-  export type AdditionalInfo = {
-    baseAmount: number;
-    maxAmount: number;
-    priceFactor: number;
-  }
-  export type CategoryEditResponse = {
-    compatibleOptionId: string;
+  token: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+};
+export type SignIn = {
+  email: string;
+  password: string;
+};
+export type Username = { firstName: string; lastName: string };
+export type Success = {
+  message: string;
+};
+export type Failure = {
+  errorMessage: string;
+};
+export type VerificationFailure = {
+  errorMessage: string;
+};
+export type Verifying = {
+  isLoading: boolean;
+  message: string;
+  isError: boolean;
+};
+export type Verify = {
+  email: string;
+  code: string;
+};
+export type ResendOtp = {
+  email: string;
+  otpType: string;
+};
+export type OtpResend = {
+  email: string;
+  type: string;
+};
+export type SetOtp = {
+  otp: string;
+};
+export type ResetPassword = {
+  email: string;
+  otpCode: string;
+  newPassword: string;
+  confirmNewPassword: string;
+};
+export type VerifyOtp = {
+  email: string;
+  otpCode: string;
+};
+export type ResetLink = {
+  email: string;
+};
+export type Contact = {
+  phoneNumber: string;
+  country: string;
+  iso2Code: string;
+  dialCode: string;
+};
+export type GeneralInfo = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  contact: Contact;
+  role: string;
+};
+export type UserInfo = {
+  firstName: string;
+  lastName: string;
+  contact: Contact | null;
+};
+export type TokenPayload = {
+  role: string;
+  sub: string;
+  iat: number;
+  exp: number;
+};
+export type Link = {
+  label: string;
+  link: string;
+  index: number;
+};
+export type ChangePassword = {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+};
+export type AttributeOption = {
+  id: string;
+  optionName: string;
+  additionalInfo: AdditionalInfo;
+  optionPrice: number;
+  optionMedia: string;
+  attribute: {
     name: string;
-    type: string;
-    price: number;
-    media: string;
-    unit: string;
-    isCompatible: boolean;
-    isIncluded: boolean;
-    isMeasured: boolean;
-    priceFactor: number;
-    size: number;
-    attributeId: string;
-    attributeOptionId: string;
-    priceIncrement: number;
-    baseAmount: number;
-    maxAmount: number,
-    brand: string,
-    incompatibleAttributeOptions: AttributeOption[],
-    inStock: number
-  }
-  export type ProductItem = {
-    imageUrl: string[];
-    coverImage: string;
-    productName: string;
-    productBrand: {
-      name: string;
-      price: number
-    };
-    productPrice: number;
-    inStock: number;
-    sales: number;
     id: string;
-    productId: string;
-    productDescription: string;
-    category: {
-      id: string;
-      name: string;
-    }
-    isFeatured: boolean;
-    serviceCharge: number;
-    stockStatus: string;
-    totalLeastStock: Attribute[]
-}
+    isMeasured: boolean;
+    unit: string;
+  };
+  compatibleOptionId?: string;
+  brand: string;
+  inStock: number;
+  incompatibleAttributeOptions: AttributeOption[];
+};
+
+export type IncompatibleAttributeOptions = Omit<
+  Omit<AttributeOption, 'inStock'>,
+  'incompatibleAttributes'
+>;
+export type AdditionalInfo = {
+  baseAmount: number;
+  maxAmount: number;
+  priceFactor: number;
+};
+export type CategoryEditResponse = {
+  compatibleOptionId: string;
+  name: string;
+  type: string;
+  price: number;
+  media: string;
+  unit: string;
+  isCompatible: boolean;
+  isIncluded: boolean;
+  isMeasured: boolean;
+  priceFactor: number;
+  size: number;
+  attributeId: string;
+  attributeOptionId: string;
+  priceIncrement: number;
+  baseAmount: number;
+  maxAmount: number;
+  brand: string;
+  incompatibleAttributeOptions: AttributeOption[];
+  inStock: number;
+};
+export type ProductItem = {
+  imageUrl: string[];
+  coverImage: string;
+  productName: string;
+  productBrand: {
+    name: string;
+    price: number;
+  };
+  productPrice: number;
+  inStock: number;
+  sales: number;
+  id: string;
+  productId: string;
+  productDescription: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  isFeatured: boolean;
+  serviceCharge: number;
+  stockStatus: string;
+  totalLeastStock: Attribute[];
+};
 
 export type ProductResponse = {
   id: string;
@@ -196,101 +199,99 @@ export type ProductResponse = {
   productCase: string;
   productCategory: string;
   productId: string;
-  imageUrl: string[],
+  imageUrl: string[];
   coverImage: string;
-  inStock: number
-}
+  inStock: number;
+};
 export type Case = {
-  id: string,
-  name: string,
+  id: string;
+  name: string;
   description: string;
-  coverImageUrl: string,
-  imageUrls: string[],
-  price: number,
-  incompatibleVariants: AttributeOption[]
-}
+  coverImageUrl: string;
+  imageUrls: string[];
+  price: number;
+  incompatibleVariants: AttributeOption[];
+};
 export type CaseResponse = {
-  totalElements: number,
-  content: Case[]
-}
-  export type AllProducts = {
-    total: number;
-    products: ProductItem[];
-  };
-  
-  export type UploadResponse = {
-    url: string;
-  };
-  export type BulkAttribute = {
-    attributeName: string;
-    isMeasured: boolean;
-    description: string;
-    variantOptions: StoreVariant[];
-  };
-  
-  export type UpdateAttribute = {
-    id: string;
-    attributeName: string;
-    isMeasured: boolean;
-    description: string;
-    variantOptions: StoreVariant[];
-  }
-  export type StoreVariant = {
-    name: string;
-    price: string;
-    media: string;
-    baseAmount: string;
-    maxAmount: string;
-    priceFactor: string;
-    id: string;
-    brand: string;
-    inStock: string;
-    incompatibleAttributeOptions: AttributeOption[]
-  };
-  export type GetAttribute = {
-    data: Attribute[];
-    message: string;
-    status: string;
-  }
-  export type Attribute = {
-    id: string;
-    attributeName: string;
-    isMeasured: boolean;
-    unit: string;
-    description: string;
-    attributeOptions: AttributeOption[],
-    isRequired: boolean
+  totalElements: number;
+  content: Case[];
+};
+export type AllProducts = {
+  total: number;
+  products: ProductItem[];
+};
 
-  }
-  export type ConfigurationEdit = {
-    name: string;
-    config: CategoryConfig[],
-    id: string
-  }
+export type UploadResponse = {
+  url: string;
+};
+export type BulkAttribute = {
+  attributeName: string;
+  isMeasured: boolean;
+  description: string;
+  variantOptions: StoreVariant[];
+};
 
-  export type Configuration = {
-    name: string;
-    thumbnail: string;
-    config: CategoryConfig[]
-  }
-  
-  export type CategoryAndConfig = {
-    name: string;
-    id: string;
-    config: Config;
-    productCount: number
-  }
+export type UpdateAttribute = {
+  id: string;
+  attributeName: string;
+  isMeasured: boolean;
+  description: string;
+  variantOptions: StoreVariant[];
+};
+export type StoreVariant = {
+  name: string;
+  price: string;
+  media: string;
+  baseAmount: string;
+  maxAmount: string;
+  priceFactor: string;
+  id: string;
+  brand: string;
+  inStock: string;
+  incompatibleAttributeOptions: AttributeOption[];
+};
+export type GetAttribute = {
+  data: Attribute[];
+  message: string;
+  status: string;
+};
+export type Attribute = {
+  id: string;
+  attributeName: string;
+  isMeasured: boolean;
+  unit: string;
+  description: string;
+  attributeOptions: AttributeOption[];
+  isRequired: boolean;
+};
+export type ConfigurationEdit = {
+  name: string;
+  config: CategoryConfig[];
+  id: string;
+};
 
-  export type Config = {
-    [key: string]: ConfigOptions[]
-  }
+export type Configuration = {
+  name: string;
+  thumbnail: string;
+  config: CategoryConfig[];
+};
 
-  export type ConfigOptions = {
-    name: string;
-    isIncluded: boolean;
-  }
+export type CategoryAndConfig = {
+  name: string;
+  id: string;
+  config: Config;
+  productCount: number;
+};
 
-  
+export type Config = {
+  [key: string]: ConfigOptions[];
+};
+
+export type ConfigOptions = {
+  name: string;
+  isIncluded: boolean;
+};
+
 export type CategoryConfig = {
   attributeId: string;
   attributeOptionId: string;
@@ -298,15 +299,15 @@ export type CategoryConfig = {
   isMeasured: boolean;
   isCompatible: boolean;
   size: number;
-  attributeName: string
-}
+  attributeName: string;
+};
 
 export type EditConfigResponse = {
   name: string;
   thumbnail: string;
   id: string;
-  config: CategoryEditResponse[]
-}
+  config: CategoryEditResponse[];
+};
 export type Item = {
   id: string;
 };
@@ -327,17 +328,17 @@ export type BasicConfig = {
   options: Option;
   id: string;
   category: Select;
-  inStock: number
+  inStock: number;
 };
 export type CategoryPayload = {
   name: string;
   thumbnail: string;
-  config: CategoryConfig[]
-}
+  config: CategoryConfig[];
+};
 export type CartResponse = {
-  configuredProducts: CartProductItem[],
+  configuredProducts: CartProductItem[];
   count: number;
-}
+};
 export type CartProductItem = {
   id: string;
   totalPrice: number;
@@ -349,8 +350,8 @@ export type CartProductItem = {
   configuredPrice: number;
   configured: Array<ConfiguredProduct>;
   stock: number;
-  quantity: number
-}
+  quantity: number;
+};
 export type ConfiguredProduct = {
   id: string;
   optionId: string;
@@ -361,10 +362,10 @@ export type ConfiguredProduct = {
   baseAmount: number;
   size: string;
   included: boolean;
-}
+};
 export interface IParamConfigOptions {
-  warranty: boolean,
-  components: string,
+  warranty: boolean;
+  components: string;
 }
 export interface IConfiguredProduct {
   id: string | null;
@@ -375,7 +376,7 @@ export interface IConfiguredProduct {
   configuredPrice: number;
   configured: IConfiguredOption[];
   warranty: boolean;
-  vat: number
+  vat: number;
 }
 // new and improved configurations
 export interface IConfiguredOption {
@@ -384,10 +385,10 @@ export interface IConfiguredOption {
   optionName: string;
   optionType: string;
   optionPrice: number;
-  isMeasured: boolean,
-  baseAmount: 1.00,
-  size: string,
-  included: true
+  isMeasured: boolean;
+  baseAmount: 1.0;
+  size: string;
+  included: true;
 }
 export interface ICompatibleOption {
   name: string;
@@ -403,7 +404,7 @@ export interface ICompatibleOption {
   priceIncrement: number;
   attributeId: string;
   attributeOptionId: string;
-  compatibleOptionId: string
+  compatibleOptionId: string;
 }
 export interface ICategoryConfig {
   id: string;
@@ -418,15 +419,15 @@ export interface ICategoryOption {
 }
 
 export interface IConfigureSelectProps {
-  type: string
-  id: string
-  size: string | number
+  type: string;
+  id: string;
+  size: string | number;
 }
 export interface IdefaultSelectedProps {
-  price: number
-  id: string
-  size: string
-  isIncluded: boolean
+  price: number;
+  id: string;
+  size: string;
+  isIncluded: boolean;
 }
 
 export type ProductPayload = {
@@ -437,16 +438,16 @@ export type ProductPayload = {
   category: string;
   productCaseId: string;
   inStock: string;
-}
+};
 
 // pageable
 interface Pageable {
   pageNumber: number;
   pageSize: number;
   sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
   };
   offset: number;
   paged: boolean;
@@ -482,8 +483,8 @@ export type PaymentForm = {
   contact?: Contact;
   amount?: number;
   reference?: string;
-  creditCardReference?: string //For testing
-}
+  creditCardReference?: string; //For testing
+};
 
 export type PaymentRequest = {
   email: string;
@@ -491,21 +492,25 @@ export type PaymentRequest = {
   reference: string;
   channels: string[];
   currency: string;
-}
+};
 
 export type PaymentResponse = {
   message: string;
   status: boolean;
-  data: PaymentData
-}
+  data: PaymentData;
+};
 
 export type PaymentData = {
   authorization_url: string;
   access_code: string;
   reference: string;
-}
+};
 
-export type PaymentVerification = { status: number, message: string, isVerified: boolean}
+export type PaymentVerification = {
+  status: number;
+  message: string;
+  isVerified: boolean;
+};
 
 export type ShippingPayload = {
   firstName: string;
@@ -518,9 +523,51 @@ export type ShippingPayload = {
   zipCode: string;
   contact: Contact | null;
   email: string;
-}
+};
 
 export type CartQuantity = {
   configuredProductId: string;
+  quantity: number;
+};
+
+export enum ShippingStatus {
+  Delivered = 'Delivered',
+  Pending = 'Pending',
+  Canceled = 'Canceled',
+  Shipped = 'Shipped',
+  All = 'All',
+}
+
+export type AllOrders = {
+  totalPages: number
+  totalElements: number
+  size: number
+  content: Content[]
+}
+
+export type Content = {
+  productCoverImage: string
+  productName: string
+  configuredProduct: ConfiguredProducts
+  orderId: string
+  customerName: string
+  paymentMethod: string
+  status: string
+  date: string
+  totalPrice: number
+}
+
+export type ConfiguredProducts = {
+  id: string
+  configuredOptions: ConfiguredProduct[]
+  totalPrice: number
   quantity: number
+}
+
+export type StatusColors = {
+  [key: string]: {
+    color: string,
+    background: string,
+    circle: string
+  }
 }

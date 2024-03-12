@@ -125,8 +125,6 @@ export class PreferenceSelectionComponent implements OnInit {
       queryParams: params,
       replaceUrl: true,
     });
-    console.log('FilterForm', this.filterForm.value);
-
   }
 
   compareEvent() {
