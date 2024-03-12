@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Attribute, CategoryAndConfig, CategoryEditResponse } from '../../../types';
+import { Attribute, CategoryAndConfig, CategoryEditResponse, Content } from '../../../types';
 
 @Injectable({
   providedIn: 'root',
@@ -39,12 +39,15 @@ export class AttributeInputService {
     group['variants'] = new FormControl('');
     return new FormGroup(group);
   }
-  toSelectFormGroup(attributes: Attribute[] | CategoryAndConfig[]) {
+  toSelectFormGroup(attributes: Attribute[] | CategoryAndConfig[] | Content[]) {
     const group: any = {};
     attributes.forEach((attribute) => {
       if ('attributeName' in attribute) {
         group[attribute.attributeName] = new FormControl(null);
-      } else {
+      } else if( 'orderId' in attribute) {
+        group[attribute.orderId] = new FormControl(null)
+      }
+      else {
         group[attribute.name] = new FormControl(null);
       }
     });

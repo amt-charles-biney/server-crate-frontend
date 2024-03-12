@@ -23,7 +23,9 @@ module.exports = {
         'yellow-color': '#F2BF08',
         'sidebar-text': '#1D2939',
         'active-link': '#F7FCF7',
-        'profile-text': '#344054'
+        'profile-text': '#344054',
+        'red-status': '#CB000E',
+        'green-status': '#037847'
       },
       gridTemplateRows: {
         '20': 'repeat(20, minmax(0, 1fr))',

@@ -25,6 +25,8 @@ import { CaseEffect } from '../../store/case/case.effects';
 import { caseFeature } from '../../store/case/case.reducers';
 import { authGuard } from '../../core/guards/auth.guard';
 import { AddCaseComponent } from './features/case-management/features/add-case/add-case.component';
+import { OrderEffects } from '../../store/orders/order.effects';
+import { orderFeature } from '../../store/orders/order.reducers';
 
 
 export const route: Routes = [
@@ -126,7 +128,11 @@ export const route: Routes = [
       },
       {
         path: 'orders',
-        component: OrdersComponent
+        component: OrdersComponent,
+        providers: [
+          provideEffects(OrderEffects),
+          provideState(orderFeature)
+        ]
       },
       {
         path: 'transactions',
