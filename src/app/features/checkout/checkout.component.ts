@@ -99,7 +99,7 @@ export class CheckoutComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.store.dispatch(getShippingDetails())
-    this.cartItems = this.store.select(selectConfiguredProducts);
+    this.cartItems = this.store.select(selectConfiguredProducts)
 
     this.activatedRoute.queryParams.subscribe((params) => {
       const reference = params['reference'];

@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CartResponse, IParamConfigOptions, ProductItem } from '../../../types';
+import { CartQuantity, CartResponse, IParamConfigOptions, ProductItem } from '../../../types';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -47,5 +47,9 @@ export class ProductService {
 
   deleteCartItem(id: string) {
     return this.http.delete(`${this.base_url}/carts/delete-item/${id}`)
+  }
+
+  changeQuantity(props: CartQuantity) {
+    return this.http.post(`${this.base_url}/carts/update-quantity`, props)
   }
 }

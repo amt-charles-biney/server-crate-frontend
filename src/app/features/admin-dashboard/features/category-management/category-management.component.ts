@@ -33,7 +33,7 @@ import { DeleteModalComponent } from '../../../../shared/components/delete-modal
 export class CategoryManagementComponent implements OnInit, AfterViewInit {
   selectForm!: FormGroup;
   @ViewChild(CustomCheckBoxComponent) check!: CustomCheckBoxComponent;
-  categoriesAndConfig$ = new BehaviorSubject<CategoryAndConfig[]>([]);
+  private categoriesAndConfig$ = new BehaviorSubject<CategoryAndConfig[]>([]);
   categoriesAndConfig = this.categoriesAndConfig$.asObservable();
   categoriesTodelete: Set<string> = new Set();
   localAttributes!: CategoryAndConfig[];

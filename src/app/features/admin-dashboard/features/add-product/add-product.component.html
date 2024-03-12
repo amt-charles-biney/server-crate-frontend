@@ -1,9 +1,9 @@
 <ng-container *ngIf="loadingState$ | async as loadingState">
   <ng-container *ngIf="!loadingState.isError">
-    <app-loader loaderId="product" size="none"/>
+    <app-loader loaderId="product" size="none" />
   </ng-container>
   <ng-container *ngIf="loadingState.message">
-    <app-error [message]="loadingState.message" [visible]="true"/>
+    <app-error [message]="loadingState.message" [visible]="true" />
   </ng-container>
 </ng-container>
 <main class="flex flex-col min-h-screen">
@@ -128,7 +128,9 @@
         <div class="py-3">
           <p class="font-dm-sans text-sm">Base Configuration</p>
 
-          <div class="relative overflow-auto overflow-y-hidden rounded-lg mt-2 bg-[#fbfbfb]">
+          <div
+            class="relative overflow-auto overflow-y-hidden rounded-lg mt-2 bg-[#fbfbfb]"
+          >
             <app-loader loaderId="getConfig" />
             <ul
               class="grid grid-rows-3 grid-flow-col gap-5 px-10 pt-[9px] list-disc"
@@ -140,7 +142,11 @@
                     *ngFor="let option of options.options | keyvalue"
                   >
                     <p>{{ option.key }}</p>
-                    <p class="text-gray-400">{{ option.value[0].name }}</p>
+                    <p class="text-gray-400" *ngFor="let opt of option.value; let i = index">
+                      @if (opt.isIncluded) {
+                        <span>{{opt.name}}</span>
+                      }
+                    </p>
                   </li>
                 </ng-container>
               </ng-container>

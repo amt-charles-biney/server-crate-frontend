@@ -33,6 +33,7 @@ import { Store } from '@ngrx/store';
 import { errorHandler } from '../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
+import { getProducts } from '../../admin/products/categories.actions';
 
 @Injectable()
 export class AttributeEffect {
@@ -43,7 +44,7 @@ export class AttributeEffect {
         this.ngxService.startLoader('attributes')
         return this.adminService.uploadImage(props.form).pipe(
           map(({ url }) => {
-            this.toast.success('Image upload successfully', 'Success')
+            this.toast.success('Image uploaded successfully', 'Success')
             return gotImage({ url, id: props.id });
           }),
           catchError((err) => {
@@ -170,37 +171,13 @@ export class AttributeEffect {
       exhaustMap((props) => {
         return this.adminService.updateAttribute(props).pipe(
           map(() => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                isError: false,
-                message: 'Updated attribute successfully',
-                status: false,
-              })
-            );
-            setTimeout(() => {
-              this.store.dispatch(
-                resetLoader({ isError: false, message: '', status: false })
-              );
-            }, 1500);
+            this.toast.success('Updated attribute successfully', 'Success', { timeOut: 1500 })
+            this.store.dispatch(getProducts({ page: 0 }))
             return getAttributes();
           }),
           catchError((err) => {
-            setTimeout(() => {
-              this.store.dispatch(
-                resetLoader({
-                  isError: true,
-                  message: '',
-                  status: false,
-                })
-              );
-            }, 1500);
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: errorHandler(err),
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), 'Error')
+            return of();
           })
         );
       })

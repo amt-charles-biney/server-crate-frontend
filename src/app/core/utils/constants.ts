@@ -1,4 +1,5 @@
 import { HttpContextToken } from "@angular/common/http";
+import { StatusColors } from "../../types";
 
 export const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/
 export const UPLOAD_PRESET = 'n6gwltfs'
@@ -12,3 +13,27 @@ export const OTP_EXPIRATION = 'server-crate-otp-expiration'
 export const COOKIE_ACCEPTANCE = 'server-crate-cookie-acceptance'
 export const LOCALSTORAGE_USER = 'server-crate-user'
 export const LOCALSTORAGE_TOKEN = 'server-crate-token'
+export const LOCALSTORAGE_EMAIL = 'server-crate-email'
+
+export const COLOR_MAPPING: StatusColors = {
+    'Canceled': {
+        color: 'text-red-status',
+        background: 'bg-[#FCE6E799]',
+        circle: 'bg-red-status'
+    },
+    'Delivered': {
+        color: 'text-green-status',
+        background: 'bg-[#ECFDF399]',
+        circle: 'bg-green-status'
+    },
+    'Pending': {
+        color: 'text-[#FF8901]',
+        background: 'bg-[#FFF3E499]',
+        circle: 'bg-[#FF8901]'
+    },
+    'Shipped': {
+        color: 'text-[#364254]',
+        background: 'bg-[#F2F4F799]',
+        circle: 'bg-[#364254]'
+    },
+}

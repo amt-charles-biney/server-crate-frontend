@@ -26,10 +26,10 @@ fdescribe('ProductService', () => {
     const product: ProductItem = {
       id: String(productId),
       productName: 'product 1',
-      imageUrl: 'www/image/com',
+      imageUrl: ['www/image/com'],
       inStock: 0,
       isFeatured: false,
-      serviceCharge: '',
+      serviceCharge: 0,
       stockStatus: 'Available',
       productBrand: {
         name: 'NVIDEA',
@@ -37,7 +37,7 @@ fdescribe('ProductService', () => {
       },
       productDescription: 'product description',
       productId: '1234',
-      productPrice: '234',
+      productPrice: 234,
       coverImage: '',
       sales: 0,
       category: {

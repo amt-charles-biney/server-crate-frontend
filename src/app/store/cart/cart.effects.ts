@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, exhaustMap, finalize, map, of } from "rxjs";
-import { deleteCartItem, getCartItems, gotCartItems } from "./cart.actions";
+import { catchError, exhaustMap, finalize, map, of, switchMap } from "rxjs";
+import { decreaseQuantity, deleteCartItem, getCartItems, gotCartItems, increaseQuantity } from "./cart.actions";
 import { ProductService } from "../../core/services/product/product.service";
 import { setLoadingSpinner } from "../loader/actions/loader.actions";
 import { errorHandler, resetLoaderFn } from "../../core/utils/helpers";
+import { CartQuantity } from "../../types";
 
 @Injectable()
 export class CartEffects {
@@ -43,6 +44,27 @@ export class CartEffects {
             })
         )
     })
+
+    increaseQuantity$ = createEffect(() => {
+        return this.action$.pipe(
+            ofType(increaseQuantity),
+            switchMap((props: CartQuantity) => {
+                return this.productService.changeQuantity(props).pipe(
+
+                )
+            })
+        )
+    }, { dispatch: false })
+    decreaseQuantity$ = createEffect(() => {
+        return this.action$.pipe(
+            ofType(decreaseQuantity),
+            switchMap((props: CartQuantity) => {
+                return this.productService.changeQuantity(props).pipe(
+
+                )
+            })
+        )
+    }, { dispatch: false })
 
     constructor(private action$: Actions, private productService: ProductService) {}
 }

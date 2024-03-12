@@ -6,7 +6,7 @@ import {
   CategoryConfig,
   CategoryEditResponse,
 } from '../../types';
-import { LOCALSTORAGE_TOKEN, LOCALSTORAGE_USER } from './constants';
+import { LOCALSTORAGE_EMAIL, LOCALSTORAGE_TOKEN, LOCALSTORAGE_USER } from './constants';
 import { Store } from '@ngrx/store';
 
 export function resetLoaderFn() {
@@ -36,6 +36,8 @@ export const logout = () => {
 export const clearStorage = () => {
   localStorage.removeItem(LOCALSTORAGE_USER);
   localStorage.removeItem(LOCALSTORAGE_TOKEN);
+  localStorage.removeItem(LOCALSTORAGE_EMAIL);
+  sessionStorage.clear()
 };
 export function isAttributeOption(obj: any): obj is AttributeOption {
   return obj && typeof obj.id === 'string';
