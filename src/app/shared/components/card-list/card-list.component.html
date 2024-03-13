@@ -1,0 +1,21 @@
+<section class="border">
+    @for (card of cards; track card) {
+        <div class="flex justify-between items-center">
+            <div class="flex items-center">
+                <div>image</div>
+                <div class="flex flex-col">
+                    <p class="text-sm">{{ card.cardHolderName }}</p>
+                    <p class="text-sm">*** *** *** *** {{ card.cardNumber | slice: -1:-5}}</p>
+                </div>
+                <p>EXP: {{ card.expirationDate }}</p>
+            </div>
+            <button
+        type="button"
+        (click)="deleteCard(card.id!)"
+        class="text-red-color underline text-xs font-inter"
+      >
+        Remove
+      </button>
+        </div>
+    }
+</section>
