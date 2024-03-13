@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { AllOrders } from "../../types";
-import { gotAdminOrders } from "./order.actions";
+import { gotAdminOrders, gotUserOrders } from "./order.actions";
 
 const orderInitialState: AllOrders = {
     content: [],
@@ -10,10 +10,18 @@ const orderInitialState: AllOrders = {
 }
 
 export const orderFeature = createFeature({
-    name: 'adminOrders',
+    name: 'orders',
     reducer: createReducer(
         orderInitialState,
         on(gotAdminOrders, (_, { content, size, totalElements, totalPages }) => {
+            return {
+                content,
+                size,
+                totalElements,
+                totalPages
+            }
+        }),
+        on(gotUserOrders, (_, { content, size, totalElements, totalPages }) => {
             return {
                 content,
                 size,
@@ -24,4 +32,4 @@ export const orderFeature = createFeature({
     )
 })
 
-export const { selectAdminOrdersState } = orderFeature
+export const { selectOrdersState } = orderFeature

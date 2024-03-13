@@ -11,13 +11,17 @@ import { ChangePasswordEffect } from "../../store/profile/changePassword/changeP
 import { ShippingInformationComponent } from "./features/shipping-information/shipping-information.component";
 import { PaymentDetailsComponent } from "./features/payment-details/payment-details.component";
 import { PrivacyPolicyComponent } from "../../shared/components/privacy-policy/privacy-policy.component";
+import { OrdersComponent } from "../admin-dashboard/features/orders/orders.component";
+import { orderFeature } from "../../store/orders/order.reducers";
+import { OrderEffects } from "../../store/orders/order.effects";
 
 export const route: Routes = [
     {
         path: '',
         component: AccountSettingsComponent,
         providers: [
-            provideEffects(GeneralInfoEffect)
+            provideEffects(GeneralInfoEffect),
+            provideEffects(OrderEffects)
         ],
         children: [
             {
@@ -46,6 +50,13 @@ export const route: Routes = [
                 component: PaymentDetailsComponent,
                 providers: [
                     provideState(paymentFeature)
+                ]
+            },
+            {
+                path: 'orders',
+                component: OrdersComponent,
+                providers: [
+                    provideState(orderFeature),
                 ]
             },
             {

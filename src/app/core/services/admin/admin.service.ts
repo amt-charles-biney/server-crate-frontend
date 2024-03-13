@@ -156,9 +156,8 @@ export class AdminService {
   getAdminOrders(params?: Record<string, string>) {
     return this.http.get<AllOrders>(`${this.baseUrl}/admin/orders`, { params })
   }
-
-  deleteAdminOrder(id: string) {
-    return this.http.delete(`${this.baseUrl}/admin/orders/${id}`)
+  getUserOrders(params?: Record<string, string>) {
+    return this.http.get<AllOrders>(`${this.baseUrl}/orders`, { params })
   }
   
   deleteAllAdminOrders(deleteList: string[]) {
