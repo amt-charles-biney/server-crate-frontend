@@ -571,3 +571,27 @@ export type StatusColors = {
     circle: string
   }
 }
+export type MobileMoneyWallet = {
+  contact: Contact;
+  network: string;
+  id?: string
+}
+
+export type CreditCard = {
+  id?: string;
+  cardNumber: string;
+  expirationDate: string;
+  cardHolderName: string;
+}
+
+export type MomoResponse = {
+  data: MobileMoneyWallet[],
+  message: string;
+  status: string
+}
+
+export type CardResponse = {
+  data: CreditCard[],
+  message: string;
+  status: string
+}

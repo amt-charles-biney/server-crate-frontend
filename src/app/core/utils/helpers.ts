@@ -402,3 +402,11 @@ export function removeCloudinaryBaseUrl(url: string) {
   }
   return url;
 }
+
+export function isMasterCard(value: string) {
+  return value === '2' || value === '5'
+}
+
+export function isVisaCard(value: string) {
+  return value === '4'
+}
