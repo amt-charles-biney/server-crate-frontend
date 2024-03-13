@@ -102,7 +102,9 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
     }
     const contactValue = this.getContact()
     this.contact?.setValue(contactValue);
-    this.store.dispatch(addMomoWallet({ network: this.mobileMoneyForm.value.network, contact: contactValue}))
+    if (this.page === 'default') {
+      this.store.dispatch(addMomoWallet({ network: this.mobileMoneyForm.value.network, contact: contactValue}))
+    }
   }
 
 
