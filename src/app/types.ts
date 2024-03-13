@@ -546,6 +546,7 @@ export type AllOrders = {
 }
 
 export type Content = {
+  id: string;
   productCoverImage: string
   productName: string
   configuredProduct: ConfiguredProducts

@@ -3,7 +3,7 @@
     <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[5%] ml-3">
     
         <app-custom-check-box
-        (changeHandler)="itemSelected($event, order.orderId)"
+        (changeHandler)="itemSelected($event, order.id)"
         [formControl]="control"
         [name]="order.productName"
         [value]="order.orderId"
