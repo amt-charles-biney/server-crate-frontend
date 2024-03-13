@@ -80,7 +80,6 @@ export function monthValidator(): ValidatorFn {
     const value = controls.value.toString()    
     if (controls && !months.includes(value)) {
       if (value.length === 1) {
-        console.log('Value', value);
         controls.setValue(`0${controls.value}`)
         return null
       }      

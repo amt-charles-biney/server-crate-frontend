@@ -5,7 +5,7 @@
                 <div>image</div>
                 <div class="flex flex-col">
                     <p class="text-sm">{{ card.cardHolderName }}</p>
-                    <p class="text-sm">*** *** *** *** {{ card.cardNumber | slice: -1:-5}}</p>
+                    <p class="text-sm">{{ card.cardNumber}}</p>
                 </div>
                 <p>EXP: {{ card.expirationDate }}</p>
             </div>

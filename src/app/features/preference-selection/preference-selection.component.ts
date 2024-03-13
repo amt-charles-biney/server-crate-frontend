@@ -77,7 +77,7 @@ export class PreferenceSelectionComponent implements OnInit {
     }
     this.brands$ = this.store.select(selectBrands)
     this.categories$ = this.store.select(selectCategories)
-    this.cases$ = this.store.select(selectCases).pipe(tap((cases) => console.log(cases)))
+    this.cases$ = this.store.select(selectCases)
   }
   getPage(pageNumber: number, search: string) {
     this.page = pageNumber;

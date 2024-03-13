@@ -7,7 +7,7 @@ import { deletePaymentInfo } from '../../../store/account-settings/general-info/
 @Component({
   selector: 'app-card-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './card-list.component.html',
 })
 export class CardListComponent {

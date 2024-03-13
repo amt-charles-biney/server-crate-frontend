@@ -80,7 +80,6 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     );
 
     this.activatedRoute.queryParams.subscribe((params) => {
-      console.log('Initial Params', params);
       if (params['status']) {
         this.filter.patchValue(params['status'])
       }

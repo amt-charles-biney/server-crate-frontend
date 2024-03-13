@@ -2,11 +2,10 @@
   [formGroup]="mobileMoneyForm"
   (ngSubmit)="addWallet()"
 >
-@if (page === 'default') {
   <ng-container *ngIf="wallets | async as wallets">
-   <app-wallet-list [wallets]="wallets"/>
+   <app-wallet-list [wallets]="wallets" [page]="page" (walletEmitter)="selectedWallet($event)"/>
   </ng-container>
-}
+
   <section class="grid grid-cols-2 gap-x-[35px] mt-4 md:mt-4">
     <app-custom-select
       label="Network"
