@@ -39,7 +39,6 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatIconModule,
   ],
   templateUrl: './orders.component.html',
-  styleUrl: './orders.component.scss',
   providers: [provideNativeDateAdapter()],
 })
 export class OrdersComponent implements OnInit, AfterViewInit {
