@@ -95,10 +95,9 @@ export class CreditCardPaymentComponent implements OnInit {
         } else if (isMasterCard(value[0])) {
           this.paymentMethod?.patchValue('mastercard')
         } else {
-          this.paymentMethod?.patchValue('paypal')
+          this.paymentMethod?.patchValue('')
         }
       }),
-      
       takeUntilDestroyed(this.destroyRef)
     ).subscribe()
 

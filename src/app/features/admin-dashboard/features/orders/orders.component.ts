@@ -57,6 +57,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   rangeDate!: FormGroup
   page: number = 1;
 
+  isAdmin!: boolean
+
   constructor(
     private store: Store,
     private inputService: AttributeInputService,
@@ -76,8 +78,9 @@ export class OrdersComponent implements OnInit, AfterViewInit {
       toDate: new FormControl(null),
       fromDate: new FormControl(null),
     });
+    this.isAdmin = this.authService.isAdmin()
     
-    if (this.authService.isAdmin()) {
+    if (this.isAdmin) {
       this.navigateTo = '/admin/orders'
       console.log('Get admin orders');
     } else {
@@ -86,7 +89,9 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     }
     this.orders = this.store.select(selectOrdersState).pipe(
       tap((data) => {
-        this.selectForm = this.inputService.toSelectFormGroup(data.content);
+        if (this.isAdmin) {
+          this.selectForm = this.inputService.toSelectFormGroup(data.content);
+        }
       })
     );
 
@@ -100,7 +105,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
       if (params['endDate']) {
         this.rangeDate.patchValue({ toDate: params['endDate']})
       }
-      if (this.authService.isAdmin()) {
+      if (this.isAdmin) {
         this.store.dispatch(getAdminOrders({ params }))
         console.log('Admin');
         
@@ -111,8 +116,10 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     });
   }
   ngAfterViewInit(): void {
-    this.indeterminateCheckbox = this.check.inputState.nativeElement;
-    this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
+    if (this.check) {
+      this.indeterminateCheckbox = this.check.inputState.nativeElement;
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
+    }
   }
 
   getPage(pageNumber: number) {

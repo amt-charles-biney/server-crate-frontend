@@ -1,14 +1,15 @@
 <div class="flex items-center text-sidebar-text text-sm border-b h-[44px] font-[400]">
-
-    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[5%] ml-3">
-    
-        <app-custom-check-box
-        (changeHandler)="itemSelected($event, order.id)"
-        [formControl]="control"
-        [name]="order.productName"
-        [value]="order.orderId"
-      />
-    </td>
+    @if (isAdmin) {
+        <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[5%] ml-3">
+        
+            <app-custom-check-box
+            (changeHandler)="itemSelected($event, order.id)"
+            [formControl]="control"
+            [name]="order.productName"
+            [value]="order.orderId"
+          />
+        </td>
+    }
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start">
         <div class="flex items-center gap-3">
             <div class="w-[33px] h-5">
@@ -17,8 +18,10 @@
             <p>{{order.productName}}</p>
         </div>
     </td>
-    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.orderId}}</td>
-    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.customerName}}</td>
+    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start"><a class="underline" title="Track your order" [href]="order.trackingUrl">{{order.orderId}}</a></td>
+    @if (isAdmin) {
+        <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.customerName}}</td>
+    }
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.paymentMethod}}</td>
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">
         <app-shipping-status [status]="order.status"/>

@@ -556,6 +556,7 @@ export type Content = {
   status: string
   date: string
   totalPrice: number
+  trackingUrl: string
 }
 
 export type ConfiguredProducts = {
