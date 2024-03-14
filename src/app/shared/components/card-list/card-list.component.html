@@ -1,21 +1,23 @@
-<section class="border">
-    @for (card of cards; track card) {
-        <div class="flex justify-between items-center">
-            <div class="flex items-center">
-                <div>image</div>
-                <div class="flex flex-col">
-                    <p class="text-sm">{{ card.cardHolderName }}</p>
-                    <p class="text-sm">*** *** *** *** {{ card.cardNumber | slice: -1:-5}}</p>
+@if (cards.length > 0) {
+    <section class="border rounded-lg w-[432px] py-[17px] pr-[27px] pl-[6px] mb-6">
+        @for (card of cards; track card) {
+            <div class="flex justify-between items-center">
+                <div class="flex items-start">
+                    <div>image</div>
+                    <div class="flex flex-col ml-3 mr-5">
+                        <p class="text-sm">{{ card.cardHolderName }}</p>
+                        <p class="text-[10px]">{{ card.cardNumber}}</p>
+                    </div>
+                    <p class="text-[10px] pt-0.5">EXP: {{ card.expirationDate }}</p>
                 </div>
-                <p>EXP: {{ card.expirationDate }}</p>
+                <button
+            type="button"
+            (click)="deleteCard(card.id!)"
+            class="text-red-color underline text-xs font-inter"
+          >
+            Remove
+          </button>
             </div>
-            <button
-        type="button"
-        (click)="deleteCard(card.id!)"
-        class="text-red-color underline text-xs font-inter"
-      >
-        Remove
-      </button>
-        </div>
-    }
-</section>
+        }
+    </section>
+}

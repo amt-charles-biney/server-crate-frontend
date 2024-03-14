@@ -23,6 +23,7 @@ import { ShippingStatusComponent } from '../shipping-status/shipping-status.comp
 export class OrderRowComponent {
   @Input() order!: Content;
   @Input() control!: FormControl;
+  @Input() isAdmin!: boolean
   @Output() itemSelectedEmitter = new EventEmitter<{
     selected: { name: string; value: string; isAdded: boolean };
     id: string;

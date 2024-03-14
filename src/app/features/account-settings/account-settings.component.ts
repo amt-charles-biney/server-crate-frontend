@@ -11,6 +11,7 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { CURRENT_INDEX } from '../../core/utils/constants';
+import { OrdersComponent } from '../admin-dashboard/features/orders/orders.component';
 @Component({
   selector: 'app-account-settings',
   standalone: true,
@@ -21,6 +22,7 @@ import { CURRENT_INDEX } from '../../core/utils/constants';
     GeneralInformationComponent,
     RouterModule,
     UserProfileImageComponent,
+    OrdersComponent,
     CommonModule,
   ],
   templateUrl: './account-settings.component.html',
@@ -61,14 +63,19 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
         index: 3,
       },
       {
+        label: 'Orders',
+        link: 'orders',
+        index: 4,
+      },
+      {
         label: 'Terms & Conditions',
         link: 'terms-conditions',
-        index: 4,
+        index: 5,
       },
       {
         label: 'Privacy Policy',
         link: 'privacy-policy',
-        index: 5,
+        index: 6,
       },
     ];
     this.activeIndex = Number(sessionStorage.getItem(CURRENT_INDEX)) || 0;

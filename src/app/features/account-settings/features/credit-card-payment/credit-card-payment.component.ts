@@ -47,7 +47,7 @@ import { CardListComponent } from '../../../../shared/components/card-list/card-
   styleUrl: './credit-card-payment.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreditCardPaymentComponent implements OnInit, AfterViewInit {
+export class CreditCardPaymentComponent implements OnInit {
   @Input() page: string = 'default';
   @Output() clearEmitter = new EventEmitter();
   @ViewChild('monthRef') monthRef!: ElementRef<HTMLInputElement>;
@@ -90,27 +90,18 @@ export class CreditCardPaymentComponent implements OnInit, AfterViewInit {
 
     this.cardNumber?.valueChanges.pipe(
       tap((value) => {
-        console.log('Value', value);
         if (isVisaCard(value[0])) {
           this.paymentMethod?.patchValue('visa')
         } else if (isMasterCard(value[0])) {
           this.paymentMethod?.patchValue('mastercard')
         } else {
-          this.paymentMethod?.patchValue('paypal')
+          this.paymentMethod?.patchValue('')
         }
       }),
-      
       takeUntilDestroyed(this.destroyRef)
     ).subscribe()
 
     this.cards = this.store.select(selectCreditCards)
-  }
-
-  ngAfterViewInit(): void {
-    if (this.monthRef && this.yearRef) {
-    }
-    console.log('Month ref', this.monthRef);
-    console.log('Year ref', this.yearRef);
   }
 
   addCard() {

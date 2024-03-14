@@ -81,6 +81,11 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
     this.clearEmitter.emit()
   }
 
+  selectedWallet(wallet: MobileMoneyWallet) {
+    this.mobileMoneyForm.patchValue({ network: wallet.network, contact: wallet.contact.phoneNumber })
+    this.intl.setNumber(wallet.contact.phoneNumber)
+  }
+
   getContact() {
     const contact = this.intl?.getSelectedCountryData();
     const contactValue: Contact = {

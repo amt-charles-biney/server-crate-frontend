@@ -21,24 +21,6 @@
       value="mastercard"
       imgUrl="/assets/mastercard.svg"
     />
-    <app-custom-radio
-      formControlName="paymentMethod"
-      [currentPaymentMethod]="creditCardForm.value['paymentMethod']"
-      id="paypal"
-      label="PayPal"
-      name="paymentMethod"
-      value="paypal"
-      imgUrl="/assets/paypal.svg"
-    />
-    <app-custom-radio
-      formControlName="paymentMethod"
-      [currentPaymentMethod]="creditCardForm.value['paymentMethod']"
-      id="applePay"
-      label="Apple Pay"
-      name="paymentMethod"
-      value="apple pay"
-      imgUrl="/assets/applePay.svg"
-    />
   </section>
   <section class="grid grid-cols-2 gap-x-[35px]">
     <div>

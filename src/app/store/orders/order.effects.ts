@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { AdminService } from "../../core/services/admin/admin.service";
-import { deleteAdminOrder, deleteAllAdminOrders, getAdminOrders, gotAdminOrders } from "./order.actions";
-import { EMPTY, catchError, exhaustMap, map, switchMap, tap } from "rxjs";
+import { deleteAllAdminOrders, getAdminOrders, getUserOrders, gotAdminOrders, gotUserOrders } from "./order.actions";
+import { EMPTY, catchError, map, switchMap, tap } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import { errorHandler } from "../../core/utils/helpers";
 
@@ -24,15 +24,14 @@ export class OrderEffects {
             })
         )
     })
-
-
-    deleteAdminOrder$ = createEffect(() => {
+    
+    getUserOrders$ = createEffect(() => {
         return this.action$.pipe(
-            ofType(deleteAdminOrder),
-            switchMap(({ id }) => {
-                return this.adminService.deleteAdminOrder(id).pipe(
-                    tap(() => {
-                        this.toast.success('Deleted order successfully', 'Success')
+            ofType(getUserOrders),
+            switchMap(({ params }) => {
+                return this.adminService.getUserOrders(params).pipe(
+                    map((orders) => {
+                        return gotUserOrders(orders)
                     }),
                     catchError((err) => {
                         this.toast.error(errorHandler(err), 'Error')
@@ -41,7 +40,7 @@ export class OrderEffects {
                 )
             })
         )
-    }, { dispatch: false})
+    })
 
     deleteAllAdminOrders$ = createEffect(() => {
         return this.action$.pipe(

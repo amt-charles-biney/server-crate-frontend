@@ -17,7 +17,7 @@ export class CheckoutEffect {
                 this.ngxService.start()
                 return this.paymentService.postPayment(paymentRequest).pipe(
                     map(({data}) => {
-                        window.open(data.authorization_url, '_blank')
+                        window.open(data.authorization_url, '_self')
                         return gotPaymentResponse(data)
                     }),
                     catchError((err) => {

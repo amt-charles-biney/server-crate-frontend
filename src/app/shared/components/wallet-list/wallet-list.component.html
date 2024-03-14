@@ -1,21 +1,33 @@
-<section class="flex flex-col gap-[13px] border rounded-xl py-[17px] pr-[27px] pl-[6px] mt-[14px] w-fit">
-    @for (wallet of wallets; track wallet) {
-    <section class="flex items-center justify-between w-[432px]">
-      <div class="flex items-center gap-[13px]">
-        <div
-          class="flex flex-col items-center justify-center w-[47px] h-[29px] bg-[#E8EAEB4D]"
-        >
-          <img [src]="images[wallet.network]" [alt]="wallet.network" />
+@if (wallets.length > 0) {
+  <section class="flex flex-col gap-[13px] border rounded-lg py-[17px] pr-[27px] pl-[6px] mt-[14px] w-fit">
+      @for (wallet of wallets; track wallet) {
+      <section class="flex items-center justify-between w-[432px]">
+        <div class="flex items-center gap-[13px]">
+          <div
+            class="flex flex-col items-center justify-center w-[47px] h-[29px] bg-[#E8EAEB4D]"
+          >
+            <img [src]="images[wallet.network]" [alt]="wallet.network" />
+          </div>
+          <p>{{ wallet.contact.phoneNumber }}</p>
         </div>
-        <p>{{ wallet.contact.phoneNumber }}</p>
-      </div>
-      <button
-        type="button"
-        (click)="deleteWallet(wallet.id!)"
-        class="text-red-color underline text-xs font-inter"
-      >
-        Remove
-      </button>
-    </section>
-    }
-</section>
+        @if (page === 'default') {
+          <button
+            type="button"
+            (click)="deleteWallet(wallet.id!)"
+            class="text-red-color underline text-xs font-inter"
+          >
+            Remove
+          </button>
+        } @else {
+          <button
+            type="button"
+            (click)="selectWallet(wallet)"
+            class="text-green-400 underline text-xs font-inter"
+          >
+            Select
+          </button>
+        }
+      </section>
+      }
+  </section>
+}
