@@ -38,6 +38,13 @@ export const COLOR_MAPPING: StatusColors = {
     },
 }
 
+export const NAME_MAPPING: { [key: string]: string} = {
+    'pre_transit': 'Pending',
+    'unknown': 'Pending',
+    'in_transit': 'Shipped',
+    'out_for_delivery': 'Out For Delivery',
+    'delivered': 'Delivered'
+}
 export const IMAGE_MAPPING: {[key:string]: string} = {
     'MTN': '/assets/mtn.svg',
     'Vodafone': '/assets/voda.svg',

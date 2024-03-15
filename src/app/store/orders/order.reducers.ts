@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { AllOrders } from "../../types";
-import { gotAdminOrders, gotUserOrders } from "./order.actions";
+import { AllOrders, Content } from "../../types";
+import { gotAdminOrders, gotOrder, gotUserOrders, resetOrderDetail } from "./order.actions";
 
 const orderInitialState: AllOrders = {
     content: [],
@@ -33,3 +33,36 @@ export const orderFeature = createFeature({
 })
 
 export const { selectOrdersState } = orderFeature
+
+
+const orderState: Content = {
+    configuredProduct: [],
+    customerName: '',
+    date: '',
+    id: '',
+    orderId: '',
+    paymentMethod: '',
+    productCoverImage: '',
+    productName: '',
+    status: '',
+    totalPrice: 0,
+    trackingUrl: '',
+    brandName: '',
+    estArrival: ''
+}
+
+
+export const singleOrderFeature = createFeature({
+    name: 'singleOrder',
+    reducer: createReducer(
+        orderState,
+        on(gotOrder, (_, order) => {
+            return order
+        }),
+        on(resetOrderDetail, () => {
+            return orderState
+        })
+    )
+})
+
+export const { selectSingleOrderState } = singleOrderFeature
