@@ -24,13 +24,24 @@
     }
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.paymentMethod}}</td>
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">
-        <app-shipping-status [status]="order.status"/>
+        <app-shipping-status [status]="status"/>
     </td>
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.date | date}}</td>
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.totalPrice | currency }}</td>
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[8%] text-start">
-        <button class="flex justify-center w-fit mx-auto">
+        <button class="flex justify-center w-fit mx-auto"  [matMenuTriggerFor]="menu">
             <img src="/assets/ellipses.svg" alt="ellipses" />
           </button>
+          <mat-menu #menu="matMenu" panelClass="customMenu">
+            <button
+              mat-menu-item
+              [disableRipple]="true"
+              [routerLink]="order.id"
+              type="button"
+              class="flex items-center px-[12px] w-[111px] bg-attr-button"
+            >
+                View More         
+            </button>
+          </mat-menu>
     </td>
 </div>

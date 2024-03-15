@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { CartProductItem } from '../../../types';
+import { CartProductItem, SummarySubset } from '../../../types';
 import { Store } from '@ngrx/store';
 import { selectConfiguredProducts } from '../../../store/cart/cart.reducers';
 import { CommonModule, CurrencyPipe } from '@angular/common';
@@ -12,20 +12,25 @@ import { getCartItems } from '../../../store/cart/cart.actions';
   standalone: true,
   imports: [CommonModule, CurrencyPipe, RouterModule],
   templateUrl: './summary.component.html',
-  styleUrl: './summary.component.scss'
+  styleUrl: './summary.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SummaryComponent implements OnInit, OnChanges {
-  @Input() cartItem!: CartProductItem
+  @Input() cartItem!: SummarySubset
   @Input() quantity!: number
   @Input() title!: string
-  @Input() page!: 'cart' | 'checkout'
+  @Input() page!: 'cart' | 'checkout' | 'details'
   @Output() subTotalEmitter = new EventEmitter<number>()
   subTotal!: number;
 
   constructor(private store: Store, private router: Router) {}
 
   ngOnInit(): void {
+    console.log('QUnatity', this.quantity);
+    
     if (this.cartItem) {
+      console.log('CartItem', this.cartItem);
+      
       this.quantity = this.cartItem.quantity
       this.subTotal = this.cartItem.totalPrice * this.quantity
       this.subTotalEmitter.emit(this.subTotal)    

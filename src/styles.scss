@@ -254,7 +254,8 @@ app-payment-details .mdc-tab {
 app-payment-details .mat-mdc-tab-label-container {
   padding: 8px;
   background-color: #f6f8f8;
-  width: 245px;
+  // width: 245px;
+  width: 388px;
   border-radius: 8px;
   flex-grow: 0;
 }
@@ -348,7 +349,7 @@ app-orders .mat-mdc-select-placeholder {
   font-size: 14px;
 }
 app-orders .mat-mdc-form-field-infix {
-  width: 149px;
+  width: 170px;
 }
 
 app-custom-select .mat-mdc-option .mat-icon,

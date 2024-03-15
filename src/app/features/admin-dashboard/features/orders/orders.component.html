@@ -29,7 +29,7 @@
       }
       <app-custom-select
         [control]="filter"
-        [options]="['All', 'Canceled', 'Delivered', 'Pending', 'Shipped']"
+        [options]="['All', 'Canceled', 'Delivered', 'Pending', 'Shipped', 'Out For Delivery']"
         placeholder="Filter by status"
         (onSelect)="filterBy($event)"
       />
@@ -122,12 +122,20 @@
         @for (order of orders.content | paginate: { id: 'orders', itemsPerPage:
         13, currentPage: page, totalItems: orders.totalElements}; track order) {
         <tr>
-          <app-order-row
-            [control]="$any(selectForm.controls[order.orderId])"
-            (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"
-            [order]="order"
-            [isAdmin]="isAdmin"
-          />
+          @if (isAdmin) {
+            <app-order-row
+              [control]="$any(selectForm.controls[order.orderId])"
+              (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"
+              [order]="order"
+              [isAdmin]="isAdmin"
+            />
+          } @else {
+            <app-order-row
+              (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"
+              [order]="order"
+              [isAdmin]="isAdmin"
+            />
+          }
         </tr>
         }
       </ng-container>

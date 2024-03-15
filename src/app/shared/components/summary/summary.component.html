@@ -2,7 +2,7 @@
   <div
     [ngClass]="{
       'pt-6 pb-[13px] w-[421px] h-fit': page === 'cart',
-      'pt-[10px] pb-[51px] w-[410px] max-h-[448px]': page === 'checkout'
+      'pt-[10px] pb-[51px] w-[410px] max-h-[448px]': (page === 'checkout' || page === 'details')
     }"
     class="flex flex-col gap-5 px-[15px] border-[2px] border-dashed rounded-2xl"
   >
@@ -28,7 +28,7 @@
     >
       Check Out
     </button>
-    } @else {
+    } @else if (page === 'checkout') {
     <p class="text-figma-green underline text-xs font-inter">
       Have a discount code?
     </p>
