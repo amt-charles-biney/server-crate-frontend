@@ -559,6 +559,7 @@ export type Content = {
   trackingUrl: string;
   estArrival: string;
   brandName: string;
+  shippingAddress: string;
 };
 
 export type ConfiguredProducts = {

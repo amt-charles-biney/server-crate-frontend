@@ -26,6 +26,7 @@
         }
       </div>
     </section>
+    <hr class="mt-[23px] mb-[29px]"/>
     <section class="mt-16">
       <app-custom-stepper [status]="status" #cdkStepper [completed]="false">
         <cdk-step
@@ -71,7 +72,14 @@
     <hr class="mt-12 mb-6" />
     <section class="grid grid-cols-5">
         <div class="flex flex-col col-span-3">
-            <h4>Payment</h4>
+            <h4 class="font-semibold">Payment</h4>
+            <div>
+              <h4 class="font-semibold">Delivery</h4>
+              <p class="text-[#999999]">Address</p>
+              <p>
+                {{ order.shippingAddress }}
+              </p>
+            </div>
         </div>
         <div>
             <app-summary [cartItem]="product" [quantity]="product.quantity" title="Order Summary" page="details"/>
