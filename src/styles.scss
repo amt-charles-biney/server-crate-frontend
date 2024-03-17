@@ -259,7 +259,12 @@ app-payment-details .mat-mdc-tab-label-container {
   border-radius: 8px;
   flex-grow: 0;
 }
-
+app-settings .mat-mdc-tab-label-container{
+  width: 245px !important;
+ }
+app-account-settings .mat-mdc-tab-label-container{
+  width: 245px !important;
+ }
 app-payment-details .mat-mdc-tab-labels {
   gap: 10px;
 }

@@ -484,6 +484,7 @@ export type PaymentForm = {
   amount?: number;
   reference?: string;
   creditCardReference?: string; //For testing
+  activeIndex: number;
 };
 
 export type PaymentRequest = {
