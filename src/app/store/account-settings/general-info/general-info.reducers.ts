@@ -1,6 +1,6 @@
-import { GeneralInfo, ShippingPayload } from '../../../types';
+import { CreditCard, GeneralInfo, MobileMoneyWallet, ShippingPayload } from '../../../types';
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { gotGeneralInfo, gotShippingDetails } from './general-info.actions';
+import { gotCards, gotGeneralInfo, gotMomoWallet, gotShippingDetails } from './general-info.actions';
 
 const initialState: GeneralInfo = {
   firstName: '',
@@ -92,3 +92,31 @@ export const shippingFeature = createFeature({
 });
 
 export const { selectShippingDetailsState } = shippingFeature;
+
+
+const paymentState: { wallets: MobileMoneyWallet[], creditCards: CreditCard[] } = {
+  wallets: [],
+  creditCards: []
+}
+
+
+export const paymentFeature = createFeature({
+  name: 'payment',
+  reducer: createReducer(
+    paymentState,
+    on(gotMomoWallet, (state, {wallets}) => {            
+      return {
+        ...state,
+        wallets,
+      }
+    }),
+    on(gotCards, (state, { creditCards }) => {
+      return {
+        ...state,
+        creditCards
+      }
+    })
+  )
+})
+
+export const { selectWallets, selectCreditCards } = paymentFeature

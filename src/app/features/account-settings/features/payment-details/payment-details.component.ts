@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MobileMoneyPaymentComponent } from '../mobile-money-payment/mobile-money-payment.component';
 import { CreditCardPaymentComponent } from '../credit-card-payment/credit-card-payment.component';
@@ -17,7 +17,10 @@ export class PaymentDetailsComponent {
   @Input() amountToPay: number = 0
   @ViewChild(MobileMoneyPaymentComponent) mobileMoneyComponent!: MobileMoneyPaymentComponent
   @ViewChild(CreditCardPaymentComponent) creditCardComponent!: CreditCardPaymentComponent
-  paymentForm!: PaymentForm | undefined
+  @ViewChild('momo') momo !: ElementRef<HTMLDivElement>
+  @ViewChild('card') card !: ElementRef<HTMLDivElement>
+  paymentForm!: PaymentForm | undefined;
+  currentIndex: number = 0
   
   shareForm() {
     this.mobileMoneyComponent.addWallet()
@@ -36,7 +39,12 @@ export class PaymentDetailsComponent {
         reference,
         securityCode,
         creditCardReference, //For testing
+        activeIndex: this.currentIndex
       }
     }
+  }
+
+  getActiveTab(index: number) {
+    this.currentIndex = index;
   }
 }

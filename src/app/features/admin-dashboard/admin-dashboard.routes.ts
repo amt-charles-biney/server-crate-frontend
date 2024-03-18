@@ -27,6 +27,7 @@ import { authGuard } from '../../core/guards/auth.guard';
 import { AddCaseComponent } from './features/case-management/features/add-case/add-case.component';
 import { OrderEffects } from '../../store/orders/order.effects';
 import { orderFeature } from '../../store/orders/order.reducers';
+import { OrdersOutletComponent } from './features/orders/orders-outlet.component';
 
 
 export const route: Routes = [
@@ -128,11 +129,12 @@ export const route: Routes = [
       },
       {
         path: 'orders',
-        component: OrdersComponent,
+        component: OrdersOutletComponent,
         providers: [
           provideEffects(OrderEffects),
           provideState(orderFeature)
-        ]
+        ],
+        loadChildren: () => import('./features/orders/orders.routes').then(m => m.routes)
       },
       {
         path: 'transactions',

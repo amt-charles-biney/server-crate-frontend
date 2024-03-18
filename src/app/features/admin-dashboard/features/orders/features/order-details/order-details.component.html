@@ -1,0 +1,89 @@
+<app-loader loaderId="orderDetails" size="none" />
+<ng-container *ngIf="order$ | async as order">
+  <main>
+    <section class="flex items-center">
+      <h2 class="font-bold text-2xl mr-20">Order Details</h2>
+      <button (click)="goBackToOrders()" class="flex items-center gap-[3px]">
+        <img src="/assets/arrow-left.svg" alt="arrow right" />
+        <span>Back to Orders</span>
+      </button>
+    </section>
+    <section class="flex justify-between mt-6 text-sm">
+      <div class="flex items-center divide-x">
+        <p class="pr-4">
+          Order date:
+          <span class="font-semibold text-base">{{ order.date | date }}</span>
+        </p>
+        <div class="flex gap-2 items-center text-figma-green pl-4 text-base">
+          <img src="/assets/eta.svg" alt="delivery icon" />
+          <p>Estimated delivery: {{ order.estArrival | date }}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <p class="font-inter">Status:</p>
+        @if (order.status) {
+        <app-shipping-status [status]="status" />
+        }
+      </div>
+    </section>
+    <hr class="mt-[23px] mb-[29px]"/>
+    <section class="mt-16">
+      <app-custom-stepper [status]="status" #cdkStepper [completed]="false">
+        <cdk-step
+          [editable]="false"
+          [completed]="false"
+          label="Order Confirmed"
+        >
+        </cdk-step>
+        <cdk-step [editable]="false" [completed]="false" label="Shipped">
+        </cdk-step>
+        <cdk-step
+          [editable]="false"
+          [completed]="false"
+          label="Out for Delivery"
+        >
+        </cdk-step>
+        <cdk-step [editable]="false" [completed]="false" label="Delivered">
+        </cdk-step>
+      </app-custom-stepper>
+    </section>
+    <section>
+      <div class="flex items-center justify-between max-w-[829px] mx-auto">
+        <div class="flex items-center gap-[9px]">
+          <div class="w-40 h-[90px] border rounded-lg p-0.5">
+            <img
+              class="max-w-full max-h-full object-contain"
+              *ngIf="order.productCoverImage"
+              [ngSrc]="order.productCoverImage | cloudinaryUrl"
+              width="160"
+              height="90"
+              priority
+              alt="cover image"
+            />
+          </div>
+          <div class="flex flex-col self-start">
+            <p class="font-bold">{{ order.productName }}</p>
+            <p class="text-sm text-[#999999] font-[500]">{{ order.brandName }}</p>
+          </div>
+        </div>
+        <p class="text-xl font-bold self-start">{{ order.totalPrice | currency }}</p>
+      </div>
+    </section>
+    <hr class="mt-12 mb-6" />
+    <section class="grid grid-cols-5">
+        <div class="flex flex-col col-span-3">
+            <h4 class="font-semibold">Payment</h4>
+            <div>
+              <h4 class="font-semibold">Delivery</h4>
+              <p class="text-[#999999]">Address</p>
+              <p>
+                {{ order.shippingAddress }}
+              </p>
+            </div>
+        </div>
+        <div>
+            <app-summary [cartItem]="product" [quantity]="product.quantity" title="Order Summary" page="details"/>
+        </div>
+    </section>
+  </main>
+</ng-container>

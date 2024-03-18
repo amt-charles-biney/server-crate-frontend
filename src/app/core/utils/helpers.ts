@@ -397,8 +397,16 @@ export function buildIncompatibleTable(
 
 export function removeCloudinaryBaseUrl(url: string) {
   const prefix = 'http://res.cloudinary.com/dah4l2inx/image/upload/';
-  if (url.startsWith(prefix)) {
+  if (url && url.startsWith(prefix)) {
     return url.substring(prefix.length);
   }
   return url;
+}
+
+export function isMasterCard(value: string) {
+  return value === '2' || value === '5'
+}
+
+export function isVisaCard(value: string) {
+  return value === '4'
 }

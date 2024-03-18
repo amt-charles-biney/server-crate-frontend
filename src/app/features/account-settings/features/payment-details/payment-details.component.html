@@ -6,7 +6,7 @@
   'md:mt-[29px]': page === 'checkout'
 }" class="h-fit">
 
-  <mat-tab-group>
+  <mat-tab-group (selectedIndexChange)="getActiveTab($event)">
     <mat-tab>
       <ng-template mat-tab-label>
         <div class="flex items-center gap-[10px]">
@@ -68,5 +68,15 @@
       </ng-template>
       <app-mobile-money-payment [page]="page" [amountToPay]="amountToPay" (clearEmitter)="paymentForm = undefined"/>
     </mat-tab>
+    @if (page === 'checkout') {
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <p>PayStack</p>
+        </ng-template>
+        <div class="mt-4">
+          <p>You will be redirected to another page</p>
+        </div>
+      </mat-tab>
+    }
   </mat-tab-group>
 </section>

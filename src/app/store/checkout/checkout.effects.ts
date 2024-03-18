@@ -7,6 +7,7 @@ import { setLoadingSpinner } from "../loader/actions/loader.actions";
 import { errorHandler } from "../../core/utils/helpers";
 import { Router } from "@angular/router";
 import { NgxUiLoaderService } from "ngx-ui-loader";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable()
 export class CheckoutEffect {
@@ -17,10 +18,13 @@ export class CheckoutEffect {
                 this.ngxService.start()
                 return this.paymentService.postPayment(paymentRequest).pipe(
                     map(({data}) => {
-                        window.open(data.authorization_url, '_blank')
+                        window.open(data.authorization_url, '_self')
                         return gotPaymentResponse(data)
                     }),
                     catchError((err) => {
+                        const errorMessage = errorHandler(err)
+                        this.ngxService.stop()
+                        this.toast.error(errorMessage, 'Error')
                         return of(setLoadingSpinner({
                             isError: true,
                             message: errorHandler(err),
@@ -57,5 +61,5 @@ export class CheckoutEffect {
     })
 
 
-    constructor(private actions: Actions, private paymentService: PaymentService, private ngxService: NgxUiLoaderService) {}
+    constructor(private actions: Actions, private paymentService: PaymentService, private ngxService: NgxUiLoaderService, private toast: ToastrService) {}
 }

@@ -5,20 +5,23 @@ import { TermsAndConditionsComponent } from "../../shared/components/terms-and-c
 import { provideEffects } from "@ngrx/effects";
 import { GeneralInfoEffect } from "../../store/account-settings/general-info/general-info.effects";
 import { provideState } from "@ngrx/store";
-import { generalInfoFeature, shippingFeature } from "../../store/account-settings/general-info/general-info.reducers";
+import { generalInfoFeature, paymentFeature, shippingFeature } from "../../store/account-settings/general-info/general-info.reducers";
 import { PasswordInformationComponent } from "./features/password-information/password-information.component";
 import { ChangePasswordEffect } from "../../store/profile/changePassword/changePassword.effects";
 import { ShippingInformationComponent } from "./features/shipping-information/shipping-information.component";
 import { PaymentDetailsComponent } from "./features/payment-details/payment-details.component";
 import { PrivacyPolicyComponent } from "../../shared/components/privacy-policy/privacy-policy.component";
+import { OrdersComponent } from "../admin-dashboard/features/orders/orders.component";
+import { orderFeature } from "../../store/orders/order.reducers";
+import { OrderEffects } from "../../store/orders/order.effects";
 
 export const route: Routes = [
     {
         path: '',
         component: AccountSettingsComponent,
         providers: [
-            
-            provideEffects(GeneralInfoEffect)
+            provideEffects(GeneralInfoEffect),
+            provideEffects(OrderEffects)
         ],
         children: [
             {
@@ -26,7 +29,6 @@ export const route: Routes = [
                 component: GeneralInformationComponent,
                 providers: [
                     provideState(generalInfoFeature),
-                    provideEffects(GeneralInfoEffect)
                 ]
             },
             {
@@ -45,7 +47,17 @@ export const route: Routes = [
             },
             {
                 path: 'payment',
-                component: PaymentDetailsComponent
+                component: PaymentDetailsComponent,
+                providers: [
+                    provideState(paymentFeature)
+                ]
+            },
+            {
+                path: 'orders',
+                component: OrdersComponent,
+                providers: [
+                    provideState(orderFeature),
+                ]
             },
             {
                 path: 'terms-conditions',

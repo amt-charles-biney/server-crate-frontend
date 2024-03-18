@@ -9,7 +9,7 @@
       [alt]="'image of ' + product.productName"
     />
   </div>
-  <div class="flex flex-col gap-5 ">
+  <div class="flex flex-col gap-4">
     <div class="flex items-center justify-between">
       <p class="font-bold text-xl">{{ product.productName }}</p>
       <p
@@ -22,16 +22,14 @@
       {{ product.productDescription }}
     </div>
     <div>
-      <div class="text-[13px] flex justify-between text-[#737373] mb-[10px]">
+      <div class="flex text-[13px] text-[#737373] mb-[10px]">
         <span>Includes:</span>
-        <div class="whitespace-nowrap">
-          <span class="text-black ml-2 text-ellipses" *ngFor="let option of product.configured | slice: 0 : 3; let i = index"
-            >{{ option.optionName }}<span *ngIf="i !== product.configured.length - 1">,</span></span
-          >
-          @if (product.configured.length > 3) {
-            <span class="ml-2">+{{ product.configured.length - 3}}</span>
+          @for (option of product.configured | slice: 0 : 2; track option) {
+              <span class="ml-2 max-w-[100px] min-w-fit whitespace-nowrap overflow-hidden text-ellipsis">{{option.optionName}}, </span>
           }
-        </div>
+          @if (product.configured.length > 2) {
+            <span class="ml-2">+{{ product.configured.length - 2}}</span>
+          }
       </div>
       <div class="flex items-center gap-2 mt-[10px] text-sm">
         <p>QTY</p>

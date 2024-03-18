@@ -13,9 +13,10 @@ import { Store } from '@ngrx/store';
 import {
   deleteAllAdminOrders,
   getAdminOrders,
+  getUserOrders,
 } from '../../../../store/orders/order.actions';
 import { Subject, tap } from 'rxjs';
-import { selectAdminOrdersState } from '../../../../store/orders/order.reducers';
+import { selectOrdersState } from '../../../../store/orders/order.reducers';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { OrderRowComponent } from '../../../../shared/components/order-row/order-row.component';
@@ -24,6 +25,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 @Component({
   selector: 'app-orders',
   standalone: true,
@@ -39,7 +41,6 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatIconModule,
   ],
   templateUrl: './orders.component.html',
-  styleUrl: './orders.component.scss',
   providers: [provideNativeDateAdapter()],
 })
 export class OrdersComponent implements OnInit, AfterViewInit {
@@ -52,8 +53,11 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   orders = this.orders$.asObservable();
 
   filter: FormControl = new FormControl<keyof typeof ShippingStatus>('All');
+  navigateTo!: string
   rangeDate!: FormGroup
   page: number = 1;
+
+  isAdmin!: boolean
 
   constructor(
     private store: Store,
@@ -61,7 +65,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     private domSanitizer: DomSanitizer,
     private matIconRegistry: MatIconRegistry,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
   ) {
     this.matIconRegistry.addSvgIcon(
       'myDatePicker',
@@ -73,15 +78,24 @@ export class OrdersComponent implements OnInit, AfterViewInit {
       toDate: new FormControl(null),
       fromDate: new FormControl(null),
     });
+    this.isAdmin = this.authService.isAdmin()
     
-    this.orders = this.store.select(selectAdminOrdersState).pipe(
+    if (this.isAdmin) {
+      this.navigateTo = '/admin/orders'
+      console.log('Get admin orders');
+    } else {
+      this.navigateTo = '/settings/orders'
+      console.log('Get user orders')
+    }
+    this.orders = this.store.select(selectOrdersState).pipe(
       tap((data) => {
-        this.selectForm = this.inputService.toSelectFormGroup(data.content);
+        if (this.isAdmin) {
+          this.selectForm = this.inputService.toSelectFormGroup(data.content);
+        }
       })
     );
 
     this.activatedRoute.queryParams.subscribe((params) => {
-      console.log('Initial Params', params);
       if (params['status']) {
         this.filter.patchValue(params['status'])
       }
@@ -91,14 +105,21 @@ export class OrdersComponent implements OnInit, AfterViewInit {
       if (params['endDate']) {
         this.rangeDate.patchValue({ toDate: params['endDate']})
       }
-
-      
-      this.store.dispatch(getAdminOrders({ params }))
+      if (this.isAdmin) {
+        this.store.dispatch(getAdminOrders({ params }))
+        console.log('Admin');
+        
+      } else {
+        this.store.dispatch(getUserOrders({ params }))
+        console.log('User');
+      }
     });
   }
   ngAfterViewInit(): void {
-    this.indeterminateCheckbox = this.check.inputState.nativeElement;
-    this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
+    if (this.check) {
+      this.indeterminateCheckbox = this.check.inputState.nativeElement;
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
+    }
   }
 
   getPage(pageNumber: number) {
@@ -107,7 +128,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   }
 
   filterBy(event: MatSelectChange) {
-    this.router.navigate(['/admin/orders'], {
+    
+    this.router.navigate([this.navigateTo], {
       queryParams: { status: event.value },
       queryParamsHandling: 'merge',
       replaceUrl: true
@@ -200,7 +222,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   onToDateChange(date: MatDatepickerInputEvent<Date>): void {
     this.rangeDate.patchValue({ toDate: date.value });
     if (date.value) {
-      this.router.navigate(['/admin/orders'], {
+      this.router.navigate([this.navigateTo], {
         queryParams: { endDate: new Date(date.value).toISOString().split('T')[0] },
         queryParamsHandling: 'merge',
         replaceUrl: true,
@@ -218,7 +240,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   onFromDateChange(date: MatDatepickerInputEvent<Date>): void {
     this.rangeDate.patchValue({ fromDate: date.value });
     if (date.value) {
-      this.router.navigate(['/admin/orders'], {
+      this.router.navigate([this.navigateTo], {
         queryParams: { startDate: new Date(date.value).toISOString().split('T')[0] },
         queryParamsHandling: 'merge',
         replaceUrl: true,

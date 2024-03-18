@@ -167,13 +167,13 @@ export class CheckoutComponent implements OnInit {
   paymentDetails() {
     this.paymentDetailsComponent.shareForm();
     if (!this.paymentDetailsComponent.paymentForm) return
-    const { amount, reference, cardNumber, creditCardReference } = this.paymentDetailsComponent.paymentForm;
+    const { amount, reference, creditCardReference, activeIndex } = this.paymentDetailsComponent.paymentForm;
     if (amount) {
       const paymentRequest: PaymentRequest = {
         amount: amount!,
-        channels: creditCardReference! ? ['card'] : ['mobile_money'],
+        channels: activeIndex === 0 ? ['card'] : activeIndex === 1 ? ['mobile_money'] : ['card', 'mobile_money'],
         email: this.shippingForm.value.email!,
-        reference: creditCardReference! ? creditCardReference! : reference!,
+        reference: activeIndex === 0 ? creditCardReference! : reference!,
         currency: 'GHS',
       };
       this.store.dispatch(sendingPaymentRequest(paymentRequest));

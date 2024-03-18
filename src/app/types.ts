@@ -484,6 +484,7 @@ export type PaymentForm = {
   amount?: number;
   reference?: string;
   creditCardReference?: string; //For testing
+  activeIndex: number;
 };
 
 export type PaymentRequest = {
@@ -539,35 +540,70 @@ export enum ShippingStatus {
 }
 
 export type AllOrders = {
-  totalPages: number
-  totalElements: number
-  size: number
-  content: Content[]
-}
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: Content[];
+};
 
 export type Content = {
-  productCoverImage: string
-  productName: string
-  configuredProduct: ConfiguredProducts
-  orderId: string
-  customerName: string
-  paymentMethod: string
-  status: string
-  date: string
-  totalPrice: number
-}
+  id: string;
+  productCoverImage: string;
+  productName: string;
+  configuredProduct: ConfiguredProducts[];
+  orderId: string;
+  customerName: string;
+  paymentMethod: string;
+  status: string;
+  date: string;
+  totalPrice: number;
+  trackingUrl: string;
+  estArrival: string;
+  brandName: string;
+  shippingAddress: string;
+};
 
 export type ConfiguredProducts = {
-  id: string
-  configuredOptions: ConfiguredProduct[]
-  totalPrice: number
-  quantity: number
-}
+  id: string;
+  configuredOptions: ConfiguredProduct[];
+  totalPrice: number;
+  quantity: number;
+};
 
 export type StatusColors = {
   [key: string]: {
-    color: string,
-    background: string,
-    circle: string
-  }
-}
+    color: string;
+    background: string;
+    circle: string;
+  };
+};
+export type MobileMoneyWallet = {
+  contact: Contact;
+  network: string;
+  id?: string;
+};
+
+export type CreditCard = {
+  id?: string;
+  cardNumber: string;
+  expirationDate: string;
+  cardHolderName: string;
+};
+
+export type MomoResponse = {
+  data: MobileMoneyWallet[];
+  message: string;
+  status: string;
+};
+
+export type CardResponse = {
+  data: CreditCard[];
+  message: string;
+  status: string;
+};
+
+export type SummarySubset = {
+  productName: string;
+  quantity: number;
+  totalPrice: number;
+};

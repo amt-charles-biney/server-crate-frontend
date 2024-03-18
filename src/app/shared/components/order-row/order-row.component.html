@@ -1,33 +1,47 @@
 <div class="flex items-center text-sidebar-text text-sm border-b h-[44px] font-[400]">
-
-    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[5%] ml-3">
-    
-        <app-custom-check-box
-        (changeHandler)="itemSelected($event, order.orderId)"
-        [formControl]="control"
-        [name]="order.productName"
-        [value]="order.orderId"
-      />
-    </th>
-    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start">
+    @if (isAdmin) {
+        <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[5%] ml-3">
+        
+            <app-custom-check-box
+            (changeHandler)="itemSelected($event, order.id)"
+            [formControl]="control"
+            [name]="order.productName"
+            [value]="order.orderId"
+          />
+        </td>
+    }
+    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start">
         <div class="flex items-center gap-3">
             <div class="w-[33px] h-5">
                 <img [ngSrc]="order.productCoverImage | cloudinaryUrl" height="20" width="33" class="max-w-full max-h-full object-contain" alt="product image">
             </div>
             <p>{{order.productName}}</p>
         </div>
-    </th>
-    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.orderId}}</th>
-    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.customerName}}</th>
-    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.paymentMethod}}</th>
-    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">
-        <app-shipping-status [status]="order.status"/>
-    </th>
-    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.date | date}}</th>
-    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.totalPrice | currency }}</th>
-    <th class="overflow-hidden whitespace-nowrap text-ellipsis w-[8%] text-start">
-        <button class="flex justify-center w-fit mx-auto">
+    </td>
+    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start"><a class="underline" title="Track your order" [href]="order.trackingUrl">{{order.orderId}}</a></td>
+    @if (isAdmin) {
+        <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.customerName}}</td>
+    }
+    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.paymentMethod}}</td>
+    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">
+        <app-shipping-status [status]="status"/>
+    </td>
+    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.date | date}}</td>
+    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.totalPrice | currency }}</td>
+    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[8%] text-start">
+        <button class="flex justify-center w-fit mx-auto"  [matMenuTriggerFor]="menu">
             <img src="/assets/ellipses.svg" alt="ellipses" />
           </button>
-    </th>
+          <mat-menu #menu="matMenu" panelClass="customMenu">
+            <button
+              mat-menu-item
+              [disableRipple]="true"
+              [routerLink]="order.id"
+              type="button"
+              class="flex items-center px-[12px] w-[111px] bg-attr-button"
+            >
+                View More         
+            </button>
+          </mat-menu>
+    </td>
 </div>

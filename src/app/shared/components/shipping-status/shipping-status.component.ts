@@ -15,8 +15,9 @@ export class ShippingStatusComponent implements OnInit {
   circle!: string
 
   ngOnInit(): void {
-    this.color = COLOR_MAPPING[this.status].color
-    this.background = COLOR_MAPPING[this.status].background
-    this.circle = COLOR_MAPPING[this.status].circle
+    if (this.status)
+    this.color = COLOR_MAPPING[this.status]?.color || 'text-gray-400'
+    this.background = COLOR_MAPPING[this.status]?.background || 'text-gray-400'
+    this.circle = COLOR_MAPPING[this.status]?.circle || 'text-gray-400'
   }
 }
