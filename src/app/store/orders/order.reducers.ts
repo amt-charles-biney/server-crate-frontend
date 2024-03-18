@@ -48,7 +48,8 @@ const orderState: Content = {
     totalPrice: 0,
     trackingUrl: '',
     brandName: '',
-    estArrival: ''
+    estArrival: '',
+    shippingAddress: ''
 }
 
 

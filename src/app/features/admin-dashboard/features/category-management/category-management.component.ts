@@ -26,7 +26,7 @@ import { DeleteModalComponent } from '../../../../shared/components/delete-modal
     MatMenuModule,
     TableRowComponent,
     DeleteModalComponent,
-    MatDialogModule
+    MatDialogModule,
   ],
   templateUrl: './category-management.component.html',
 })
@@ -39,12 +39,12 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
   localAttributes!: CategoryAndConfig[];
   indeterminateCheckbox!: HTMLInputElement;
 
-  toggleCheckbox = false
+  toggleCheckbox = false;
 
   constructor(
     private store: Store,
     private inputService: AttributeInputService,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {}
   ngOnInit(): void {
     this.store.dispatch(getCategoriesAndConfig());
@@ -62,38 +62,31 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
     this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
   }
   removeCheck() {
-    this.toggleCheckbox = !this.toggleCheckbox
+    this.toggleCheckbox = !this.toggleCheckbox;
     Object.keys(this.selectForm.value).forEach((value) => {
       this.selectForm.patchValue({ [value]: this.toggleCheckbox });
     });
     const someValuesSelected = Object.values(this.selectForm.value).some(
       (value) => value
     );
-    const allSelected = Object.values(
-      this.selectForm.value
-    ).every((value) => value);
+    const allSelected = Object.values(this.selectForm.value).every(
+      (value) => value
+    );
 
     if (allSelected) {
       this.indeterminateCheckbox.checked = true;
-      this.check.inputState.nativeElement.className = ''
-      this.indeterminateCheckbox.indeterminate = false
+      this.check.inputState.nativeElement.className = '';
+      this.indeterminateCheckbox.indeterminate = false;
 
-        this.localAttributes.map((attr) => {
+      this.localAttributes.map((attr) => {
         this.itemSelected({ name: '', isAdded: false, value: '' }, attr.id);
       });
-    }
-    else if (someValuesSelected) {
+    } else if (someValuesSelected) {
       this.clearSelected();
-      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
     } else {
-      this.clearSelected()
+      this.clearSelected();
     }
-    // else {
-    //   this.localAttributes.map((attr) => {
-    //     this.itemSelected({ name: '', isAdded: false, value: '' }, attr.id);
-    //   });
-    //   this.indeterminateCheckbox.indeterminate = true;
-    // }
   }
   clearSelected() {
     Object.keys(this.selectForm.value).forEach((value) => {
@@ -110,40 +103,44 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
     } else {
       this.categoriesTodelete.add(id);
     }
-    const allSelected = Object.values(
-      this.selectForm.value
-    ).every((value) => value);
-    const someSelected = Object.values(
-      this.selectForm.value
-    ).some((value) => value);
+    const allSelected = Object.values(this.selectForm.value).every(
+      (value) => value
+    );
+    const someSelected = Object.values(this.selectForm.value).some(
+      (value) => value
+    );
 
     if (allSelected) {
-      this.indeterminateCheckbox.checked = true
-      this.indeterminateCheckbox.indeterminate = false
-      this.check.inputState.nativeElement.className = ''
+      this.indeterminateCheckbox.checked = true;
+      this.indeterminateCheckbox.indeterminate = false;
+      this.check.inputState.nativeElement.className = '';
     } else if (someSelected) {
-      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
-      this.indeterminateCheckbox.indeterminate = true
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
+      this.indeterminateCheckbox.indeterminate = true;
     } else {
-      this.indeterminateCheckbox.indeterminate = false
-      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
-    }    
+      this.indeterminateCheckbox.indeterminate = false;
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
+    }
   }
   deleteCategories() {
     const deleteList = Array.from(this.categoriesTodelete);
     if (deleteList.length === 0) {
-      return
+      return;
     }
     const dialogRef = this.dialog.open(DeleteModalComponent, {
-      data: { deleteList },
+      data: {
+        deleteList,
+        isCategory: true,
+        text: 'This category would be permanently deleted from the system.',
+      },
     });
     // this.store.dispatch(deleteCategoriesAndConfig({ deleteList }));
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.categoriesTodelete.clear();
         this.indeterminateCheckbox.indeterminate = false;
-        this.indeterminateCheckbox.checked = false
-        this.toggleCheckbox = false
+        this.indeterminateCheckbox.checked = false;
+        this.toggleCheckbox = false;
       }
     });
   }

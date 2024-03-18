@@ -22,7 +22,7 @@ import {
   selectProductConfig,
   selectProductConfigItem,
 } from '../../store/product-spec/product-spec.reducer'
-import { Observable, map } from 'rxjs'
+import { Observable } from 'rxjs'
 import {
   loadProduct,
   loadProductConfigItem
@@ -47,7 +47,8 @@ import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-
     OrderSummaryComponent,
     ProductLoadingComponent,
     NgOptimizedImage,
-    CloudinaryUrlPipe
+    CloudinaryUrlPipe,
+    NgOptimizedImage
   ],
   templateUrl: './product-configure.component.html',
 })

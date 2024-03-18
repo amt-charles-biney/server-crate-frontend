@@ -484,6 +484,7 @@ export type PaymentForm = {
   amount?: number;
   reference?: string;
   creditCardReference?: string; //For testing
+  activeIndex: number;
 };
 
 export type PaymentRequest = {
@@ -559,6 +560,7 @@ export type Content = {
   trackingUrl: string;
   estArrival: string;
   brandName: string;
+  shippingAddress: string;
 };
 
 export type ConfiguredProducts = {

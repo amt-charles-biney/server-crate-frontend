@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CustomInputComponent } from '../../../../../../shared/components/custom-input/custom-input.component';
 import { CustomImageComponent } from '../../../../../../shared/components/custom-image/custom-image.component';
 import { AuthLoaderComponent } from '../../../../../../shared/components/auth-loader/auth-loader.component';
@@ -21,7 +21,6 @@ import {
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AdminService } from '../../../../../../core/services/admin/admin.service';
 import { selectLoaderState } from '../../../../../../store/loader/reducers/loader.reducers';
 import { setLoadingSpinner } from '../../../../../../store/loader/actions/loader.actions';
 import {
@@ -30,13 +29,14 @@ import {
 } from '../../../../../../store/case/case.reducers';
 import {
   addCase,
-  deleteCase,
   getSingleCase,
   resetCase,
   updateCase,
 } from '../../../../../../store/case/case.actions';
 import { LoaderComponent } from '../../../../../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../../../../../shared/components/error/error.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DeleteModalComponent } from '../../../../../../shared/components/delete-modal/delete-modal.component';
 
 @Component({
   selector: 'app-add-case',
@@ -51,6 +51,7 @@ import { ErrorComponent } from '../../../../../../shared/components/error/error.
     IncompatiblesComponent,
     LoaderComponent,
     ErrorComponent,
+    MatDialogModule,
   ],
   templateUrl: './add-case.component.html',
 })
@@ -74,9 +75,8 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     private fb: RxFormBuilder,
     private store: Store,
     private router: Router,
-    private adminService: AdminService,
-    private destroyRef: DestroyRef,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog
   ) {}
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
@@ -191,48 +191,55 @@ export class AddCaseComponent implements OnInit, OnDestroy {
   }
 
   /**
- * The `removeCoverImage` function clears the cover image value in a form and sets it to null.
- */
+   * The `removeCoverImage` function clears the cover image value in a form and sets it to null.
+   */
   removeCoverImage() {
     this.caseForm.patchValue({ coverImage: null });
     this.coverImage = null;
   }
 
   /**
- * The `removeImage1` function in TypeScript removes the value of `image1` from a form and sets it to
- * null.
- */
+   * The `removeImage1` function in TypeScript removes the value of `image1` from a form and sets it to
+   * null.
+   */
   removeImage1() {
     this.caseForm.patchValue({ image1: null });
     this.image1 = null;
   }
 
   /**
- * The `removeImage2` function removes the value of `image2` from the `addProductForm` and sets it to
- * null.
- */
+   * The `removeImage2` function removes the value of `image2` from the `addProductForm` and sets it to
+   * null.
+   */
   removeImage2() {
     this.caseForm.patchValue({ image2: null });
     this.image2 = null;
   }
 
   /**
- * The `removeImage3` function in TypeScript removes the value of `image3` from the `addProductForm`
- * and sets it to null.
- */
+   * The `removeImage3` function in TypeScript removes the value of `image3` from the `addProductForm`
+   * and sets it to null.
+   */
   removeImage3() {
     this.caseForm.patchValue({ image3: null });
     this.image3 = null;
   }
 
-/**
- * The `deleteCase` function dispatches an action to delete a case
- * with the specified ID.
- * @param {string} id - The `id` parameter in the `deleteCase` function is a string that represents the
- * unique identifier of the case that needs to be deleted.
- */
+  /**
+   * The `deleteCase` function dispatches an action to delete a case
+   * with the specified ID.
+   * @param {string} id - The `id` parameter in the `deleteCase` function is a string that represents the
+   * unique identifier of the case that needs to be deleted.
+   */
   deleteCase(id: string) {
-    this.store.dispatch(deleteCase({ id }));
+    this.dialog.open(DeleteModalComponent, {
+      data: {
+        deleteList: [id],
+        text: 'Deleting this case, will delete all products associated with it',
+        isCategory: false,
+        caseName: this.caseForm.value.name,
+      },
+    });
   }
 
   getIncompatibleAttributeOptions({
