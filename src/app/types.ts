@@ -217,8 +217,13 @@ export type CaseResponse = {
   content: Case[];
 };
 export type AllProducts = {
-  total: number;
-  products: ProductItem[];
+  // total: number;
+  // products: ProductItem[];
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: ProductItem[];
+  product: ProductItem
 };
 
 export type UploadResponse = {

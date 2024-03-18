@@ -1,10 +1,12 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { ProductItem } from './../../../types';
+import { AllProducts } from './../../../types';
 import { gotProduct, gotProducts, resetProduct } from './categories.actions';
 import { getUniqueId } from '../../../core/utils/settings';
-export const productInitialState: { products: ProductItem[]; product: ProductItem; total: number } = {
-  products: [],
-  total: 0,
+export const productInitialState: AllProducts = {
+  content: [],
+  totalElements: 0,
+  size: 0,
+  totalPages: 0,
   product: {
     productName: '',
     productDescription: '',
@@ -36,8 +38,10 @@ export const productsFeature = createFeature({
     productInitialState,
     on(gotProducts, (state, { products }) => ({
       ...state,
-      products: [...products.products],
-      total: products.total
+      content: [...products.content],
+      totalElements: products.totalElements,
+      size: products.size,
+      totalPages: products.totalPages
     })),
     on(gotProduct, (state, product) => ({ ...state, product })),
     on(resetProduct, (state) => {
@@ -52,8 +56,7 @@ export const productsFeature = createFeature({
 export const {
   name,
   reducer,
-  selectProducts,
+  selectContent,
   selectProduct,
-  selectProductsState,
-  selectTotal
+  selectTotalElements
 } = productsFeature;
