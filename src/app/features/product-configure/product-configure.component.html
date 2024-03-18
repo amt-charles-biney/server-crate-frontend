@@ -282,7 +282,7 @@
                         })
                           ? 'border-green-600 border-2'
                           : ''
-                      }} flex flex-col border-[#E6E6E6] rounded-lg w-[190px] h-[170px] p-4"
+                      }} flex flex-col justify-between border-[#E6E6E6] rounded-lg w-[190px] h-[170px] p-4"
                     >
                       <div
                         class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3"
@@ -303,13 +303,16 @@
                       </div>
 
                       <div
-                        class="w-full flex flex-row items-center justify-center max-h-[140px] h-full"
+                        class="max-w-[155px] flex flex-row items-center justify-center max-h-[65px] h-full"
                       >
                         <img
                           title="attribte-media"
-                          [src]="attributeProduct.media"
+                          [ngSrc]="attributeProduct.media | cloudinaryUrl"
+                          height="65"
+                          width="155"
+                          priority
                           [alt]="attributeProduct.media"
-                          class="w-24 h-24"
+                          class="max-w-full max-h-full object-contain"
                         />
                       </div>
                       <div>

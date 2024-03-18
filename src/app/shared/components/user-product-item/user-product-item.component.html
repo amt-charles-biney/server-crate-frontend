@@ -1,7 +1,7 @@
 <article
   [ngClass]="{ 'border-4 border-figma-green': isSelected, 'flex flex-col max-w-[297px] w-full h-[245px] gap-[9px]': isGrid, 'grid grid-cols-2 gap-6 w-[618px] h-[166px]': !isGrid }"
 >
-<div class="w-[297px] h-[166px] border rounded-2xl p-[4.5px]">
+<div class="relative w-[297px] h-[166px] border rounded-2xl p-[4.5px]">
   <img
     class="object-contain max-w-full max-h-full"
     [ngSrc]="product.coverImage | cloudinaryUrl"
@@ -10,6 +10,9 @@
     priority
     [alt]="'image of ' + product.productName"
   />
+  <!-- <button (click)="buyNow()" class="absolute rounded-lg bottom-[9px] px-[17px] pb-0.5 bg-[#DADADA8F]">
+    <span class="text-figma-green text-xs">Buy Now</span>
+  </button> -->
 </div>
   <div
  class="flex flex-col pr-[7.5px]">
