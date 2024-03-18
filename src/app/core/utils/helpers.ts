@@ -397,7 +397,7 @@ export function buildIncompatibleTable(
 
 export function removeCloudinaryBaseUrl(url: string) {
   const prefix = 'http://res.cloudinary.com/dah4l2inx/image/upload/';
-  if (url.startsWith(prefix)) {
+  if (url && url.startsWith(prefix)) {
     return url.substring(prefix.length);
   }
   return url;
