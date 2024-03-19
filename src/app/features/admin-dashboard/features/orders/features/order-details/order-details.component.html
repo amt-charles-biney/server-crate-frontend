@@ -16,17 +16,24 @@
         </p>
         <div class="flex gap-2 items-center text-figma-green pl-4 text-base">
           <img src="/assets/eta.svg" alt="delivery icon" />
-          <p>Estimated delivery: {{ order.estArrival | date }}</p>
+          <p>
+            Estimated delivery: 
+            @if (order.estArrival) {
+              <span>{{ order.estArrival | date }}</span>
+            } @else {
+              <span>Not Available</span>
+            }
+          </p>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <p class="font-inter">Status:</p>
         @if (order.status) {
-        <app-shipping-status [status]="status" />
+        <app-shipping-status [status]="order.status" />
         }
       </div>
     </section>
-    <hr class="mt-[23px] mb-[29px]"/>
+    <hr class="mt-[23px] mb-[29px]" />
     <section class="mt-16">
       <app-custom-stepper [status]="status" #cdkStepper [completed]="false">
         <cdk-step
@@ -63,27 +70,36 @@
           </div>
           <div class="flex flex-col self-start">
             <p class="font-bold">{{ order.productName }}</p>
-            <p class="text-sm text-[#999999] font-[500]">{{ order.brandName }}</p>
+            <p class="text-sm text-[#999999] font-[500]">
+              {{ order.brandName }}
+            </p>
           </div>
         </div>
-        <p class="text-xl font-bold self-start">{{ order.totalPrice | currency }}</p>
+        <p class="text-xl font-bold self-start">
+          {{ order.totalPrice | currency }}
+        </p>
       </div>
     </section>
     <hr class="mt-12 mb-6" />
     <section class="grid grid-cols-5">
-        <div class="flex flex-col col-span-3">
-            <h4 class="font-semibold">Payment</h4>
-            <div>
-              <h4 class="font-semibold">Delivery</h4>
-              <p class="text-[#999999]">Address</p>
-              <p>
-                {{ order.shippingAddress }}
-              </p>
-            </div>
-        </div>
+      <div class="flex flex-col col-span-3">
+        <h4 class="font-semibold">Payment</h4>
         <div>
-            <app-summary [cartItem]="product" [quantity]="product.quantity" title="Order Summary" page="details"/>
+          <h4 class="font-semibold">Delivery</h4>
+          <p class="text-[#999999]">Address</p>
+          <p>
+            {{ order.shippingAddress }}
+          </p>
         </div>
+      </div>
+      <div>
+        <app-summary
+          [cartItem]="product"
+          [quantity]="product.quantity"
+          title="Order Summary"
+          page="details"
+        />
+      </div>
     </section>
   </main>
 </ng-container>
