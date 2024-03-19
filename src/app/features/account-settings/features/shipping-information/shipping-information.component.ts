@@ -6,14 +6,15 @@ import { Store } from '@ngrx/store';
 import { getShippingDetails, saveShippingDetails } from '../../../../store/account-settings/general-info/general-info.actions';
 import { Observable, tap } from 'rxjs';
 import { selectShippingDetailsState } from '../../../../store/account-settings/general-info/general-info.reducers';
-import { Contact, ShippingPayload } from '../../../../types';
+import { Address, Contact, ShippingPayload } from '../../../../types';
 import { CommonModule } from '@angular/common';
 import { zipCodeValidator } from '../../../../core/utils/validators';
+import { AddressComponent } from '../../../../shared/components/address/address.component';
 
 @Component({
   selector: 'app-shipping-information',
   standalone: true,
-  imports: [CustomInputComponent, CustomButtonComponent, ReactiveFormsModule, CommonModule],
+  imports: [CustomInputComponent, CustomButtonComponent, ReactiveFormsModule, CommonModule, AddressComponent],
   templateUrl: './shipping-information.component.html',
 })
 export class ShippingInformationComponent implements OnInit {
@@ -33,7 +34,7 @@ export class ShippingInformationComponent implements OnInit {
       lastName: new FormControl('', Validators.required),
       email: new FormControl(''),
       address1: new FormControl('', Validators.required),
-      address2: new FormControl('', Validators.required),
+      address2: new FormControl(null),
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
@@ -69,8 +70,13 @@ export class ShippingInformationComponent implements OnInit {
       iso2Code: contact.iso2,
       phoneNumber: this.intl?.getNumber(),
     };
-    this.shippingForm.patchValue({ contact: contactValue})    
+    this.shippingForm.patchValue({ contact: contactValue, address2: this.shippingForm.value.address2 || null })    
     this.store.dispatch(saveShippingDetails(this.shippingForm.value))
+  }
+
+  getAddress(address: Address) {
+    console.log("Address", address)
+    this.shippingForm.patchValue({...address, address1: address.address})
   }
   
 }

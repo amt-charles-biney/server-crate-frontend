@@ -14,7 +14,7 @@ export const getShippingDetails = createAction('[shipping] get shipping details'
 export const gotShippingDetails = createAction('[shipping] got shipping details', props<ShippingPayload>())
 
 export const addMomoWallet = createAction('[payment] add momo wallet', props<MobileMoneyWallet>())
-export const deletePaymentInfo = createAction('[payment] delete payment info', props<{id: string}>())
+export const deletePaymentInfo = createAction('[payment] delete payment info', props<{id: string, isWallet: boolean}>())
 export const getMomoWallet = createAction('[payment] get momo wallet')
 export const gotMomoWallet = createAction('[payment] got momo wallet', props<{wallets: MobileMoneyWallet[]}>())
 

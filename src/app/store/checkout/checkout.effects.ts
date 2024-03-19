@@ -46,9 +46,12 @@ export class CheckoutEffect {
                         return gotPaymentVerification({ isVerified: true, message: props.message, status: props.status})
                     }),
                     catchError((err) => {
+                        const errorMessage = errorHandler(err)
+                        this.toast.error(errorMessage, "Error")
+                        this.router.navigate(['/checkout'], { replaceUrl: true })
                         return of(setLoadingSpinner({
                             isError: true,
-                            message: errorHandler(err),
+                            message: errorMessage,
                             status: false
                         }))
                     }),
@@ -61,5 +64,5 @@ export class CheckoutEffect {
     })
 
 
-    constructor(private actions: Actions, private paymentService: PaymentService, private ngxService: NgxUiLoaderService, private toast: ToastrService) {}
+    constructor(private actions: Actions, private paymentService: PaymentService, private ngxService: NgxUiLoaderService, private toast: ToastrService, private router: Router) {}
 }

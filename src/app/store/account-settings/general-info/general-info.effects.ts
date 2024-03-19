@@ -1,4 +1,3 @@
-import { Success } from './../../../types';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
@@ -16,7 +15,7 @@ import {
   gotShippingDetails,
   saveShippingDetails,
 } from './general-info.actions';
-import { EMPTY, catchError, exhaustMap, map, of, share, shareReplay, tap } from 'rxjs';
+import { EMPTY, catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { UserInfo, GeneralInfo } from '../../../types';
 import { ProfileService } from '../../../core/services/user-profile/profile.service';
 import { Store } from '@ngrx/store';
@@ -84,8 +83,16 @@ export class GeneralInfoEffect {
       return this.action$.pipe(
         ofType(saveShippingDetails),
         exhaustMap((props) => {
-            this.toast.success('Updated shipping details', 'Success')
-          return this.profileService.saveShippingDetails(props).pipe();
+            
+          return this.profileService.saveShippingDetails(props).pipe(
+            tap(() => {
+              this.toast.success('Updated shipping details', 'Success')
+            }),
+            catchError((err) => {
+              this.toast.error(errorHandler(err), 'Error')
+              return EMPTY
+            })
+          );
         })
       );
     },
@@ -174,11 +181,14 @@ export class GeneralInfoEffect {
   deleteMomoWallet$ = createEffect(() => {
     return this.action$.pipe(
       ofType(deletePaymentInfo),
-      exhaustMap(({ id }) => {
+      exhaustMap(({ id, isWallet }) => {
         return this.profileService.deleteWallet(id).pipe(
           map(() => {
-            this.toast.success('Deleted wallet successfully', 'Success')
-            return getMomoWallet()
+            this.toast.success(`Deleted ${ isWallet ? 'wallet' : 'card' } successfully`, 'Success')
+            if (isWallet) {
+              return getMomoWallet()
+            }
+            return getCards()
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), 'Error')

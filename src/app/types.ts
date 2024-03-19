@@ -593,6 +593,7 @@ export type CreditCard = {
   cardNumber: string;
   expirationDate: string;
   cardHolderName: string;
+  paymentMethod: string
 };
 
 export type MomoResponse = {
@@ -612,3 +613,11 @@ export type SummarySubset = {
   quantity: number;
   totalPrice: number;
 };
+
+export type Address = {
+  country?: string;
+  city?: string;
+  zipCode?: string;
+  state?: string;
+  address?: string;
+}

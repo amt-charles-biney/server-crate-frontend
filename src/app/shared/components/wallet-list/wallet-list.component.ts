@@ -18,7 +18,7 @@ export class WalletListComponent {
 
   constructor(private store: Store) {}
   deleteWallet(id: string) {
-    this.store.dispatch(deletePaymentInfo({ id }))
+    this.store.dispatch(deletePaymentInfo({ id, isWallet: true }))
   }
 
   selectWallet(wallet: MobileMoneyWallet) {

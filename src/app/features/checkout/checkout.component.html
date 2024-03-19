@@ -43,13 +43,15 @@
                   placeholder="Enter your email"
                   formControlName="email"
                 />
-                <app-custom-input
+                <!-- <app-custom-input
                   id="address1"
                   label="Address 1"
                   type="text"
                   placeholder="Address 1"
                   formControlName="address1"
-                />
+                /> -->
+
+                <app-address [control]="shippingForm.controls['address1']" (addressEmitter)="getAddress($event)"/>
                 <app-custom-input
                   id="address2"
                   label="Address 2"
