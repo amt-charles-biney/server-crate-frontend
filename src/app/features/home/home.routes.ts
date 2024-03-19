@@ -16,6 +16,8 @@ import { CheckoutEffect } from '../../store/checkout/checkout.effects';
 import { checkoutFeature, verificationFeature } from '../../store/checkout/checkout.reducers';
 import { paymentFeature, shippingFeature } from '../../store/account-settings/general-info/general-info.reducers';
 import { GeneralInfoEffect } from '../../store/account-settings/general-info/general-info.effects';
+import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from '../../store/product-spec/product-spec.reducer';
+import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
 
 export const route: Routes = [
     {
@@ -46,6 +48,20 @@ export const route: Routes = [
                     provideEffects(UserEffect),
                     provideState(productsFeature),
                     provideState(categoryFeature),
+                ]
+            },
+            {
+                path: 'compare',
+                loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent)
+            },
+            {
+                path: 'product/configure/:id',
+                loadChildren: () => import('../product-configure/product-configure.routes').then(m => m.route),
+                providers: [
+                    provideState(productConfigFeature),
+                    provideEffects(ProductSpecEffects),
+                    provideState(productCartItemFeature),
+                    provideState(productConfigItemFeature)
                 ]
             },
             {

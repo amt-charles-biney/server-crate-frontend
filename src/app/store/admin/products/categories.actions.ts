@@ -63,10 +63,6 @@ export const  getConfiguration = createAction(
   '[products] get category config',
   props<Select>()
 );
-export const getUserConfiguration = createAction(
-  '[products] get user category config',
-  props<Select>()
-);
 
 export const gotConfiguration = createAction(
   '[products] got category config',
