@@ -1,23 +1,35 @@
 @if (cards.length > 0) {
-    <section class="border rounded-lg w-[432px] py-[17px] pr-[27px] pl-[6px] mb-6">
-        @for (card of cards; track card) {
-            <div class="flex justify-between items-center">
-                <div class="flex items-start">
-                    <div>image</div>
-                    <div class="flex flex-col ml-3 mr-5">
-                        <p class="text-sm">{{ card.cardHolderName }}</p>
-                        <p class="text-[10px]">{{ card.cardNumber}}</p>
-                    </div>
-                    <p class="text-[10px] pt-0.5">EXP: {{ card.expirationDate }}</p>
-                </div>
-                <button
-            type="button"
-            (click)="deleteCard(card.id!)"
-            class="text-red-color underline text-xs font-inter"
-          >
-            Remove
-          </button>
-            </div>
-        }
-    </section>
+<section class="flex flex-col gap-[13px] border rounded-lg w-[432px] py-[17px] pr-[27px] pl-[6px] mb-6">
+  @for (card of cards; track card) {
+  <div class="flex justify-between items-center">
+    <div class="flex items-start">
+      <div class="flex flex-col w-[47px] h-[29px] bg-[#E8EAEB4D] justify-center rounded">
+        <img class="max-h-full max-w-full object-contain" [src]="images[card.paymentMethod]" [alt]="card.paymentMethod">
+      </div>
+      <div class="flex flex-col ml-3 mr-5">
+        <p class="text-sm">{{ card.cardHolderName }}</p>
+        <p class="text-[10px]">XXXXXXXXX{{ card.cardNumber  | slice: 12:16 }}</p>
+      </div>
+      <p class="text-[10px] pt-0.5">EXP: {{ card.expirationDate }}</p>
+    </div>
+    @if (page === 'default') {
+        <button
+          type="button"
+          (click)="deleteCard(card.id!)"
+          class="text-red-color underline text-xs font-inter"
+        >
+          Remove
+        </button>
+    } @else {
+        <button
+          type="button"
+          (click)="selectCard(card)"
+          class="text-figma-green underline text-xs font-inter"
+        >
+          Select
+        </button>
+    }
+  </div>
+  }
+</section>
 }

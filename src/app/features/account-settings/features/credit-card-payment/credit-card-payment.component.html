@@ -1,6 +1,6 @@
 <form class="mt-10" [formGroup]="creditCardForm" (ngSubmit)="addCard()">
   <ng-container *ngIf="cards | async as cards">
-    <app-card-list [cards]="cards"/>
+    <app-card-list [cards]="cards" (cardEmitter)="selectCard($event)" [page]="page"/>
   </ng-container>
   <section class="flex gap-[25px] w-[432px]">
     <app-custom-radio
@@ -60,7 +60,10 @@
         <span class="text-red-600 text-xs">{{cardNumber?.value.toString().length - 16}} digits in excess</span>
       </div>
       <div *ngIf="cardNumber?.errors?.['pattern']">
-        <span class="text-red-600">Please use only numbers</span>
+        <span class="text-red-600 text-xs">Please use only numbers</span>
+      </div>
+      <div *ngIf="cardNumber?.errors?.['card']">
+        <span class="text-red-600 text-xs">Invalid card. Must be a visa or mastercard.</span>
       </div>
       }
     </div>

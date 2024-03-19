@@ -22,7 +22,7 @@ import {
 } from '@angular/cdk/stepper';
 import { CustomCheckBoxComponent } from '../../shared/components/custom-check-box/custom-check-box.component';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { CartProductItem, Contact, LoadingStatus, PaymentRequest, ShippingPayload } from '../../types';
+import { Address, CartProductItem, Contact, LoadingStatus, PaymentRequest, ShippingPayload } from '../../types';
 import { Store } from '@ngrx/store';
 import { selectConfiguredProducts } from '../../store/cart/cart.reducers';
 import { SummaryComponent } from '../../shared/components/summary/summary.component';
@@ -40,6 +40,7 @@ import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
 import { LoaderComponent } from '../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../shared/components/error/error.component';
 import { getCartItems } from '../../store/cart/cart.actions';
+import { AddressComponent } from '../../shared/components/address/address.component';
 
 @Component({
   selector: 'app-checkout',
@@ -58,6 +59,7 @@ import { getCartItems } from '../../store/cart/cart.actions';
     PaymentDetailsComponent,
     LoaderComponent,
     ErrorComponent,
+    AddressComponent
   ],
   templateUrl: './checkout.component.html',
 })
@@ -138,6 +140,11 @@ export class CheckoutComponent implements OnInit {
   }
   getSubtotal(amountToPay: number) {
     this.amountToPay = amountToPay;
+  }
+
+  getAddress(address: Address) {
+    console.log("Checkout", address)
+    this.shippingForm.patchValue({...address, address1: address.address})
   }
 
   userDetails() {
