@@ -6,7 +6,7 @@ import { HomeComponent } from './home.component';
 import { Routes } from '@angular/router';
 import { FeaturedProductFeature } from '../../store/product/featured-product/featured-product.reducer';
 import { FeaturedProductEffect } from '../../store/product/featured-product/featured-product.effect';
-import { productsFeature } from '../../store/admin/products/products.reducers';
+import { productsFeature, recommendationsFeature } from '../../store/admin/products/products.reducers';
 import { categoryFeature } from '../../store/admin/products/categories.reducers';
 import { UserEffect } from '../../store/users/users.effects';
 import { CategoryEffect } from '../../store/admin/products/categories.effect';
@@ -18,6 +18,8 @@ import { CheckoutEffect } from '../../store/checkout/checkout.effects';
 import { checkoutFeature, verificationFeature } from '../../store/checkout/checkout.reducers';
 import { paymentFeature, shippingFeature } from '../../store/account-settings/general-info/general-info.reducers';
 import { GeneralInfoEffect } from '../../store/account-settings/general-info/general-info.effects';
+import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from '../../store/product-spec/product-spec.reducer';
+import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
 
 export const route: Routes = [
     {
@@ -51,6 +53,10 @@ export const route: Routes = [
                 ]
             },
             {
+                path: 'compare',
+                loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent)
+            },
+            {
                 path: 'product/configure/:id',
                 loadChildren: () => import('../product-configure/product-configure.routes').then(m => m.route),
                 providers: [
@@ -75,6 +81,10 @@ export const route: Routes = [
             {
                 path: 'cart',
                 component: CartComponent,
+                providers: [
+                    provideEffects(ProductsEffect),
+                    provideState(recommendationsFeature)
+                ]
             },
         ],
         component: HomeComponent,

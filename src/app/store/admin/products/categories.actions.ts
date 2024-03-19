@@ -5,6 +5,7 @@ import {
   Item,
   ProductItem,
   ProductPayload,
+  ProductItemSubset,
 } from '../../../types';
 
 export const getCategories = createAction('[products] get categories');
@@ -63,10 +64,6 @@ export const  getConfiguration = createAction(
   '[products] get category config',
   props<Select>()
 );
-export const getUserConfiguration = createAction(
-  '[products] get user category config',
-  props<Select>()
-);
 
 export const gotConfiguration = createAction(
   '[products] got category config',
@@ -103,3 +100,6 @@ export const removeFromFeature = createAction(
 
 export const gotCases = createAction('[cases] get user cases', props<{ cases: Select[] }>())
 export const getCases = createAction('[cases] get all cases to display for user')
+
+export const getRecommendations = createAction('[recommendations] get recommendations')
+export const gotRecommendations = createAction('[recommendations] got recommendations', props<{recommendations: ProductItemSubset[]}>())

@@ -19,7 +19,6 @@ import {
 import { UserProductItemComponent } from '../../shared/components/user-product-item/user-product-item.component';
 import { filter } from '../../store/users/users.actions';
 import { MatDialog } from '@angular/material/dialog';
-import { CompareDialogComponent } from '../../shared/components/compare-dialog/compare-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { selectBrands, selectCategories, selectCases } from '../../store/admin/products/categories.reducers';
 
@@ -128,9 +127,7 @@ export class PreferenceSelectionComponent implements OnInit {
   }
 
   compareEvent() {
-    if (this.selectedProducts.length < 2) {
-      this.dialog.open(CompareDialogComponent);
-    }
+    this.router.navigateByUrl('/compare')
   }
 
   onSelect(product: ProductItem) {
