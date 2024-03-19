@@ -10,7 +10,13 @@
       @for (product of popularProducts; let i = $index; track i) {
         <div class="keen-slider__slide p-4 w-full mx-auto sm:mx-0 md:max-w-[320px]">
           <div class="w-[297px]">
-            <app-user-product-item [product]="product"></app-user-product-item>
+            <app-user-product-item [product]="{
+              id: product.id,
+              productName: product.productName,
+              coverImage: product.coverImage,
+              productPrice: product.productPrice,
+              productBrand: product.productBrand
+            }"></app-user-product-item>
           </div>
         </div>
       }

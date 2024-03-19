@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProductItem } from '../../../types';
+import { ProductItem, ProductItemSubset } from '../../../types';
 import { CommonModule, CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
@@ -20,19 +20,9 @@ import { BuyNowComponent } from './features/buy-now/buy-now.component';
   templateUrl: './user-product-item.component.html',
 })
 export class UserProductItemComponent {
-  @Input() product!: ProductItem;
+  @Input() product!: ProductItemSubset;
   @Input() isGrid: boolean = true;
-  @Output() selectorEmitter = new EventEmitter<ProductItem>();
   isSelected: boolean = false;
-
-  onSelect() {
-    if (this.isSelected) {
-      this.isSelected = false;
-    } else {
-      this.isSelected = true;
-      this.selectorEmitter.emit(this.product);
-    }
-  }
 
   // buyNow() {
   //   this.dialog.open(BuyNowComponent, {

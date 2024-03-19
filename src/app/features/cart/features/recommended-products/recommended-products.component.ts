@@ -1,11 +1,10 @@
 import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
-import { ProductItem } from '../../../../types';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
 import { Store } from '@ngrx/store';
-import { loadFeaturedProducts, loadNewProducts } from '../../../../store/product/featured-product/featured-product.action';
-import { selectFeaturedProducts, selectNewProducts } from '../../../../store/product/featured-product/featured-product.reducer';
 import { CommonModule } from '@angular/common';
 import { UserProductItemComponent } from '../../../../shared/components/user-product-item/user-product-item.component';
+import { selectRecommendedState } from '../../../../store/admin/products/products.reducers';
+import { getRecommendations } from '../../../../store/admin/products/categories.actions';
 
 @Component({
   selector: 'app-recommended-products',
@@ -20,13 +19,13 @@ export class RecommendedProductsComponent {
   @ViewChild('recommendedSliderRef') recommendedSliderRef!: ElementRef<HTMLElement>
 
   recommendedProductSlider!: KeenSliderInstance
-  recommendedProducts$ = this.store.select(selectFeaturedProducts)
+  recommendedProducts$ = this.store.select(selectRecommendedState)
   currentRecommendedSlide = 0
 
   constructor(private store: Store, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.store.dispatch(loadFeaturedProducts())
+    this.store.dispatch(getRecommendations())
   }
 
 

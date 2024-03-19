@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { AllProducts, PageAbleResponseData, Select } from '../../../types';
+import { AllProducts, PageAbleResponseData, ProductItemSubset, Select } from '../../../types';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
@@ -32,5 +32,9 @@ export class UserService {
 
   getCases(): Observable<PageAbleResponseData<Select>> {
     return this.http.get<PageAbleResponseData<Select>>(`${this.baseUrl}/cases`);
+  }
+
+  getRecommendations() {
+    return this.http.get<ProductItemSubset[]>(`${this.baseUrl}/recommendation`)
   }
 }
