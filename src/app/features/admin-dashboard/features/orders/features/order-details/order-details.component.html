@@ -35,7 +35,7 @@
     </section>
     <hr class="mt-[23px] mb-[29px]" />
     <section class="mt-16">
-      <app-custom-stepper [status]="status" #cdkStepper [completed]="false">
+      <app-custom-stepper [status]="order.status" #cdkStepper [completed]="false">
         <cdk-step
           [editable]="false"
           [completed]="false"
