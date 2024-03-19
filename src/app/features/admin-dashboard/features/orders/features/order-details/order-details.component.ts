@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { getOrder, resetOrderDetail } from '../../../../../../store/orders/order.actions';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { Content, SummarySubset } from '../../../../../../types';
 import { selectSingleOrderState } from '../../../../../../store/orders/order.reducers';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ShippingStatusComponent } from '../../../../../../shared/components/shipping-status/shipping-status.component';
 import { CustomStepperComponent } from '../../../../../../shared/components/custom-stepper/custom-stepper.component';
-import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
+import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CloudinaryUrlPipe } from '../../../../../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
 import { SummaryComponent } from '../../../../../../shared/components/summary/summary.component';
-import { NAME_MAPPING } from '../../../../../../core/utils/constants';
 import { LoaderComponent } from '../../../../../../core/components/loader/loader.component';
 
 @Component({
@@ -33,7 +32,6 @@ import { LoaderComponent } from '../../../../../../core/components/loader/loader
 export class OrderDetailsComponent implements OnInit, OnDestroy {
   order$!: Observable<Content>;
   product!: SummarySubset
-  status!: string
   constructor(private store: Store, private activatedRoute: ActivatedRoute, private router: Router) {}
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id')!;
@@ -47,7 +45,6 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
           quantity: order.configuredProduct[0]?.quantity,
           totalPrice: order.totalPrice
         }
-        this.status = NAME_MAPPING[order.status]
       })
     )
   }
