@@ -2,17 +2,20 @@ import { AdminService } from './../../../core/services/admin/admin.service';
 import {
   addToFeature,
   getProducts,
+  getRecommendations,
   getUserProducts,
   gotProducts,
+  gotRecommendations,
   removeFromFeature,
 } from './categories.actions';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, map, of, shareReplay, switchMap } from 'rxjs';
-import { AllProducts, ProductItem } from '../../../types';
+import { EMPTY, catchError, exhaustMap, map, of, shareReplay, switchMap } from 'rxjs';
+import { AllProducts } from '../../../types';
 import { UserService } from '../../../core/services/user/user.service';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { errorHandler } from '../../../core/utils/helpers';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class ProductsEffect {
@@ -90,11 +93,27 @@ export class ProductsEffect {
     )
   }, { dispatch: false})
 
-
+  getRecommendations$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(getRecommendations),
+      switchMap(() => {
+        return this.userService.getRecommendations().pipe(
+          map((recommendations) => {
+            return gotRecommendations({recommendations})
+          }),
+          catchError((err) => {
+            this.toast.error(errorHandler(err), 'Error')
+            return EMPTY
+          })
+        )
+      })
+    )
+  })
 
   constructor(
     private action$: Actions,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private toast: ToastrService
   ) {}
 }

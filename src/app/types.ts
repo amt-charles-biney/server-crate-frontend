@@ -621,3 +621,16 @@ export type Address = {
   state?: string;
   address?: string;
 }
+
+export type ProductItemSubset = {
+  id: string;
+  productName: string,
+  coverImage: string;
+  productPrice: number;
+  productBrand: string | {
+    name: string;
+    price: number
+  };
+}
+
+

@@ -1,6 +1,6 @@
 <ng-container *ngIf="recommendedProducts$ | async as recommendedProducts">
   @if(recommendedProducts.length <= 0) {
-  <div>no new products available!!</div>
+  <div>No recommended products available!</div>
   }
 
   <div class="keen-slider" #recommendedSliderRef>

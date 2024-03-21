@@ -81,7 +81,10 @@
           <mat-expansion-panel-header>
             <mat-panel-title class="text-[16px]"> Categories </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul class="flex flex-col gap-2" *ngIf="categories$ | async as categories">
+          <ul
+            class="flex flex-col gap-2"
+            *ngIf="categories$ | async as categories"
+          >
             <li *ngFor="let category of categories">
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
@@ -159,14 +162,14 @@
       </mat-accordion> -->
     </form>
   </aside>
-  <section class="col-span-3 2xl:w-[923px] flex flex-col ">
+  <section class="col-span-3 2xl:w-[923px] flex flex-col">
     <div class="flex items-center w-full justify-between">
       @if (search) {
-        <p>Search results for "{{search}}"</p>
+      <p>Search results for "{{ search }}"</p>
       } @else {
-        <p *ngIf="total | async as total; else no_servers">
-          {{ total }} {{ total === 1 ? "Server" : "Servers" }}
-        </p>
+      <p *ngIf="total | async as total; else no_servers">
+        {{ total }} {{ total === 1 ? "Server" : "Servers" }}
+      </p>
       }
       <ng-template #no_servers>
         <p>0 Servers</p>
@@ -229,8 +232,11 @@
       </div>
     </div>
     <section
-    [ngClass]="{' flex-col gap-10 self-start': !isGridMode, 'flex-wrap gap-x-2 xl:gap-x-4 gap-y-[40px]': isGridMode}"
-      class="flex mt-6 "
+      [ngClass]="{
+        ' flex-col gap-10 self-start': !isGridMode,
+        'flex-wrap gap-x-2 xl:gap-x-4 gap-y-[40px]': isGridMode
+      }"
+      class="flex mt-6"
     >
       <ng-container
         *ngIf="{ products: products | async, total: total | async } as products"
@@ -240,12 +246,17 @@
             @for (product of products.products| paginate: { id: 'server',
             itemsPerPage: 9, currentPage: page, totalItems: products.total};
             track product) {
-              <app-user-product-item
-                [isGrid]="isGridMode"
-                [product]="product"
-                (selectorEmitter)="onSelect($event)"
-              />
-            
+            <app-user-product-item
+              [isGrid]="isGridMode"
+              [product]="{
+                id: product.id,
+                productName: product.productName,
+                coverImage: product.coverImage,
+                productPrice: product.productPrice,
+                productBrand: product.productBrand
+              }"
+            />
+
             }
           </ng-container>
         </ng-container>

@@ -14,7 +14,6 @@ import {
   getProducts,
   getUserBrands,
   getUserCategories,
-  getUserConfiguration,
   gotBrands,
   gotCases,
   gotCategories,
@@ -178,40 +177,6 @@ export class CategoryEffect {
             }),
             finalize(() => {
               this.ngxService.stopBackgroundLoader('getConfig');
-            })
-          );
-      })
-    );
-  });
-
-  getUserCategoryConfig$ = createEffect(() => {
-    return this.action$.pipe(
-      ofType(getUserConfiguration),
-      concatMap((selectedCategory: Select) => {
-        return this.userService
-          .getCategoryConfiguration(selectedCategory.id)
-          .pipe(
-            map((data) => {
-              this.store.dispatch(
-                setLoadingSpinner({
-                  status: false,
-                  message: '',
-                  isError: false,
-                })
-              );
-              return gotConfiguration(data);
-            }),
-            timeout(5000),
-            catchError((error) => {
-              throwError(() => 'Request timed out');
-              return of(
-                setLoadingSpinner({
-                  status: false,
-                  message:
-                    error.error.detail || 'Cannot get category configuration',
-                  isError: true,
-                })
-              );
             })
           );
       })

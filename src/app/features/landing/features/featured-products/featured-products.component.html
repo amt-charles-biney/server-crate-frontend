@@ -16,7 +16,13 @@
           <div class="flex flex-wrap gap-[16px] justify-center max-w-screen-maxCap">
             @for(product of featuredProducts; let idx = $index; track idx) {
               <div class="w-[297px] mx-auto">
-                <app-user-product-item [product]="product"></app-user-product-item>
+                <app-user-product-item [product]="{
+                  id: product.id,
+                  productName: product.productName,
+                  coverImage: product.coverImage,
+                  productPrice: product.productPrice,
+                  productBrand: product.productBrand
+                }"></app-user-product-item>
               </div>
             }
         </div>        
