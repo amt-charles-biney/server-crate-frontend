@@ -52,7 +52,7 @@
             placeholder="Select an option"
             formControlName="category"
             [filteredOptions]="filteredOptions"
-            [optionSelected]="onCategorySelected"
+            (optionSelectedEmitter)="onCategorySelected($event)"
             [deleteFn]="deleteCategory"
             myClass="font-[500]"
           />

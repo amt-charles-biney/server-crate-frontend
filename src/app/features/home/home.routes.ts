@@ -53,15 +53,15 @@ export const route: Routes = [
             },
             {
                 path: 'compare',
-                loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent)
+                loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent),
+                providers:  [
+                    provideEffects(ProductsEffect),
+                    provideState(productsFeature)
+                ]
             },
             {
                 path: 'wishlist',
                 loadComponent: () => import('../wishlist/wishlist.component').then(c => c.WishlistComponent),
-                providers: [
-                    provideState(wishlistFeature),
-                    provideEffects(ProductsEffect)
-                ]
             },
             {
                 path: 'product/configure/:id',

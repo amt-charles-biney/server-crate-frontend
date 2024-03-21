@@ -18,7 +18,7 @@
  class="flex flex-col pr-[7.5px]">
     <div class="flex items-center justify-between">
       <p class="font-bold">{{ product.productName }}</p>
-      <button (click)="addToWishlst(product.id)">
+      <button (click)="addToWishlist(product.id)">
         <img src="/assets/heart.svg" alt="" />
       </button>
     </div>
@@ -34,6 +34,7 @@
         <span class="text-sm font-[500]">configure</span>
         <img src="/assets/arrow-right.svg" alt="" />
       </button>
+      <button (click)="addToCompare(product)">Add to compare</button>
     </div>
   </div>
 </article>

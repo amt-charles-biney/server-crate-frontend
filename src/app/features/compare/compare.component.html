@@ -4,7 +4,7 @@
     <button class="text-sm text-red-600 underline">Clear selections</button>
   </header>
   <section class="flex">
-    <div class="flex flex-col w-[211px] border">
+    <div class="flex flex-col border">
       <div class="row h-[241px]">
         <p>Products</p>
       </div>
@@ -28,6 +28,71 @@
       </div>
       <div class="row h-[39px] !border-b-0">
         <p>Operating System</p>
+      </div>
+    </div>
+    <div class="flex gap-[73px] ml-[17px] overflow-auto myScroll">
+      <ng-container *ngIf="productsToCompare | async as productsToCompare">
+        @for (product of productsToCompare; track product) {
+        <div class="flex flex-col">
+          <div class="py-3 px-2 product">
+            <p class="font-bold">{{ product.productName }}</p>
+          </div>
+          <div class="relative h-[180px] product !rounded-2xl mt-3">
+            <img
+              [ngSrc]="product.coverImage | cloudinaryUrl"
+              class="max-w-full max-h-full object-contain"
+              width="469"
+              height="180"
+              priority
+              [alt]="'image of ' + product.productName"
+            />
+            <button class="absolute top-2 right-3" (click)="addToWishlist(product.id)">
+              <img src="/assets/heart.svg" alt="" />
+            </button>
+            <p class="absolute bottom-2 right-3 font-[500] text-sm">{{product.productPrice | currency }}</p>
+          </div>
+          <div class="border-b w-[469px] flex flex-col justify-center items-center h-[147px]">
+            <p>Description</p>
+          </div>
+          <div class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]">
+            <p>{{ product.productBrand }}</p>
+          </div>
+          <div class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]">
+            <p>Graphics Card</p>
+          </div>
+          <div class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]">
+            <p>Motherboard</p>
+          </div>
+          <div class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]">
+            <p>RAM</p>
+          </div>
+          <div class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]">
+            <p>Storage</p>
+          </div>
+          <div class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]">
+            <p>Operating System</p>
+          </div>
+        </div>
+        }
+      </ng-container>
+      <div class="flex flex-col">
+        <div class="product !border-0">
+          <ng-container *ngIf="allProducts | async">
+            <form [formGroup]="productList">
+              
+              <app-custom-input
+              id="category"
+              type="async"
+              placeholder="Select a product for comparison"
+              formControlName="product"
+              [filteredOptions]="filteredOptions"
+              (optionSelectedEmitter)="onProductSelect($event)"
+              myClass="font-[500]"
+            />
+            </form>
+          </ng-container>
+          <!-- <p class="font-bold">{{ product.productName }}</p> -->
+        </div>
       </div>
     </div>
   </section>

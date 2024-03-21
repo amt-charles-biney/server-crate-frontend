@@ -36,8 +36,19 @@ export class UserProductItemComponent {
     this.router.navigate(['/product/configure', id]);
   }
 
-  addToWishlst(id: string) {
-    this.store.dispatch(addToWishlist({ id }))
+  addToWishlist(id: string) {
+    this.store.dispatch(addToWishlist({ id }));
+  }
+
+  addToCompare(product: ProductItemSubset) {
+    let productsForComparison:ProductItemSubset[] = [product];
+    if (localStorage.getItem("products")) {
+      const productsInStorage = JSON.parse(localStorage.getItem("products")!)
+    productsForComparison = [...productsInStorage, product]
+    }
+
+    localStorage.setItem('products', JSON.stringify(productsForComparison)); 
+    
   }
 
   constructor(private router: Router, private store: Store) {}
