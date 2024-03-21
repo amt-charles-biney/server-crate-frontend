@@ -16,9 +16,10 @@ import { Store } from '@ngrx/store';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {MatBadgeModule} from '@angular/material/badge';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { selectCount } from '../../../store/cart/cart.reducers';
 import { MegaMenuComponent } from './mega-menu/mega-menu.component';
+import { selectTotalElements } from '../../../store/admin/products/wishlist.reducers';
 
 @Component({
   selector: 'app-header',
@@ -64,6 +65,7 @@ export class HeaderComponent implements OnInit {
   showSearch: boolean = false;
   searchForm!: FormGroup
   numberOfCartItems$!: Observable<number>
+  numberOfWishlistItems$!: Observable<number>
   constructor(private authService: AuthService, private store: Store, private router: Router, private renderer: Renderer2) {
     this.isAuthenticated = this.authService.isAuthenticated();
   }
@@ -72,6 +74,7 @@ export class HeaderComponent implements OnInit {
       searchValue: new FormControl('', Validators.required)
     })
     this.numberOfCartItems$ = this.store.select(selectCount) 
+    this.numberOfWishlistItems$ = this.store.select(selectTotalElements)
   }
 
   openSearch() {

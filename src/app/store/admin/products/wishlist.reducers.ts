@@ -22,4 +22,4 @@ const wishlistState: Wishlist = {
     )
   })
   
-  export const { selectContent } = wishlistFeature
+  export const { selectContent, selectTotalElements } = wishlistFeature

@@ -64,7 +64,7 @@
               [matBadgeHidden]="(numberOfCartItems$ | async) === 0"
               matBadgeColor="warn"
               matBadgeSize="small"
-              class="relative w-7 h-7 flex justify-center items-center hover:bg-gray-200 rounded-full"
+              class="w-7 h-7 flex justify-center items-center hover:bg-gray-200 rounded-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -83,6 +83,10 @@
             </button>
             <button
               routerLink="/wishlist"
+              [matBadge]="numberOfWishlistItems$ | async"
+              [matBadgeHidden]="(numberOfWishlistItems$ | async) === 0"
+              matBadgeColor="warn"
+              matBadgeSize="small"
               class="w-7 h-7 flex justify-center items-center hover:bg-gray-200 rounded-full"
             >
               <svg
