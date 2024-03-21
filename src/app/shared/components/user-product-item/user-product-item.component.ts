@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProductItem, ProductItemSubset } from '../../../types';
+import { Component, Input } from '@angular/core';
+import { ProductItemSubset } from '../../../types';
 import { CommonModule, CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BuyNowComponent } from './features/buy-now/buy-now.component';
+import { Store } from '@ngrx/store';
+import { addToWishlist } from '../../../store/admin/products/categories.actions';
 
 @Component({
   selector: 'app-user-product-item',
@@ -13,7 +14,6 @@ import { BuyNowComponent } from './features/buy-now/buy-now.component';
     CurrencyPipe,
     // BuyNowComponent,
     NgOptimizedImage,
-    MatDialogModule,
     CommonModule,
     CloudinaryUrlPipe,
   ],
@@ -36,5 +36,9 @@ export class UserProductItemComponent {
     this.router.navigate(['/product/configure', id]);
   }
 
-  constructor(private router: Router, private dialog: MatDialog) {}
+  addToWishlst(id: string) {
+    this.store.dispatch(addToWishlist({ id }))
+  }
+
+  constructor(private router: Router, private store: Store) {}
 }

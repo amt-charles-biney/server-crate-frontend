@@ -6,6 +6,7 @@ import {
   ProductItem,
   ProductPayload,
   ProductItemSubset,
+  Wishlist,
 } from '../../../types';
 
 export const getCategories = createAction('[products] get categories');
@@ -103,3 +104,7 @@ export const getCases = createAction('[cases] get all cases to display for user'
 
 export const getRecommendations = createAction('[recommendations] get recommendations')
 export const gotRecommendations = createAction('[recommendations] got recommendations', props<{recommendations: ProductItemSubset[]}>())
+
+export const getWishlist = createAction('[wishlist] get wishlist')
+export const gotWishlist = createAction('[wishlist] got wishlist', props<Wishlist>())
+export const addToWishlist = createAction('[wishlist] add to wishlist', props<{ id: string }>())

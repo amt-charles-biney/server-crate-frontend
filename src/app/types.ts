@@ -632,5 +632,20 @@ export type ProductItemSubset = {
     price: number
   };
 }
+export type WishlistItemSubset = {
+  id: string;
+  productName: string,
+  coverImage: string;
+  productPrice: number;
+  productBrand: string | {
+    name: string;
+    price: number
+  };
+}
 
-
+export type Wishlist = {
+  content: ProductItemSubset[],
+  totalElements: number;
+  totalPages: number;
+  size: number;
+}

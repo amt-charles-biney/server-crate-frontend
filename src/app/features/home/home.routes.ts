@@ -18,6 +18,7 @@ import { paymentFeature, shippingFeature } from '../../store/account-settings/ge
 import { GeneralInfoEffect } from '../../store/account-settings/general-info/general-info.effects';
 import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from '../../store/product-spec/product-spec.reducer';
 import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
+import { wishlistFeature } from '../../store/admin/products/wishlist.reducers';
 
 export const route: Routes = [
     {
@@ -53,6 +54,14 @@ export const route: Routes = [
             {
                 path: 'compare',
                 loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent)
+            },
+            {
+                path: 'wishlist',
+                loadComponent: () => import('../wishlist/wishlist.component').then(c => c.WishlistComponent),
+                providers: [
+                    provideState(wishlistFeature),
+                    provideEffects(ProductsEffect)
+                ]
             },
             {
                 path: 'product/configure/:id',
