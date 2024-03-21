@@ -15,7 +15,7 @@
     <ng-template #has_cartItems>
       <section class="grid grid-cols-5 mt-[39px]">
         @for (cartItem of cartProducts; track cartItem) {
-        <section class="flex flex-col col-span-3 gap-6 max-h-[708px] overflow-auto myScroll">
+        <section class="flex flex-col col-span-3 gap-6 max-h-[708px]">
           <app-cart-product-item [product]="cartItem" (quantityEmitter)="getQuantityOfProduct($event, cartItem)" [limit]="cartItem.stock"/>
         </section>
         <div class="col-span-2 ml-auto">
