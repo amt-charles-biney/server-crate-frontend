@@ -13,8 +13,8 @@ import {
   getUserProducts,
 } from '../../store/admin/products/categories.actions';
 import {
-  selectProducts,
-  selectTotal,
+  selectContent,
+  selectTotalElements,
 } from '../../store/admin/products/products.reducers';
 import { UserProductItemComponent } from '../../shared/components/user-product-item/user-product-item.component';
 import { filter } from '../../store/users/users.actions';
@@ -65,8 +65,8 @@ export class PreferenceSelectionComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.onLoad();
-    this.products = this.store.select(selectProducts);
-    this.total = this.store.select(selectTotal);
+    this.products = this.store.select(selectContent);
+    this.total = this.store.select(selectTotalElements);
 
     this.activatedRoute.queryParams
       .subscribe((params) => {        
@@ -90,8 +90,8 @@ export class PreferenceSelectionComponent implements OnInit {
     } else {
       this.store.dispatch(filter({ page: 0, params: {...this.initialParams, query: search } }))
     }
-    this.products = this.store.select(selectProducts);
-    this.total = this.store.select(selectTotal);
+    this.products = this.store.select(selectContent);
+    this.total = this.store.select(selectTotalElements);
   }
   onLoad() {
     this.queryParams = {

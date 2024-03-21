@@ -217,8 +217,13 @@ export type CaseResponse = {
   content: Case[];
 };
 export type AllProducts = {
-  total: number;
-  products: ProductItem[];
+  // total: number;
+  // products: ProductItem[];
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: ProductItem[];
+  product: ProductItem
 };
 
 export type UploadResponse = {
@@ -588,6 +593,7 @@ export type CreditCard = {
   cardNumber: string;
   expirationDate: string;
   cardHolderName: string;
+  paymentMethod: string
 };
 
 export type MomoResponse = {
@@ -607,3 +613,11 @@ export type SummarySubset = {
   quantity: number;
   totalPrice: number;
 };
+
+export type Address = {
+  country?: string;
+  city?: string;
+  zipCode?: string;
+  state?: string;
+  address?: string;
+}

@@ -48,6 +48,9 @@ export const NAME_MAPPING: { [key: string]: string} = {
 export const IMAGE_MAPPING: {[key:string]: string} = {
     'MTN': '/assets/mtn.svg',
     'Vodafone': '/assets/voda.svg',
+    'visa': '/assets/visa.svg',
+    'mastercard': '/assets/mastercard.svg'
+    
 }
 
 export const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]

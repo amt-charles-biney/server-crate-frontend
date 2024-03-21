@@ -24,7 +24,7 @@
     }
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.paymentMethod}}</td>
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">
-        <app-shipping-status [status]="status"/>
+        <app-shipping-status [status]="order.status"/>
     </td>
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.date | date}}</td>
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.totalPrice | currency }}</td>

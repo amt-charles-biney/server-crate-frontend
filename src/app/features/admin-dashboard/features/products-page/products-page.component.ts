@@ -12,7 +12,7 @@ import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { getProducts } from '../../../../store/admin/products/categories.actions';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { selectProducts, selectTotal } from '../../../../store/admin/products/products.reducers';
+import { selectContent, selectTotalElements } from '../../../../store/admin/products/products.reducers';
 import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -47,7 +47,7 @@ export class ProductsPageComponent implements OnInit {
     document.body.scrollTo({ top: 0, behavior: 'smooth'})
     this.page = pageNumber;
     this.store.dispatch(getProducts({ page: this.page - 1 }));
-    this.products = this.store.select(selectProducts);
-    this.total = this.store.select(selectTotal)
+    this.products = this.store.select(selectContent);
+    this.total = this.store.select(selectTotalElements)
   }
 }

@@ -25,7 +25,7 @@ import { NAME_MAPPING } from '../../../core/utils/constants';
   ],
   templateUrl: './order-row.component.html',
 })
-export class OrderRowComponent implements OnInit {
+export class OrderRowComponent {
   @Input() order!: Content;
   @Input() control!: FormControl;
   @Input() isAdmin!: boolean
@@ -33,11 +33,6 @@ export class OrderRowComponent implements OnInit {
     selected: { name: string; value: string; isAdded: boolean };
     id: string;
   }>();
-  status!: string
-
-  ngOnInit(): void {
-    this.status = NAME_MAPPING[this.order.status]
-  }
 
   itemSelected(
     selected: { name: string; value: string; isAdded: boolean },
