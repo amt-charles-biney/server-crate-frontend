@@ -4,7 +4,6 @@ import { ProductItemSubset } from '../../types';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { UserProductItemComponent } from '../../shared/components/user-product-item/user-product-item.component';
-import { getWishlist } from '../../store/admin/products/categories.actions';
 import { selectContent } from '../../store/admin/products/wishlist.reducers';
 
 @Component({
@@ -20,7 +19,6 @@ export class WishlistComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch(getWishlist())
     this.wishlist = this.store.select(selectContent)
   }
 }

@@ -1,19 +1,16 @@
 import { AdminService } from './../../../core/services/admin/admin.service';
 import {
   addToFeature,
-  addToWishlist,
   getProducts,
   getRecommendations,
   getUserProducts,
-  getWishlist,
   gotProducts,
   gotRecommendations,
-  gotWishlist,
   removeFromFeature,
 } from './categories.actions';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, catchError, exhaustMap, map, of, shareReplay, switchMap, tap } from 'rxjs';
+import { EMPTY, catchError, exhaustMap, map, of, shareReplay, switchMap } from 'rxjs';
 import { AllProducts } from '../../../types';
 import { UserService } from '../../../core/services/user/user.service';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
@@ -112,40 +109,6 @@ export class ProductsEffect {
       })
     )
   })
-
-  getWishList$ = createEffect(() => {
-    return this.action$.pipe(
-      ofType(getWishlist),
-      switchMap(() => {
-        return this.userService.getWishlist().pipe(
-          map(({ content, size, totalElements, totalPages}) => {
-            return gotWishlist({ content, size, totalElements, totalPages })
-          }),
-          catchError((err) => {
-            this.toast.error(errorHandler(err), 'Error')
-            return EMPTY
-          })
-        )
-      })
-    )
-  })
-
-  addToWishlist$ = createEffect(() => {
-    return this.action$.pipe(
-      ofType(addToWishlist),
-      switchMap(({ id }) => {
-        return this.userService.addToWishlist(id).pipe(
-          tap(() => {
-            this.toast.success('Added product to wishlist', 'Success', { timeOut: 1000 })
-          }),
-          catchError((err) => {
-            this.toast.error(errorHandler(err), 'Error')
-            return EMPTY
-          })
-        )
-      })
-    )
-  }, { dispatch: false })
 
 
   constructor(
