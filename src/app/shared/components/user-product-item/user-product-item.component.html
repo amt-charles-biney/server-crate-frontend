@@ -17,14 +17,16 @@
   <div
  class="flex flex-col pr-[7.5px]">
     <div class="flex items-center justify-between">
-      <p class="font-bold">{{ product.productName }}</p>
-      <img src="/assets/heart.svg" alt="" />
+      <p class="font-bold max-w-[145px] overflow-hidden whitespace-nowrap text-ellipsis">{{ product.productName }}</p>
+      <button (click)="addToWishlist(product.id)">
+        <img src="/assets/heart.svg" alt="" />
+      </button>
     </div>
-    <p class="text-product-text font-[500] text-sm">
+    <p class="text-product-text font-[500] text-sm  max-w-[145px] overflow-hidden whitespace-nowrap text-ellipsis">
       {{ product.productBrand }}
     </p>
     <div [ngClass]="!isGrid ? 'mt-[38px]' : ''" class="flex items-center justify-between">
-      <p class="text-sm font-[500]">{{ product.productPrice | currency }}</p>
+      <p class="text-sm font-[500] max-w-[145px] overflow-hidden whitespace-nowrap text-ellipsis">{{ product.productPrice | currency }}</p>
       <button
         (click)="onNavigateToProduct($event, product.id)"
         class="flex items-center w-fit gap-[10px] text-figma-green"

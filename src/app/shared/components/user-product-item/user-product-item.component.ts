@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProductItem, ProductItemSubset } from '../../../types';
+import { Component, Input } from '@angular/core';
+import { ProductItemSubset } from '../../../types';
 import { CommonModule, CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BuyNowComponent } from './features/buy-now/buy-now.component';
+import { Store } from '@ngrx/store';
+import { addToWishlist, removeFromWishlist } from '../../../store/admin/products/categories.actions';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-product-item',
@@ -13,7 +15,6 @@ import { BuyNowComponent } from './features/buy-now/buy-now.component';
     CurrencyPipe,
     // BuyNowComponent,
     NgOptimizedImage,
-    MatDialogModule,
     CommonModule,
     CloudinaryUrlPipe,
   ],
@@ -36,5 +37,29 @@ export class UserProductItemComponent {
     this.router.navigate(['/product/configure', id]);
   }
 
-  constructor(private router: Router, private dialog: MatDialog) {}
+  addToWishlist(id: string) {
+    this.store.dispatch(addToWishlist({ id }));
+  }
+
+  removeFromWishlist(id: string) {
+    this.store.dispatch(removeFromWishlist({ id }))
+  }
+
+  addToCompare(product: ProductItemSubset) {
+    let productsForComparison: ProductItemSubset[] = [product];
+    if (localStorage.getItem('products')) {
+      const productsInStorage = JSON.parse(localStorage.getItem('products')!);
+      
+      if (productsInStorage.length < 5) {
+        productsForComparison = [...productsInStorage, product];
+      } else {
+        this.toast.info("Reached the maximum number of products for comparison", "Info")
+        return
+      }
+    }
+
+    localStorage.setItem('products', JSON.stringify(productsForComparison));
+  }
+
+  constructor(private router: Router, private store: Store, private toast: ToastrService) {}
 }

@@ -12,13 +12,13 @@ import { UserEffect } from '../../store/users/users.effects';
 import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { ProductsEffect } from '../../store/admin/products/products.effects';
 import { CartComponent } from '../cart/cart.component';
-import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from '../../store/product-spec/product-spec.reducer';
-import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
 import { CheckoutEffect } from '../../store/checkout/checkout.effects';
 import { checkoutFeature, verificationFeature } from '../../store/checkout/checkout.reducers';
 import { paymentFeature, shippingFeature } from '../../store/account-settings/general-info/general-info.reducers';
 import { GeneralInfoEffect } from '../../store/account-settings/general-info/general-info.effects';
-
+import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from '../../store/product-spec/product-spec.reducer';
+import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
+import { wishlistFeature } from '../../store/admin/products/wishlist.reducers';
 
 export const route: Routes = [
     {
@@ -53,7 +53,15 @@ export const route: Routes = [
             },
             {
                 path: 'compare',
-                loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent)
+                loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent),
+                providers:  [
+                    provideEffects(ProductsEffect),
+                    provideState(productsFeature)
+                ]
+            },
+            {
+                path: 'wishlist',
+                loadComponent: () => import('../wishlist/wishlist.component').then(c => c.WishlistComponent),
             },
             {
                 path: 'product/configure/:id',

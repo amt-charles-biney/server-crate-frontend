@@ -10,6 +10,8 @@ import { ProfileService } from '../../../core/services/user-profile/profile.serv
 import { errorHandler } from '../../../core/utils/helpers';
 import { getCartItems } from '../../cart/cart.actions';
 import { ToastrService } from 'ngx-toastr';
+import { Store } from '@ngrx/store';
+import { getWishlist } from '../../admin/products/categories.actions';
 
 @Injectable()
 export class LoginEffect {
@@ -34,6 +36,7 @@ export class LoginEffect {
             this.toast.success('Login successful', 'Success', {
               timeOut: 1500,
             });
+            this.store.dispatch(getWishlist())
             return getCartItems();
           }),
           catchError((err) => {
@@ -49,6 +52,7 @@ export class LoginEffect {
     private router: Router,
     private authService: AuthService,
     private profileService: ProfileService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private store: Store
   ) {}
 }

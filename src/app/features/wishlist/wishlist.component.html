@@ -1,0 +1,10 @@
+<main class="flex flex-col pt-[60px] max-w-[1239px] w-full mx-auto">
+    <h2 class="font-bold text-2xl">Wishlist</h2>
+    <ng-container *ngIf="wishlist | async as wishlist">
+        <section class="flex mt-6 flex-wrap gap-x-2 xl:gap-x-4 gap-y-[40px]">
+            @for (product of wishlist; track product) {
+                <app-user-product-item [product]="product"/>
+            }
+        </section>
+    </ng-container>
+</main>

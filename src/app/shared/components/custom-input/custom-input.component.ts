@@ -63,7 +63,7 @@ export class CustomInputComponent
   @Input() filteredOptions!: Observable<any>;
   @Input() value!: string
   @Input() isRequired!: boolean
-  @Input() optionSelected!: (event: MatAutocompleteSelectedEvent) => void
+  @Output() optionSelectedEmitter = new EventEmitter<MatAutocompleteSelectedEvent>()
   @Input() deleteFn!: (event: Event, option: Select) => void
   @Output() focusFn = new EventEmitter()
   @ViewChild('telInput', { static: false }) telInput!: ElementRef;
@@ -86,6 +86,10 @@ export class CustomInputComponent
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
+  }
+
+  optionSelected(event: MatAutocompleteSelectedEvent) {
+    this.optionSelectedEmitter.emit(event)
   }
   ngAfterViewInit(): void {
     if (this.telInput) {
