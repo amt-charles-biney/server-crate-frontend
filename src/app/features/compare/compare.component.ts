@@ -84,6 +84,11 @@ export class CompareComponent implements OnInit {
     
   }
 
+  clearSelections() {
+    localStorage.setItem("products", JSON.stringify([]))
+    this.onInit()
+  }
+
   get product() {
     return this.productList.get('product')!
   }

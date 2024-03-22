@@ -1,7 +1,7 @@
 <main class="max-w-[1239px] mx-auto mt-[66px]">
   <header class="flex justify-between mb-6">
     <h2 class="text-2xl font-bold">Compare Servers</h2>
-    <button class="text-sm text-red-600 underline">Clear selections</button>
+    <button (click)="clearSelections()" class="text-sm text-red-600 underline">Clear selections</button>
   </header>
   <section class="flex">
     <div class="flex flex-col border">
@@ -74,10 +74,9 @@
           </div>
         </div>
         }
-      </ng-container>
-      <div class="flex flex-col">
-        <div class="product !border-0">
-          <ng-container *ngIf="allProducts | async">
+        <div class="flex flex-col">
+          <div class="product !border-0">
+          <ng-container *ngIf="(allProducts | async) && productsToCompare.length < 5">
             <form [formGroup]="productList">
               
               <app-custom-input
@@ -88,12 +87,13 @@
               [filteredOptions]="filteredOptions"
               (optionSelectedEmitter)="onProductSelect($event)"
               myClass="font-[500]"
-            />
+              />
             </form>
           </ng-container>
           <!-- <p class="font-bold">{{ product.productName }}</p> -->
         </div>
       </div>
+    </ng-container>
     </div>
   </section>
 </main>

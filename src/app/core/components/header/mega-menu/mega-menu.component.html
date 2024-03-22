@@ -70,7 +70,7 @@
       >
         <div class="flex flex-row gap-2 items-center cursor-pointer">
           <img src="/assets/mega-chevron.svg" alt="Inactive Image" />
-          <span class="text-[#1D2939] hover:underline hover:text-[#3CB043]">{{
+          <span class="text-[#1D2939] hover:underline w-32 overflow-hidden whitespace-nowrap text-ellipsis hover:text-[#3CB043]">{{
             option.name
           }}</span>
         </div>
@@ -94,7 +94,7 @@
         />
       </div>
       <div class="text-black space-y-2 h-[100px]">
-        <h1 class="font-semibold text-[16px]">{{ defaultMenu.name }}</h1>
+        <h1 class="font-semibold text-[16px] w-32 overflow-hidden whitespace-nowrap text-ellipsis">{{ defaultMenu.name }}</h1>
         <p>{{ defaultMenu.description || "no decription" }}</p>
       </div>
     </div>

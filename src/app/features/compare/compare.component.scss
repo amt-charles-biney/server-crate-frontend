@@ -11,4 +11,7 @@
     width: 469px;
     border-width: 1px;
     border-radius: 8px;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    overflow: hidden;
 }

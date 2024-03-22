@@ -45,4 +45,8 @@ export class UserService {
   addToWishlist(id: string) {
     return this.http.post(`${this.baseUrl}/wishlists/add-item/${id}`, {})
   }
+
+  removeFromWishlist(id: string) {
+    return this.http.delete( `${this.baseUrl}/wishlists/${id}`)
+  }
 }

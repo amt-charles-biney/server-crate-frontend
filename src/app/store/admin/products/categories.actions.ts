@@ -108,3 +108,4 @@ export const gotRecommendations = createAction('[recommendations] got recommenda
 export const getWishlist = createAction('[wishlist] get wishlist')
 export const gotWishlist = createAction('[wishlist] got wishlist', props<Wishlist>())
 export const addToWishlist = createAction('[wishlist] add to wishlist', props<{ id: string }>())
+export const removeFromWishlist = createAction('[wishlist] remove from wishlist', props<{ id: string }>())
