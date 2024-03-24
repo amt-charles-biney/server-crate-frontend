@@ -20,6 +20,7 @@ import {
   AllOrders,
   Content,
   Notifications,
+  Customers,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -174,6 +175,10 @@ export class AdminService {
 
   getNotifications() {
     return this.http.get<Notifications>(`${this.baseUrl}/admin/notifications`)
+  }
+
+  getCustomers() {
+    return this.http.get<Customers>(`${this.baseUrl}/admin/customers`)
   }
 
 }

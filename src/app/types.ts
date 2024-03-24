@@ -651,6 +651,18 @@ export type Wishlist = {
   size: number;
 }
 
+export type Customers = {
+  content: CustomerData[]
+  totalElements: number;
+  totalPages: number;
+  size: number;
+}
+
+export type CustomerData = {
+  name: string;
+  numberOfOrders: number;
+}
+
 export type Notifications = {
   data: NotificationData,
   message: string;

@@ -1,1 +1,16 @@
-<p>customers works!</p>
+<table class="w-full">
+  <tr
+    class="flex items-center text-table-text bg-table-bg text-xs font-[500] border-b h-[44px]"
+  >
+    <th class="w-1/2">Customer Name</th>
+    <th class="w-1/2">Number of Orders</th>
+  </tr>
+  <ng-container *ngIf="customers | async as customers">
+    @for (customer of customers; track customer) {
+    <tr class="flex items-center text-sidebar-text text-sm border-b h-[44px] font-[400]">
+      <td class="w-1/2 text-center">{{ customer.name }}</td>
+      <td class="w-1/2 text-center">{{ customer.numberOfOrders }}</td>
+    </tr>
+    }
+  </ng-container>
+</table>
