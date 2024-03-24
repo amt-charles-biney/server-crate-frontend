@@ -19,6 +19,7 @@ import {
   ProductResponse,
   AllOrders,
   Content,
+  Notifications,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -169,6 +170,10 @@ export class AdminService {
     return this.http.delete(`${this.baseUrl}/admin/orders/all`, {
       body: deleteList
     })
+  }
+
+  getNotifications() {
+    return this.http.get<Notifications>(`${this.baseUrl}/admin/notifications`)
   }
 
 }

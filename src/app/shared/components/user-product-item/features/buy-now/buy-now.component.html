@@ -1,1 +1,160 @@
-<p>buy-now works!</p>
+<ng-container *ngIf="product | async as product">
+  <ng-container *ngIf="productConfig | async as productConfig">
+    <!-- {{ product | json }} -->
+    <main class="grid grid-cols-2 gap-10 px-6 py-12 overflow-auto myScroll">
+      <div class="flex flex-col gap-6">
+        <div class="flex flex-col lg:flex-row items-start gap-6 flex-1">
+          <div class="flex lg:flex-col gap-[29px] items-center">
+            <div
+              *ngFor="let image of product.imageUrl; let i = index"
+              class="border hover:border-[#3CB043] border-[#E6E6E6] rounded-lg flex p-1"
+            >
+              <img
+                [ngSrc]="image | cloudinaryUrl"
+                width="76"
+                height="78"
+                priority
+                alt="Product Image {{ i + 1 }}"
+                class="object-contain max-w-full max-h-full"
+              />
+            </div>
+          </div>
+          <div class="border border-[#E6E6E6] rounded-2xl p-1">
+            <img
+              [ngSrc]="product.coverImage | cloudinaryUrl"
+              width="548"
+              height="312"
+              priority
+              alt="Product coverImage"
+              class="object-contain max-w-full max-h-full mx-auto"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-5">
+          <h3 class="font-bold text-[13px]">Details</h3>
+          <p class="text-sm">{{ product.productDescription }}</p>
+          <ul class="text-sm list-disc ml-3">
+            <li>
+              Built in a brand new
+              <span
+                class="w-28 text-ellipsis overflow-hidden whitespace-nowrap"
+                >{{ product.productBrand.name | slice: 0 : 13 }}</span
+              >
+            </li>
+            @for (option of productConfig.configured; track option) {
+              @if (option.optionType === 'Operating Systems') {
+                <li><span
+                  class="w-28 text-ellipsis overflow-hidden whitespace-nowrap"
+                  >{{ option.optionName }}</span
+                >
+                included </li>
+              }
+              @else if (option.optionType === 'Processors') {
+                <li><span
+                  class="w-28 text-ellipsis overflow-hidden whitespace-nowrap"
+                  >{{ option.optionName }}</span
+                >
+                Processor</li> 
+              } 
+              @else if (option.optionType === "Graphics") { 
+                <li>With the
+                  pretty visuals of
+                  <span
+                    class="w-28 text-ellipsis overflow-hidden whitespace-nowrap"
+                    >{{ option.optionName }}</span
+                  ></li>
+              } 
+              @else if (option.optionType === "Storage") { 
+                <li>Up to
+                  {{ option.baseAmount }} of
+                  <span
+                    class="w-28 text-ellipsis overflow-hidden whitespace-nowrap"
+                    >{{ option.optionName }}</span
+                  ></li>
+              }
+              @else if (option.optionType === "Motherboard") { 
+                <li>Equipped on a
+                  <span class="w-28 text-ellipsis overflow-hidden whitespace-nowrap"
+                    >{{ option.optionName }} motherboard</span
+                  ></li>
+              }
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex flex-col w-full">
+        <div class="flex flex-col">
+          <h2
+            class="w-44 text-ellipsis whitespace-nowrap overflow-hidden font-bold text-[20px]"
+          >
+            {{ product.productName }}
+          </h2>
+          <p class="text-[13px] font-normal">
+            {{ product.productDescription }}
+          </p>
+
+          <div class="flex flex-col gap-2 w-full max-w-md mt-5 overflow-hidden text-ellipsis whitespace-nowrap">
+            <div class="flex flex-row items-center w-full justify-between">
+              <h1 class="text-xs font-light text-[#737373] w-1/2">Brand :</h1>
+              <p class="text-[13px] font-light text-[#000] w-1/2">
+                {{ product.productBrand.name }}
+              </p>
+            </div>
+            <div
+              *ngFor="let option of productConfig.configured"
+              class="flex flex-row items-center w-full justify-between"
+            >
+              <h1 class="text-[13px] font-light text-[#737373] w-1/2">
+                {{ option.optionType }} :
+              </h1>
+              <p class="text-[13px] font-light text-[#000] w-1/2">
+                {{ option.optionName }}
+                <span>{{ option?.isMeasured ? option?.size : "" }}</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- <div
+                class="w-full flex-row items-center flex-wrap mx-auto justify-start gap-8 mt-5 flex"
+              >
+                <div class="font-medium text-sm">
+                  <label class="flex flex-row gap-3">
+                    <input
+                      name="bring-in-warranty"
+                      [checked]="warranty"
+                      (change)="onOptionChange(true)"
+                      class="text-[#3CB043] border-[1px] border-[#3CB043]"
+                      type="checkbox"
+                      name="warranty"
+                    />
+                    <span>Bring-in warranty for 36 months</span>
+                  </label>
+                </div>
+    
+                <div class="font-medium text-sm">
+                  <label class="flex flex-row gap-3">
+                    <input
+                      [checked]="!warranty"
+                      (change)="onOptionChange(false)"
+                      name="pick-up-warranty"
+                      type="checkbox"
+                    />
+                    <span>Pick Up warranty</span>
+                  </label>
+                </div>
+              </div> -->
+
+          <div class="w-full p-4 rounded-lg bg-gray-300 bg-opacity-10">
+            <div class="font-normal text-sm">
+              Technical support: by e-mail and components or the whole system
+              will be repaired or replaced subsequently to reshipment, we will
+              pay the costs for transport and logistics within 30 days after
+              delivery.
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </ng-container>
+</ng-container>

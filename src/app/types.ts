@@ -631,6 +631,7 @@ export type ProductItemSubset = {
     name: string;
     price: number
   };
+  productCoverImage?: string
 }
 export type WishlistItemSubset = {
   id: string;
@@ -648,4 +649,15 @@ export type Wishlist = {
   totalElements: number;
   totalPages: number;
   size: number;
+}
+
+export type Notifications = {
+  data: NotificationData,
+  message: string;
+  status: number;
+}
+
+export type NotificationData = {
+  count: number;
+  attributeResponseList: Attribute[];
 }

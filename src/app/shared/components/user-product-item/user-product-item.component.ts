@@ -5,18 +5,24 @@ import { Router } from '@angular/router';
 import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
 import { BuyNowComponent } from './features/buy-now/buy-now.component';
 import { Store } from '@ngrx/store';
-import { addToWishlist, removeFromWishlist } from '../../../store/admin/products/categories.actions';
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from '../../../store/admin/products/categories.actions';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
+import { HoverDirective } from '../../directives/hover/hover.directive';
 
 @Component({
   selector: 'app-user-product-item',
   standalone: true,
   imports: [
     CurrencyPipe,
-    // BuyNowComponent,
+    BuyNowComponent,
     NgOptimizedImage,
     CommonModule,
     CloudinaryUrlPipe,
+    HoverDirective
   ],
   templateUrl: './user-product-item.component.html',
 })
@@ -24,13 +30,17 @@ export class UserProductItemComponent {
   @Input() product!: ProductItemSubset;
   @Input() isGrid: boolean = true;
   isSelected: boolean = false;
+  hovered!: boolean
 
-  // buyNow() {
-  //   this.dialog.open(BuyNowComponent, {
-  //     height: '80%',
-  //     width: '70%',
-  //   });
-  // }
+  buyNow(id: string) {
+    this.dialog.open(BuyNowComponent, {
+      height: '80%',
+      width: '70%',
+      data: {
+        id
+      }
+    });
+  }
 
   onNavigateToProduct(event: Event, id: string) {
     event.stopPropagation();
@@ -42,24 +52,32 @@ export class UserProductItemComponent {
   }
 
   removeFromWishlist(id: string) {
-    this.store.dispatch(removeFromWishlist({ id }))
+    this.store.dispatch(removeFromWishlist({ id }));
   }
 
   addToCompare(product: ProductItemSubset) {
     let productsForComparison: ProductItemSubset[] = [product];
     if (localStorage.getItem('products')) {
       const productsInStorage = JSON.parse(localStorage.getItem('products')!);
-      
+
       if (productsInStorage.length < 5) {
         productsForComparison = [...productsInStorage, product];
       } else {
-        this.toast.info("Reached the maximum number of products for comparison", "Info")
-        return
+        this.toast.info(
+          'Reached the maximum number of products for comparison',
+          'Info'
+        );
+        return;
       }
     }
 
     localStorage.setItem('products', JSON.stringify(productsForComparison));
   }
 
-  constructor(private router: Router, private store: Store, private toast: ToastrService) {}
+  constructor(
+    private router: Router,
+    private store: Store,
+    private toast: ToastrService,
+    private dialog: MatDialog
+  ) {}
 }
