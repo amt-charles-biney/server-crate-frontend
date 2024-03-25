@@ -19,4 +19,4 @@ export const customerFeature = createFeature({
     )
 })
 
-export const { selectContent, selectTotalElements } = customerFeature
+export const { selectContent, selectTotalElements, selectCustomersState } = customerFeature

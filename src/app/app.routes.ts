@@ -80,6 +80,11 @@ export const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./features/home/home.routes').then((m) => m.route),
-    providers: [provideState(categoryFeature), provideEffects(CategoryEffect)],
+    providers: [
+      provideState(categoryFeature),
+      provideEffects(CategoryEffect),
+      provideEffects(ProductSpecEffects),
+      provideState(productConfigItemFeature)
+    ],
   },
 ];

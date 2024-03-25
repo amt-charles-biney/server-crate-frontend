@@ -8,11 +8,12 @@ import { getCases } from '../../../../store/case/case.actions';
 import { selectCases, selectTotalCases } from '../../../../store/case/case.reducers';
 import { RouterModule } from '@angular/router';
 import { CaseItemComponent } from '../../../../shared/components/case-item/case-item.component';
+import { PaginatedComponent } from '../../../../shared/components/paginated/paginated.component';
 
 @Component({
   selector: 'app-case-management',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, RouterModule, CaseItemComponent],
+  imports: [CommonModule, NgxPaginationModule, RouterModule, CaseItemComponent, PaginatedComponent],
   templateUrl: './case-management.component.html',
 })
 export class CaseManagementComponent implements OnInit {

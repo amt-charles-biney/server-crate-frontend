@@ -5,12 +5,15 @@
     <th class="w-1/2">Customer Name</th>
     <th class="w-1/2">Number of Orders</th>
   </tr>
-  <ng-container *ngIf="customers | async as customers">
-    @for (customer of customers; track customer) {
-    <tr class="flex items-center text-sidebar-text text-sm border-b h-[44px] font-[400]">
-      <td class="w-1/2 text-center">{{ customer.name }}</td>
-      <td class="w-1/2 text-center">{{ customer.numberOfOrders }}</td>
-    </tr>
-    }
-  </ng-container>
+  <app-paginated (pageEmitter)="page = $event" paginationId="customers" >
+    <ng-container *ngIf="customers | async as customers">
+      @for (customer of customers.content | paginate: { id: 'customers',
+      itemsPerPage: 9, currentPage: page, totalItems: customers.totalElements}; track customer) {
+      <tr class="flex items-center text-sidebar-text text-sm border-b h-[44px] font-[400]">
+        <td class="w-1/2 text-center">{{ customer.name }}</td>
+        <td class="w-1/2 text-center">{{ customer.numberOfOrders }}</td>
+      </tr>
+      }
+    </ng-container>
+  </app-paginated>
 </table>
