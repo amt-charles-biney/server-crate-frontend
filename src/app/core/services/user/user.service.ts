@@ -47,6 +47,15 @@ export class UserService {
   }
 
   removeFromWishlist(id: string) {
-    return this.http.delete( `${this.baseUrl}/wishlists/${id}`)
+    return this.http.delete(`${this.baseUrl}/wishlists/${id}`)
+  }
+
+  getComparisons() {
+    let params = ''
+    if (localStorage.getItem("products")) {
+      const listOfIds: string[] = JSON.parse(localStorage.getItem("products")!)
+      params = listOfIds.join(',')
+    }
+    return this.http.get(`${this.baseUrl}/compare/all?products=${params}`)
   }
 }

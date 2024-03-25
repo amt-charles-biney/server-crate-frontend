@@ -631,7 +631,8 @@ export type ProductItemSubset = {
     name: string;
     price: number
   };
-  productCoverImage?: string
+  productCoverImage?: string;
+  productCaseName?: string
 }
 export type WishlistItemSubset = {
   id: string;
