@@ -47,8 +47,12 @@ export const route: Routes = [
                     provideEffects(ProductsEffect),
                     provideEffects(CategoryEffect),
                     provideEffects(UserEffect),
+                    provideEffects(ProductSpecEffects),
                     provideState(productsFeature),
                     provideState(categoryFeature),
+                    provideState(productConfigFeature),
+                    provideState(productConfigItemFeature)
+
                 ]
             },
             {

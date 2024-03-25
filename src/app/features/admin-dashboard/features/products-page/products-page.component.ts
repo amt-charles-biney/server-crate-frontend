@@ -15,6 +15,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { selectContent, selectTotalElements } from '../../../../store/admin/products/products.reducers';
 import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { PaginatedComponent } from '../../../../shared/components/paginated/paginated.component';
 
 @Component({
   selector: 'app-products-page',
@@ -24,6 +25,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     RouterModule,
     CommonModule,
     NgxPaginationModule,
+    PaginatedComponent
   ],
   templateUrl: './products-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

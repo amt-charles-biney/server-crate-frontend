@@ -22,6 +22,7 @@ import {
   updateProduct,
 } from './categories.actions';
 import {
+  EMPTY,
   catchError,
   concatMap,
   exhaustMap,
@@ -276,14 +277,10 @@ export class CategoryEffect {
       exhaustMap((props) => {
         this.ngxService.startLoader('product');
         return this.adminService.updateProduct(props.id, props.product).pipe(
-          map(() => {
-            return setLoadingSpinner({
-              isError: false,
-              message: 'Edited product successfully',
-              status: false,
-            });
-          }),
           tap(() => {
+            this.toast.success('Edited product successfully', 'Success', {
+              timeOut: 1000
+            })
             this.ngxService.stopLoader('product');
             setTimeout(() => {
               this.router.navigateByUrl('/admin/products', {
@@ -292,18 +289,13 @@ export class CategoryEffect {
             }, 500);
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: errorHandler(err),
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), 'Error')
+            return EMPTY
           })
         );
       })
     );
-  });
+  }, { dispatch: false });
 
   getCases$ = createEffect(() => {
     return this.action$.pipe(

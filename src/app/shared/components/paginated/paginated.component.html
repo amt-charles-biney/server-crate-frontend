@@ -1,0 +1,76 @@
+<ng-content></ng-content>
+<pagination-template
+      #p="paginationApi"
+      class="flex w-full justify-end self-end gap-3 mt-4"
+      (pageChange)="getPage($event)"
+      [id]="paginationId"
+      rounded-md
+      (pageBoundsCorrection)="getPage($event)"
+    >
+      <button
+        [ngClass]="p.isFirstPage() ? 'pointer-events-none text-gray-200' : ''"
+        class="flex flex-col justify-center items-center w-10 h-10 border rounded-md"
+        (click)="p.previous()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
+        </svg>
+      </button>
+      <ng-container *ngIf="p.pages.length > 0">
+        <div
+          *ngFor="let page of p.pages"
+          [class.current]="p.getCurrent() === page.value"
+        >
+          <button
+            class="w-10 h-10 font-bold border rounded-md"
+            (click)="p.setCurrent(page.value)"
+            *ngIf="p.getCurrent() !== page.value"
+          >
+            <span>{{ page.label }}</span>
+          </button>
+          <button
+            class="w-10 h-10 font-bold border rounded-md"
+            [ngClass]="
+              p.getCurrent() === page.value
+                ? 'text-figma-green bg-figma-green bg-opacity-5 border-figma-green'
+                : ''
+            "
+            *ngIf="p.getCurrent() === page.value"
+          >
+            <span>{{ page.label }}</span>
+          </button>
+        </div>
+      </ng-container>
+
+      <button
+        class="flex flex-col justify-center items-center w-10 h-10 border rounded-md"
+        [ngClass]="p.isLastPage() ? 'pointer-events-none text-gray-200' : ''"
+        (click)="p.next()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m8.25 4.5 7.5 7.5-7.5 7.5"
+          />
+        </svg>
+      </button>
+    </pagination-template>

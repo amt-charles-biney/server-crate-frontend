@@ -28,6 +28,8 @@ import { AddCaseComponent } from './features/case-management/features/add-case/a
 import { OrderEffects } from '../../store/orders/order.effects';
 import { orderFeature } from '../../store/orders/order.reducers';
 import { OrdersOutletComponent } from './features/orders/orders-outlet.component';
+import { CustomerEffect } from '../../store/customers/customers.effects';
+import { customerFeature } from '../../store/customers/customers.reducers';
 
 
 export const route: Routes = [
@@ -142,7 +144,11 @@ export const route: Routes = [
       },
       {
         path: 'customers',
-        component: CustomersComponent
+        component: CustomersComponent,
+        providers: [
+          provideEffects(CustomerEffect),
+          provideState(customerFeature)
+        ]
       },
       {
         path: 'settings',
