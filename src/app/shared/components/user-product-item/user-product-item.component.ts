@@ -55,13 +55,12 @@ export class UserProductItemComponent {
     this.store.dispatch(removeFromWishlist({ id }));
   }
 
-  addToCompare(product: ProductItemSubset) {
-    let productsForComparison: ProductItemSubset[] = [product];
+  addToCompare(id: string) {
+    let productsForComparison: Record<string, string> = {[id]: id};
     if (localStorage.getItem('products')) {
       const productsInStorage = JSON.parse(localStorage.getItem('products')!);
-
-      if (productsInStorage.length < 5) {
-        productsForComparison = [...productsInStorage, product];
+      if (Object.values(productsInStorage).length < 5) {
+        productsForComparison = { ...productsInStorage, [id]: id };
       } else {
         this.toast.info(
           'Reached the maximum number of products for comparison',
@@ -71,7 +70,7 @@ export class UserProductItemComponent {
       }
     }
 
-    localStorage.setItem('products', JSON.stringify(productsForComparison));
+    localStorage.setItem('products', JSON.stringify(Object.values(productsForComparison)));
   }
 
   constructor(
