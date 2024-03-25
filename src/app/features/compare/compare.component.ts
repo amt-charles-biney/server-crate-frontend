@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ProductItem, ProductItemSubset } from '../../types';
+import { Comparison, Product, ProductItem, ProductItemSubset } from '../../types';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
 import { Store } from '@ngrx/store';
-import { addToWishlist, getUserProducts } from '../../store/admin/products/categories.actions';
+import { addToWishlist, getAllProducts, getSingleProduct } from '../../store/admin/products/categories.actions';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
-import { BehaviorSubject, Observable, map, startWith, tap } from 'rxjs';
-import { selectContent } from '../../store/admin/products/products.reducers';
+import { BehaviorSubject, Observable, map, of, startWith, tap } from 'rxjs';
+import { selectAllProductsState, selectProducts, selectSingleProduct } from '../../store/admin/products/products.reducers';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { getProductComparisons } from '../../store/compare/compare.actions';
+import { selectData } from '../../store/compare/compare.reducers';
 
 @Component({
   selector: 'app-compare',
@@ -19,16 +21,24 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CompareComponent implements OnInit {
-  productsToCompare = new BehaviorSubject<ProductItemSubset[]>([]);
-  filteredOptions!: Observable<ProductItemSubset[]>;
-  private allProducts$ = new BehaviorSubject<ProductItem[]>([])
+  private productsToCompare$ = new BehaviorSubject<Comparison[]>([]);
+  private allProducts$ = new BehaviorSubject<Product[]>([])
+  private singleProduct$ = new BehaviorSubject<Comparison | null>(null)
+  
+  filteredOptions!: Observable<Product[]>;
   allProducts = this.allProducts$.asObservable()
+  singleProduct = this.singleProduct$.asObservable()
+  productsToCompare = this.productsToCompare$.asObservable()
+
+  products: Comparison[] = []
 
   productList!: FormGroup
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
+    this.store.dispatch(getProductComparisons())
+    this.store.dispatch(getAllProducts())
     this.productList = new FormGroup({
       product: new FormControl('')
     })
@@ -37,12 +47,17 @@ export class CompareComponent implements OnInit {
 
   onInit() {
 
-    this.store.dispatch(getUserProducts({ page: 0, params: {}}))
-    const products: string = localStorage.getItem("products") ? localStorage.getItem("products")! : "[]"
-    this.productsToCompare.next(JSON.parse(products));
+    this.productsToCompare = this.store.select(selectData).pipe(
+      tap((productsToCompare) => {
+        this.products = productsToCompare
+      })
+    )
+    // const products: string = localStorage.getItem("products") ? localStorage.getItem("products")! : "[]"
+    // this.productsToCompare.next(JSON.parse(products));
 
-    this.allProducts = this.store.select(selectContent).pipe(
+    this.allProducts = this.store.select(selectProducts).pipe(
       tap((products) => {
+        console.log('Products', products);
         this.filteredOptions = this.product.valueChanges.pipe(
           startWith(''),
           map((value) => {
@@ -51,14 +66,21 @@ export class CompareComponent implements OnInit {
         );
       })
     );
+    this.singleProduct = this.store.select(selectSingleProduct).pipe(
+      tap((product) => {
+        if (product) {
+          this.products = [...this.products, product]
+        }
+      })
+    )
   }
 
-  private _filter(value: ProductItem | string, filterFrom: ProductItem[]): ProductItem[] {
-    return filterFrom.filter((option: ProductItem) => {
+  private _filter(value: Product | string, filterFrom: Product[]): Product[] {
+    return filterFrom.filter((option: Product) => {
       if (typeof value !== 'string') {
-        return option.productName.toLowerCase().includes(value.productName.toLowerCase());
+        return option.name.toLowerCase().includes(value.name.toLowerCase());
       }
-      return option.productName.toLowerCase().includes(value.toLowerCase());
+      return option.name.toLowerCase().includes(value.toLowerCase());
     });
   }
 
@@ -67,9 +89,10 @@ export class CompareComponent implements OnInit {
   }
 
   onProductSelect(event: MatAutocompleteSelectedEvent) {
-    const selectedProduct = event.option.value;
+    const selectedProduct: Product = event.option.value;
     console.log('Selected product', selectedProduct);
-    this.addToCompare({...selectedProduct})
+    this.store.dispatch(getSingleProduct({ id: selectedProduct.id }))
+    // this.addToCompare({...selectedProduct})
     this.onInit()
   }
 
@@ -85,8 +108,8 @@ export class CompareComponent implements OnInit {
   }
 
   clearSelections() {
-    localStorage.setItem("products", JSON.stringify([]))
-    this.onInit()
+    localStorage.setItem("products", JSON.stringify({}))
+    this.productsToCompare = of([])
   }
 
   get product() {

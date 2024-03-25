@@ -1,11 +1,15 @@
 import { AdminService } from './../../../core/services/admin/admin.service';
 import {
   addToFeature,
+  getAllProducts,
   getProducts,
   getRecommendations,
+  getSingleProduct,
   getUserProducts,
+  gotAllProducts,
   gotProducts,
   gotRecommendations,
+  gotSingleProduct,
   removeFromFeature,
 } from './categories.actions';
 import { Injectable } from '@angular/core';
@@ -39,6 +43,41 @@ export class ProductsEffect {
       })
     );
   });
+
+  getAllProducts$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(getAllProducts),
+      exhaustMap(() => {
+        return this.userService.getAllProducts().pipe(
+          map((products) => {
+            return gotAllProducts({ products: products.data })
+          }),
+          catchError((err) => {
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
+          })
+        )
+      })
+    )
+  })
+
+  getSingleProduct$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(getSingleProduct),
+      exhaustMap(({ id }) => {
+        return this.userService.getSingleProduct(id).pipe(
+          map((product) => {
+            return gotSingleProduct(product)
+          }),
+          catchError((err) => {
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
+          })
+        )
+      })
+    )
+  })
+
   loadUserProduct$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getUserProducts),

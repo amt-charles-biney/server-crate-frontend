@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { AllProducts, ProductItemSubset } from './../../../types';
-import { gotProduct, gotProducts, gotRecommendations, resetProduct } from './categories.actions';
+import { AllProducts, Comparison, Product, ProductItemSubset } from './../../../types';
+import { gotAllProducts, gotProduct, gotProducts, gotRecommendations, gotSingleProduct, resetProduct } from './categories.actions';
 import { getUniqueId } from '../../../core/utils/settings';
 export const productInitialState: AllProducts = {
   content: [],
@@ -76,3 +76,32 @@ export const recommendationsFeature = createFeature({
 
 
 export const { selectRecommendedState } = recommendationsFeature
+
+const allProductsInit: {
+  products: Product[],
+  singleProduct: Comparison | null
+} = {
+  products: [],
+  singleProduct: null
+}
+
+export const allProductsFeature = createFeature({
+  name: 'allProducts',
+  reducer: createReducer(
+    allProductsInit,
+    on(gotAllProducts, (state, { products }) => {
+      return {
+        ...state,
+        products
+      }
+    }),
+    on(gotSingleProduct, (state, singleProduct) => {
+      return {
+        ...state,
+        singleProduct
+      } 
+    })
+  )
+})
+
+export const { selectAllProductsState, selectProducts, selectSingleProduct } = allProductsFeature

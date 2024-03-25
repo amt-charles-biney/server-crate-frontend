@@ -6,7 +6,7 @@ import { HomeComponent } from './home.component';
 import { Routes } from '@angular/router';
 import { FeaturedProductFeature } from '../../store/product/featured-product/featured-product.reducer';
 import { FeaturedProductEffect } from '../../store/product/featured-product/featured-product.effect';
-import { productsFeature, recommendationsFeature } from '../../store/admin/products/products.reducers';
+import { allProductsFeature, productsFeature, recommendationsFeature } from '../../store/admin/products/products.reducers';
 import { categoryFeature } from '../../store/admin/products/categories.reducers';
 import { UserEffect } from '../../store/users/users.effects';
 import { CategoryEffect } from '../../store/admin/products/categories.effect';
@@ -19,6 +19,8 @@ import { GeneralInfoEffect } from '../../store/account-settings/general-info/gen
 import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from '../../store/product-spec/product-spec.reducer';
 import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
 import { wishlistFeature } from '../../store/admin/products/wishlist.reducers';
+import { CompareEffect } from '../../store/compare/compare.effects';
+import { compareFeature } from '../../store/compare/compare.reducers';
 
 export const route: Routes = [
     {
@@ -60,7 +62,10 @@ export const route: Routes = [
                 loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent),
                 providers:  [
                     provideEffects(ProductsEffect),
-                    provideState(productsFeature)
+                    provideEffects(CompareEffect),
+                    provideState(productsFeature),
+                    provideState(compareFeature),
+                    provideState(allProductsFeature)
                 ]
             },
             {

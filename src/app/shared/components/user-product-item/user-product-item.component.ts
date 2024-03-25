@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProductItemSubset } from '../../../types';
 import { CommonModule, CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { HoverDirective } from '../../directives/hover/hover.directive';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-user-product-item',
@@ -22,23 +23,31 @@ import { HoverDirective } from '../../directives/hover/hover.directive';
     NgOptimizedImage,
     CommonModule,
     CloudinaryUrlPipe,
-    HoverDirective
+    HoverDirective,
   ],
   templateUrl: './user-product-item.component.html',
 })
-export class UserProductItemComponent {
+export class UserProductItemComponent implements OnInit {
   @Input() product!: ProductItemSubset;
   @Input() isGrid: boolean = true;
   isSelected: boolean = false;
-  hovered!: boolean
+  hovered!: boolean;
+  colored = false;
+
+  ngOnInit(): void {
+    let productsInStorage = JSON.parse(localStorage.getItem('products')!);
+    if (productsInStorage[this.product.id]) {
+      this.colored = true
+    }
+  }
 
   buyNow(id: string) {
     this.dialog.open(BuyNowComponent, {
       height: '80%',
       width: '70%',
       data: {
-        id
-      }
+        id,
+      },
     });
   }
 
@@ -56,21 +65,26 @@ export class UserProductItemComponent {
   }
 
   addToCompare(id: string) {
-    let productsForComparison: Record<string, string> = {[id]: id};
-    if (localStorage.getItem('products')) {
-      const productsInStorage = JSON.parse(localStorage.getItem('products')!);
-      if (Object.values(productsInStorage).length < 5) {
-        productsForComparison = { ...productsInStorage, [id]: id };
+    let productsForComparison: Record<string, boolean> = { [id]: true };
+    let productsInStorage = JSON.parse(localStorage.getItem('products')!);
+    if (Object.values(productsInStorage).length < 5) {
+      if (productsInStorage[id]) {
+        console.log('Already in');
+        productsForComparison = { ...productsInStorage, [id]: false };
+        this.colored = false;
       } else {
-        this.toast.info(
-          'Reached the maximum number of products for comparison',
-          'Info'
-        );
-        return;
+        productsForComparison = { ...productsInStorage, [id]: true };
+        this.colored = true;
       }
+    } else {
+      this.toast.info(
+        'Reached the maximum number of products for comparison',
+        'Info'
+      );
+      return;
     }
 
-    localStorage.setItem('products', JSON.stringify(Object.values(productsForComparison)));
+    localStorage.setItem('products', JSON.stringify(productsForComparison));
   }
 
   constructor(

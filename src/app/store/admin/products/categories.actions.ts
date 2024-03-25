@@ -7,6 +7,8 @@ import {
   ProductPayload,
   ProductItemSubset,
   Wishlist,
+  Product,
+  Comparison,
 } from '../../../types';
 
 export const getCategories = createAction('[products] get categories');
@@ -45,6 +47,11 @@ export const getProducts = createAction(
   '[products] get products',
   props<{ page: number }>()
 );
+
+export const getAllProducts = createAction('[products] get all products')
+export const gotAllProducts = createAction('[products] got all products', props<{products: Product[]}>())
+export const getSingleProduct = createAction('[products] get single product', props<{ id: string }>())
+export const gotSingleProduct = createAction('[products] got single product', props<Comparison>())
 
 export const getUserProducts = createAction(
   '[products] get user products',

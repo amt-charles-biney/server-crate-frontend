@@ -674,3 +674,24 @@ export type NotificationData = {
   count: number;
   attributeResponseList: Attribute[];
 }
+
+export type Comparisons = {
+  data: Comparison[];
+  message: string;
+  status: string
+}
+
+export type Comparison = {
+  productName: string;
+  productId: string;
+  description: string;
+  coverImage: string;
+  options: Record<string, string>;
+  price: number;
+  productCase: string
+}
+
+export type Product = {
+  name: string;
+  id: string;
+}
