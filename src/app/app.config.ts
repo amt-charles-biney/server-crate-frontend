@@ -35,7 +35,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([loadingInterceptor, authInterceptor, cookieInterceptor])),
     provideCloudinaryLoader('https://res.cloudinary.com/dah4l2inx'),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { disableClose: true } },
     provideToastr({toastComponent: CustomToastComponent, progressBar: true, autoDismiss: true, maxOpened: 1 })
   ],
 };
