@@ -15,6 +15,7 @@ import {
   IParamConfigOptions,
   ProductItem,
   IdefaultSelectedProps,
+  REQUIRED_CONFIG,
 } from '../../types';
 import { Store } from '@ngrx/store';
 import {
@@ -22,7 +23,7 @@ import {
   selectProductConfig,
   selectProductConfigItem,
 } from '../../store/product-spec/product-spec.reducer'
-import { Observable } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 import {
   loadProduct,
   loadProductConfigItem
@@ -39,8 +40,6 @@ import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-
   selector: 'app-product-configure',
   standalone: true,
   imports: [
-    HeaderComponent,
-    FooterComponent,
     CommonModule,
     MatTabsModule,
     RouterModule,
@@ -58,10 +57,23 @@ export class ProductConfigureComponent {
   defaultSelectedValues: (Record<string, IdefaultSelectedProps>) = {}
   defaultIncludedPrices: (Record<string, IdefaultSelectedProps>) = {}
 
+  privateQueryParamSubscription: Subscription | undefined;
+  privateConfigItemSubscription: Subscription | undefined;
+  privateConfigSubscription: Subscription | undefined;
+
   product$: Observable<ProductItem | null> = this.store.select(selectProduct)
   productConfig$: Observable<any> = this.store.select(selectProductConfig)
   productConfigItem$: Observable<IConfiguredProduct | null> = this.store.select(selectProductConfigItem)
 
+  RequiredConfig: Record<string, boolean> = {
+    [REQUIRED_CONFIG.BRAND.toLowerCase()]: true,
+    [REQUIRED_CONFIG.MOTHERBOARD.toLowerCase()]: true,
+    [REQUIRED_CONFIG.OPERATING_SYSTEM.toLowerCase()]: true,
+    [REQUIRED_CONFIG.CASE.toLowerCase()]: true,
+    [REQUIRED_CONFIG.GRAPHICS_CARD.toLowerCase()]: true,
+    [REQUIRED_CONFIG.RAM.toLowerCase()]: true,
+    [REQUIRED_CONFIG.STORAGE.toLowerCase()]: true,
+  }
 
   productId: string = ''
   productConfig!: ICategoryConfig
@@ -104,13 +116,13 @@ export class ProductConfigureComponent {
 
     this.store.dispatch(loadProduct({ id: this.productId }))
 
-    this.productConfigItem$.subscribe((product: IConfiguredProduct | null) => {
+    this.privateConfigItemSubscription = this.productConfigItem$.subscribe((product: IConfiguredProduct | null) => {
       if (product !== null) this.productConfigItem = product
       this.buildQueryMapper()
       this.cdr.detectChanges()
     })
 
-    this.productConfig$.subscribe((product: ICategoryConfig) => {
+    this.privateConfigSubscription = this.productConfig$.subscribe((product: ICategoryConfig) => {
       if (product !== null) {
         this.productConfig = product
         const keys: string[] = Object.keys(product?.options)
@@ -133,7 +145,7 @@ export class ProductConfigureComponent {
       }
     })
 
-    this.route.queryParams.subscribe((queryParams: { [x: string]: any; }) => {
+    this.privateQueryParamSubscription = this.route.queryParams.subscribe((queryParams: { [x: string]: any; }) => {
       const configOptions: IParamConfigOptions = {
         warranty: queryParams['warranty'] ?? this.warranty,
         components: queryParams['components']
@@ -328,6 +340,18 @@ export class ProductConfigureComponent {
     return this.defaultSelectedValues[activeLink].id === this.defaultIncludedPrices[activeLink].id &&
       this.defaultSelectedValues[activeLink].size === this.defaultIncludedPrices[activeLink].size &&
       this.defaultSelectedValues[activeLink].isIncluded;
+  }
+
+
+  isRequiredConfig (optionType: string): boolean {
+     return this.RequiredConfig[optionType.toLowerCase()];
+  }
+
+
+  ngOnDestroy(): void {
+    this.privateQueryParamSubscription?.unsubscribe()
+    this.privateConfigItemSubscription?.unsubscribe()
+    this.privateConfigSubscription?.unsubscribe()
   }
 
 }
