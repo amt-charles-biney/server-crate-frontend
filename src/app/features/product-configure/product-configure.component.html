@@ -1,7 +1,6 @@
-<main class="relative min-h-screen">
-  <app-header />
+<main class="relative h-auto">
   <section
-    class="md:pb-[330px] mt-5 pb-[770px] w-full max-w-[1239px] px-14 lg:px-0 mx-auto"
+    class="mt-5 w-full max-w-[1239px] px-14 lg:px-0 mx-auto"
   >
     <ng-container *ngIf="product$ | async as product">
       <div
@@ -23,8 +22,6 @@
         <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
         <span class="text-green-600">Configure</span>
       </div>
-
-      <!-- <app-product-loading /> -->
 
       <div
         class="w-full mt-10 flex gap-[97px] flex-wrap mx-auto justify-between items-start"
@@ -75,10 +72,10 @@
                 *ngFor="let option of productConfigItem.configured"
                 class="flex flex-row items-center w-full justify-between"
               >
-                <h1 class="text-[13px] font-light text-[#737373] w-1/2">
+                <h1 *ngIf="isRequiredConfig(option.optionType)" class="text-[13px] font-light text-[#737373] w-1/2">
                   {{ option.optionType }} :
                 </h1>
-                <p class="text-[13px] font-light text-[#000] w-1/2">
+                <p *ngIf="isRequiredConfig(option.optionType)" class="text-[13px] font-light text-[#000] w-1/2">
                   {{ option.optionName }}
                   <span>{{ option?.isMeasured ? option?.size : "" }}</span>
                 </p>
@@ -347,5 +344,4 @@
       />
     </div>
   </section>
-  <app-footer />
 </main>
