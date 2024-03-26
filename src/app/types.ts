@@ -187,6 +187,7 @@ export type ProductItem = {
   serviceCharge: number;
   stockStatus: string;
   totalLeastStock: Attribute[];
+  isWishListItem?: boolean
 };
 
 export type ProductResponse = {
@@ -632,7 +633,9 @@ export type ProductItemSubset = {
     price: number
   };
   productCoverImage?: string;
-  productCaseName?: string
+  productCaseName?: string;
+  configurationUrl?: string;
+  isWishListItem?: boolean
 }
 export type WishlistItemSubset = {
   id: string;
@@ -687,11 +690,17 @@ export type Comparison = {
   description: string;
   coverImage: string;
   options: Record<string, string>;
-  price: number;
+  productPrice: number;
   productCase: string
 }
 
 export type Product = {
   name: string;
   id: string;
+}
+
+export type SingleProductResponse = {
+  data: Comparison;
+  message: string;
+  status: string
 }

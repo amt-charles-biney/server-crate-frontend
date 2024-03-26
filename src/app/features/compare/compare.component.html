@@ -1,3 +1,4 @@
+<ng-container *ngIf="singleProduct | async"></ng-container>
 <main class="max-w-[1239px] mx-auto mt-[66px]">
   <header class="flex justify-between mb-6">
     <h2 class="text-2xl font-bold">Compare Servers</h2>
@@ -56,7 +57,7 @@
                 <img src="/assets/heart.svg" alt="" />
               </button>
               <p class="absolute bottom-2 right-3 font-[500] text-sm">
-                {{ product.price | currency }}
+                {{ product.productPrice | currency }}
               </p>
             </div>
             <div
@@ -98,24 +99,66 @@
             </div>
           </div>
           }
-          <div class="flex flex-col">
-            <div class="product !border-0">
-              <ng-container *ngIf="productsToCompare.length < 5">
+          <ng-container *ngIf="products.length < 5">
+          <div class="flex flex-col gap-3">
+            <div class="product ">
                 <form [formGroup]="productList">
-                  <app-custom-input
-                    id="category"
-                    type="async"
-                    placeholder="Select a product for comparison"
-                    formControlName="product"
-                    [filteredOptions]="filteredOptions"
-                    (optionSelectedEmitter)="onProductSelect($event)"
-                    myClass="font-[500]"
-                  />
+                  <div class="relative">
+                    <label for="comparison">
+                      <input
+                        id="comparison"
+                        class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
+                        type="text"
+                        placeholder="Select a product for comparison"
+                        #trigger="matAutocompleteTrigger"
+                        formControlName="product"
+                        [matAutocomplete]="productsAuto"
+                      />
+                      <img
+                        class="absolute top-3 right-[10px] transition-transform duration-300 w-4 h-4"
+                        src="/assets/chevron-down.svg"
+                        alt="expand"
+                      />
+                    </label>
+                  </div>
+                  <mat-autocomplete
+                    (optionSelected)="onProductSelect($event)"
+                    [hideSingleSelectionIndicator]="true"
+                    [displayWith]="displayFn"
+                    #productsAuto="matAutocomplete"
+                  >
+                    <mat-option [value]="option" class="relative" *ngFor="let option of filteredOptions | async">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-autocomplete>
                 </form>
-              </ng-container>
-              <!-- <p class="font-bold">{{ product.productName }}</p> -->
-            </div>
+                <!-- <p class="font-bold">{{ product.productName }}</p> -->
+              </div>
+              <div
+              class="flex flex-col justify-center items-center flex-1 p-1 w-full border rounded-3xl"
+              >
+              <button (click)="openPanel($event)">
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-16 h-16 text-gray-400"
+                >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </button>
+            <p class="font-inter text-lg text-gray-400 text-center">
+              Add a product
+            </p>
           </div>
+        </div>
+      </ng-container>
         </ng-container>
       </ng-container>
     </div>

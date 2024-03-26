@@ -12,7 +12,6 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { HoverDirective } from '../../directives/hover/hover.directive';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-user-product-item',
@@ -37,7 +36,7 @@ export class UserProductItemComponent implements OnInit {
   ngOnInit(): void {
     let productsInStorage = JSON.parse(localStorage.getItem('products')!);
     if (productsInStorage[this.product.id]) {
-      this.colored = true
+      this.colored = true;
     }
   }
 
@@ -53,35 +52,45 @@ export class UserProductItemComponent implements OnInit {
 
   onNavigateToProduct(event: Event, id: string) {
     event.stopPropagation();
-    this.router.navigate(['/product/configure', id]);
+    if (this.product.configurationUrl) {
+      console.log('In wishlist');
+
+      this.router.navigateByUrl(this.product.configurationUrl);
+    } else {
+      console.log('Anywhere else');
+      this.router.navigate(['/product/configure', id]);
+    }
   }
 
   addToWishlist(id: string) {
+    console.log('Add');
+
     this.store.dispatch(addToWishlist({ id }));
   }
 
   removeFromWishlist(id: string) {
+    console.log('Remove');
+
     this.store.dispatch(removeFromWishlist({ id }));
   }
 
   addToCompare(id: string) {
     let productsForComparison: Record<string, boolean> = { [id]: true };
     let productsInStorage = JSON.parse(localStorage.getItem('products')!);
-    if (Object.values(productsInStorage).length < 5) {
-      if (productsInStorage[id]) {
-        console.log('Already in');
-        productsForComparison = { ...productsInStorage, [id]: false };
-        this.colored = false;
-      } else {
+    if (productsInStorage[id]) {
+      delete productsInStorage[id];
+      productsForComparison = { ...productsInStorage };
+      this.colored = false;
+    } else {
+      if (Object.values(productsInStorage).length < 5) {
         productsForComparison = { ...productsInStorage, [id]: true };
         this.colored = true;
+      } else {
+        this.toast.info(
+          'Reached the maximum number of products for comparison',
+          'Info'
+        );
       }
-    } else {
-      this.toast.info(
-        'Reached the maximum number of products for comparison',
-        'Info'
-      );
-      return;
     }
 
     localStorage.setItem('products', JSON.stringify(productsForComparison));

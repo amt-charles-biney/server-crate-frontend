@@ -67,7 +67,7 @@ export class ProductsEffect {
       exhaustMap(({ id }) => {
         return this.userService.getSingleProduct(id).pipe(
           map((product) => {
-            return gotSingleProduct(product)
+            return gotSingleProduct(product.data)
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), "Error")

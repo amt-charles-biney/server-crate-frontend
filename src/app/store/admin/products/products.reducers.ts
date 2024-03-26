@@ -98,7 +98,7 @@ export const allProductsFeature = createFeature({
     on(gotSingleProduct, (state, singleProduct) => {
       return {
         ...state,
-        singleProduct
+        singleProduct: singleProduct
       } 
     })
   )

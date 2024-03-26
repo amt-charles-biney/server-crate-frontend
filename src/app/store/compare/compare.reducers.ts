@@ -12,7 +12,7 @@ export const compareFeature = createFeature({
     name: 'compare',
     reducer: createReducer(
         initialCompareState,
-        on(gotProductComparisons, (state, comparisons) => {
+        on(gotProductComparisons, (_, comparisons) => {
             return {
                 ...comparisons
             }

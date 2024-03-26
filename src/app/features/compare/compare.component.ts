@@ -1,57 +1,87 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Comparison, Product, ProductItem, ProductItemSubset } from '../../types';
+import { trigger } from '@angular/animations';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  Comparison,
+  Product,
+  ProductItem,
+  ProductItemSubset,
+  Select,
+} from '../../types';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
 import { Store } from '@ngrx/store';
-import { addToWishlist, getAllProducts, getSingleProduct } from '../../store/admin/products/categories.actions';
+import {
+  addToWishlist,
+  getAllProducts,
+  getSingleProduct,
+} from '../../store/admin/products/categories.actions';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
 import { BehaviorSubject, Observable, map, of, startWith, tap } from 'rxjs';
-import { selectAllProductsState, selectProducts, selectSingleProduct } from '../../store/admin/products/products.reducers';
+import {
+  selectAllProductsState,
+  selectProducts,
+  selectSingleProduct,
+} from '../../store/admin/products/products.reducers';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { getProductComparisons } from '../../store/compare/compare.actions';
 import { selectData } from '../../store/compare/compare.reducers';
+import { isInStorage } from '../../core/utils/helpers';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-compare',
   standalone: true,
-  imports: [NgOptimizedImage, CloudinaryUrlPipe, CustomInputComponent, ReactiveFormsModule, CommonModule],
+  imports: [
+    NgOptimizedImage,
+    CloudinaryUrlPipe,
+    CustomInputComponent,
+    ReactiveFormsModule,
+    CommonModule,
+    MatAutocompleteTrigger,
+    MatAutocompleteModule
+  ],
   templateUrl: './compare.component.html',
   styleUrl: './compare.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompareComponent implements OnInit {
   private productsToCompare$ = new BehaviorSubject<Comparison[]>([]);
-  private allProducts$ = new BehaviorSubject<Product[]>([])
-  private singleProduct$ = new BehaviorSubject<Comparison | null>(null)
-  
+  private allProducts$ = new BehaviorSubject<Product[]>([]);
+  private singleProduct$ = new BehaviorSubject<Comparison | null>(null);
+
+  @ViewChild(MatAutocompleteTrigger, {read: MatAutocompleteTrigger}) trigger!: MatAutocompleteTrigger;
+
+  productsToCompare = this.productsToCompare$.asObservable();
+  allProducts = this.allProducts$.asObservable();
+  singleProduct = this.singleProduct$.asObservable();
   filteredOptions!: Observable<Product[]>;
-  allProducts = this.allProducts$.asObservable()
-  singleProduct = this.singleProduct$.asObservable()
-  productsToCompare = this.productsToCompare$.asObservable()
 
-  products: Comparison[] = []
+  products: Comparison[] = [];
+  productList!: FormGroup;
 
-  productList!: FormGroup
-
-  constructor(private store: Store) {}
+  constructor(private store: Store, private toast: ToastrService) {}
 
   ngOnInit(): void {
-    this.store.dispatch(getProductComparisons())
-    this.store.dispatch(getAllProducts())
+    this.store.dispatch(getProductComparisons());
+    this.store.dispatch(getAllProducts());
     this.productList = new FormGroup({
-      product: new FormControl('')
-    })
-    this.onInit()
+      product: new FormControl(''),
+    });
+    this.onInit();
   }
 
   onInit() {
-
     this.productsToCompare = this.store.select(selectData).pipe(
       tap((productsToCompare) => {
-        this.products = productsToCompare
+        this.products = productsToCompare;
       })
-    )
+    );
     // const products: string = localStorage.getItem("products") ? localStorage.getItem("products")! : "[]"
     // this.productsToCompare.next(JSON.parse(products));
 
@@ -69,10 +99,10 @@ export class CompareComponent implements OnInit {
     this.singleProduct = this.store.select(selectSingleProduct).pipe(
       tap((product) => {
         if (product) {
-          this.products = [...this.products, product]
+          this.products = [...this.products, product];
         }
       })
-    )
+    );
   }
 
   private _filter(value: Product | string, filterFrom: Product[]): Product[] {
@@ -90,29 +120,44 @@ export class CompareComponent implements OnInit {
 
   onProductSelect(event: MatAutocompleteSelectedEvent) {
     const selectedProduct: Product = event.option.value;
-    console.log('Selected product', selectedProduct);
-    this.store.dispatch(getSingleProduct({ id: selectedProduct.id }))
-    // this.addToCompare({...selectedProduct})
-    this.onInit()
+    if (!isInStorage(selectedProduct.id).inStorage) {
+      this.store.dispatch(getSingleProduct({ id: selectedProduct.id }));
+      this.product.setValue('');
+      this.addToCompare(selectedProduct.id);
+    } else {
+      this.toast.info('Product is already here', 'Duplicate', {
+        timeOut: 1500,
+      });
+    }
+  }
+  displayFn(option: Select): string {    
+    return option && option.name ? option.name : ''
   }
 
-  addToCompare(product: ProductItemSubset) {
-    let productsForComparison:ProductItemSubset[] = [product];
-    if (localStorage.getItem("products")) {
-      const productsInStorage = JSON.parse(localStorage.getItem("products")!)
-    productsForComparison = [...productsInStorage, product]
-    }
-
-    localStorage.setItem('products', JSON.stringify(productsForComparison)); 
+  openPanel(event: any) {
+    event.stopPropagation()
+    console.log('Open panel');
     
+    this.trigger.openPanel()
+  }
+
+  addToCompare(id: string) {
+    const { inStorage, productsInStorage } = isInStorage(id);
+    if (!inStorage) {
+      localStorage.setItem(
+        'products',
+        JSON.stringify({ ...productsInStorage, [id]: true })
+      );
+    }
   }
 
   clearSelections() {
-    localStorage.setItem("products", JSON.stringify({}))
-    this.productsToCompare = of([])
+    localStorage.setItem('products', JSON.stringify({}));
+    this.productsToCompare = of([]);
+    this.products = [];
   }
 
   get product() {
-    return this.productList.get('product')!
+    return this.productList.get('product')!;
   }
 }

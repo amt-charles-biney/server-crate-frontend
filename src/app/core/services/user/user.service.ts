@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { AllProducts, Comparison, Comparisons, PageAbleResponseData, Product, ProductItemSubset, Select, Wishlist } from '../../../types';
+import { AllProducts, Comparison, Comparisons, PageAbleResponseData, Product, ProductItemSubset, Select, SingleProductResponse, Wishlist } from '../../../types';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
@@ -66,6 +66,6 @@ export class UserService {
   }
 
   getSingleProduct(id: string) {
-    return this.http.get<Comparison>(`${this.baseUrl}/compare/${id}`)
+    return this.http.get<SingleProductResponse>(`${this.baseUrl}/compare/${id}`)
   }
 }

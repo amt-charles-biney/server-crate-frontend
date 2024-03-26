@@ -5,6 +5,7 @@ import { addToCartItem } from '../../../store/product-spec/product-spec.action'
 import { Observable } from 'rxjs'
 import { selectProductCartItemLoading } from '../../../store/product-spec/product-spec.reducer'
 import { CommonModule } from '@angular/common'
+import { addToWishlist } from '../../../store/admin/products/categories.actions'
 
 @Component({
   selector: 'app-order-summary',
@@ -24,5 +25,9 @@ export class OrderSummaryComponent {
   addProductToCart (): void {
     document.body.scrollTo({ top: 0, behavior: 'smooth' })
     this.store.dispatch(addToCartItem({ productId: this.productId, configOptions: this.querySnapShot  }))
+  }
+
+  addToWishlist(id: string) {
+    this.store.dispatch(addToWishlist({ id }));
   }
 }
