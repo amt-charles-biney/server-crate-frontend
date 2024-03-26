@@ -18,6 +18,14 @@ export function resetLoaderFn() {
   }))
 }
 
+export function isInStorage(id: string){
+  const productsInStorage = JSON.parse(localStorage.getItem("products")!)
+  if (!productsInStorage[id]) {
+    return { productsInStorage, inStorage: false }
+  }     
+  return { productsInStorage, inStorage: true }
+}
+
 export function errorHandler(err: any): string {
   let errorMessage = '';
   if (err && err.error && err.error.detail) {

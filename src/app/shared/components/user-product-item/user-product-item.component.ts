@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProductItemSubset } from '../../../types';
 import { CommonModule, CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
@@ -22,52 +22,74 @@ import { HoverDirective } from '../../directives/hover/hover.directive';
     NgOptimizedImage,
     CommonModule,
     CloudinaryUrlPipe,
-    HoverDirective
+    HoverDirective,
   ],
   templateUrl: './user-product-item.component.html',
 })
-export class UserProductItemComponent {
+export class UserProductItemComponent implements OnInit {
   @Input() product!: ProductItemSubset;
   @Input() isGrid: boolean = true;
   isSelected: boolean = false;
-  hovered!: boolean
+  hovered!: boolean;
+  colored = false;
+
+  ngOnInit(): void {
+    let productsInStorage = JSON.parse(localStorage.getItem('products')!);
+    if (productsInStorage[this.product.id]) {
+      this.colored = true;
+    }
+  }
 
   buyNow(id: string) {
     this.dialog.open(BuyNowComponent, {
       height: '80%',
       width: '70%',
       data: {
-        id
-      }
+        id,
+      },
     });
   }
 
   onNavigateToProduct(event: Event, id: string) {
     event.stopPropagation();
-    this.router.navigate(['/product/configure', id]);
+    if (this.product.configurationUrl) {
+      console.log('In wishlist');
+
+      this.router.navigateByUrl(this.product.configurationUrl);
+    } else {
+      console.log('Anywhere else');
+      this.router.navigate(['/product/configure', id]);
+    }
   }
 
   addToWishlist(id: string) {
+    console.log('Add');
+
     this.store.dispatch(addToWishlist({ id }));
   }
 
   removeFromWishlist(id: string) {
+    console.log('Remove');
+
     this.store.dispatch(removeFromWishlist({ id }));
   }
 
-  addToCompare(product: ProductItemSubset) {
-    let productsForComparison: ProductItemSubset[] = [product];
-    if (localStorage.getItem('products')) {
-      const productsInStorage = JSON.parse(localStorage.getItem('products')!);
-
-      if (productsInStorage.length < 5) {
-        productsForComparison = [...productsInStorage, product];
+  addToCompare(id: string) {
+    let productsForComparison: Record<string, boolean> = { [id]: true };
+    let productsInStorage = JSON.parse(localStorage.getItem('products')!);
+    if (productsInStorage[id]) {
+      delete productsInStorage[id];
+      productsForComparison = { ...productsInStorage };
+      this.colored = false;
+    } else {
+      if (Object.values(productsInStorage).length < 5) {
+        productsForComparison = { ...productsInStorage, [id]: true };
+        this.colored = true;
       } else {
         this.toast.info(
           'Reached the maximum number of products for comparison',
           'Info'
         );
-        return;
       }
     }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { AllProducts, PageAbleResponseData, ProductItemSubset, Select, Wishlist } from '../../../types';
+import { AllProducts, Comparison, Comparisons, PageAbleResponseData, Product, ProductItemSubset, Select, SingleProductResponse, Wishlist } from '../../../types';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
@@ -47,6 +47,25 @@ export class UserService {
   }
 
   removeFromWishlist(id: string) {
-    return this.http.delete( `${this.baseUrl}/wishlists/${id}`)
+    return this.http.delete(`${this.baseUrl}/wishlists/${id}`)
+  }
+
+  getComparisons() {
+    let params = ''
+    if (localStorage.getItem("products")) {
+      const listOfIds: string[] = Object.keys(JSON.parse(localStorage.getItem("products")!))
+      params = listOfIds.join(',')
+    }
+    console.log('Params', params);
+    
+    return this.http.get<Comparisons>(`${this.baseUrl}/compare/all?products=${params}`)
+  }
+
+  getAllProducts() {
+    return this.http.get<{data: Product[], message: string, status: string}>(`${this.baseUrl}/compare`)
+  }
+
+  getSingleProduct(id: string) {
+    return this.http.get<SingleProductResponse>(`${this.baseUrl}/compare/${id}`)
   }
 }
