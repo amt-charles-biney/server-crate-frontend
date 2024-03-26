@@ -48,9 +48,6 @@ import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-
     ProductLoadingComponent,
     NgOptimizedImage,
     CloudinaryUrlPipe,
-    NgOptimizedImage,
-    HeaderComponent,
-    FooterComponent
   ],
   templateUrl: './product-configure.component.html',
 })

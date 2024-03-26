@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { addToWishlist, getWishlist, gotWishlist, removeFromWishlist } from "./categories.actions";
+import { addToWishlist, getUserProducts, getWishlist, gotWishlist, removeFromWishlist } from "./categories.actions";
 import { UserService } from "../../../core/services/user/user.service";
 import { ToastrService } from "ngx-toastr";
 import { EMPTY, catchError, map, switchMap, tap } from "rxjs";
 import { errorHandler } from "../../../core/utils/helpers";
+import { Store } from "@ngrx/store";
 
 @Injectable()
 export class WishlistEffect {
@@ -31,7 +32,7 @@ export class WishlistEffect {
           switchMap(({ id }) => {
             return this.userService.addToWishlist(id).pipe(
               map(() => {
-                this.toast.success('Added product to wishlist', 'Success', { timeOut: 1000 })
+                this.store.dispatch(getUserProducts({ page: 0, params: {}}))
                 return getWishlist()
               }),
               catchError((err) => {
@@ -49,7 +50,7 @@ export class WishlistEffect {
           switchMap(({ id }) => {
             return this.userService.removeFromWishlist(id).pipe(
               map(() => {
-                this.toast.success('Removed product from wishlist', 'Success', { timeOut: 1000 })
+                this.store.dispatch(getUserProducts({ page: 0, params: {}}))
                 return getWishlist()
               }),
               catchError((err) => {
@@ -64,6 +65,7 @@ export class WishlistEffect {
       constructor(
         private action$: Actions,
         private userService: UserService,
-        private toast: ToastrService
+        private toast: ToastrService,
+        private store: Store
       ) {}
 }
