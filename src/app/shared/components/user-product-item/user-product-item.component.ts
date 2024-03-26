@@ -65,7 +65,7 @@ export class UserProductItemComponent implements OnInit {
   addToWishlist(id: string) {
     console.log('Add');
 
-    this.store.dispatch(addToWishlist({ id }));
+    this.store.dispatch(addToWishlist({ id, configOptions: {} }));
   }
 
   removeFromWishlist(id: string) {

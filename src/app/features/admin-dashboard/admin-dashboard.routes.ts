@@ -30,6 +30,8 @@ import { orderFeature } from '../../store/orders/order.reducers';
 import { OrdersOutletComponent } from './features/orders/orders-outlet.component';
 import { CustomerEffect } from '../../store/customers/customers.effects';
 import { customerFeature } from '../../store/customers/customers.reducers';
+import { DashboardEffect } from '../../store/dashboard/dashboard.effects';
+import { dashboardFeature } from '../../store/dashboard/dashboard.reducers';
 
 
 export const route: Routes = [
@@ -110,7 +112,11 @@ export const route: Routes = [
       },
       {
         path: 'dashboard',
-        component: DashboardComponent
+        component: DashboardComponent,
+        providers: [
+          provideEffects(DashboardEffect),
+          provideState(dashboardFeature)
+        ]
       },
       {
         path: 'category-management',

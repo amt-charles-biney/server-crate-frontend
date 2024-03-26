@@ -115,7 +115,7 @@ export class CompareComponent implements OnInit {
   }
 
   addToWishlist(id: string) {
-    this.store.dispatch(addToWishlist({ id }));
+    this.store.dispatch(addToWishlist({ id, configOptions: {} }));
   }
 
   onProductSelect(event: MatAutocompleteSelectedEvent) {

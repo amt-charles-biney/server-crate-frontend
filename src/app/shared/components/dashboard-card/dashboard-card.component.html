@@ -1,0 +1,33 @@
+<article
+  class="flex flex-col justify-between font-bold border rounded-2xl p-6 w-[230px] h-28"
+>
+  <div class="flex justify-between items-center">
+    <p>{{ title }}</p>
+    <img [src]="iconPath" alt="icon" />
+  </div>
+  <div class="flex justify-between items-center">
+    @if (isCurrency) {
+    <p>{{ amount | currency }}</p>
+    } @else {
+    <p>{{ amount }}</p>
+    }
+    <div class="flex gap-[4px] items-center text-figma-green">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        data-slot="icon"
+        class="w-4 h-4 text-figma-green"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
+        />
+      </svg>
+      <p>11.01%</p>
+    </div>
+  </div>
+</article>

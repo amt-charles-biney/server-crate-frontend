@@ -29,8 +29,8 @@ export class WishlistEffect {
       addToWishlist$ = createEffect(() => {
         return this.action$.pipe(
           ofType(addToWishlist),
-          switchMap(({ id }) => {
-            return this.userService.addToWishlist(id).pipe(
+          switchMap(({ id, configOptions }) => {
+            return this.userService.addToWishlist(id, configOptions).pipe(
               map(() => {
                 this.store.dispatch(getUserProducts({ page: 0, params: {}}))
                 return getWishlist()
