@@ -39,6 +39,8 @@ import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-
   selector: 'app-product-configure',
   standalone: true,
   imports: [
+    HeaderComponent,
+    FooterComponent,
     CommonModule,
     MatTabsModule,
     RouterModule,
