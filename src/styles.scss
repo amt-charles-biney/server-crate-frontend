@@ -528,15 +528,15 @@ app-header .mat-badge-small.mat-badge-above .mat-badge-content {
   /* opacity: 0.8; */
 }
 
-app-orders .mat-date-range-input-container {
+app-date-picker .mat-date-range-input-container {
   display: none;
 }
 
-app-orders .mat-date-range-input {
+app-date-picker .mat-date-range-input {
   width: 0;
 }
 
-app-orders .mat-mdc-button-persistent-ripple {
+app-date-picker .mat-mdc-button-persistent-ripple {
   display: none;
 }
 @media only screen and (max-width: 768px) {
