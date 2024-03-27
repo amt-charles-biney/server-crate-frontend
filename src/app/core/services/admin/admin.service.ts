@@ -187,8 +187,8 @@ export class AdminService {
     return this.http.get<Dashboard>(`${this.baseUrl}/admin/dashboard`)
   }
 
-  getChartData() {
-    return this.http.get<ChartData>(`${this.baseUrl}/admin/dashboard/revenue`)
+  getChartData(params?: Record<string, string>) {
+    return this.http.get<ChartData>(`${this.baseUrl}/admin/dashboard/revenue`, { params })
   }
 
 }

@@ -29,8 +29,8 @@ export class DashboardEffect {
   getChartData$ = createEffect(() => {
     return this.action$.pipe(
         ofType(getChartData),
-        exhaustMap(() => {
-            return this.adminService.getChartData().pipe(
+        exhaustMap(({ params }) => {
+            return this.adminService.getChartData(params).pipe(
                 map((chartData) => {
                     return gotChartData(chartData)
                 }),
