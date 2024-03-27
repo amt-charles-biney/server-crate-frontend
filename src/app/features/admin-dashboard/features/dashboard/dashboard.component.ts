@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { LOCALSTORAGE_USER } from '../../../../core/utils/constants';
 import { Dashboard, Username } from '../../../../types';
 import { DashboardCardComponent } from '../../../../shared/components/dashboard-card/dashboard-card.component';
@@ -26,7 +26,7 @@ import { ShippingStatusComponent } from '../../../../shared/components/shipping-
     ShippingStatusComponent
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit {
   name!: string;
