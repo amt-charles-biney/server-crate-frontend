@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { AllProducts, Comparison, Comparisons, PageAbleResponseData, Product, ProductItemSubset, Select, SingleProductResponse, Wishlist } from '../../../types';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { AllProducts, Comparison, Comparisons, IParamConfigOptions, PageAbleResponseData, Product, ProductItemSubset, Select, SingleProductResponse, Wishlist } from '../../../types';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
@@ -42,8 +42,11 @@ export class UserService {
     return this.http.get<Wishlist>(`${this.baseUrl}/wishlists`)
   }
 
-  addToWishlist(id: string) {
-    return this.http.post(`${this.baseUrl}/wishlists/add-item/${id}`, {})
+  addToWishlist(id: string, configOptions: IParamConfigOptions ) {
+    let params = new HttpParams()
+    params = params.set('warranty', configOptions.warranty.toString())
+    params = params.set('components', configOptions.components?.toString() ?? '')
+    return this.http.post(`${this.baseUrl}/wishlists/add-item/${id}`, configOptions, { params })
   }
 
   removeFromWishlist(id: string) {

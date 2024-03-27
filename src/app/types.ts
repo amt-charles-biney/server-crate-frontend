@@ -700,7 +700,7 @@ export type Comparison = {
   description: string;
   coverImage: string;
   options: Record<string, string>;
-  productPrice: number;
+  productPrice : number;
   productCase: string
 }
 
@@ -713,4 +713,24 @@ export type SingleProductResponse = {
   data: Comparison;
   message: string;
   status: string
+}
+
+export type Dashboard = {
+  customers: number;
+  orders: number;
+  products: number;
+  revenue: number;
+  latestOrders: LatestOrders[]
+}
+
+export type LatestOrders = {
+  coverImage: string;
+  orderedTime: string;
+  status: string;
+  productName: string
+}
+
+export type ChartData = {
+  dayOfWeeks: string[],
+  revenue: number[]
 }

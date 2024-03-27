@@ -1,1 +1,12 @@
-<p>dashboard works!</p>
+<ng-container *ngIf="dashboardData | async as dashboardData">
+    <main class="px-6">
+        <h4 class="font-xs font-semibold">Welcome Back, {{name}} 👋</h4>
+        <div class="flex gap-20 mt-[46px]">
+            <app-dashboard-card title="Revenue" [amount]="dashboardData.revenue" [isCurrency]="true"/>
+            <app-dashboard-card title="Products Available" [amount]="dashboardData.products"/>
+            <app-dashboard-card title="Orders" [amount]="dashboardData.orders"/>
+            <app-dashboard-card title="Customers" [amount]="dashboardData.customers"/>
+        </div>
+        <app-chart></app-chart>
+    </main>
+</ng-container>
