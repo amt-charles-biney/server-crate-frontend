@@ -1,5 +1,5 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 import { AllOrders, ShippingStatus } from '../../../../types';
 
@@ -32,6 +32,7 @@ import { DatePickerComponent } from '../../../../shared/components/date-picker/d
     DatePickerComponent
   ],
   templateUrl: './orders.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrdersComponent implements OnInit, AfterViewInit {
   @ViewChild(CustomCheckBoxComponent) check!: CustomCheckBoxComponent;

@@ -1,7 +1,7 @@
 <ng-container *ngIf="dashboardData | async as dashboardData">
   <main class="px-6">
     <h4 class="font-xs font-semibold">Welcome Back, {{ name }} 👋</h4>
-    <section class="grid grid-cols-4 gap-20 mt-[46px] mb-6">
+    <section class="flex flex-wrap gap-x-10 gap-y-5 mt-[46px] mb-6">
       <app-dashboard-card
         title="Revenue"
         [amount]="dashboardData.revenue"
@@ -20,9 +20,9 @@
     <section class="grid grid-cols-2 gap-8">
       <app-chart></app-chart>
       <div></div>
-      <div class="flex flex-col border">
-        <div class="flex items-center justify-between">
-          <p>Latest Order</p>
+      <div class="flex flex-col border p-[10px] rounded-lg">
+        <div class="flex items-center justify-between mb-[18px]">
+          <p class="font-bold">Latest Order</p>
           <button class="flex items-center w-fit gap-[10px] text-figma-green">
             <span class="text-sm font-[500]">More</span>
             <img src="/assets/arrow-right.svg" alt="" />
@@ -51,7 +51,7 @@
                 <p class="overflow-hidden whitespace-nowrap text-ellipsis">{{ order.productName  }}</p>
             </td>
             <td>
-              <p>{{ order.orderedTime }}</p>
+              <p>{{ order.orderedTime | date }}</p>
             </td>
             <td class="mx-auto">
               <app-shipping-status [status]="order.status" />
@@ -60,6 +60,7 @@
           }
         </table>
       </div>
+      <img src="/assets/segment.png" alt="customer segmentation">
     </section>
   </main>
 </ng-container>

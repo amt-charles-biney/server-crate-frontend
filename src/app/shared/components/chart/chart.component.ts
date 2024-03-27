@@ -36,8 +36,9 @@ export class ChartComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    Chart.defaults.plugins.legend.display = false
     this.activatedRoute.queryParams.subscribe((params) => {
-      console.log('Params');
+      console.log('Params', params);
       
       this.store.dispatch(getChartData({ params }));
     })
@@ -58,6 +59,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
     if (this.chartRef !== undefined) {
       Chart.getChart('revenueChart')?.destroy();
     }
+    const newDaysOfWeek = daysOfWeek.map((day) => day[0].concat(day.slice(1, 3).toLowerCase()))
     this.chartRef = this.elementRef.nativeElement
       .querySelector('#revenueChart')
       .getContext('2d');
@@ -66,10 +68,9 @@ export class ChartComponent implements OnInit, AfterViewInit {
 
       data: {
         // values on X-Axis
-        labels: daysOfWeek,
+        labels: newDaysOfWeek,
         datasets: [
           {
-            label: 'Revenue',
             data: revenue,
             tension: 0.5,
           },
@@ -78,24 +79,21 @@ export class ChartComponent implements OnInit, AfterViewInit {
       options: {
         maintainAspectRatio: true,
         aspectRatio: 2.5,
+        scales: {
+          x: {
+            grid: {
+              display: false
+            }
+          },
+        }
       },
     });
   }
 
-  getToDate(toDate: Date) {
+  getRange(dates: Record<string, Date>) {
+    const params = {  startDate: new Date(dates['fromDate']).toISOString().split('T')[0], endDate: new Date(dates['toDate']).toISOString().split('T')[0]}
     this.router.navigate([this.navigateTo], {
-      queryParams: { endDate: new Date(toDate).toISOString().split('T')[0] },
-      queryParamsHandling: 'merge',
-      replaceUrl: true,
-      relativeTo: this.activatedRoute,
-    });
-  }
-
-  getFromDate(fromDate: Date) {
-    this.router.navigate([this.navigateTo], {
-      queryParams: {
-        startDate: new Date(fromDate).toISOString().split('T')[0],
-      },
+      queryParams: params,
       queryParamsHandling: 'merge',
       replaceUrl: true,
       relativeTo: this.activatedRoute,
