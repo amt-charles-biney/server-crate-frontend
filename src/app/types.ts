@@ -717,6 +717,7 @@ export type LatestOrders = {
   coverImage: string;
   orderedTime: string;
   status: string;
+  productName: string
 }
 
 export type ChartData = {
