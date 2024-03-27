@@ -1,12 +1,65 @@
 <ng-container *ngIf="dashboardData | async as dashboardData">
-    <main class="px-6">
-        <h4 class="font-xs font-semibold">Welcome Back, {{name}} 👋</h4>
-        <div class="flex gap-20 mt-[46px]">
-            <app-dashboard-card title="Revenue" [amount]="dashboardData.revenue" [isCurrency]="true"/>
-            <app-dashboard-card title="Products Available" [amount]="dashboardData.products"/>
-            <app-dashboard-card title="Orders" [amount]="dashboardData.orders"/>
-            <app-dashboard-card title="Customers" [amount]="dashboardData.customers"/>
+  <main class="px-6">
+    <h4 class="font-xs font-semibold">Welcome Back, {{ name }} 👋</h4>
+    <section class="grid grid-cols-4 gap-20 mt-[46px] mb-6">
+      <app-dashboard-card
+        title="Revenue"
+        [amount]="dashboardData.revenue"
+        [isCurrency]="true"
+      />
+      <app-dashboard-card
+        title="Products Available"
+        [amount]="dashboardData.products"
+      />
+      <app-dashboard-card title="Orders" [amount]="dashboardData.orders" />
+      <app-dashboard-card
+        title="Customers"
+        [amount]="dashboardData.customers"
+      />
+    </section>
+    <section class="grid grid-cols-2 gap-8">
+      <app-chart></app-chart>
+      <div></div>
+      <div class="flex flex-col border">
+        <div class="flex items-center justify-between">
+          <p>Latest Order</p>
+          <button class="flex items-center w-fit gap-[10px] text-figma-green">
+            <span class="text-sm font-[500]">More</span>
+            <img src="/assets/arrow-right.svg" alt="" />
+          </button>
         </div>
-        <app-chart></app-chart>
-    </main>
+        <table class="w-full">
+          <tr
+            class="grid grid-cols-3 items-center text-table-text bg-table-bg text-xs font-[500] border-b h-11"
+          >
+            <th>Products</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+          @for (order of dashboardData.latestOrders; track order) {
+          <tr class="grid grid-cols-3 items-center text-table-text text-center border-b h-11"  >
+            <td class="flex items-center gap-2 self-center">
+                <div class="w-[33px] h-5">
+                  <img
+                    [ngSrc]="order.coverImage | cloudinaryUrl"
+                    height="20"
+                    width="33"
+                    class="max-w-full max-h-full object-contain"
+                    alt="product image"
+                  />
+                </div>
+                <p class="overflow-hidden whitespace-nowrap text-ellipsis">{{ order.productName  }}</p>
+            </td>
+            <td>
+              <p>{{ order.orderedTime }}</p>
+            </td>
+            <td class="mx-auto">
+              <app-shipping-status [status]="order.status" />
+            </td>
+          </tr>
+          }
+        </table>
+      </div>
+    </section>
+  </main>
 </ng-container>
