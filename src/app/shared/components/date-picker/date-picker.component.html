@@ -1,0 +1,40 @@
+<div
+  [ngClass]="containerClass"
+  class="flex items-center border rounded py-2 pr-[18px] font-[500] justify-evenly min-w-[222px]"
+>
+  <mat-datepicker-toggle
+    [disableRipple]="true"
+    matIconSuffix
+    [for]="rangeDatePicker"
+  >
+    <mat-icon matDatepickerToggleIcon svgIcon="myDatePicker" [ngClass]="iconScale"></mat-icon>
+  </mat-datepicker-toggle>
+  <div [ngClass]="textClass" class="mt-1">
+    @if (rangeDate.value.fromDate) {
+    <span>{{ rangeDate.value.fromDate | date }}</span>
+    } @else {
+    <span>Start Date</span>
+    } - @if (rangeDate.value.toDate) {
+    <span>{{ rangeDate.value.toDate | date }}</span>
+    } @else {
+    <span>End Date</span>
+    }
+  </div>
+  <mat-date-range-input [formGroup]="rangeDate" [rangePicker]="rangeDatePicker">
+    <input
+      matStartDate
+      placeholder="From"
+      formControlName="fromDate"
+      class="!w-0"
+      (dateChange)="onFromDateChange($event)"
+    />
+    <input
+      matEndDate
+      placeholder="End"
+      formControlName="toDate"
+      class="!w-0"
+      (dateChange)="onToDateChange($event)"
+    />
+  </mat-date-range-input>
+  <mat-date-range-picker #rangeDatePicker></mat-date-range-picker>
+</div>
