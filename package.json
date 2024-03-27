@@ -29,6 +29,7 @@
     "@rxweb/reactive-form-validators": "^13.0.1",
     "angular-uploader": "^8.41.1",
     "autoprefixer": "^10.4.16",
+    "chart.js": "^4.4.2",
     "jasmine-marbles": "^0.9.2",
     "jwt-decode": "^4.0.0",
     "keen-slider": "^6.8.6",
