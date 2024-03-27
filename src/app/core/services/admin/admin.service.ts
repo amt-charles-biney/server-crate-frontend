@@ -21,6 +21,8 @@ import {
   Content,
   Notifications,
   Customers,
+  Dashboard,
+  ChartData,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -179,6 +181,14 @@ export class AdminService {
 
   getCustomers() {
     return this.http.get<Customers>(`${this.baseUrl}/admin/customers`)
+  }
+
+  getDashboardData() {
+    return this.http.get<Dashboard>(`${this.baseUrl}/admin/dashboard`)
+  }
+
+  getChartData() {
+    return this.http.get<ChartData>(`${this.baseUrl}/admin/dashboard/revenue`)
   }
 
 }
