@@ -2,7 +2,7 @@
 <div class="flex flex-col border rounded-lg px-4 pt-1">
   <div class="flex items-center divide-x">
     <p class="font-bold text-sm pr-6">Revenue</p>
-    <app-date-picker textClass="text-sm" iconScale="scale-75" containerClass="h-[30px] ml-6"/>
+    <app-date-picker (fromDateEmitter)="getFromDate($event)" (toDateEmitter)="getToDate($event)" textClass="text-sm" iconScale="scale-75" containerClass="h-[30px] ml-6"/>
   </div>
   <div class="w-full h-[252px]">
     <canvas id="revenueChart">{{ chart }}</canvas>
