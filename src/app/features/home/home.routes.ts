@@ -58,6 +58,19 @@ export const route: Routes = [
                 ]
             },
             {
+                path: 'product/configure/:id',
+                loadChildren: () =>
+                  import('../product-configure/product-configure.routes').then(
+                    (m) => m.route
+                  ),
+                providers: [
+                  provideState(productConfigFeature),
+                  provideEffects(ProductSpecEffects),
+                  provideState(productCartItemFeature),
+                  provideState(productConfigItemFeature),
+                ],
+              },
+            {
                 path: 'compare',
                 loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent),
                 providers:  [
