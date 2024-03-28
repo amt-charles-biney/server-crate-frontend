@@ -34,7 +34,7 @@ export class UserProductItemComponent implements OnInit {
   colored = false;
 
   ngOnInit(): void {
-    let productsInStorage = JSON.parse(localStorage.getItem('products')!);
+    let productsInStorage = JSON.parse(sessionStorage.getItem('products')!);
     if (productsInStorage[this.product.id]) {
       this.colored = true;
     }
@@ -53,30 +53,23 @@ export class UserProductItemComponent implements OnInit {
   onNavigateToProduct(event: Event, id: string) {
     event.stopPropagation();
     if (this.product.configurationUrl) {
-      console.log('In wishlist');
-
       this.router.navigateByUrl(this.product.configurationUrl);
     } else {
-      console.log('Anywhere else');
       this.router.navigate(['/product/configure', id]);
     }
   }
 
   addToWishlist(id: string) {
-    console.log('Add');
-
     this.store.dispatch(addToWishlist({ id, configOptions: { components: '', warranty: false } }));
   }
 
   removeFromWishlist(id: string) {
-    console.log('Remove');
-
     this.store.dispatch(removeFromWishlist({ id }));
   }
 
   addToCompare(id: string) {
     let productsForComparison: Record<string, boolean> = { [id]: true };
-    let productsInStorage = JSON.parse(localStorage.getItem('products')!);
+    let productsInStorage = JSON.parse(sessionStorage.getItem('products')!);
     if (productsInStorage[id]) {
       delete productsInStorage[id];
       productsForComparison = { ...productsInStorage };
@@ -93,7 +86,7 @@ export class UserProductItemComponent implements OnInit {
       }
     }
 
-    localStorage.setItem('products', JSON.stringify(productsForComparison));
+    sessionStorage.setItem('products', JSON.stringify(productsForComparison));
   }
 
   constructor(

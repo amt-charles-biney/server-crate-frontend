@@ -43,37 +43,40 @@
       </button>
     </section>
   </section>
-  <section>
-    <form [formGroup]="selectForm">
-      <table class="flex flex-col w-full mt-6">
-        <tr
-          class="grid grid-cols-11 py-3 pl-3 border-b text-table-text bg-table-bg text-xs font-[500]"
-        >
-          <th class="md:col-span-3 2xl:col-span-2 flex items-center gap-9">
-            <app-custom-check-box (changeHandler)="removeCheck()" />
-            <p class="whitespace-nowrap">Attribute Name</p>
-          </th>
-          <th class="col-span-5 text-start self-center">Description</th>
-          <th class="col-span-2 text-start self-center">Measurement Type</th>
-
-          <th class="col-span-1 text-center self-center">Actions</th>
-        </tr>
-        <ng-container *ngIf="attributes | async as attributes">
-          <cdk-accordion>
-            @for (attribute of attributes; track $index) {
-            <div class="border-b">
-              <app-expandable
-                [attribute]="attribute"
-                [control]="$any(selectForm.controls[attribute.attributeName])"
-                (editEmitter)="editOption($event)"
-                (deleteEmitter)="deleteAttribute($event)"
-                (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"
-              />
-            </div>
-            }
-          </cdk-accordion>
-        </ng-container>
-      </table>
-    </form>
-  </section>
+  <app-paginated (pageEmitter)="getPage($event)" paginationId="attributes">
+    <section>
+      <form [formGroup]="selectForm">
+        <table class="flex flex-col w-full mt-6">
+          <tr
+            class="grid grid-cols-11 py-3 pl-3 border-b text-table-text bg-table-bg text-xs font-[500]"
+          >
+            <th class="md:col-span-3 2xl:col-span-2 flex items-center gap-9">
+              <app-custom-check-box (changeHandler)="removeCheck()" />
+              <p class="whitespace-nowrap">Attribute Name</p>
+            </th>
+            <th class="col-span-5 text-start self-center">Description</th>
+            <th class="col-span-2 text-start self-center">Measurement Type</th>
+  
+            <th class="col-span-1 text-center self-center">Actions</th>
+          </tr>
+          <ng-container *ngIf="attributes | async as attributes">
+            <cdk-accordion>
+              @for (attribute of attributes| paginate: { id: 'attributes', itemsPerPage: 9,
+              currentPage: page, totalItems: attributes.length}; track attribute ) {
+              <div class="border-b">
+                <app-expandable
+                  [attribute]="attribute"
+                  [control]="$any(selectForm.controls[attribute.attributeName])"
+                  (editEmitter)="editOption($event)"
+                  (deleteEmitter)="deleteAttribute($event)"
+                  (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"
+                />
+              </div>
+              }
+            </cdk-accordion>
+          </ng-container>
+        </table>
+      </form>
+    </section>
+  </app-paginated>
 </main>

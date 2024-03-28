@@ -362,8 +362,8 @@ export class AttributeModalComponent implements OnInit {
       if (index === 0) {
         this.toast.info("Attributes must have at least one option", "Info")
       } else {
-        this.attributes.removeAt(index);
       }
+      this.attributes.removeAt(index);
     }
   }
 

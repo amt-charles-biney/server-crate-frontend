@@ -524,9 +524,10 @@ export type PaymentData = {
 };
 
 export type PaymentVerification = {
-  status: number;
+  trackingId: string;
+  trackingUrl: string;
   message: string;
-  isVerified: boolean;
+  status: number;
 };
 
 export type ShippingPayload = {

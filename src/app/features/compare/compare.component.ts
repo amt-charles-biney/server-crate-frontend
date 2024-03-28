@@ -87,7 +87,6 @@ export class CompareComponent implements OnInit {
 
     this.allProducts = this.store.select(selectProducts).pipe(
       tap((products) => {
-        console.log('Products', products);
         this.filteredOptions = this.product.valueChanges.pipe(
           startWith(''),
           map((value) => {
@@ -135,16 +134,14 @@ export class CompareComponent implements OnInit {
   }
 
   openPanel(event: any) {
-    event.stopPropagation()
-    console.log('Open panel');
-    
+    event.stopPropagation()    
     this.trigger.openPanel()
   }
 
   addToCompare(id: string) {
     const { inStorage, productsInStorage } = isInStorage(id);
     if (!inStorage) {
-      localStorage.setItem(
+      sessionStorage.setItem(
         'products',
         JSON.stringify({ ...productsInStorage, [id]: true })
       );
@@ -152,7 +149,7 @@ export class CompareComponent implements OnInit {
   }
 
   clearSelections() {
-    localStorage.setItem('products', JSON.stringify({}));
+    sessionStorage.setItem('products', JSON.stringify({}));
     this.productsToCompare = of([]);
     this.products = [];
   }

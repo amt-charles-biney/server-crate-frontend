@@ -40,26 +40,28 @@
       </button>
     </section>
   </section>
-  <section class="mt-6">
-    <table class="w-full">
-      <tr class="grid grid-cols-12 py-3 border-b text-table-text text-xs">
-        <th class="md:col-span-3 2xl:col-span-2 flex items-center gap-9">
-          <app-custom-check-box (changeHandler)="removeCheck()" />
-          <p class="whitespace-nowrap">Category Name</p>
-        </th>
-        <th class="md:col-span-4 2xl:col-span-5 text-start self-center">Base Configuration</th>
-        <th class="col-span-4 text-start self-center">Number of Products</th>
-
-        <th class="col-span-1 text-center self-center">Action</th>
-      </tr>
-      <ng-container *ngIf="categoriesAndConfig | async as categories">
-        <tr
-          class=""
-          *ngFor="let category of categories"
-        >
-        <app-table-row [category]="category" [control]="$any(selectForm.controls[category.name])" (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"/>
+  <app-paginated (pageEmitter)="getPage($event)" paginationId="categories">
+    <section class="mt-6">
+      <table class="w-full">
+        <tr class="grid grid-cols-12 py-3 border-b text-table-text text-xs">
+          <th class="md:col-span-3 2xl:col-span-2 flex items-center gap-9">
+            <app-custom-check-box (changeHandler)="removeCheck()" />
+            <p class="whitespace-nowrap">Category Name</p>
+          </th>
+          <th class="md:col-span-4 2xl:col-span-5 text-start self-center">Base Configuration</th>
+          <th class="col-span-4 text-start self-center">Number of Products</th>
+  
+          <th class="col-span-1 text-center self-center">Action</th>
         </tr>
-      </ng-container>
-    </table>
-  </section>
+        <ng-container *ngIf="categoriesAndConfig | async as categories">
+          <tr
+            class=""
+            *ngFor="let category of categories | paginate: { id: 'categories', itemsPerPage: 9, currentPage: page, totalItems: categories.length}"
+          >
+          <app-table-row [category]="category" [control]="$any(selectForm.controls[category.name])" (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"/>
+          </tr>
+        </ng-container>
+      </table>
+    </section>
+  </app-paginated>
 </main>

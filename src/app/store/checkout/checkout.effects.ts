@@ -43,7 +43,8 @@ export class CheckoutEffect {
                 this.ngxService.start()
                 return this.paymentService.verifyPayment(reference).pipe(
                     map((props) => {
-                        return gotPaymentVerification({ isVerified: true, message: props.message, status: props.status})
+                        sessionStorage.setItem("order", JSON.stringify(props))
+                        return gotPaymentVerification(props)
                     }),
                     catchError((err) => {
                         const errorMessage = errorHandler(err)

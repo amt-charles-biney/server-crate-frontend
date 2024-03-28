@@ -88,7 +88,7 @@
       </tr>
       <ng-container *ngIf="orders | async as orders">
         @for (order of orders.content | paginate: { id: 'orders', itemsPerPage:
-        13, currentPage: page, totalItems: orders.totalElements}; track order) {
+        9, currentPage: page, totalItems: orders.totalElements}; track order) {
         <tr>
           @if (isAdmin) {
             <app-order-row

@@ -1,5 +1,4 @@
 <ng-container *ngIf="shippingInfoForm$ | async"></ng-container>
-<ng-container *ngIf="verification$ | async"></ng-container>
 <app-loader loaderId="master" [useDefaultOverlay]="true" [text]="loaderText" />
 <ng-container *ngIf="loadingStatus | async as loadingState">
   <ng-container *ngIf="!loadingState.isError"> </ng-container>
@@ -43,14 +42,6 @@
                   placeholder="Enter your email"
                   formControlName="email"
                 />
-                <!-- <app-custom-input
-                  id="address1"
-                  label="Address 1"
-                  type="text"
-                  placeholder="Address 1"
-                  formControlName="address1"
-                /> -->
-
                 <app-address [control]="shippingForm.controls['address1']" (addressEmitter)="getAddress($event)"/>
                 <app-custom-input
                   id="address2"
@@ -149,22 +140,25 @@
           </section>
         </cdk-step>
       </ng-container>
-
       <cdk-step label="Track Order">
-        <section class="flex flex-col items-center justify-center">
-          <img src="/assets/checkout.svg" alt="tracking your order" />
-          <div class="flex flex-col items-center justify-center mt-[39px]">
-            <p class="font-bold text-2xl">Thank You</p>
-            <p class="text-[13px]">Order Confirmed</p>
-            <p class="text-[#737373] text-[13px] mb-[44px]">INSERT [ORDERID]</p>
-          </div>
-          <button
-            class="bg-figma-green hover:bg-green-500 w-[469px] p-[9px] rounded-xl text-white font-[500px] text-[20px]"
-          >
-            Track Order
-          </button>
-        </section>
-      </cdk-step>
+          <ng-container *ngIf="verification$ | async as verification">
+          <section class="flex flex-col items-center justify-center">
+            <img src="/assets/checkout.svg" alt="tracking your order" />
+            <div class="flex flex-col items-center justify-center mt-[39px]">
+              <p class="font-bold text-2xl">Thank You</p>
+              <p class="text-[13px]">Order Confirmed</p>
+              <p class="text-[#737373] text-[13px] mb-[44px]">{{verification.trackingId}}</p>
+            </div>
+            <a
+              [href]="verification.trackingUrl"
+              class="bg-figma-green hover:bg-green-500 text-center w-[469px] p-[9px] rounded-xl text-white font-[500px] text-[20px]"
+            >
+              Track Order
+          </a>
+          </section>
+        </ng-container>
+        </cdk-step>
+
     </section>
   </app-custom-stepper>
   @if (cdkStepper.selectedIndex !== 2) {

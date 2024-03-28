@@ -25,23 +25,24 @@ export const checkoutFeature = createFeature({
 })
 
 const verificationState: PaymentVerification = {
-    isVerified: false,
-    status: 0,
     message: '',
+    status: 0,
+    trackingId: '',
+    trackingUrl: ''
 }
 
 export const verificationFeature = createFeature({
     name: 'verification',
     reducer: createReducer(
         verificationState,
-        on(gotPaymentVerification, ({ isVerified, message, status}) => {                        
-            return {
-                isVerified: true,
-                message,
-                status
-            }
+        on(gotPaymentVerification, ({ message, status, trackingId, trackingUrl }) => {   
+            // TODO - change for deployment
+            const verification: PaymentVerification = JSON.parse(
+                sessionStorage.getItem('order')!
+              );
+            return verification
         })
     )
 })
 
-export const { selectIsVerified } = verificationFeature
+export const { selectStatus, selectVerificationState } = verificationFeature

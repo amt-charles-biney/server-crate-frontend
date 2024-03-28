@@ -25,6 +25,8 @@ import {
 } from '../../../../store/category-management/attributes/attributes.actions';
 import {CdkAccordionModule} from '@angular/cdk/accordion';
 import { ExpandableComponent } from '../../../../shared/components/expandable/expandable.component';
+import { PaginatedComponent } from '../../../../shared/components/paginated/paginated.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 @Component({
   selector: 'app-attributes',
   standalone: true,
@@ -37,7 +39,9 @@ import { ExpandableComponent } from '../../../../shared/components/expandable/ex
     MatExpansionModule,
     VariantOptionsComponent,
     CdkAccordionModule,
-    ExpandableComponent
+    ExpandableComponent,
+    PaginatedComponent,
+    NgxPaginationModule
   ],
   templateUrl: './attributes.component.html',
 })
@@ -49,7 +53,7 @@ export class AttributesComponent implements OnInit, AfterViewInit {
   indeterminateCheckbox!: HTMLInputElement;
   selectForm!: FormGroup;
   toggleCheckbox = false
-
+  page: number = 1;
   @ViewChild(CustomCheckBoxComponent) check!: CustomCheckBoxComponent;
   constructor(
     public dialog: MatDialog,
@@ -65,6 +69,11 @@ export class AttributesComponent implements OnInit, AfterViewInit {
         this.selectForm = this.attrService.toSelectFormGroup(attrs);
         this.localAttributes = attrs
       });
+  }
+
+  getPage(pageNumber: number) {
+    this.page = pageNumber;
+    document.body.scrollTo({ top: 0, behavior: 'smooth'})
   }
 
   ngAfterViewInit(): void {

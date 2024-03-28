@@ -19,7 +19,7 @@ export function resetLoaderFn() {
 }
 
 export function isInStorage(id: string){
-  const productsInStorage = JSON.parse(localStorage.getItem("products")!)
+  const productsInStorage = JSON.parse(sessionStorage.getItem("products")!)
   if (!productsInStorage[id]) {
     return { productsInStorage, inStorage: false }
   }     

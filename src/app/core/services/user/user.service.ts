@@ -55,12 +55,10 @@ export class UserService {
 
   getComparisons() {
     let params = ''
-    if (localStorage.getItem("products")) {
-      const listOfIds: string[] = Object.keys(JSON.parse(localStorage.getItem("products")!))
+    if (sessionStorage.getItem("products")) {
+      const listOfIds: string[] = Object.keys(JSON.parse(sessionStorage.getItem("products")!))
       params = listOfIds.join(',')
-    }
-    console.log('Params', params);
-    
+    }    
     return this.http.get<Comparisons>(`${this.baseUrl}/compare/all?products=${params}`)
   }
 

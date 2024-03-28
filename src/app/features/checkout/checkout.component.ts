@@ -22,7 +22,15 @@ import {
 } from '@angular/cdk/stepper';
 import { CustomCheckBoxComponent } from '../../shared/components/custom-check-box/custom-check-box.component';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Address, CartProductItem, Contact, LoadingStatus, PaymentRequest, ShippingPayload } from '../../types';
+import {
+  Address,
+  CartProductItem,
+  Contact,
+  LoadingStatus,
+  PaymentRequest,
+  PaymentVerification,
+  ShippingPayload,
+} from '../../types';
 import { Store } from '@ngrx/store';
 import { selectConfiguredProducts } from '../../store/cart/cart.reducers';
 import { SummaryComponent } from '../../shared/components/summary/summary.component';
@@ -32,8 +40,8 @@ import {
   sendingPaymentRequest,
   verifyPayment,
 } from '../../store/checkout/checkout.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { selectIsVerified } from '../../store/checkout/checkout.reducers';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { selectStatus, selectVerificationState } from '../../store/checkout/checkout.reducers';
 import { getShippingDetails } from '../../store/account-settings/general-info/general-info.actions';
 import { selectShippingDetailsState } from '../../store/account-settings/general-info/general-info.reducers';
 import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
@@ -59,7 +67,8 @@ import { AddressComponent } from '../../shared/components/address/address.compon
     PaymentDetailsComponent,
     LoaderComponent,
     ErrorComponent,
-    AddressComponent
+    AddressComponent,
+    RouterLink
   ],
   templateUrl: './checkout.component.html',
 })
@@ -83,16 +92,17 @@ export class CheckoutComponent implements OnInit {
     zipCode: ['', [Validators.required, zipCodeValidator()]],
     contact: {},
   });
-  shippingInfoForm$!: Observable<ShippingPayload>
+  shippingInfoForm$!: Observable<ShippingPayload>;
 
   private cartItems$ = new BehaviorSubject<CartProductItem[]>([]);
   cartItems = this.cartItems$.asObservable();
-  verification$!: Observable<boolean>
+  verification$!: Observable<PaymentVerification>;
+  verification!: PaymentVerification
   amountToPay!: number;
-  isVerified = false
-  stepIndex!: number
-  loadingStatus!: Observable<LoadingStatus>
-  loaderText: string = 'Redirecting to PayStack...'
+  isVerified = false;
+  stepIndex!: number;
+  loadingStatus!: Observable<LoadingStatus>;
+  loaderText: string = 'Redirecting to PayStack...';
   constructor(
     private _formBuilder: FormBuilder,
     private store: Store,
@@ -100,34 +110,34 @@ export class CheckoutComponent implements OnInit {
     private router: Router
   ) {}
   ngOnInit(): void {
-    this.store.dispatch(getShippingDetails())
-    this.cartItems = this.store.select(selectConfiguredProducts)
+    this.store.dispatch(getShippingDetails());
+    this.cartItems = this.store.select(selectConfiguredProducts);
 
     this.activatedRoute.queryParams.subscribe((params) => {
       const reference = params['reference'];
       if (reference) {
         this.store.dispatch(verifyPayment({ reference }));
-        this.loaderText = 'Verifying payment...'
-        this.verification$ = this.store.select(selectIsVerified).pipe(
-          tap(isVerified => {
-            if (isVerified) {
-              this.cdkStepper.linear = false
-              this.cdkStepper.selectedIndex = 2
-              this.router.navigateByUrl('/checkout', { replaceUrl: true })
-              this.store.dispatch(getCartItems())
+        this.loaderText = 'Verifying payment...';
+        this.verification$ = this.store.select(selectVerificationState).pipe(
+          tap((verification) => {
+            if (verification.status === 200) {
+              this.cdkStepper.linear = false;
+              this.cdkStepper.selectedIndex = 2;
+              this.router.navigateByUrl('/checkout', { replaceUrl: true });
+              this.store.dispatch(getCartItems());
             }
           })
-        )
+        );
       }
     });
 
     this.shippingInfoForm$ = this.store.select(selectShippingDetailsState).pipe(
       tap((shippingDetails) => {
-        this.shippingForm.patchValue({...shippingDetails })
-        this.intl?.setNumber(shippingDetails.contact?.phoneNumber)
+        this.shippingForm.patchValue({ ...shippingDetails });
+        this.intl?.setNumber(shippingDetails.contact?.phoneNumber);
       })
-    )
-    this.loadingStatus = this.store.select(selectLoaderState)
+    );
+    this.loadingStatus = this.store.select(selectLoaderState);
   }
   ngAfterViewInit(): void {
     if (this.telInput) {
@@ -143,8 +153,8 @@ export class CheckoutComponent implements OnInit {
   }
 
   getAddress(address: Address) {
-    console.log("Checkout", address)
-    this.shippingForm.patchValue({...address, address1: address.address})
+    console.log('Checkout', address);
+    this.shippingForm.patchValue({ ...address, address1: address.address });
   }
 
   userDetails() {
@@ -157,10 +167,8 @@ export class CheckoutComponent implements OnInit {
     };
 
     this.shippingForm.patchValue({ contact: contactValue });
-    this.shippingForm.markAllAsTouched()
-    if (
-      !this.intl.isValidNumber()
-    ) {
+    this.shippingForm.markAllAsTouched();
+    if (!this.intl.isValidNumber()) {
       this.showWarning = 'Please enter a valid phone number';
       setTimeout(() => {
         this.showWarning = '';
@@ -168,17 +176,22 @@ export class CheckoutComponent implements OnInit {
       return;
     }
     this.cdkStepper.next();
-
   }
 
   paymentDetails() {
     this.paymentDetailsComponent.shareForm();
-    if (!this.paymentDetailsComponent.paymentForm) return
-    const { amount, reference, creditCardReference, activeIndex } = this.paymentDetailsComponent.paymentForm;
+    if (!this.paymentDetailsComponent.paymentForm) return;
+    const { amount, reference, creditCardReference, activeIndex } =
+      this.paymentDetailsComponent.paymentForm;
     if (amount) {
       const paymentRequest: PaymentRequest = {
         amount: amount!,
-        channels: activeIndex === 0 ? ['card'] : activeIndex === 1 ? ['mobile_money'] : ['card', 'mobile_money'],
+        channels:
+          activeIndex === 0
+            ? ['card']
+            : activeIndex === 1
+            ? ['mobile_money']
+            : ['card', 'mobile_money'],
         email: this.shippingForm.value.email!,
         reference: activeIndex === 0 ? creditCardReference! : reference!,
         currency: 'GHS',
@@ -200,7 +213,7 @@ export class CheckoutComponent implements OnInit {
       zipCode: '',
       contact: {},
     });
-    this.intl.setNumber('')
+    this.intl.setNumber('');
     this.intl.setCountry('us');
   }
   next() {

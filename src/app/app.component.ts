@@ -18,11 +18,11 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(getCartItems());
     this.store.dispatch(getWishlist())
-    const productsInStorage = localStorage.getItem("products")
+    const productsInStorage = sessionStorage.getItem("products")
     if (productsInStorage) {
-      localStorage.setItem("products", productsInStorage)
+      sessionStorage.setItem("products", productsInStorage)
     } else {
-      localStorage.setItem("products", JSON.stringify({}))
+      sessionStorage.setItem("products", JSON.stringify({}))
     }
   }
 }

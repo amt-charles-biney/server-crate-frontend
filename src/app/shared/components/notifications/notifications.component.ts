@@ -47,7 +47,9 @@ export class NotificationsComponent implements OnInit {
     this.router.navigate(['/admin/attributes'])
     setTimeout(() => {
       this.dialog.open(AttributeModalComponent, {
-        data: { attribute }
+        data: { attribute },
+        height: "80%",
+        width: "70%"
       })
     }, 0);
     this.closeEmitter.emit()

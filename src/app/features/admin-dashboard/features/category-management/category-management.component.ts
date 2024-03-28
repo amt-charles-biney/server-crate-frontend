@@ -13,6 +13,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { TableRowComponent } from '../../../../shared/components/table-row/table-row.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteModalComponent } from '../../../../shared/components/delete-modal/delete-modal.component';
+import { PaginatedComponent } from '../../../../shared/components/paginated/paginated.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 @Component({
   selector: 'app-category-management',
   standalone: true,
@@ -27,6 +29,8 @@ import { DeleteModalComponent } from '../../../../shared/components/delete-modal
     TableRowComponent,
     DeleteModalComponent,
     MatDialogModule,
+    PaginatedComponent,
+    NgxPaginationModule
   ],
   templateUrl: './category-management.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -39,7 +43,7 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
   categoriesTodelete: Set<string> = new Set();
   localAttributes!: CategoryAndConfig[];
   indeterminateCheckbox!: HTMLInputElement;
-
+  page: number = 1;
   toggleCheckbox = false;
 
   constructor(
@@ -61,6 +65,11 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.indeterminateCheckbox = this.check.inputState.nativeElement;
     this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
+  }
+
+  getPage(pageNumber: number) {
+    this.page = pageNumber;
+    document.body.scrollTo({ top: 0, behavior: 'smooth'})
   }
   removeCheck() {
     this.toggleCheckbox = !this.toggleCheckbox;
