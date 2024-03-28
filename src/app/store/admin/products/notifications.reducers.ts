@@ -3,21 +3,25 @@ import { gotNotifications } from "./notifications.actions";
 import { NotificationData } from "../../../types";
 
 const initialNotificationState: NotificationData = {
-    attributeResponseList: [],
-    count: 0
+    count: 0,
+    lowOrZeroStock: [],
+    requiredCategories: [],
+    unassignedProducts: []
 }
 
 export const notificationFeature = createFeature({
     name: 'notifications',
     reducer: createReducer(
         initialNotificationState,
-        on(gotNotifications, (_, { attributeResponseList, count }) => {
+        on(gotNotifications, (_, { lowOrZeroStock, requiredCategories, unassignedProducts, count }) => {
             return {
-                attributeResponseList,
+                lowOrZeroStock,
+                requiredCategories,
+                unassignedProducts,
                 count
             }
         })
     )
 })
 
-export const { selectAttributeResponseList, selectCount } = notificationFeature
+export const { selectNotificationsState, selectCount } = notificationFeature

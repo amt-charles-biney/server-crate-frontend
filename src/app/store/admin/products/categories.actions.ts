@@ -51,7 +51,7 @@ export const getProducts = createAction(
 
 export const getAllProducts = createAction('[products] get all products')
 export const gotAllProducts = createAction('[products] got all products', props<{products: Product[]}>())
-export const getSingleProduct = createAction('[products] get single product', props<{ id: string }>())
+export const getSingleProduct = createAction('[products] get single comparison product', props<{ id: string }>())
 export const gotSingleProduct = createAction('[products] got single product', props<Comparison>())
 
 export const getUserProducts = createAction(

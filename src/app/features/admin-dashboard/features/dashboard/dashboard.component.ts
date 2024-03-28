@@ -7,7 +7,6 @@ import { getDashboardData } from '../../../../store/dashboard/dashboard.actions'
 import { BehaviorSubject } from 'rxjs';
 import {
   selectDashboardData,
-  selectDashboardState,
 } from '../../../../store/dashboard/dashboard.reducers';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChartComponent } from '../../../../shared/components/chart/chart.component';

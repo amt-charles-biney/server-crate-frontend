@@ -45,6 +45,7 @@ import { UserService } from '../../../core/services/user/user.service';
 import { errorHandler } from '../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
+import { getNotifications } from './notifications.actions';
 
 @Injectable()
 export class CategoryEffect {
@@ -164,17 +165,9 @@ export class CategoryEffect {
             map((data) => {
               return gotConfiguration(data);
             }),
-            timeout(5000),
             catchError((error) => {
-              throwError(() => 'Request timed out');
-              return of(
-                setLoadingSpinner({
-                  status: false,
-                  message:
-                    error.error.detail || 'Cannot get category configuration',
-                  isError: true,
-                })
-              );
+              this.toast.error(errorHandler(error), "Error")
+              return EMPTY
             }),
             finalize(() => {
               this.ngxService.stopBackgroundLoader('getConfig');
@@ -194,13 +187,8 @@ export class CategoryEffect {
             return gotProduct(data);
           }),
           catchError((error) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: errorHandler(error),
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(error), "Error")
+            return EMPTY
           }),
           finalize(() => {
             this.ngxService.stopLoader('product');
@@ -277,7 +265,7 @@ export class CategoryEffect {
       exhaustMap((props) => {
         this.ngxService.startLoader('product');
         return this.adminService.updateProduct(props.id, props.product).pipe(
-          tap(() => {
+          map(() => {
             this.toast.success('Edited product successfully', 'Success', {
               timeOut: 1000
             })
@@ -287,6 +275,7 @@ export class CategoryEffect {
                 replaceUrl: true,
               });
             }, 500);
+            return getNotifications()
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), 'Error')
@@ -295,7 +284,7 @@ export class CategoryEffect {
         );
       })
     );
-  }, { dispatch: false });
+  });
 
   getCases$ = createEffect(() => {
     return this.action$.pipe(

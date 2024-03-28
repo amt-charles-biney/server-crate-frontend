@@ -37,7 +37,6 @@ import {
   CLOUD_NAME,
   UPLOAD_PRESET,
 } from '../../../../../../core/utils/constants';
-import { AdminService } from '../../../../../../core/services/admin/admin.service';
 import {
   Attribute,
   AttributeOption,
@@ -57,6 +56,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { IncompatiblesComponent } from '../../../../../../shared/components/incompatibles/incompatibles.component';
 import { LoaderComponent } from '../../../../../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../../../../../shared/components/error/error.component';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-attribute-modal',
   standalone: true,
@@ -92,7 +92,7 @@ export class AttributeModalComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AttributeModalComponent>,
     private store: Store,
-    private adminService: AdminService,
+    private toast: ToastrService,
     private fb: FormBuilder,
     private destroyRef: DestroyRef,
     @Inject(MAT_DIALOG_DATA) public data: { attribute: Attribute, index: number }
@@ -174,7 +174,6 @@ export class AttributeModalComponent implements OnInit {
   createAttr(attributeOption: AttributeOption): FormGroup {
     const {
       additionalInfo,
-      attribute,
       id,
       optionMedia,
       optionName,
@@ -360,7 +359,11 @@ export class AttributeModalComponent implements OnInit {
       );
       this.attributes.removeAt(index)
     } else {
-      this.attributes.removeAt(index);
+      if (index === 0) {
+        this.toast.info("Attributes must have at least one option", "Info")
+      } else {
+        this.attributes.removeAt(index);
+      }
     }
   }
 

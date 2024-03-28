@@ -19,8 +19,8 @@ export class SelectionStrategy<D> implements MatDateRangeSelectionStrategy<D> {
 
   private _createWeekRange(date: D | null): DateRange<D> {
     if (date) {
-      const start = this._dateAdapter.addCalendarDays(date, -3);
-      const end = this._dateAdapter.addCalendarDays(date, 3);
+      const start = this._dateAdapter.addCalendarDays(date, 0);
+      const end = this._dateAdapter.addCalendarDays(date, 6);
       return new DateRange<D>(start, end);
     }
 

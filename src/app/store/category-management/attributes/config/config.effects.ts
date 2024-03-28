@@ -11,7 +11,7 @@ import {
   sendEditedConfig,
   uploadCoverImage,
 } from './config.actions';
-import { catchError, exhaustMap, finalize, map, of, switchMap } from 'rxjs';
+import { EMPTY, catchError, exhaustMap, finalize, map, of, switchMap } from 'rxjs';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { Store } from '@ngrx/store';
 import {
@@ -23,6 +23,7 @@ import { CategoryAndConfig } from '../../../../types';
 import { errorHandler } from '../../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
+import { getNotifications } from '../../../admin/products/notifications.actions';
 
 @Injectable()
 export class ConfigEffect {
@@ -113,21 +114,12 @@ export class ConfigEffect {
       exhaustMap((props) => {
         return this.adminService.deleteCategories(props.deleteList).pipe(
           map(() => {
-            setTimeout(() => {
-              this.store.dispatch(
-                resetLoader({ isError: false, message: '', status: false })
-              );
-            }, 1500);
+            this.store.dispatch(getNotifications())
             return getCategoriesAndConfig();
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: errorHandler(err),
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
           })
         );
       })
@@ -144,16 +136,11 @@ export class ConfigEffect {
             document.body.scrollTo({ top: 0, behavior: 'smooth'})
             
             this.router.navigateByUrl('/admin/category-management');
-            return resetLoader({ isError: false, message: '', status: false });
+            return getNotifications()
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: errorHandler(err),
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
           }),
           finalize(() => {
             this.ngxService.stopLoader('category')

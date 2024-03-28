@@ -1,4 +1,4 @@
-import { Attribute, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
   addAttribute,
@@ -12,16 +12,13 @@ import {
   uploadImage,
 } from './attributes.actions';
 import {
+  EMPTY,
   catchError,
   concatMap,
   exhaustMap,
   finalize,
   map,
-  of,
   switchMap,
-  tap,
-  throwError,
-  timeout,
 } from 'rxjs';
 import { AdminService } from '../../../core/services/admin/admin.service';
 import {
@@ -33,7 +30,7 @@ import { Store } from '@ngrx/store';
 import { errorHandler } from '../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
-import { getProducts } from '../../admin/products/categories.actions';
+import { getNotifications } from '../../admin/products/notifications.actions';
 
 @Injectable()
 export class AttributeEffect {
@@ -49,7 +46,7 @@ export class AttributeEffect {
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), 'Error')
-            return of();
+            return EMPTY;
           }),
           finalize(() => {
             this.ngxService.stopLoader('attributes')
@@ -65,35 +62,12 @@ export class AttributeEffect {
       switchMap((props) => {
         return this.adminService.addAttribute(props).pipe(
           map((props: GetAttribute) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                isError: false,
-                message: 'Added attribute successfully',
-                status: false,
-              })
-            );
-            setTimeout(() => {
-              this.store.dispatch(
-                resetLoader({ isError: false, message: '', status: false })
-              );
-            }, 1500);
+            this.store.dispatch(getNotifications())
             return gotAttributes({ attributes: props.data });
           }),
-          timeout(5000),
           catchError((err) => {
-            throwError(() => 'Request timed out');
-            setTimeout(() => {
-              this.store.dispatch(
-                resetLoader({ isError: false, message: '', status: false })
-              );
-            }, 5000);
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: 'Fix: Adding attributes',
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
           })
         );
       })
@@ -116,13 +90,8 @@ export class AttributeEffect {
             return gotAttributes({ attributes: props.data });
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: err.error.detail,
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
           })
         );
       })
@@ -137,28 +106,12 @@ export class AttributeEffect {
           .deleteAttributeOption(props.optionId, props.attributeId)
           .pipe(
             map(() => {
-              this.store.dispatch(
-                setLoadingSpinner({
-                  isError: false,
-                  message: 'Deleted attribute successfully',
-                  status: false,
-                })
-              );
-              setTimeout(() => {
-                this.store.dispatch(
-                  resetLoader({ isError: false, message: '', status: false })
-                );
-              }, 1500);
+              this.store.dispatch(getNotifications())
               return getAttributes();
             }),
             catchError((err) => {
-              return of(
-                setLoadingSpinner({
-                  isError: true,
-                  message: err.error.detail,
-                  status: false,
-                })
-              );
+              this.toast.error(errorHandler(err), "Error")
+              return EMPTY
             })
           );
       })
@@ -172,12 +125,13 @@ export class AttributeEffect {
         return this.adminService.updateAttribute(props).pipe(
           map(() => {
             this.toast.success('Updated attribute successfully', 'Success', { timeOut: 1500 })
-            this.store.dispatch(getProducts({ page: 0 }))
+            // this.store.dispatch(getProducts({ page: 0 }))
+            this.store.dispatch(getNotifications())
             return getAttributes();
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), 'Error')
-            return of();
+            return EMPTY;
           })
         );
       })
@@ -190,28 +144,12 @@ export class AttributeEffect {
       concatMap((props) => {
         return this.adminService.deleteAttribute(props.attributeId).pipe(
           map(() => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                isError: false,
-                message: 'Deleted attribute',
-                status: false,
-              })
-            );
-            setTimeout(() => {
-              this.store.dispatch(
-                resetLoader({ isError: false, message: '', status: false })
-              );
-            }, 1500);
+            this.store.dispatch(getNotifications())
             return getAttributes();
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: err.error.detail,
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
           })
         );
       })
@@ -223,21 +161,12 @@ export class AttributeEffect {
       exhaustMap((props) => {
         return this.adminService.deleteAll(props.deleteList).pipe(
           map(() => {
-            setTimeout(() => {
-              this.store.dispatch(
-                resetLoader({ isError: false, message: '', status: false })
-              );
-            }, 1500);
+            this.store.dispatch(getNotifications())
             return getAttributes();
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: errorHandler(err),
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
           })
         );
       })

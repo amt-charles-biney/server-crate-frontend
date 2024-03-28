@@ -1,5 +1,5 @@
 import { RouterModule } from '@angular/router';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -29,6 +29,7 @@ import { DeleteModalComponent } from '../../../../shared/components/delete-modal
     MatDialogModule,
   ],
   templateUrl: './category-management.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategoryManagementComponent implements OnInit, AfterViewInit {
   selectForm!: FormGroup;

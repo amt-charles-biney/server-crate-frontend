@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 import { Store } from '@ngrx/store';
@@ -9,11 +9,12 @@ import { clearStorage } from '../../core/utils/helpers';
 import { getCases } from '../../store/case/case.actions';
 import { LoaderComponent } from '../../core/components/loader/loader.component';
 import { getNotifications } from '../../store/admin/products/notifications.actions';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { selectAttributeResponseList, selectCount } from '../../store/admin/products/notifications.reducers';
+import { Observable } from 'rxjs';
+import { selectCount } from '../../store/admin/products/notifications.reducers';
 import { MatBadgeModule } from '@angular/material/badge';
-import { Attribute } from '../../types';
 import { ClickOutsideDirective } from '../../shared/directives/click/click-outside.directive';
+import { NotificationsComponent } from '../../shared/components/notifications/notifications.component';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -25,16 +26,19 @@ import { ClickOutsideDirective } from '../../shared/directives/click/click-outsi
     CommonModule,
     LoaderComponent,
     MatBadgeModule,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    NotificationsComponent,
+    MatSidenavModule
   ],
   templateUrl: './admin-dashboard.component.html',
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
-  private notification$ = new BehaviorSubject<Attribute[]>([]); 
-  notifications = this.notification$.asObservable();
+  @ViewChild('sidenav') sidenav!: MatSidenav
+  reason = '';
+
   numberOfNotifications$!: Observable<number>;
   activeLink: string = '';
-  showNotifications!: boolean;
+  showNotifications: boolean = false;
   constructor(private router: Router, private store: Store) {}
   ngOnInit(): void {
     this.store.dispatch(getAttributes());
@@ -43,7 +47,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.activeLink = sessionStorage.getItem(CURRENT_AD_TAB) || 'Dashboard';
 
     this.numberOfNotifications$ = this.store.select(selectCount);
-    this.notifications = this.store.select(selectAttributeResponseList)
   }
   ngOnDestroy(): void {
     sessionStorage.removeItem(CURRENT_AD_TAB);

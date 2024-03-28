@@ -1,0 +1,62 @@
+<ng-container *ngIf="notifications | async as notifications">
+  <mat-tab-group [disableRipple]="true" class="mb-3">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Stock Issues
+        <div class="ml-1 count bg-opacity-20 bg-figma-green">
+          <p class="text-figma-green">
+            {{ notifications.lowOrZeroStock.length }}
+          </p>
+        </div>
+      </ng-template>
+      <div class="mt-3">
+        @for (notification of notifications.lowOrZeroStock; track notification) {
+        @if (notification.content) {
+        <app-notification
+          (action)="fixStockIssues(notification.content)"
+          [message]="notification.message"
+        />
+        } }
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Unassigned Products
+        <div class="ml-1 count bg-opacity-20 bg-figma-green">
+          <p class="text-figma-green">
+            {{ notifications.unassignedProducts.length }}
+          </p>
+        </div>
+      </ng-template>
+      <div class="mt-3">
+        @for (notification of notifications.unassignedProducts; track
+        notification) {
+        <app-notification
+          (action)="fixUnassignedProducts(notification.id)"
+          [message]="notification.message"
+        />
+        }
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Required Attributes
+        <div class="ml-1 count bg-opacity-20 bg-figma-green">
+          <p class="text-figma-green">
+            {{ notifications.requiredCategories.length }}
+          </p>
+        </div>
+      </ng-template>
+      <div class="mt-3">
+        @for (notification of notifications.requiredCategories; track
+        notification) {
+        <app-notification
+          (action)="fixCategoryIssue(notification.id)"
+          [message]="notification.message"
+        />
+  
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</ng-container>

@@ -187,7 +187,7 @@ export type ProductItem = {
   serviceCharge: number;
   stockStatus: string;
   totalLeastStock: Attribute[];
-  isWishListItem?: boolean
+  isWishListItem?: boolean;
 };
 
 export type ProductResponse = {
@@ -224,7 +224,7 @@ export type AllProducts = {
   totalElements: number;
   size: number;
   content: ProductItem[];
-  product: ProductItem
+  product: ProductItem;
 };
 
 export type UploadResponse = {
@@ -594,7 +594,7 @@ export type CreditCard = {
   cardNumber: string;
   expirationDate: string;
   cardHolderName: string;
-  paymentMethod: string
+  paymentMethod: string;
 };
 
 export type MomoResponse = {
@@ -621,68 +621,83 @@ export type Address = {
   zipCode?: string;
   state?: string;
   address?: string;
-}
+};
 
 export type ProductItemSubset = {
   id: string;
-  productName: string,
+  productName: string;
   coverImage: string;
   productPrice: number;
-  productBrand: string | {
-    name: string;
-    price: number
-  };
+  productBrand:
+    | string
+    | {
+        name: string;
+        price: number;
+      };
   productCoverImage?: string;
   productCaseName?: string;
   configurationUrl?: string;
-  isWishListItem?: boolean
-}
+  isWishListItem?: boolean;
+};
 export type WishlistItemSubset = {
   id: string;
-  productName: string,
+  productName: string;
   coverImage: string;
   productPrice: number;
-  productBrand: string | {
-    name: string;
-    price: number
-  };
-}
+  productBrand:
+    | string
+    | {
+        name: string;
+        price: number;
+      };
+};
 
 export type Wishlist = {
-  content: ProductItemSubset[],
+  content: ProductItemSubset[];
   totalElements: number;
   totalPages: number;
   size: number;
-}
+};
 
 export type Customers = {
-  content: CustomerData[]
+  content: CustomerData[];
   totalElements: number;
   totalPages: number;
   size: number;
-}
+};
 
 export type CustomerData = {
   name: string;
   numberOfOrders: number;
-}
+  amountSpent: number;
+  joinDate: string
+};
 
 export type Notifications = {
-  data: NotificationData,
+  data: NotificationData;
   message: string;
   status: number;
-}
+};
 
 export type NotificationData = {
   count: number;
-  attributeResponseList: Attribute[];
-}
+  lowOrZeroStock: NotificationSubData[];
+  unassignedProducts: NotificationSubData[];
+  requiredCategories: NotificationSubData[];
+};
+
+export type NotificationSubData = {
+  name: string;
+  id: string;
+  message: string;
+  content?: Attribute;
+};
 
 export type Comparisons = {
   data: Comparison[];
   message: string;
-  status: string
-}
+  status: string;
+};
 
 export type Comparison = {
   productName: string;
@@ -690,37 +705,37 @@ export type Comparison = {
   description: string;
   coverImage: string;
   options: Record<string, string>;
-  productPrice : number;
-  productCase: string
-}
+  productPrice: number;
+  productCase: string;
+};
 
 export type Product = {
   name: string;
   id: string;
-}
+};
 
 export type SingleProductResponse = {
   data: Comparison;
   message: string;
-  status: string
-}
+  status: string;
+};
 
 export type Dashboard = {
   customers: number;
   orders: number;
   products: number;
   revenue: number;
-  latestOrders: LatestOrders[]
-}
+  latestOrders: LatestOrders[];
+};
 
 export type LatestOrders = {
   coverImage: string;
   orderedTime: string;
   status: string;
-  productName: string
-}
+  productName: string;
+};
 
 export type ChartData = {
-  dayOfWeeks: string[],
-  revenue: number[]
-}
+  dayOfWeeks: string[];
+  revenue: number[];
+};
