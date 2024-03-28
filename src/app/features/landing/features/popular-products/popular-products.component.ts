@@ -45,15 +45,18 @@ export class PopularProductsComponent {
             spacing: 16
           },
           breakpoints: {
-            "(min-width: 1450px)": {
-              slides: { perView: "auto", spacing: 0 }
+            "(min-width: 1451px)": {
+              slides: { perView: 4, spacing: 16 }
             },
-            "(max-width: 600px)": {
-              slides: { perView: 1, spacing: 0 }
+            "(max-width: 1450px)": {
+              slides: { perView: 3, spacing: 16 }
             },
             "(max-width: 1008px)": {
-              slides: { perView: 2, spacing: 16}
+              slides: { perView: 2, spacing: 16 }
             },
+            "(max-width: 600px)": {
+              slides: { perView: 1, spacing: 16 }
+            }
           }
         })
       }
