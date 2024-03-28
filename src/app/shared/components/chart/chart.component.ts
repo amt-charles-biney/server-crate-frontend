@@ -1,54 +1,104 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Chart } from 'chart.js/auto';
+import { Chart, ChartItem } from 'chart.js/auto';
 import { getChartData } from '../../../store/dashboard/dashboard.actions';
 import { BehaviorSubject, tap } from 'rxjs';
 import { ChartData } from '../../../types';
 import { selectChartData } from '../../../store/dashboard/dashboard.reducers';
 import { CommonModule } from '@angular/common';
+import { DatePickerComponent } from '../date-picker/date-picker.component';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-chart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DatePickerComponent],
   templateUrl: './chart.component.html',
 })
-export class ChartComponent implements OnInit {
-  chart: any
+export class ChartComponent implements OnInit, AfterViewInit {
+  chart: any;
+  chartRef!: ChartItem;
 
-  private chartData$ = new BehaviorSubject<ChartData>({ dayOfWeeks: [], revenue: []});
-  chartData = this.chartData$.asObservable()
-  constructor(private store: Store) {}
+  navigateTo = '/admin/dashboard'
+
+  toDate!: Date;
+  fromDate!: Date;
+
+  private chartData$ = new BehaviorSubject<ChartData>({
+    dayOfWeeks: [],
+    revenue: [],
+  });
+  chartData = this.chartData$.asObservable();
+  constructor(
+    private store: Store,
+    private elementRef: ElementRef,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(getChartData())
+    this.activatedRoute.queryParams.subscribe((params) => {
+      console.log('Params');
+      
+      this.store.dispatch(getChartData({ params }));
+    })
     
-
-    this.chartData = this.store.select(selectChartData).pipe(
-      tap((chartData) => {
-        this.createChart(chartData.dayOfWeeks, chartData.revenue)
-      })
-    )
   }
 
-  createChart(daysOfWeek: string[], revenue: number[]){
-  
-    this.chart = new Chart("MyChart", {
+  ngAfterViewInit(): void {
+    this.chartData = this.store.select(selectChartData).pipe(
+      tap((chartData) => {
+        if (chartData.dayOfWeeks.length > 0) {
+          this.createChart(chartData.dayOfWeeks, chartData.revenue);
+        }
+      })
+    );
+  }
+
+  createChart(daysOfWeek: string[], revenue: number[]) {
+    if (this.chartRef !== undefined) {
+      Chart.getChart('revenueChart')?.destroy();
+    }
+    this.chartRef = this.elementRef.nativeElement
+      .querySelector('#revenueChart')
+      .getContext('2d');
+    this.chart = new Chart(this.chartRef, {
       type: 'line', //this denotes tha type of chart
 
-      data: {// values on X-Axis
-        labels: daysOfWeek, 
-	      datasets: [
+      data: {
+        // values on X-Axis
+        labels: daysOfWeek,
+        datasets: [
           {
             label: 'Revenue',
             data: revenue,
-
-          }
-        ]
+            tension: 0.5,
+          },
+        ],
       },
       options: {
-        aspectRatio:2.5
-      }
-      
+        maintainAspectRatio: true,
+        aspectRatio: 2.5,
+      },
+    });
+  }
+
+  getToDate(toDate: Date) {
+    this.router.navigate([this.navigateTo], {
+      queryParams: { endDate: new Date(toDate).toISOString().split('T')[0] },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+      relativeTo: this.activatedRoute,
+    });
+  }
+
+  getFromDate(fromDate: Date) {
+    this.router.navigate([this.navigateTo], {
+      queryParams: {
+        startDate: new Date(fromDate).toISOString().split('T')[0],
+      },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+      relativeTo: this.activatedRoute,
     });
   }
 }

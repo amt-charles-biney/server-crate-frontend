@@ -1,12 +1,7 @@
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 import { AllOrders, ShippingStatus } from '../../../../types';
-import {
-  MatDatepickerInputEvent,
-  MatDatepickerModule,
-} from '@angular/material/datepicker';
-import { provideNativeDateAdapter } from '@angular/material/core';
 
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { Store } from '@ngrx/store';
@@ -18,30 +13,25 @@ import {
 import { Subject, tap } from 'rxjs';
 import { selectOrdersState } from '../../../../store/orders/order.reducers';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { OrderRowComponent } from '../../../../shared/components/order-row/order-row.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { DomSanitizer } from '@angular/platform-browser';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth/auth.service';
+import { DatePickerComponent } from '../../../../shared/components/date-picker/date-picker.component';
 @Component({
   selector: 'app-orders',
   standalone: true,
   imports: [
     CustomSelectComponent,
     CustomCheckBoxComponent,
-    MatDatepickerModule,
-    ReactiveFormsModule,
     CommonModule,
     OrderRowComponent,
     NgxPaginationModule,
-    DatePipe,
-    MatIconModule,
+    DatePickerComponent
   ],
   templateUrl: './orders.component.html',
-  providers: [provideNativeDateAdapter()],
 })
 export class OrdersComponent implements OnInit, AfterViewInit {
   @ViewChild(CustomCheckBoxComponent) check!: CustomCheckBoxComponent;
@@ -54,7 +44,6 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
   filter: FormControl = new FormControl<keyof typeof ShippingStatus>('All');
   navigateTo!: string
-  rangeDate!: FormGroup
   page: number = 1;
 
   isAdmin!: boolean
@@ -62,22 +51,12 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   constructor(
     private store: Store,
     private inputService: AttributeInputService,
-    private domSanitizer: DomSanitizer,
-    private matIconRegistry: MatIconRegistry,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService
   ) {
-    this.matIconRegistry.addSvgIcon(
-      'myDatePicker',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('/assets/datepicker.svg')
-    );
   }
   ngOnInit(): void {
-    this.rangeDate = new FormGroup({
-      toDate: new FormControl(null),
-      fromDate: new FormControl(null),
-    });
     this.isAdmin = this.authService.isAdmin()
     
     if (this.isAdmin) {
@@ -99,12 +78,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
       if (params['status']) {
         this.filter.patchValue(params['status'])
       }
-      if (params['startDate']) {
-        this.rangeDate.patchValue({ fromDate: params['startDate']})
-      }
-      if (params['endDate']) {
-        this.rangeDate.patchValue({ toDate: params['endDate']})
-      }
+     
       if (this.isAdmin) {
         this.store.dispatch(getAdminOrders({ params }))
         console.log('Admin');
@@ -214,38 +188,22 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     this.toggleCheckbox = false;
   }
 
-  /**
-   * This function sets the "to" date
-   * @param date - Date selected from date picker
-   * @returns {void}
-   */
-  onToDateChange(date: MatDatepickerInputEvent<Date>): void {
-    this.rangeDate.patchValue({ toDate: date.value });
-    if (date.value) {
-      this.router.navigate([this.navigateTo], {
-        queryParams: { endDate: new Date(date.value).toISOString().split('T')[0] },
-        queryParamsHandling: 'merge',
-        replaceUrl: true,
-        relativeTo: this.activatedRoute
 
-      });
-    }
+  getToDate(toDate: Date) {
+    this.router.navigate([this.navigateTo], {
+      queryParams: { endDate: new Date(toDate).toISOString().split('T')[0] },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+      relativeTo: this.activatedRoute
+    });
   }
 
-  /**
-   * This function sets the "from" date
-   * @param date - Date selected from date picker
-   * @returns {void}
-   */
-  onFromDateChange(date: MatDatepickerInputEvent<Date>): void {
-    this.rangeDate.patchValue({ fromDate: date.value });
-    if (date.value) {
-      this.router.navigate([this.navigateTo], {
-        queryParams: { startDate: new Date(date.value).toISOString().split('T')[0] },
-        queryParamsHandling: 'merge',
-        replaceUrl: true,
-        relativeTo: this.activatedRoute
-      });
-    }
+  getFromDate(fromDate: Date) {
+    this.router.navigate([this.navigateTo], {
+      queryParams: { startDate: new Date(fromDate).toISOString().split('T')[0] },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+      relativeTo: this.activatedRoute
+    });
   }
 }
