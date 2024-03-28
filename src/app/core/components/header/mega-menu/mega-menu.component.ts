@@ -6,6 +6,7 @@ import { selectCategoriesState } from '../../../../store/admin/products/categori
 import { Select } from '../../../../types';
 import { Router } from '@angular/router';
 import { CloudinaryUrlPipe } from '../../../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -20,6 +21,8 @@ export class MegaMenuComponent {
   CATEGORY_OPTION = 'categories'
   CASE_OPTION = 'case'
   BRAND_OPTION = 'brand'
+
+  privateOptionsSubscription: Subscription | undefined;
 
   initCategory: Select = { id: "1", name: "category", description: "description", thumbnail: "http://res.cloudinary.com/dah4l2inx/image/upload/v1709298506/jyobrrmhntfgnjcjopon.jpg" }
   initCase: Select = { id: "2", name: "cases", description: "description", thumbnail: "http://res.cloudinary.com/dah4l2inx/image/upload/v1709298605/dicncen5rmlgzbfcfcfc.jpg" }
@@ -45,7 +48,7 @@ export class MegaMenuComponent {
     this.store.dispatch(getCases())
     this.store.dispatch(getBrands())
 
-    this.store.select(selectCategoriesState).subscribe(state => {
+    this.privateOptionsSubscription = this.store.select(selectCategoriesState).subscribe(state => {
       this.productOptions[this.CASE_OPTION] = state.cases
       this.productOptions[this.CATEGORY_OPTION] = state.categories
       this.productOptions[this.BRAND_OPTION] = state.brands
@@ -95,4 +98,8 @@ export class MegaMenuComponent {
   getMenuOptionsName = (name: string) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
   constructor(private store: Store, private router: Router) { }
+
+  ngOnDestroy() {
+     this.privateOptionsSubscription?.unsubscribe()
+  }
 }
