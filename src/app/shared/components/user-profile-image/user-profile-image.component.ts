@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ProfileService } from '../../../core/services/user-profile/profile.service';
 import { Observable } from 'rxjs';
 import { Username } from '../../../types';
 import { MatMenuModule } from '@angular/material/menu';
 import { logout } from '../../../core/utils/helpers';
-import { CURRENT_AD_TAB } from '../../../core/utils/constants';
 import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
@@ -14,7 +13,8 @@ import { AuthService } from '../../../core/services/auth/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule, MatMenuModule],
   templateUrl: './user-profile-image.component.html',
-  styleUrl: './user-profile-image.component.scss'
+  styleUrl: './user-profile-image.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserProfileImageComponent implements OnInit {
   @Input() smaller!: boolean
@@ -30,7 +30,6 @@ export class UserProfileImageComponent implements OnInit {
   navigateToSettings() {
     if (this.isAdmin()) {
       this.adminLinkEmitter.emit('Settings')
-      sessionStorage.setItem(CURRENT_AD_TAB, 'Settings')
       if (this.router.url.includes('/settings/')) return
       this.router.navigateByUrl('/admin/settings/general')
       return
@@ -40,7 +39,6 @@ export class UserProfileImageComponent implements OnInit {
   }
   navigateToDashboard() {
     this.adminLinkEmitter.emit('Dashboard')
-    sessionStorage.setItem(CURRENT_AD_TAB, 'Dashboard')
     this.router.navigateByUrl('/admin/dashboard')
   }
 

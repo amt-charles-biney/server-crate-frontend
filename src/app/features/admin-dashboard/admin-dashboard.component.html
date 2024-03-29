@@ -1,5 +1,11 @@
 <mat-sidenav-container (backdropClick)="sidenav.close()">
-  <mat-sidenav #sidenav position="end" fixedInViewport fixedTopGap="111" disableClose>
+  <mat-sidenav
+    #sidenav
+    position="end"
+    fixedInViewport
+    fixedTopGap="111"
+    disableClose
+  >
     <app-notifications (closeEmitter)="sidenav.close()"></app-notifications>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -18,15 +24,12 @@
           <p class="text-sm mb-4 font-bold text-[#595959] tracking-wide">
             Main Menu
           </p>
-          <nav class="flex flex-col gap-2">
+          <nav            
+            class="flex flex-col gap-2"
+          >
             <a
-              (click)="setCurrentTab('Dashboard')"
-              [ngClass]="
-                activeLink === 'Dashboard'
-                  ? 'bg-active-link text-figma-green rounded-xl'
-                  : 'text-sidebar-text'
-              "
               routerLink="/admin/dashboard"
+              [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
                 <svg
@@ -68,13 +71,8 @@
               </div>
             </a>
             <a
-              (click)="setCurrentTab('Products')"
-              [ngClass]="
-                activeLink === 'Products'
-                  ? 'bg-active-link text-figma-green rounded-xl'
-                  : 'text-sidebar-text'
-              "
               routerLink="/admin/products"
+              [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
                 <svg
@@ -100,18 +98,13 @@
                     </clipPath>
                   </defs>
                 </svg>
-    
+
                 <p class="font-bold">Products</p>
               </div>
             </a>
             <a
-              (click)="setCurrentTab('Case Management')"
-              [ngClass]="
-                activeLink === 'Case Management'
-                  ? 'bg-active-link text-figma-green rounded-xl'
-                  : 'text-sidebar-text'
-              "
               routerLink="/admin/case-management"
+              [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
                 <svg
@@ -146,13 +139,8 @@
               </div>
             </a>
             <a
-              (click)="setCurrentTab('Attributes')"
-              [ngClass]="
-                activeLink === 'Attributes'
-                  ? 'bg-active-link text-figma-green rounded-xl'
-                  : 'text-sidebar-text'
-              "
               routerLink="/admin/attributes"
+              [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
                 <svg
@@ -191,13 +179,8 @@
               </div>
             </a>
             <a
-              (click)="setCurrentTab('Category Management')"
-              [ngClass]="
-                activeLink === 'Category Management'
-                  ? 'bg-active-link text-figma-green rounded-xl'
-                  : 'text-sidebar-text'
-              "
               routerLink="/admin/category-management"
+              [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
                 <svg
@@ -212,18 +195,13 @@
                     fill="currentColor"
                   />
                 </svg>
-    
+
                 <p class="font-bold">Category Management</p>
               </div>
             </a>
             <a
-              (click)="setCurrentTab('Orders')"
-              [ngClass]="
-                activeLink === 'Orders'
-                  ? 'bg-active-link text-figma-green rounded-xl'
-                  : 'text-sidebar-text'
-              "
               routerLink="/admin/orders"
+              [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
                 <svg
@@ -246,14 +224,9 @@
               </div>
             </a>
             <a
-              (click)="setCurrentTab('Transactions')"
-              [ngClass]="
-                activeLink === 'Transactions'
-                  ? 'bg-active-link text-figma-green rounded-xl'
-                  : 'text-sidebar-text'
-              "
               class="text-slate-300 pointer-events-none"
               routerLink="/admin/transactions"
+              [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
                 <svg
@@ -295,13 +268,8 @@
               </div>
             </a>
             <a
-              (click)="setCurrentTab('Customers')"
-              [ngClass]="
-                activeLink === 'Customers'
-                  ? 'bg-active-link text-figma-green rounded-xl'
-                  : 'text-sidebar-text'
-              "
               routerLink="/admin/customers"
+              [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
                 <svg
@@ -338,20 +306,16 @@
                 <p class="font-bold">Customers</p>
               </div>
             </a>
-    
+
             <section class="mt-8 mb-4">
               <p class="text-sm font-dm-sans text-[#595959]">General</p>
               <a
-                (click)="setCurrentTab('Settings')"
-                routerLink="/admin/settings/general"
+                class="cursor-pointer"
               >
                 <div
-                  [ngClass]="
-                    activeLink === 'Settings'
-                      ? 'bg-active-link text-figma-green rounded-xl'
-                      : 'text-sidebar-text'
-                  "
                   class="flex items-center gap-3 p-4"
+                  routerLink="/admin/settings"
+                  [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
                 >
                   <svg
                     width="24"
@@ -398,9 +362,14 @@
       </aside>
       <div class="flex-1 overflow-hidden">
         <nav
-          class="flex border-b pl-6 pr-[26px] w-full h-[111px] justify-between items-center bg-[#fdfdfd]"
+          [ngClass]="showSearchBar ? '' : 'justify-between '"
+          class="flex border-b pl-6 pr-[26px] w-full h-[111px] items-center bg-[#fdfdfd]"
         >
           <h2 class="font-bold tracking-wide">{{ activeLink }}</h2>
+          @if (showSearchBar) {
+          <input class="outline mx-4 py-1 pl-2 h-fit w-full" type="text" />
+          }
+
           <div class="flex justify-end gap-12 py-6 w-[169px]">
             <!-- <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -417,21 +386,43 @@
                   />
                 </svg> -->
             <div class="flex items-center gap-9">
-              <!-- <svg
+              <button
+                class="hover:bg-gray-200 p-1.5"
+                (click)="showSearchBar = !showSearchBar"
+              >
+                @if (showSearchBar) {
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="21"
-                  viewBox="0 0 20 21"
                   fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4"
                 >
                   <path
-                    d="M19.0002 19.5002L14.6572 15.1572M14.6572 15.1572C15.4001 14.4143 15.9894 13.5324 16.3914 12.5618C16.7935 11.5911 17.0004 10.5508 17.0004 9.50021C17.0004 8.4496 16.7935 7.40929 16.3914 6.43866C15.9894 5.46803 15.4001 4.58609 14.6572 3.84321C13.9143 3.10032 13.0324 2.51103 12.0618 2.10898C11.0911 1.70693 10.0508 1.5 9.00021 1.5C7.9496 1.5 6.90929 1.70693 5.93866 2.10898C4.96803 2.51103 4.08609 3.10032 3.34321 3.84321C1.84288 5.34354 1 7.37842 1 9.50021C1 11.622 1.84288 13.6569 3.34321 15.1572C4.84354 16.6575 6.87842 17.5004 9.00021 17.5004C11.122 17.5004 13.1569 16.6575 14.6572 15.1572Z"
-                    stroke="currentColor"
-                    stroke-width="1.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
                   />
-                </svg> -->
+                </svg>
+                } @else {
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                  />
+                </svg>
+                }
+              </button>
+
               <button
                 [matBadge]="numberOfNotifications$ | async"
                 [matBadgeHidden]="(numberOfNotifications$ | async) === 0"

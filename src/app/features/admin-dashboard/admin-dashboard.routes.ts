@@ -116,7 +116,10 @@ export const route: Routes = [
         providers: [
           provideEffects(DashboardEffect),
           provideState(dashboardFeature)
-        ]
+        ],
+        data: {
+          title: 'Dashboard'
+        }
       },
       {
         path: 'category-management',

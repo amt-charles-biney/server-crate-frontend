@@ -5,9 +5,11 @@
       @for (link of navLinks; track link.label) {
       <a
         mat-tab-link
-        (click)="setCurrentIndex(link)"
-        [active]="activeLink.label === link.label"
+        [active]="rla.isActive"
         [routerLink]="link.link"
+        routerLinkActive
+        #rla="routerLinkActive"
+        (isActiveChange)="onActiveChange($event, link)"
       >
         <span
           [ngClass]="
