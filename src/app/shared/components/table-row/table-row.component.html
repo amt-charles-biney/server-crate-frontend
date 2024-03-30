@@ -54,16 +54,21 @@
       >
         <h3 class="text-sm text-[#101928]">{{ config.key }}</h3>
         <div class="text-xs text-[#667185] grid grid-flow-col w-fit">
-          <p
-            [ngClass]="{
-              'text-figma-green' : c.isIncluded,
-              'after:border-l': i !== category.config[config.key].length - 1
-            }"
-            class=" after:content-[''] after:border-[#667185] after:mx-1"
-            *ngFor="let c of category.config[config.key]; let i = index"
-          >
-            {{ c.name }}
-          </p>
+          <div class="flex flex-wrap">
+
+            @for (c of category.config[config.key]; track $index) {
+  
+              <p
+                [ngClass]="{
+                  'text-figma-green' : c.isIncluded,
+                  'after:border-l': $index !== category.config[config.key].length - 1
+                }"
+                class=" after:content-[''] after:border-[#667185] after:mx-1"
+              >
+                {{ c.name }}
+              </p>
+            }
+          </div>
         </div>
       </div>
     </div>
@@ -74,7 +79,9 @@
   <td
     class="col-span-4 overflow-hidden whitespace-nowrap text-ellipsis self-center"
   >
-    {{ category.productCount }}
+    <div class="px-1 py-0.5 bg-[#E6E6E64D] rounded-2xl w-16 ml-4">
+      <p class="text-center">{{ category.productCount }}</p>
+    </div>  
   </td>
   <td class="col-span-1 self-center">
     <button

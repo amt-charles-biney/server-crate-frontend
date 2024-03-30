@@ -106,6 +106,9 @@ export class GeneralInfoEffect {
         return this.profileService.getShippingDetails().pipe(
           map((shippingDetails) => {
             return gotShippingDetails(shippingDetails);
+          }),
+          catchError((error) => {
+            return EMPTY
           })
         );
       })

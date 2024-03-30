@@ -42,7 +42,7 @@ export class TableRowComponent {
   }
 
   editCategory(id: string) {    
-    this.router.navigateByUrl(`/admin/add-category/${id}`)
+    this.router.navigateByUrl(`/admin/categories/add-category/${id}`)
   }
   showCategoryInfo(id: string) {
     this.isMenuOpened = true;

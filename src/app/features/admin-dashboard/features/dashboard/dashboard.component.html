@@ -5,16 +5,16 @@
       <app-dashboard-card
         title="Revenue"
         [amount]="dashboardData.revenue"
-        [isCurrency]="true"
+        [isCurrency]="true" iconPath="/assets/dash-card.svg"
       />
       <app-dashboard-card
         title="Products Available"
-        [amount]="dashboardData.products"
+        [amount]="dashboardData.products" iconPath="/assets/dash-card2.svg"
       />
-      <app-dashboard-card title="Orders" [amount]="dashboardData.orders" />
+      <app-dashboard-card title="Orders" [amount]="dashboardData.orders" iconPath="/assets/dash-card3.svg" />
       <app-dashboard-card
         title="Customers"
-        [amount]="dashboardData.customers"
+        [amount]="dashboardData.customers" iconPath="/assets/dash-card4.svg"
       />
     </section>
     <section class="grid grid-cols-2 gap-8">
@@ -24,7 +24,7 @@
         <div class="flex items-center justify-between mb-[18px]">
           <p class="font-bold">Latest Order</p>
           <button class="flex items-center w-fit gap-[10px] text-figma-green">
-            <span  class="text-sm font-[500]">More</span>
+            <span routerLink="/admin/orders" class="text-sm font-[500]">More</span>
             <img src="/assets/arrow-right.svg" alt="" />
           </button>
         </div>
@@ -60,7 +60,7 @@
           }
         </table>
       </div>
-      <img src="/assets/segment.png" alt="customer segmentation">
+      <img src="/assets/segmentation.svg" class="h-full w-full" alt="customer segmentation">
     </section>
   </main>
 </ng-container>

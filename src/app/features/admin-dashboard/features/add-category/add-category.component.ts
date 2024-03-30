@@ -401,7 +401,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.router.navigateByUrl('/admin/category-management');
+    this.router.navigateByUrl('/admin/categories');
   }
   get attributesInput() {
     return this.categoryForm.get('attributesInput')!;

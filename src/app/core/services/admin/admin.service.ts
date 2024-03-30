@@ -45,8 +45,10 @@ export class AdminService {
   }
 
   getProducts(page: number) {
+    const query = JSON.parse(sessionStorage.getItem("search") || '')
+    const params = { page, q: query || '', size: 9}
     return this.http.get<AllProducts>(
-      `${this.baseUrl}/admin/product?page=${page}&size=9`
+      `${this.baseUrl}/admin/product`, { params }
     );
   }
 

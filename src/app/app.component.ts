@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
     this.store.dispatch(getCartItems());
     this.store.dispatch(getWishlist())
     const productsInStorage = sessionStorage.getItem("products")
+    sessionStorage.setItem("search", JSON.stringify(""))
     if (productsInStorage) {
       sessionStorage.setItem("products", productsInStorage)
     } else {

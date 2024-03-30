@@ -12,6 +12,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChartComponent } from '../../../../shared/components/chart/chart.component';
 import { CloudinaryUrlPipe } from '../../../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
 import { ShippingStatusComponent } from '../../../../shared/components/shipping-status/shipping-status.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +23,8 @@ import { ShippingStatusComponent } from '../../../../shared/components/shipping-
     ChartComponent,
     CloudinaryUrlPipe,
     NgOptimizedImage,
-    ShippingStatusComponent
+    ShippingStatusComponent,
+    RouterLink
   ],
   templateUrl: './dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

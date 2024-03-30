@@ -29,6 +29,7 @@ export class ProductsEffect {
       exhaustMap((props) => {
         return this.adminService.getProducts(props.page).pipe(
           map((products: AllProducts) => {
+            sessionStorage.setItem("search", JSON.stringify(""))
             return gotProducts({ products });
           }),
           shareReplay(1),

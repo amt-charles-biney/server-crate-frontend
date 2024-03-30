@@ -167,7 +167,7 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     }
   }
   cancel() {
-    this.router.navigateByUrl('/admin/case-management');
+    this.router.navigateByUrl('/admin/cases');
   }
 
   /**

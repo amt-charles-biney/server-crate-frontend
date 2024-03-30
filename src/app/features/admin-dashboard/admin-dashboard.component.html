@@ -103,7 +103,7 @@
               </div>
             </a>
             <a
-              routerLink="/admin/case-management"
+              routerLink="/admin/cases"
               [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
@@ -135,7 +135,7 @@
                     fill="currentColor"
                   />
                 </svg>
-                <p class="font-bold">Case Management</p>
+                <p class="font-bold">Cases</p>
               </div>
             </a>
             <a
@@ -179,7 +179,7 @@
               </div>
             </a>
             <a
-              routerLink="/admin/category-management"
+              routerLink="/admin/categories"
               [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
             >
               <div class="flex items-center gap-3 p-4">
@@ -196,7 +196,7 @@
                   />
                 </svg>
 
-                <p class="font-bold">Category Management</p>
+                <p class="font-bold">Categories</p>
               </div>
             </a>
             <a
@@ -314,7 +314,7 @@
               >
                 <div
                   class="flex items-center gap-3 p-4"
-                  routerLink="/admin/settings"
+                  routerLink="/admin/settings/general"
                   [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
                 >
                   <svg
@@ -365,9 +365,9 @@
           [ngClass]="showSearchBar ? '' : 'justify-between '"
           class="flex border-b pl-6 pr-[26px] w-full h-[111px] items-center bg-[#fdfdfd]"
         >
-          <h2 class="font-bold tracking-wide">{{ activeLink }}</h2>
+          <h2 class="font-bold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis">{{ activeLink }}</h2>
           @if (showSearchBar) {
-          <input class="outline mx-4 py-1 pl-2 h-fit w-full" type="text" />
+          <input [formControl]="searchInput" class="outline outline-2 rounded outline-figma-green mx-4 py-1 pl-2 h-fit w-full" type="text" />
           }
 
           <div class="flex justify-end gap-12 py-6 w-[169px]">
@@ -437,7 +437,7 @@
                   stroke-width="1.5"
                   stroke="currentColor"
                   data-slot="icon"
-                  class="w-6 h-6"
+                  class="w-4 h-4"
                 >
                   <path
                     stroke-linecap="round"

@@ -66,7 +66,7 @@ export class CaseEffect {
         return this.adminService.deleteCase(id).pipe(
           map(() => {
             document.body.scrollTo({ top: 0, behavior: 'smooth' });
-            this.router.navigateByUrl('/admin/case-management');
+            this.router.navigateByUrl('/admin/cases');
             return getCases();
           }),
           catchError((err) => {
@@ -94,7 +94,7 @@ export class CaseEffect {
         return this.adminService.addCase({ formData }).pipe(
           map(() => {
             setTimeout(() => {
-              this.router.navigateByUrl('/admin/case-management');
+              this.router.navigateByUrl('/admin/cases');
             }, 500);
             return getCases();
           }),
@@ -118,7 +118,7 @@ export class CaseEffect {
         return this.adminService.updateCase({ formData, id }).pipe(
           map(() => {
             setTimeout(() => {
-              this.router.navigateByUrl('/admin/case-management');
+              this.router.navigateByUrl('/admin/cases');
             }, 500);
             return getCases();
           }),

@@ -31,7 +31,7 @@ export class LoginEffect {
                 replaceUrl: true,
               });
             } else {
-              this.router.navigateByUrl('/settings', { replaceUrl: true });
+              this.router.navigateByUrl('/settings/general', { replaceUrl: true });
             }
             this.toast.success('Login successful', 'Success', {
               timeOut: 1500,

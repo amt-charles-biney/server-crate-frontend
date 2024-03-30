@@ -92,6 +92,8 @@ export class IndicatorsComponent implements OnInit {
       } else if (this.product.inStock <= 5) {
         const lowStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock <= 5))!
         attributeToCheck = lowStockAttribute
+        console.log('Attribute To Check', attributeToCheck);
+        
       }
       setTimeout(() => {
         this.dialog.open(AttributeModalComponent, {

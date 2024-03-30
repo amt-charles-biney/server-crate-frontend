@@ -40,7 +40,7 @@ export class ConfigEffect {
                 status: false,
               })
             );
-            this.router.navigateByUrl('/admin/category-management');
+            this.router.navigateByUrl('/admin/categories');
             return resetLoader({ isError: false, message: '', status: false });
           }),
           catchError((err) => {
@@ -135,7 +135,7 @@ export class ConfigEffect {
           map(() => {
             document.body.scrollTo({ top: 0, behavior: 'smooth'})
             
-            this.router.navigateByUrl('/admin/category-management');
+            this.router.navigateByUrl('/admin/categories');
             return getNotifications()
           }),
           catchError((err) => {
