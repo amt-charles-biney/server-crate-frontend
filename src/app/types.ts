@@ -409,6 +409,7 @@ export interface ICompatibleOption {
   name: string;
   type: string;
   price: number;
+  size: number,
   media: string;
   unit: string;
   isCompatible: boolean;
