@@ -61,11 +61,11 @@ export class AdminDashboardComponent implements OnInit {
     this.store.dispatch(getCases());
     this.store.dispatch(getNotifications());
     this.activeLink = this.setTitle(this.router.url);
-
     if (this.router)
     this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
       if (event instanceof NavigationEnd) {                
         this.activeLink = this.setTitle(this.router.url);
+        this.searchInput.setValue("")
       }
     });
 

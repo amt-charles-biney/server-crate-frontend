@@ -33,6 +33,7 @@ export class CustomCheckBoxComponent {
   @Input() label!: string;
   @Input() value!: string;
   @Input() name!: string;
+  @Input() customClass: string = "max-w-28 overflow-hidden text-ellipsis whitespace-nowrap"
   @Output() changeHandler = new EventEmitter<{ name: string, value: string, isAdded: boolean }>();
   @ViewChild('inputState') inputState!: ElementRef<HTMLInputElement>
   onChange: OnChange<string> = () => {};

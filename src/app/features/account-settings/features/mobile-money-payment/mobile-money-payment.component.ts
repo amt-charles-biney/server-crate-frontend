@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   EventEmitter,
   Input,
@@ -18,9 +19,10 @@ import { CustomSelectComponent } from '../../../../shared/components/custom-sele
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { Store } from '@ngrx/store';
 import { addMomoWallet, getMomoWallet } from '../../../../store/account-settings/general-info/general-info.actions';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { selectWallets } from '../../../../store/account-settings/general-info/general-info.reducers';
 import { WalletListComponent } from '../../../../shared/components/wallet-list/wallet-list.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-mobile-money-payment',
@@ -47,7 +49,7 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
   showWarning: string = '';
   wallets!: Observable<MobileMoneyWallet[]>
   image!: string
-  constructor(private store: Store) {}
+  constructor(private store: Store, private destroyRef: DestroyRef) {}
   ngOnInit(): void {
     this.store.dispatch(getMomoWallet())
     this.mobileMoneyForm = new FormGroup({
@@ -58,6 +60,12 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
     });    
 
     this.wallets = this.store.select(selectWallets)
+    this.contact.valueChanges.pipe(
+      tap(() => {
+        this.showWarning = ''
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe()
   }
 
   ngAfterViewInit(): void {
@@ -98,15 +106,13 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
   }
 
   addWallet() {
+    this.mobileMoneyForm.markAllAsTouched()
     if (!this.intl.isValidNumber()) {
       this.showWarning = 'Please enter a valid phone number';
-      setTimeout(() => {
-        this.showWarning = '';
-      }, 3000);
       return;
     }
     const contactValue = this.getContact()
-    this.contact?.setValue(contactValue);
+    this.contact?.setValue(contactValue.phoneNumber);
     if (this.page === 'default') {
       this.store.dispatch(addMomoWallet({ network: this.mobileMoneyForm.value.network, contact: contactValue}))
     }
@@ -115,6 +121,6 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
 
 
   get contact() {
-    return this.mobileMoneyForm.get('contact');
+    return this.mobileMoneyForm.get('contact')!;
   }
 }

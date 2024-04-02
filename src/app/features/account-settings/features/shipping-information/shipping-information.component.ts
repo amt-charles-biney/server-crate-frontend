@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -10,6 +10,7 @@ import { Address, Contact, ShippingPayload } from '../../../../types';
 import { CommonModule } from '@angular/common';
 import { zipCodeValidator } from '../../../../core/utils/validators';
 import { AddressComponent } from '../../../../shared/components/address/address.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-shipping-information',
@@ -24,7 +25,7 @@ export class ShippingInformationComponent implements OnInit {
   intl!: any;
   showWarning: string = '';
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private destroyRef: DestroyRef) {
     
   }
   ngOnInit(): void {
@@ -39,7 +40,7 @@ export class ShippingInformationComponent implements OnInit {
       state: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
       zipCode: new FormControl('', [Validators.required, zipCodeValidator()]),
-      contact: new FormControl({}),
+      contact: new FormControl(''),
     })
 
     this.shippingInfoForm$ = this.store.select(selectShippingDetailsState).pipe(
@@ -48,6 +49,13 @@ export class ShippingInformationComponent implements OnInit {
         this.intl?.setNumber(shippingDetails.contact?.phoneNumber)
       })
     )
+
+    this.contact.valueChanges.pipe(
+      tap(() => {
+        this.showWarning = ''
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe()
   }
 
   ngAfterViewInit(): void {
@@ -70,13 +78,20 @@ export class ShippingInformationComponent implements OnInit {
       iso2Code: contact.iso2,
       phoneNumber: this.intl?.getNumber(),
     };
-    this.shippingForm.patchValue({ contact: contactValue, address2: this.shippingForm.value.address2 || null })    
-    this.store.dispatch(saveShippingDetails(this.shippingForm.value))
+    if (!this.intl.isValidNumber()){
+      this.showWarning = 'Please enter a valid phone number';
+      return;
+    }
+    this.shippingForm.patchValue({ contact: contactValue.phoneNumber, address2: this.shippingForm.value.address2 || null })    
+    this.store.dispatch(saveShippingDetails({ ...this.shippingForm.value, contact: contactValue}))
   }
 
   getAddress(address: Address) {
-    console.log("Address", address)
     this.shippingForm.patchValue({...address, address1: address.address})
+  }
+
+  get contact() {
+    return this.shippingForm.get('contact')!
   }
   
 }

@@ -648,6 +648,7 @@ export type ProductItemSubset = {
   productCaseName?: string;
   configurationUrl?: string;
   isWishListItem?: boolean;
+  totalPrice?: number
 };
 export type WishlistItemSubset = {
   id: string;

@@ -92,7 +92,7 @@ export class CreditCardPaymentComponent implements OnInit {
         validators: [Validators.required, yearValidator()],
         updateOn: 'submit',
       }),
-      creditCardReference: new FormControl('', Validators.required),
+      creditCardReference: new FormControl(''),
     });
 
     this.cardNumber?.valueChanges

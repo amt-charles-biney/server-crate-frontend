@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   ElementRef,
   OnInit,
   ViewChild,
@@ -49,6 +50,7 @@ import { LoaderComponent } from '../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../shared/components/error/error.component';
 import { getCartItems } from '../../store/cart/cart.actions';
 import { AddressComponent } from '../../shared/components/address/address.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-checkout',
@@ -107,7 +109,8 @@ export class CheckoutComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private store: Store,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private destroyRef: DestroyRef
   ) {}
   ngOnInit(): void {
     this.store.dispatch(getShippingDetails());
@@ -138,6 +141,12 @@ export class CheckoutComponent implements OnInit {
       })
     );
     this.loadingStatus = this.store.select(selectLoaderState);
+    this.contact.valueChanges.pipe(
+      tap(() => {
+        this.showWarning = ''
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe()
   }
   ngAfterViewInit(): void {
     if (this.telInput) {
@@ -153,7 +162,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   getAddress(address: Address) {
-    console.log('Checkout', address);
     this.shippingForm.patchValue({ ...address, address1: address.address });
   }
 
@@ -170,9 +178,6 @@ export class CheckoutComponent implements OnInit {
     this.shippingForm.markAllAsTouched();
     if (!this.intl.isValidNumber()) {
       this.showWarning = 'Please enter a valid phone number';
-      setTimeout(() => {
-        this.showWarning = '';
-      }, 2000);
       return;
     }
     this.cdkStepper.next();
@@ -180,6 +185,16 @@ export class CheckoutComponent implements OnInit {
 
   paymentDetails() {
     this.paymentDetailsComponent.shareForm();
+    if (this.paymentDetailsComponent.currentIndex === 2) {
+      const paymentRequest: PaymentRequest = {
+        amount: this.paymentDetailsComponent.payStack.amount!,
+        channels:['card', 'mobile_money'],
+        email: this.shippingForm.value.email!,
+        reference: Date.now().toString(),
+        currency: 'GHS',
+      };
+      this.store.dispatch(sendingPaymentRequest(paymentRequest));
+    }
     if (!this.paymentDetailsComponent.paymentForm) return;
     const { amount, reference, creditCardReference, activeIndex } =
       this.paymentDetailsComponent.paymentForm;
@@ -226,5 +241,9 @@ export class CheckoutComponent implements OnInit {
   }
   previous() {
     this.cdkStepper.previous();
+  }
+
+  get contact() {
+    return this.shippingForm.get('contact')!;
   }
 }

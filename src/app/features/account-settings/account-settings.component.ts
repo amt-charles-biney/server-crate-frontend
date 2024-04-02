@@ -3,7 +3,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TermsAndConditionsComponent } from '../../shared/components/terms-and-conditions/terms-and-conditions.component';
 import { ResetPasswordComponent } from '../reset/reset-password/reset-password.component';
 import { GeneralInformationComponent } from './features/general-information/general-information.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Link, Username } from '../../types';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 import { ProfileService } from '../../core/services/user-profile/profile.service';
@@ -35,10 +35,15 @@ export class AccountSettingsComponent implements OnInit {
 
   constructor(
     private profileService: ProfileService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin();
+    if (this.router.url === '/settings') {
+      this.router.navigateByUrl('/settings/general', { replaceUrl: true })
+    }
+    
     this.navLinks = [
       {
         label: 'General',

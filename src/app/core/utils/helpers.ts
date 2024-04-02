@@ -45,7 +45,6 @@ export const clearStorage = () => {
   localStorage.removeItem(LOCALSTORAGE_USER);
   localStorage.removeItem(LOCALSTORAGE_TOKEN);
   localStorage.removeItem(LOCALSTORAGE_EMAIL);
-  sessionStorage.clear()
 };
 export function isAttributeOption(obj: any): obj is AttributeOption {
   return obj && typeof obj.id === 'string';

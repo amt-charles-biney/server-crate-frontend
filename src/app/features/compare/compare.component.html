@@ -32,6 +32,8 @@
       <div class="row h-[39px] !border-b-0">
         <p>Operating System</p>
       </div>
+      <div class="row h-[39px] !border-b-0">
+      </div>
     </div>
     <div class="flex gap-[73px] ml-[17px] overflow-auto myScroll">
       <ng-container *ngIf="allProducts | async as allProducts">
@@ -97,6 +99,9 @@
                 {{ product.options["operating systems"] || "Not available" }}
               </p>
             </div>
+            <button (click)="goToConfiguration(product.productId)" class="w-full my-2 rounded-xl text-xl text-white py-4 px-[72px] bg-figma-green">
+              Configure
+            </button>
           </div>
           }
           <ng-container *ngIf="products.length < 5">

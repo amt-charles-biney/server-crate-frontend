@@ -1,6 +1,4 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { HeaderComponent } from '../../core/components/header/header.component';
-import { FooterComponent } from '../../core/components/footer/footer.component';
 import {
   ActivatedRoute,
   NavigationExtras,
@@ -98,6 +96,15 @@ export class ProductConfigureComponent {
   configKeys: string[] = []
   queryMapper: Record<string, string> = {}
   querySnapShot!: IParamConfigOptions
+
+  allowedOptionTypes: string[] = [
+    'Graphics',
+    'Motherboard',
+    'RAM',
+    'Storage',
+    'Operating Systems',
+    'Processors'
+  ];
 
   setActiveLink = (active: string): void => {
     this.unit = this.productConfig.options[active][0]?.unit ?? 'GB'

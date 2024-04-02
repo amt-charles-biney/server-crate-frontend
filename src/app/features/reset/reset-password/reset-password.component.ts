@@ -43,17 +43,17 @@ export class ResetPasswordComponent implements OnInit{
   loadingState$!: Observable<LoadingStatus>
   ngOnInit(): void {
     this.resetPasswordForm = new FormGroup({
-      password: new FormControl('', [
+      password: new FormControl('', {validators:[
         Validators.required,
         Validators.minLength(8),
         Validators.pattern(
           passwordRegex
         ),
-      ]),
-      confirmPwd: new FormControl('', [
+      ], updateOn: 'submit'}),
+      confirmPwd: new FormControl('', {validators: [
         Validators.required,
         checkIfPasswordsMatch(),
-      ]),
+      ], updateOn: 'submit'}),
     }, formValidator('password', 'confirmPwd'))
     this.loadingState$ = this.store.select(selectLoaderState)
   }
@@ -71,6 +71,7 @@ export class ResetPasswordComponent implements OnInit{
   }
 
   resetPassword() {
+    this.resetPasswordForm.markAllAsTouched()
     if (this.resetPasswordForm.invalid) return ;
     const email = localStorage.getItem(LOCALSTORAGE_EMAIL) ?? ''
     const { password, confirmPwd } = this.resetPasswordForm.value

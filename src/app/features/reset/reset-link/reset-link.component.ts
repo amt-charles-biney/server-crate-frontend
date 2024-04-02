@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CustomInputComponent } from '../../../shared/components/custom-input/custom-input.component';
 import { RouterLink } from '@angular/router';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
@@ -12,11 +12,9 @@ import {
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { sendingResetLink } from '../../../store/reset/actions/reset.actions';
-import { setLoadingSpinner } from '../../../store/loader/actions/loader.actions';
 import { Observable } from 'rxjs';
 import {
   selectLoaderState,
-  selectStatus,
 } from '../../../store/loader/reducers/loader.reducers';
 import { AuthLoaderComponent } from '../../../shared/components/auth-loader/auth-loader.component';
 import { LoadingStatus } from '../../../types';
@@ -44,7 +42,7 @@ export class ResetLinkComponent {
     this.resetForm = new FormGroup({
       email: new FormControl('', {
         validators: [Validators.required, Validators.email],
-        updateOn: 'blur',
+        updateOn: 'submit',
       }),
     });
     this.loadingState$ = this.store.select(selectLoaderState);

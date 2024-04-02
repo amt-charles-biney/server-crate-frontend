@@ -1,0 +1,12 @@
+.resetImage  {
+    height: 100vh;
+    background-image: url("/assets/reset-pic.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+@media only screen and (max-width: 768px) {
+    .resetImage {
+        display: none;
+    }
+  }

@@ -20,6 +20,7 @@ export class PaymentDetailsComponent {
   @ViewChild('momo') momo !: ElementRef<HTMLDivElement>
   @ViewChild('card') card !: ElementRef<HTMLDivElement>
   paymentForm!: PaymentForm | undefined;
+  payStack: { amount?: number } = { }
   currentIndex: number = 0
   
   shareForm() {
@@ -40,6 +41,10 @@ export class PaymentDetailsComponent {
         securityCode,
         creditCardReference, //For testing
         activeIndex: this.currentIndex
+      }
+    } else if (this.currentIndex === 2) {
+      this.payStack = {
+        amount
       }
     }
   }

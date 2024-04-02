@@ -9,7 +9,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { signIn } from '../../store/signin/actions/login.actions';
 import { AuthLoaderComponent } from '../../shared/components/auth-loader/auth-loader.component';
@@ -27,24 +27,28 @@ import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
     CustomButtonComponent,
     FormsModule,
     ReactiveFormsModule,
-    AuthLoaderComponent
+    AuthLoaderComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  loadingState$!: Observable<LoadingStatus>
+  loadingState$!: Observable<LoadingStatus>;
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [
-        Validators.required,
-      ]),
-    })
-    this.loadingState$ = this.store.select(selectLoaderState)
+      email: new FormControl('', {
+        validators: [Validators.required, Validators.email],
+        updateOn: 'submit',
+      }),
+      password: new FormControl('', {
+        validators: [Validators.required],
+        updateOn: 'submit',
+      }),
+    });
+    this.loadingState$ = this.store.select(selectLoaderState);
   }
 
   constructor(private store: Store) {}
@@ -55,8 +59,9 @@ export class LoginComponent implements OnInit {
    * @returns {void}
    */
   submitLoginForm(): void {
-    if (this.loginForm.invalid) return;    
-    const { email, password } = this.loginForm.value
-    this.store.dispatch(signIn({ email, password }))
+    this.loginForm.markAllAsTouched();
+    if (this.loginForm.invalid) return;
+    const { email, password } = this.loginForm.value;
+    this.store.dispatch(signIn({ email, password }));
   }
 }

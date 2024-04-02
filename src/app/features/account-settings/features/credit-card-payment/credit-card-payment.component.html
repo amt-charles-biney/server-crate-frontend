@@ -136,12 +136,14 @@
         <span class="text-red-600 text-xs">Please use only numbers</span>
       </div>
     </label>
-    <app-custom-input
-      type="text"
-      label="Reference"
-      placeholder="Enter a reference"
-      formControlName="creditCardReference"
-    />
+    @if (page !== 'default') {
+      <app-custom-input
+        type="text"
+        label="Reference"
+        placeholder="Enter a reference"
+        formControlName="creditCardReference"
+      />
+    }
   </section>
   @if (page === 'default') {
   <app-custom-button buttonText="Add Card" [isPrimaryButton]="true" />
@@ -151,6 +153,7 @@
       name="save-form"
       label="Save this information for next time"
       class="text-table-text text-sm"
+      customClass="w-full"
     />
     <button
       (click)="clearForm()"

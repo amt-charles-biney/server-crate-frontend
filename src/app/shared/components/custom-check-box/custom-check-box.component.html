@@ -1,4 +1,4 @@
 <label [ngClass]="label ? 'gap-3' : 'gap-0'" class="flex items-center select-none" [for]="randomId + label | lowercase">
   <input [formControl]="formControl" #inputState type="checkbox" [id]="randomId + label | lowercase" />
-  <span class="max-w-28 overflow-hidden text-ellipsis whitespace-nowrap">{{ label }}</span>
+  <span [ngClass]="customClass">{{ label }}</span>
 </label>

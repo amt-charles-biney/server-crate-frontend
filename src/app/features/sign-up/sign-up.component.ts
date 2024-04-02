@@ -61,15 +61,15 @@ export class SignUpComponent implements OnInit {
       {
         firstName: new FormControl('', {
           validators: [Validators.required],
-          updateOn: 'blur',
+          updateOn: 'submit',
         }),
         lastName: new FormControl('', {
           validators: [Validators.required],
-          updateOn: 'blur',
+          updateOn: 'submit',
         }),
         email: new FormControl('', {
           validators: [Validators.required, Validators.email],
-          updateOn: 'blur',
+          updateOn: 'submit',
         }),
         password: new FormControl('', {
           validators: [
@@ -77,11 +77,11 @@ export class SignUpComponent implements OnInit {
             Validators.minLength(8),
             Validators.pattern(passwordRegex),
           ],
-          updateOn: 'blur',
+          updateOn: 'submit',
         }),
         confirmPwd: new FormControl('', {
           validators: [Validators.required, checkIfPasswordsMatch()],
-          updateOn: 'blur',
+          updateOn: 'submit',
         }),
         acceptTerms: new FormControl(null, [
           Validators.required,
@@ -98,6 +98,7 @@ export class SignUpComponent implements OnInit {
    * @returns {void}
    */
   submitRegistrationForm(): void {
+    this.signUpForm.markAllAsTouched()
     if (this.signUpForm.invalid) return;
     document.body.scrollTo({ top: 0, behavior: 'smooth' });
     const { firstName, lastName, email, password } = this.signUpForm.value;

@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -30,7 +31,7 @@ import { PaginatedComponent } from '../../../../shared/components/paginated/pagi
   templateUrl: './products-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductsPageComponent implements OnInit {
+export class ProductsPageComponent implements OnInit, OnDestroy {
   @Input() id!: string;
   @Input() maxSize!: number;
   @Output() pageChange: EventEmitter<number> = new EventEmitter<number>();
@@ -43,6 +44,10 @@ export class ProductsPageComponent implements OnInit {
   constructor(private store: Store) {}
   ngOnInit(): void {
     this.getPage(1);
+  }
+
+  ngOnDestroy(): void {
+    sessionStorage.setItem("search", JSON.stringify(""))
   }
 
   getPage(pageNumber: number) {

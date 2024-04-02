@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
     NgOptimizedImage
   ],
   templateUrl: './reset.component.html',
+  styleUrl: './reset.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResetComponent {

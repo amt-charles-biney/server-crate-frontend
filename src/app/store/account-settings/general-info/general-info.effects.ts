@@ -15,11 +15,9 @@ import {
   gotShippingDetails,
   saveShippingDetails,
 } from './general-info.actions';
-import { EMPTY, catchError, exhaustMap, map, of, tap } from 'rxjs';
+import { EMPTY, catchError, exhaustMap, map, tap } from 'rxjs';
 import { UserInfo, GeneralInfo } from '../../../types';
 import { ProfileService } from '../../../core/services/user-profile/profile.service';
-import { Store } from '@ngrx/store';
-import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { ToastrService } from 'ngx-toastr';
 import { errorHandler } from '../../../core/utils/helpers';
 
@@ -34,21 +32,11 @@ export class GeneralInfoEffect {
         return this.profileService.getGeneralInfo().pipe(
           map((generalInfo: GeneralInfo) => {
             cache.set(action, generalInfo);
-            this.store.dispatch(gotGeneralInfo(generalInfo));
-            return setLoadingSpinner({
-              status: false,
-              message: '',
-              isError: false,
-            });
+            return gotGeneralInfo(generalInfo)
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                status: false,
-                message: err.error.detail ?? '',
-                isError: true,
-              })
-            );
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
           })
         );
       })
@@ -69,7 +57,7 @@ export class GeneralInfoEffect {
             }),
             catchError((err) => {
               this.toast.error(errorHandler(err), 'Error');
-              return of();
+              return EMPTY;
             })
           );
         })
@@ -82,8 +70,7 @@ export class GeneralInfoEffect {
     () => {
       return this.action$.pipe(
         ofType(saveShippingDetails),
-        exhaustMap((props) => {
-            
+        exhaustMap((props) => {           
           return this.profileService.saveShippingDetails(props).pipe(
             tap(() => {
               this.toast.success('Updated shipping details', 'Success')
@@ -108,6 +95,10 @@ export class GeneralInfoEffect {
             return gotShippingDetails(shippingDetails);
           }),
           catchError((error) => {
+            if (error.status === 404 || error.status === 403) {
+              return EMPTY
+            }
+            this.toast.error(errorHandler(error), "Error")
             return EMPTY
           })
         );
@@ -123,7 +114,7 @@ export class GeneralInfoEffect {
           map((wallet) => {
             return gotMomoWallet({wallets: wallet.data})
           }),
-          catchError((err) => {
+          catchError((err) => {            
             this.toast.error(errorHandler(err), 'Error')
             return EMPTY
           })
@@ -139,7 +130,7 @@ export class GeneralInfoEffect {
           map((cards) => {
             return gotCards({creditCards: cards.data})
           }),
-          catchError((err) => {
+          catchError((err) => {            
             this.toast.error(errorHandler(err), 'Error')
             return EMPTY
           })
@@ -206,7 +197,6 @@ export class GeneralInfoEffect {
   constructor(
     private action$: Actions,
     private profileService: ProfileService,
-    private store: Store,
     private toast: ToastrService
   ) {}
 }

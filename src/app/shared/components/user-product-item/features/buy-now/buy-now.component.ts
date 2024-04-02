@@ -9,6 +9,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { CloudinaryUrlPipe } from '../../../../pipes/cloudinary-url/cloudinary-url.pipe';
 import { Store } from '@ngrx/store';
 import {
+  addToCartItem,
   loadProduct,
   loadProductConfigItem,
 } from '../../../../../store/product-spec/product-spec.action';
@@ -67,5 +68,9 @@ export class BuyNowComponent implements OnInit {
 
   onOptionChange(warranty: boolean) {
     this.warranty = warranty;
+  }
+
+  addToCart(id: string) {    
+    this.store.dispatch(addToCartItem({ productId: id, configOptions: { warranty: this.warranty, components: ''}  }))
   }
 }

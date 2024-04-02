@@ -99,7 +99,7 @@
       <p
         class="text-sm font-[500] max-w-[145px] overflow-hidden whitespace-nowrap text-ellipsis"
       >
-        {{ product.productPrice | currency }}
+        {{ product.totalPrice || product.productPrice | currency }}
       </p>
       <button
         (click)="onNavigateToProduct($event, product.id)"

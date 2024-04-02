@@ -321,9 +321,9 @@ app-notifications .mat-mdc-tab-header .mdc-tab {
   padding-block: 8px;
 }
 
-app-admin-dashboard .mat-mdc-tab.mdc-tab--active:hover .mdc-tab__text-label {
-  color: #3cb043;
-}
+// app-admin-dashboard .mat-mdc-tab.mdc-tab--active:hover .mdc-tab__text-label {
+//   color: red;
+// }
 
 app-notifications .mat-mdc-tab:not(.mdc-tab--stacked) {
   height: fit-content;
@@ -362,7 +362,7 @@ app-notifications .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
   width: 100%;
 }
 .iti__country-list {
-  width: 410px;
+  width: 400px;
   margin-top: 8px;
 }
 

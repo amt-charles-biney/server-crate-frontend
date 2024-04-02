@@ -1,4 +1,3 @@
-import { trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,8 +7,6 @@ import {
 import {
   Comparison,
   Product,
-  ProductItem,
-  ProductItemSubset,
   Select,
 } from '../../types';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
@@ -23,7 +20,6 @@ import {
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
 import { BehaviorSubject, Observable, map, of, startWith, tap } from 'rxjs';
 import {
-  selectAllProductsState,
   selectProducts,
   selectSingleProduct,
 } from '../../store/admin/products/products.reducers';
@@ -33,6 +29,7 @@ import { getProductComparisons } from '../../store/compare/compare.actions';
 import { selectData } from '../../store/compare/compare.reducers';
 import { isInStorage } from '../../core/utils/helpers';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-compare',
@@ -65,7 +62,7 @@ export class CompareComponent implements OnInit {
   products: Comparison[] = [];
   productList!: FormGroup;
 
-  constructor(private store: Store, private toast: ToastrService) {}
+  constructor(private store: Store, private toast: ToastrService, private router: Router) {}
 
   ngOnInit(): void {
     this.store.dispatch(getProductComparisons());
@@ -82,8 +79,6 @@ export class CompareComponent implements OnInit {
         this.products = productsToCompare;
       })
     );
-    // const products: string = localStorage.getItem("products") ? localStorage.getItem("products")! : "[]"
-    // this.productsToCompare.next(JSON.parse(products));
 
     this.allProducts = this.store.select(selectProducts).pipe(
       tap((products) => {
@@ -152,6 +147,10 @@ export class CompareComponent implements OnInit {
     sessionStorage.setItem('products', JSON.stringify({}));
     this.productsToCompare = of([]);
     this.products = [];
+  }
+
+  goToConfiguration(id: string) {
+    this.router.navigate([`/product/configure/${id}`])
   }
 
   get product() {

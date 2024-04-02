@@ -33,6 +33,11 @@ export const COLOR_MAPPING: StatusColors = {
         background: 'bg-[#F2F4F799]',
         circle: 'bg-[#364254]'
     },
+    'Out For Delivery':  {
+        color: 'text-[#364254]',
+        background: 'bg-[#F2F4F799]',
+        circle: 'bg-[#364254]'
+    }
 }
 
 export const NAME_MAPPING: { [key: string]: string} = {

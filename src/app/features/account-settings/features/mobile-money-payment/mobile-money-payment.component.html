@@ -1,20 +1,23 @@
-<form
-  [formGroup]="mobileMoneyForm"
-  (ngSubmit)="addWallet()"
->
+<form [formGroup]="mobileMoneyForm" (ngSubmit)="addWallet()">
   <ng-container *ngIf="wallets | async as wallets">
-   <app-wallet-list [wallets]="wallets" [page]="page" (walletEmitter)="selectedWallet($event)"/>
+    <app-wallet-list
+      [wallets]="wallets"
+      [page]="page"
+      (walletEmitter)="selectedWallet($event)"
+    />
   </ng-container>
 
-  <section class="grid grid-cols-2 gap-x-[35px] mt-4 md:mt-4">
+  <section
+    [ngClass]="page != 'checkout' ? ' h-[700px]' : ''"
+    class="relative grid grid-cols-2 gap-x-[35px] mt-4 md:mt-4"
+  >
     <app-custom-select
       label="Network"
       [control]="$any(mobileMoneyForm.controls['network'])"
       [options]="['MTN', 'Vodafone']"
     />
     <div>
-  
-      <label class="flex flex-col " for="contact">
+      <label class="flex flex-col" for="contact">
         <span class="">Contact</span>
         <input
           id="contact"
@@ -22,6 +25,7 @@
           type="tel"
           class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
           #telInput
+          formControlName="contact"
         />
       </label>
       @if (showWarning !== '') {
@@ -29,26 +33,41 @@
       }
     </div>
     @if (page === 'checkout') {
-      <app-custom-input type="text" [isReadOnly]="true" label="Amount" formControlName="amount"/>
-      <div>
-        <app-custom-input type="text" label="Reference" placeholder="Enter a reference" formControlName="reference"/>
-        
-      </div>
-      
+    <app-custom-input
+      type="text"
+      [isReadOnly]="true"
+      label="Amount"
+      formControlName="amount"
+    />
+
+    <app-custom-input
+      type="text"
+      label="Reference"
+      placeholder="Enter a reference"
+      formControlName="reference"
+    />
+
     } @else {
+    <div class="absolute top-16">
       <app-custom-button buttonText="Add Wallet" [isPrimaryButton]="true" />
+    </div>
     }
   </section>
 </form>
 @if (page === 'checkout') {
-  <div class="flex justify-between mt-4">
-    <app-custom-check-box
-      name="save-form"
-      label="Save wallets for future purchase"
-      class="text-table-text text-sm"
-    />
-    <button (click)="clearForm()" type="button" class="text-xs text-red-color underline">
-      Clear form
-    </button>
-  </div>
+<div class="flex justify-between mt-4">
+  <app-custom-check-box
+    name="save-form"
+    label="Save wallets for future purchase"
+    class="text-table-text text-sm"
+    customClass="w-full"
+  />
+  <button
+    (click)="clearForm()"
+    type="button"
+    class="text-xs text-red-color underline"
+  >
+    Clear form
+  </button>
+</div>
 }

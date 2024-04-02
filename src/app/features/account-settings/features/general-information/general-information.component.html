@@ -1,11 +1,10 @@
 <ng-container *ngIf="generalForm | async as generalForm"> </ng-container>
 <form
-  class="mt-4 md:mt-0 xl:w-[50%]"
+  class="mt-4 md:mt-0 md:w-[70%] xl:w-[50%]"
   (ngSubmit)="saveGeneralInfoChanges()"
   [formGroup]="generalInfoForm"
 >
   <h2 class="font-bold text-center md:text-start">Basic Information</h2>
-  <app-auth-loader [loadingState]="loadingState$"/>
   <app-custom-input
     id="firstName"
     label="First Name"
@@ -61,6 +60,7 @@
       type="tel"
       class="flex border-[1.5px] w-full placeholder:text-figma-gray outline-none px-4 py-2 rounded-md"
       #telInput
+      formControlName="contact"
     />
   </label>
   @if (showWarning !== '') {

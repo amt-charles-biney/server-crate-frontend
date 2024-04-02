@@ -37,6 +37,7 @@
           class="font-[500]"
           label="Has measurement"
           formControlName="isMeasured"
+          customClass="w-full"
           (changeHandler)="modifyValidator()"
         />
         @if (isMeasured.value) {
@@ -63,6 +64,7 @@
           name="isRequired"
           class="font-[500]"
           label="Make Attribute Required"
+          customClass="w-full"
           formControlName="isRequired"
         />
       </div>

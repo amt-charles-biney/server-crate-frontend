@@ -32,6 +32,7 @@ export class WishlistEffect {
           switchMap(({ id, configOptions }) => {
             return this.userService.addToWishlist(id, configOptions).pipe(
               map(() => {
+                this.toast.success('Added product to wishlist')
                 this.store.dispatch(getUserProducts({ page: 0, params: {}}))
                 return getWishlist()
               }),
@@ -50,6 +51,7 @@ export class WishlistEffect {
           switchMap(({ id }) => {
             return this.userService.removeFromWishlist(id).pipe(
               map(() => {
+                this.toast.success('Removed product from wishlist')
                 this.store.dispatch(getUserProducts({ page: 0, params: {}}))
                 return getWishlist()
               }),

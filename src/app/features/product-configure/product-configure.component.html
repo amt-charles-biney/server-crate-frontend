@@ -1,7 +1,5 @@
 <main class="relative h-auto">
-  <section
-    class="mt-5 w-full max-w-[1239px] px-14 lg:px-0 mx-auto"
-  >
+  <section class="mt-5 w-full max-w-[1239px] px-14 lg:px-0 mx-auto">
     <ng-container *ngIf="product$ | async as product">
       <div
         class="text-[13px] font-normal flex flex-row gap-1 items-center text-[#999999]"
@@ -18,7 +16,10 @@
           >Product</span
         >
         <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
-        <span class="max-w-28 text-ellipsis whitespace-nowrap overflow-hidden text-[13px]">{{ product.productName || "..." }}</span>
+        <span
+          class="max-w-28 text-ellipsis whitespace-nowrap overflow-hidden text-[13px]"
+          >{{ product.productName || "..." }}</span
+        >
         <img alt="chevron-nav" src="/assets/chevron-nav.svg" />
         <span class="text-green-600">Configure</span>
       </div>
@@ -42,7 +43,9 @@
               />
             </div>
           </div>
-          <div class="w-[548px] h-[312px] border border-[#E6E6E6] rounded-2xl p-1">
+          <div
+            class="w-[548px] h-[312px] border border-[#E6E6E6] rounded-2xl p-1"
+          >
             <img
               [ngSrc]="product.coverImage | cloudinaryUrl"
               width="548"
@@ -56,30 +59,36 @@
 
         <div class="max-w-[488px] flex flex-col gap-6 w-full">
           <div class="flex flex-col gap-[20px]">
-            <h2 class="font-bold text-[20px] whitespace-nowrap text-ellipsis overflow-hidden">{{ product.productName }}</h2>
+            <h2
+              class="font-bold text-[20px] whitespace-nowrap text-ellipsis overflow-hidden"
+            >
+              {{ product.productName }}
+            </h2>
             <p class="text-[13px] font-normal">
               {{ product.productDescription }}
             </p>
 
-            <div class="flex flex-col gap-3 w-full max-w-md mt-5">
+            <div
+              class="flex flex-col gap-2 w-full max-w-md overflow-hidden text-ellipsis whitespace-nowrap"
+            >
               <div class="flex flex-row items-center w-full justify-between">
                 <h1 class="text-xs font-light text-[#737373] w-1/2">Brand :</h1>
-                <p class="text-[13px] font-light text-[#000] w-1/2 overflow-hidden text-ellipsis whitespace-nowrap">
+                <p class="text-[13px] font-light text-[#000] w-1/2">
                   {{ product.productBrand.name }}
                 </p>
               </div>
-              <div
-                *ngFor="let option of productConfigItem.configured"
-                class="flex flex-row items-center w-full justify-between"
-              >
-                <h1 *ngIf="isRequiredConfig(option.optionType)" class="text-[13px] font-light text-[#737373] w-1/2">
+              @for (option of productConfigItem.configured; track option) { @if
+              (allowedOptionTypes.includes(option.optionType)) {
+              <div class="flex flex-row items-center w-full justify-between">
+                <h1 class="text-[13px] font-light text-[#737373] w-1/2">
                   {{ option.optionType }} :
                 </h1>
-                <p *ngIf="isRequiredConfig(option.optionType)" class="text-[13px] font-light text-[#000] w-1/2">
+                <p class="text-[13px] font-light text-[#000] w-1/2">
                   {{ option.optionName }}
                   <span>{{ option?.isMeasured ? option?.size : "" }}</span>
                 </p>
               </div>
+              } }
             </div>
 
             <div
