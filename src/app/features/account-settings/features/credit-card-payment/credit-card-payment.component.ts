@@ -21,7 +21,7 @@ import { CustomButtonComponent } from '../../../../shared/components/custom-butt
 import { CommonModule } from '@angular/common';
 import { CustomRadioComponent } from '../../../../shared/components/custom-radio/custom-radio.component';
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
-import { Observable, first, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   monthValidator,
@@ -36,6 +36,7 @@ import {
 } from '../../../../store/account-settings/general-info/general-info.actions';
 import { selectCreditCards } from '../../../../store/account-settings/general-info/general-info.reducers';
 import { CardListComponent } from '../../../../shared/components/card-list/card-list.component';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-credit-card-payment',
@@ -61,10 +62,12 @@ export class CreditCardPaymentComponent implements OnInit {
   creditCardForm!: FormGroup;
   cards!: Observable<CreditCard[]>;
 
-  constructor(private destroyRef: DestroyRef, private store: Store) {}
+  constructor(private destroyRef: DestroyRef, private store: Store, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.store.dispatch(getCards());
+    if (this.authService.getToken()) {
+      this.store.dispatch(getCards());
+    }
     this.creditCardForm = new FormGroup({
       paymentMethod: new FormControl('visa', Validators.required),
       name: new FormControl('', Validators.required),

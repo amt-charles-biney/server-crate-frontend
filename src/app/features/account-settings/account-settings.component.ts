@@ -10,7 +10,6 @@ import { ProfileService } from '../../core/services/user-profile/profile.service
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { OrdersComponent } from '../admin-dashboard/features/orders/orders.component';
 @Component({
   selector: 'app-account-settings',
   standalone: true,
@@ -21,7 +20,6 @@ import { OrdersComponent } from '../admin-dashboard/features/orders/orders.compo
     GeneralInformationComponent,
     RouterModule,
     UserProfileImageComponent,
-    OrdersComponent,
     CommonModule,
   ],
   templateUrl: './account-settings.component.html',

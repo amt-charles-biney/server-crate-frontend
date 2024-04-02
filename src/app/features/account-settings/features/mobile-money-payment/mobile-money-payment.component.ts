@@ -23,6 +23,7 @@ import { Observable, tap } from 'rxjs';
 import { selectWallets } from '../../../../store/account-settings/general-info/general-info.reducers';
 import { WalletListComponent } from '../../../../shared/components/wallet-list/wallet-list.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-mobile-money-payment',
@@ -49,9 +50,11 @@ export class MobileMoneyPaymentComponent implements OnInit, AfterViewInit {
   showWarning: string = '';
   wallets!: Observable<MobileMoneyWallet[]>
   image!: string
-  constructor(private store: Store, private destroyRef: DestroyRef) {}
+  constructor(private store: Store, private destroyRef: DestroyRef, private authService: AuthService) {}
   ngOnInit(): void {
-    this.store.dispatch(getMomoWallet())
+    if (this.authService.getToken()) {
+      this.store.dispatch(getMomoWallet())
+    }
     this.mobileMoneyForm = new FormGroup({
       network: new FormControl('', Validators.required),
       contact: new FormControl(null, Validators.required),

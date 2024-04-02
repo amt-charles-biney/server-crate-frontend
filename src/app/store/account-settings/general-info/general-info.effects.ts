@@ -15,11 +15,14 @@ import {
   gotShippingDetails,
   saveShippingDetails,
 } from './general-info.actions';
-import { EMPTY, catchError, exhaustMap, map, tap } from 'rxjs';
+import { EMPTY, catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { UserInfo, GeneralInfo } from '../../../types';
 import { ProfileService } from '../../../core/services/user-profile/profile.service';
 import { ToastrService } from 'ngx-toastr';
 import { errorHandler } from '../../../core/utils/helpers';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { validationFailure, validationSuccess } from '../../checkout/checkout.actions';
+import { resetLoader } from '../../loader/actions/loader.actions';
 
 const cache = new Map();
 @Injectable()
@@ -32,11 +35,11 @@ export class GeneralInfoEffect {
         return this.profileService.getGeneralInfo().pipe(
           map((generalInfo: GeneralInfo) => {
             cache.set(action, generalInfo);
-            return gotGeneralInfo(generalInfo)
+            return gotGeneralInfo(generalInfo);
           }),
           catchError((err) => {
-            this.toast.error(errorHandler(err), "Error")
-            return EMPTY
+            this.toast.error(errorHandler(err), 'Error');
+            return EMPTY;
           })
         );
       })
@@ -66,25 +69,39 @@ export class GeneralInfoEffect {
     { dispatch: false }
   );
 
-  saveShippingDetails$ = createEffect(
-    () => {
-      return this.action$.pipe(
-        ofType(saveShippingDetails),
-        exhaustMap((props) => {           
-          return this.profileService.saveShippingDetails(props).pipe(
-            tap(() => {
-              this.toast.success('Updated shipping details', 'Success')
+  saveShippingDetails$ = createEffect(() => {
+    return this.action$.pipe(
+      ofType(saveShippingDetails),
+      exhaustMap((props) => {
+        this.ngxService.start();
+        return this.profileService
+          .saveShippingDetails(props.shippingPayload, props.isProfile)
+          .pipe(
+            map(() => {
+              this.ngxService.stop();
+              if (!props.isProfile) {
+                this.toast.success('Verified user address', 'Success');
+                return validationSuccess();
+              }
+              this.toast.success('Saved shipping details', 'Success');
+              return resetLoader({
+                isError: false,
+                message: '',
+                status: false
+              });
             }),
             catchError((err) => {
-              this.toast.error(errorHandler(err), 'Error')
-              return EMPTY
+              this.toast.error(errorHandler(err), 'Error');
+              this.ngxService.stop();
+              if (!props.isProfile) {
+                return of(validationFailure())
+              }
+              return EMPTY;
             })
           );
-        })
-      );
-    },
-    { dispatch: false }
-  );
+      })
+    );
+  });
 
   getShippingDetails$ = createEffect(() => {
     return this.action$.pipe(
@@ -96,10 +113,10 @@ export class GeneralInfoEffect {
           }),
           catchError((error) => {
             if (error.status === 404 || error.status === 403) {
-              return EMPTY
+              return EMPTY;
             }
-            this.toast.error(errorHandler(error), "Error")
-            return EMPTY
+            this.toast.error(errorHandler(error), 'Error');
+            return EMPTY;
           })
         );
       })
@@ -112,91 +129,94 @@ export class GeneralInfoEffect {
       exhaustMap(() => {
         return this.profileService.getMomoWallet().pipe(
           map((wallet) => {
-            return gotMomoWallet({wallets: wallet.data})
+            return gotMomoWallet({ wallets: wallet.data });
           }),
-          catchError((err) => {            
-            this.toast.error(errorHandler(err), 'Error')
-            return EMPTY
+          catchError((err) => {
+            this.toast.error(errorHandler(err), 'Error');
+            return EMPTY;
           })
-        )
+        );
       })
-    )
-  })
+    );
+  });
   getCreditCards$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getCards),
       exhaustMap(() => {
         return this.profileService.getCreditCards().pipe(
           map((cards) => {
-            return gotCards({creditCards: cards.data})
+            return gotCards({ creditCards: cards.data });
           }),
-          catchError((err) => {            
-            this.toast.error(errorHandler(err), 'Error')
-            return EMPTY
+          catchError((err) => {
+            this.toast.error(errorHandler(err), 'Error');
+            return EMPTY;
           })
-        )
+        );
       })
-    )
-  })
+    );
+  });
   addMomoWallet$ = createEffect(() => {
     return this.action$.pipe(
       ofType(addMomoWallet),
       exhaustMap((wallet) => {
         return this.profileService.addMomoWallet(wallet).pipe(
           map(() => {
-            this.toast.success('Added wallet successfully', 'Success')
-            return getMomoWallet()
+            this.toast.success('Added wallet successfully', 'Success');
+            return getMomoWallet();
           }),
           catchError((err) => {
-            this.toast.error(errorHandler(err), 'Error')
-            return EMPTY
+            this.toast.error(errorHandler(err), 'Error');
+            return EMPTY;
           })
-        )
+        );
       })
-    )
-  })
+    );
+  });
   addCreditCard$ = createEffect(() => {
     return this.action$.pipe(
       ofType(addCard),
       exhaustMap((card) => {
         return this.profileService.addCreditCard(card).pipe(
           map(() => {
-            this.toast.success('Added credit card successfully', 'Success')
-            return getCards()
+            this.toast.success('Added credit card successfully', 'Success');
+            return getCards();
           }),
           catchError((err) => {
-            this.toast.error(errorHandler(err), 'Error')
-            return EMPTY
+            this.toast.error(errorHandler(err), 'Error');
+            return EMPTY;
           })
-        )
+        );
       })
-    )
-  })
+    );
+  });
   deleteMomoWallet$ = createEffect(() => {
     return this.action$.pipe(
       ofType(deletePaymentInfo),
       exhaustMap(({ id, isWallet }) => {
         return this.profileService.deleteWallet(id).pipe(
           map(() => {
-            this.toast.success(`Deleted ${ isWallet ? 'wallet' : 'card' } successfully`, 'Success')
+            this.toast.success(
+              `Deleted ${isWallet ? 'wallet' : 'card'} successfully`,
+              'Success'
+            );
             if (isWallet) {
-              return getMomoWallet()
+              return getMomoWallet();
             }
-            return getCards()
+            return getCards();
           }),
           catchError((err) => {
-            this.toast.error(errorHandler(err), 'Error')
-            return EMPTY
+            this.toast.error(errorHandler(err), 'Error');
+            return EMPTY;
           })
-        )
+        );
       })
-    )
-  })
-
+    );
+  });
 
   constructor(
     private action$: Actions,
     private profileService: ProfileService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private ngxService: NgxUiLoaderService
   ) {}
 }

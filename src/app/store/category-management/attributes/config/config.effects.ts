@@ -19,7 +19,7 @@ import {
   setLoadingSpinner,
 } from '../../../loader/actions/loader.actions';
 import { Router } from '@angular/router';
-import { CategoryAndConfig } from '../../../../types';
+import { AllCategories, CategoryAndConfig } from '../../../../types';
 import { errorHandler } from '../../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
@@ -33,24 +33,13 @@ export class ConfigEffect {
       switchMap((props) => {
         return this.adminService.createCategoryConfig(props).pipe(
           map(() => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                isError: false,
-                message: 'Created new category',
-                status: false,
-              })
-            );
+            this.toast.success("Category created successfully", "Success")
             this.router.navigateByUrl('/admin/categories');
             return resetLoader({ isError: false, message: '', status: false });
           }),
           catchError((err) => {
-            return of(
-              setLoadingSpinner({
-                isError: true,
-                message: errorHandler(err),
-                status: false,
-              })
-            );
+            this.toast.error(errorHandler(err), "Error")
+            return EMPTY
           })
         );
       })
@@ -60,10 +49,10 @@ export class ConfigEffect {
   getCategoriesAndConfig$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getCategoriesAndConfig),
-      exhaustMap(() => {
-        return this.adminService.getCategoriesAndConfig().pipe(
-          map((categories: CategoryAndConfig[]) => {
-            return gotCategoryAndConfig({ categories });
+      exhaustMap(({page}) => {
+        return this.adminService.getCategoriesAndConfig(page).pipe(
+          map((categories: AllCategories) => {
+            return gotCategoryAndConfig(categories);
           }),
           catchError((err) => {
             return of(
@@ -115,7 +104,7 @@ export class ConfigEffect {
         return this.adminService.deleteCategories(props.deleteList).pipe(
           map(() => {
             this.store.dispatch(getNotifications())
-            return getCategoriesAndConfig();
+            return getCategoriesAndConfig({ page: 0});
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), "Error")

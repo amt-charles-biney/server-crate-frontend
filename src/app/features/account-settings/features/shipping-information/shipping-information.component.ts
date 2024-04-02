@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { zipCodeValidator } from '../../../../core/utils/validators';
 import { AddressComponent } from '../../../../shared/components/address/address.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-shipping-information',
@@ -25,11 +26,15 @@ export class ShippingInformationComponent implements OnInit {
   intl!: any;
   showWarning: string = '';
 
-  constructor(private store: Store, private destroyRef: DestroyRef) {
+  constructor(private store: Store, private destroyRef: DestroyRef, private authService: AuthService) {
     
   }
   ngOnInit(): void {
-    this.store.dispatch(getShippingDetails())
+    if (this.authService.getToken()) {
+      console.log('Token', this.authService.getToken());
+      
+      this.store.dispatch(getShippingDetails())
+    }
     this.shippingForm = new FormGroup({
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
@@ -83,7 +88,7 @@ export class ShippingInformationComponent implements OnInit {
       return;
     }
     this.shippingForm.patchValue({ contact: contactValue.phoneNumber, address2: this.shippingForm.value.address2 || null })    
-    this.store.dispatch(saveShippingDetails({ ...this.shippingForm.value, contact: contactValue}))
+    this.store.dispatch(saveShippingDetails({ shippingPayload: { ...this.shippingForm.value, contact: contactValue}, isProfile: true}))
   }
 
   getAddress(address: Address) {

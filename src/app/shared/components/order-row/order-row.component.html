@@ -1,5 +1,5 @@
 <div class="flex items-center text-sidebar-text text-sm border-b h-[44px] font-[400]">
-    <!-- @if (isAdmin) {
+    @if (isAdmin) {
         <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[5%] ml-3">
         
             <app-custom-check-box
@@ -9,7 +9,7 @@
             [value]="order.orderId"
           />
         </td>
-    } -->
+    }
     <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start">
         <div class="flex items-center gap-3">
             <div class="w-[33px] h-5">
@@ -36,7 +36,7 @@
             <button
               mat-menu-item
               [disableRipple]="true"
-              [routerLink]="order.id"
+              [routerLink]="isAdmin ? order.id : '/settings/orders/' + order.id"
               type="button"
               class="flex items-center px-[12px] w-[111px] bg-attr-button"
             >

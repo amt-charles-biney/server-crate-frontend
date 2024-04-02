@@ -39,11 +39,18 @@ import { PaymentDetailsComponent } from '../account-settings/features/payment-de
 import { zipCodeValidator } from '../../core/utils/validators';
 import {
   sendingPaymentRequest,
+  validationFailure,
   verifyPayment,
 } from '../../store/checkout/checkout.actions';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { selectStatus, selectVerificationState } from '../../store/checkout/checkout.reducers';
-import { getShippingDetails } from '../../store/account-settings/general-info/general-info.actions';
+import {
+  selectAddressValidationState,
+  selectVerificationState,
+} from '../../store/checkout/checkout.reducers';
+import {
+  getShippingDetails,
+  saveShippingDetails,
+} from '../../store/account-settings/general-info/general-info.actions';
 import { selectShippingDetailsState } from '../../store/account-settings/general-info/general-info.reducers';
 import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
 import { LoaderComponent } from '../../core/components/loader/loader.component';
@@ -51,6 +58,7 @@ import { ErrorComponent } from '../../shared/components/error/error.component';
 import { getCartItems } from '../../store/cart/cart.actions';
 import { AddressComponent } from '../../shared/components/address/address.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-checkout',
@@ -70,7 +78,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     LoaderComponent,
     ErrorComponent,
     AddressComponent,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './checkout.component.html',
 })
@@ -92,28 +100,37 @@ export class CheckoutComponent implements OnInit {
     state: ['', Validators.required],
     city: ['', Validators.required],
     zipCode: ['', [Validators.required, zipCodeValidator()]],
-    contact: {},
+    contact: {
+      country: '',
+      dialCode: '',
+      iso2Code: '',
+      phoneNumber: '',
+    },
   });
   shippingInfoForm$!: Observable<ShippingPayload>;
 
   private cartItems$ = new BehaviorSubject<CartProductItem[]>([]);
   cartItems = this.cartItems$.asObservable();
   verification$!: Observable<PaymentVerification>;
-  verification!: PaymentVerification
+  verification!: PaymentVerification;
   amountToPay!: number;
   isVerified = false;
   stepIndex!: number;
   loadingStatus!: Observable<LoadingStatus>;
-  loaderText: string = 'Redirecting to PayStack...';
+  addressVerified: boolean = false
+  loaderText!: string ;
   constructor(
     private _formBuilder: FormBuilder,
     private store: Store,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
+    private authService: AuthService
   ) {}
   ngOnInit(): void {
-    this.store.dispatch(getShippingDetails());
+    if (this.authService.getToken()) {
+      this.store.dispatch(getShippingDetails());
+    }
     this.cartItems = this.store.select(selectConfiguredProducts);
 
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -140,13 +157,19 @@ export class CheckoutComponent implements OnInit {
         this.intl?.setNumber(shippingDetails.contact?.phoneNumber);
       })
     );
-    this.loadingStatus = this.store.select(selectLoaderState);
-    this.contact.valueChanges.pipe(
-      tap(() => {
-        this.showWarning = ''
-      }),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe()
+    this.loadingStatus = this.store.select(selectLoaderState).pipe(
+      tap((value) => {
+       console.log("Loader", value) 
+      })
+    )
+    this.contact.valueChanges
+      .pipe(
+        tap(() => {
+          this.showWarning = '';
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
   }
   ngAfterViewInit(): void {
     if (this.telInput) {
@@ -180,7 +203,6 @@ export class CheckoutComponent implements OnInit {
       this.showWarning = 'Please enter a valid phone number';
       return;
     }
-    this.cdkStepper.next();
   }
 
   paymentDetails() {
@@ -188,7 +210,7 @@ export class CheckoutComponent implements OnInit {
     if (this.paymentDetailsComponent.currentIndex === 2) {
       const paymentRequest: PaymentRequest = {
         amount: this.paymentDetailsComponent.payStack.amount!,
-        channels:['card', 'mobile_money'],
+        channels: ['card', 'mobile_money'],
         email: this.shippingForm.value.email!,
         reference: Date.now().toString(),
         currency: 'GHS',
@@ -226,7 +248,12 @@ export class CheckoutComponent implements OnInit {
       state: '',
       city: '',
       zipCode: '',
-      contact: {},
+      contact: {
+        country: '',
+        dialCode: '',
+        iso2Code: '',
+        phoneNumber: '',
+      },
     });
     this.intl.setNumber('');
     this.intl.setCountry('us');
@@ -235,8 +262,57 @@ export class CheckoutComponent implements OnInit {
     const selectedIndex = this.cdkStepper.selectedIndex;
     if (selectedIndex === 0) {
       this.userDetails();
+      this.loaderText = "Verifying user address"
+      console.log('Shipping details', this.shippingForm.value);
+      const {
+        address1,
+        address2,
+        city,
+        contact,
+        country,
+        email,
+        firstName,
+        lastName,
+        state,
+        zipCode,
+      } = this.shippingForm.value;
+      if (contact) {
+        const contactValue: Contact = {
+          country: contact.country,
+          dialCode: contact.dialCode,
+          iso2Code: contact.iso2Code,
+          phoneNumber: this.intl?.getNumber(),
+        };
+        this.store.dispatch(
+          saveShippingDetails({ shippingPayload: {
+            address1: address1!,
+            address2: address2!,
+            city: city!,
+            contact: contactValue,
+            country: country!,
+            email: email!,
+            firstName: firstName!,
+            lastName: lastName!,
+            state: state!,
+            zipCode: zipCode!,
+          }, isProfile: false })
+        );
+      }
+      this.store.select(selectAddressValidationState).pipe(
+        tap((isVerified) => {
+          console.log('isVerified', isVerified);
+          this.addressVerified = isVerified
+          if (this.addressVerified) {
+            this.cdkStepper.next();
+            this.store.dispatch(validationFailure())
+          }
+          this.addressVerified = false
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe()
     } else if (selectedIndex === 1) {
       this.paymentDetails();
+      this.loaderText = 'Redirecting to PayStack...'
     }
   }
   previous() {

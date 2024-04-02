@@ -297,6 +297,12 @@ export type CategoryAndConfig = {
   config: Config;
   productCount: number;
 };
+export type AllCategories = {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: CategoryAndConfig[];
+}
 
 export type Config = {
   [key: string]: ConfigOptions[];

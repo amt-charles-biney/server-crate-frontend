@@ -23,6 +23,7 @@ import {
   Customers,
   Dashboard,
   ChartData,
+  AllCategories,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -84,8 +85,10 @@ export class AdminService {
     return this.http.put(`${this.baseUrl}/admin/featured/${id}`, {});
   }
 
-  getAttributes() {
-    return this.http.get<GetAttribute>(`${this.baseUrl}/admin/attributes`);
+  getAttributes(page: number) {
+    const query = JSON.parse(sessionStorage.getItem("search") || '')
+    const params = { page, q: query || '', size: 9}
+    return this.http.get<GetAttribute>(`${this.baseUrl}/admin/attributes`, { params });
   }
 
   uploadImage(params: FormData) {
@@ -122,8 +125,10 @@ export class AdminService {
     return this.http.post(`${this.baseUrl}/admin/category/config`, categoryConfig)
   }
 
-  getCategoriesAndConfig() {
-    return this.http.get<CategoryAndConfig[]>(`${this.baseUrl}/admin/category/config`)
+  getCategoriesAndConfig(page: number) {
+    const query = JSON.parse(sessionStorage.getItem("search") || '')
+    const params = { page, q: query || '', size: 9}
+    return this.http.get<AllCategories>(`${this.baseUrl}/admin/category/config`, { params })
   }
 
   getSingleCategory(id: string) {
@@ -160,10 +165,16 @@ export class AdminService {
     return this.http.delete(`${this.baseUrl}/admin/cases/${id}`)
   }
 
-  getAdminOrders(params?: Record<string, string>) {
-    return this.http.get<AllOrders>(`${this.baseUrl}/admin/orders`, { params })
+  getAdminOrders(params?: Record<string, string | number>) {
+    const query = JSON.parse(sessionStorage.getItem("search") || '')
+    let newParams
+    if (params) {
+     newParams = { q: query || '', size: 9, page:0, ...params}
+    }
+
+    return this.http.get<AllOrders>(`${this.baseUrl}/admin/orders`, { params: newParams })
   }
-  getUserOrders(params?: Record<string, string>) {
+  getUserOrders(params?: Record<string, string | number>) {
     return this.http.get<AllOrders>(`${this.baseUrl}/orders`, { params })
   }
 

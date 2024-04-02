@@ -11,7 +11,7 @@ export const addAttribute = createAction('[attribute] sending attribute to serve
 
 export const updateAttributesInStore = createAction('[attribute] update attribute in store', props<{ attributes: StoreVariant[]}>())
 
-export const getAttributes = createAction('[attribute] get attributes')
+export const getAttributes = createAction('[attribute] get attributes', props<{page: number}>())
 export const gotAttributes = createAction('[attribute] got attributes', props<{attributes: Attribute[]}>())
 
 export const deleteAttributeOption = createAction('[attribute] delete attribute option', props<{optionId: string, attributeId: string }>())

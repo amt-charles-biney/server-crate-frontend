@@ -24,9 +24,7 @@
           <p class="text-sm mb-4 font-bold text-[#595959] tracking-wide">
             Main Menu
           </p>
-          <nav            
-            class="flex flex-col gap-2"
-          >
+          <nav class="flex flex-col gap-2">
             <a
               routerLink="/admin/dashboard"
               [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
@@ -309,13 +307,13 @@
 
             <section class="mt-8 mb-4">
               <p class="text-sm font-dm-sans text-[#595959]">General</p>
-              <a
-                class="cursor-pointer"
-              >
+              <a class="cursor-pointer">
                 <div
                   class="flex items-center gap-3 p-4"
                   routerLink="/admin/settings/general"
-                  [routerLinkActive]="'bg-active-link text-figma-green rounded-xl'"
+                  [routerLinkActive]="
+                    'bg-active-link text-figma-green rounded-xl'
+                  "
                 >
                   <svg
                     width="24"
@@ -365,9 +363,18 @@
           [ngClass]="showSearchBar ? '' : 'justify-between '"
           class="flex border-b pl-6 pr-[26px] w-full h-[111px] items-center bg-[#fdfdfd]"
         >
-          <h2 class="font-bold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis">{{ activeLink }}</h2>
+          <h2
+            class="font-bold tracking-wide whitespace-nowrap overflow-hidden text-ellipsis"
+          >
+            {{ activeLink }}
+          </h2>
           @if (showSearchBar) {
-          <input [formControl]="searchInput" class="outline outline-2 rounded outline-figma-green mx-4 py-1 pl-2 h-fit ml-auto w-1/2" type="text" />
+          <input
+            [formControl]="searchInput"
+            class="outline outline-2 rounded outline-figma-green mx-4 py-1 pl-2 h-fit ml-auto w-72"
+            type="text"
+            autofocus
+          />
           }
 
           <div class="flex justify-end gap-12 py-6 w-[169px]">
@@ -386,6 +393,8 @@
                   />
                 </svg> -->
             <div class="flex items-center gap-9">
+              @if (activeLink !== "Dashboard" && activeLink !== "Settings") {
+
               <button
                 class="hover:bg-gray-200 p-1.5"
                 (click)="showSearchBar = !showSearchBar"
@@ -422,6 +431,7 @@
                 </svg>
                 }
               </button>
+              }
 
               <button
                 [matBadge]="numberOfNotifications$ | async"

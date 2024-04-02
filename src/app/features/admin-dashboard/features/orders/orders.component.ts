@@ -46,7 +46,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   filter: FormControl = new FormControl<keyof typeof ShippingStatus>('All');
   navigateTo!: string
   page: number = 1;
-
+  localParams = { page: 0, size: 9}
   isAdmin!: boolean
 
   constructor(
@@ -76,16 +76,19 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     );
 
     this.activatedRoute.queryParams.subscribe((params) => {
+      console.log('Params', params);
+      
+      this.localParams = { ...this.localParams, ...params }
       if (params['status']) {
         this.filter.patchValue(params['status'])
       }
      
       if (this.isAdmin) {
-        this.store.dispatch(getAdminOrders({ params }))
+        this.store.dispatch(getAdminOrders({ params: this.localParams }))
         console.log('Admin');
         
       } else {
-        this.store.dispatch(getUserOrders({ params }))
+        this.store.dispatch(getUserOrders({ params: this.localParams }))
         console.log('User');
       }
     });
@@ -99,6 +102,14 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
   getPage(pageNumber: number) {
     this.page = pageNumber;
+    if (this.isAdmin) {
+      this.store.dispatch(getAdminOrders({ params: {...this.localParams, page: this.page - 1} }))
+      console.log('Admin');
+      
+    } else {
+      this.store.dispatch(getUserOrders({ params: {...this.localParams, page: this.page - 1} }))
+      console.log('User');
+    }
     document.body.scrollTo({ top: 0, behavior: 'smooth' });
   }
 

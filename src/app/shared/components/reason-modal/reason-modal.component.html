@@ -1,0 +1,21 @@
+<form [formGroup]="reasonForm" class="flex flex-col px-6 pb-4">
+  <app-custom-input
+    id="reason"
+    label="Reason"
+    type="textarea"
+    placeholder="Please enter a reason for cancelling this order"
+    formControlName="reason"
+  />
+  <div class="flex gap-2 self-end">
+      <button
+        class="bg-red-color px-2 py-0.5 text-white font-semibold font-inter rounded-sm"
+      >
+        Cancel
+      </button>
+    <button
+      class="bg-figma-green px-2 py-0.5 text-white font-semibold font-inter rounded-sm"
+    >
+      Submit
+    </button>
+  </div>
+</form>

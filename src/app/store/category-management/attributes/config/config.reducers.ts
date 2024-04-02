@@ -1,15 +1,25 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { CategoryAndConfig, EditConfigResponse } from "../../../../types";
+import { AllCategories, CategoryAndConfig, EditConfigResponse } from "../../../../types";
 import { gotCategoryAndConfig, gotCoverImage, gotSingleCategory, resetEditState, resetImage } from "./config.actions";
 
-const initialState: CategoryAndConfig[] = []
+const initialState: AllCategories = {
+    content: [],
+    size: 0,
+    totalElements: 0,
+    totalPages: 0
+}
 
 export const configFeature = createFeature({
     name: 'categoryAndConfig',
     reducer: createReducer(
         initialState,
-        on(gotCategoryAndConfig, (state, { categories }) => {
-            return categories
+        on(gotCategoryAndConfig, (_, { content, size, totalElements, totalPages }) => {
+            return {
+                content,
+                size,
+                totalElements,
+                totalPages
+            }
         })
     )
 })
@@ -57,6 +67,6 @@ export const categoryImageFeature = createFeature({
         })
     )
 })
-export const { selectCategoryAndConfigState } = configFeature;
+export const { selectContent, selectTotalElements, selectCategoryAndConfigState } = configFeature;
 export const { selectConfig, selectName, selectId, selectEditConfigState } = editConfigFeature;
 export const { selectCategoryImageState } = categoryImageFeature

@@ -1,7 +1,7 @@
 import { verificationFailure } from './../signup/actions/signup.actions';
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { PaymentData, PaymentVerification,  } from "../../types";
-import { gotPaymentResponse, gotPaymentVerification } from "./checkout.actions";
+import { gotPaymentResponse, gotPaymentVerification, validationFailure, validationSuccess } from "./checkout.actions";
 
 const checkoutInitialState: PaymentData = {
     access_code: '',
@@ -45,4 +45,20 @@ export const verificationFeature = createFeature({
     )
 })
 
+const addressValidation = false
+
+export const addressValidationFeature = createFeature({
+    name: 'addressValidation',
+    reducer: createReducer(
+        addressValidation,
+        on(validationSuccess, () => {
+            return true
+        } ),
+        on(validationFailure, () => {
+            return false
+        }),
+    )
+})
+
 export const { selectStatus, selectVerificationState } = verificationFeature
+export const { selectAddressValidationState } = addressValidationFeature

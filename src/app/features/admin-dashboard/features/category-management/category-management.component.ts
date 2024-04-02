@@ -4,9 +4,9 @@ import { CustomCheckBoxComponent } from '../../../../shared/components/custom-ch
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { getCategoriesAndConfig } from '../../../../store/category-management/attributes/config/config.actions';
-import { BehaviorSubject, tap } from 'rxjs';
-import { CategoryAndConfig } from '../../../../types';
-import { selectCategoryAndConfigState } from '../../../../store/category-management/attributes/config/config.reducers';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { AllCategories, CategoryAndConfig } from '../../../../types';
+import { selectCategoryAndConfigState, selectContent, selectTotalElements } from '../../../../store/category-management/attributes/config/config.reducers';
 import { CommonModule } from '@angular/common';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { MatMenuModule } from '@angular/material/menu';
@@ -38,13 +38,14 @@ import { NgxPaginationModule } from 'ngx-pagination';
 export class CategoryManagementComponent implements OnInit, AfterViewInit {
   selectForm!: FormGroup;
   @ViewChild(CustomCheckBoxComponent) check!: CustomCheckBoxComponent;
-  private categoriesAndConfig$ = new BehaviorSubject<CategoryAndConfig[]>([]);
+  private categoriesAndConfig$ = new Subject<AllCategories>();
   categoriesAndConfig = this.categoriesAndConfig$.asObservable();
   categoriesTodelete: Set<string> = new Set();
   localAttributes!: CategoryAndConfig[];
   indeterminateCheckbox!: HTMLInputElement;
   page: number = 1;
   toggleCheckbox = false;
+  total!: Observable<number>
 
   constructor(
     private store: Store,
@@ -52,13 +53,13 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog
   ) {}
   ngOnInit(): void {
-    this.store.dispatch(getCategoriesAndConfig());
+    this.store.dispatch(getCategoriesAndConfig({ page: 0}));
     this.categoriesAndConfig = this.store
       .select(selectCategoryAndConfigState)
       .pipe(
         tap((attrs) => {
-          this.selectForm = this.inputService.toSelectFormGroup(attrs);
-          this.localAttributes = attrs;
+          this.selectForm = this.inputService.toSelectFormGroup(attrs.content);
+          this.localAttributes = attrs.content;
         })
       );
   }
@@ -69,6 +70,16 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
 
   getPage(pageNumber: number) {
     this.page = pageNumber;
+    this.store.dispatch(getCategoriesAndConfig({ page: this.page - 1}));
+    this.categoriesAndConfig = this.store
+    .select(selectCategoryAndConfigState)
+    .pipe(
+      tap((attrs) => {
+        this.selectForm = this.inputService.toSelectFormGroup(attrs.content);
+        this.localAttributes = attrs.content;
+      })
+    );
+    this.total = this.store.select(selectTotalElements)
     document.body.scrollTo({ top: 0, behavior: 'smooth'})
   }
   removeCheck() {
