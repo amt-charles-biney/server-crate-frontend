@@ -66,6 +66,7 @@ export class AdminDashboardComponent implements OnInit {
       if (event instanceof NavigationEnd) {                
         this.activeLink = this.setTitle(this.router.url);
         this.searchInput.setValue("")
+        this.showSearchBar = false
       }
     });
 
