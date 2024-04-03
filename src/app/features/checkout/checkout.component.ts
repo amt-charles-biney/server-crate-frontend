@@ -100,12 +100,7 @@ export class CheckoutComponent implements OnInit {
     state: ['', Validators.required],
     city: ['', Validators.required],
     zipCode: ['', [Validators.required, zipCodeValidator()]],
-    contact: {
-      country: '',
-      dialCode: '',
-      iso2Code: '',
-      phoneNumber: '',
-    },
+    contact: '',
   });
   shippingInfoForm$!: Observable<ShippingPayload>;
 
@@ -153,15 +148,11 @@ export class CheckoutComponent implements OnInit {
 
     this.shippingInfoForm$ = this.store.select(selectShippingDetailsState).pipe(
       tap((shippingDetails) => {
-        this.shippingForm.patchValue({ ...shippingDetails });
+        this.shippingForm.patchValue({ ...shippingDetails, contact: shippingDetails.contact?.phoneNumber });
         this.intl?.setNumber(shippingDetails.contact?.phoneNumber);
       })
     );
-    this.loadingStatus = this.store.select(selectLoaderState).pipe(
-      tap((value) => {
-       console.log("Loader", value) 
-      })
-    )
+    this.loadingStatus = this.store.select(selectLoaderState)
     this.contact.valueChanges
       .pipe(
         tap(() => {
@@ -174,7 +165,6 @@ export class CheckoutComponent implements OnInit {
   ngAfterViewInit(): void {
     if (this.telInput) {
       this.intl = (<any>window).intlTelInput(this.telInput.nativeElement, {
-        nationalMode: true,
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
       });
@@ -189,20 +179,60 @@ export class CheckoutComponent implements OnInit {
   }
 
   userDetails() {
-    const contact = this.intl?.getSelectedCountryData();
+    const localContact = this.intl?.getSelectedCountryData();
     const contactValue: Contact = {
-      country: contact.name,
-      dialCode: contact.dialCode,
-      iso2Code: contact.iso2,
+      country: localContact.name,
+      dialCode: localContact.dialCode,
+      iso2Code: localContact.iso2,
       phoneNumber: this.intl?.getNumber(),
     };
 
-    this.shippingForm.patchValue({ contact: contactValue });
+    this.shippingForm.patchValue({ contact: contactValue.phoneNumber });
     this.shippingForm.markAllAsTouched();
     if (!this.intl.isValidNumber()) {
       this.showWarning = 'Please enter a valid phone number';
       return;
     }
+    this.loaderText = "Verifying user address"
+      const {
+        address1,
+        address2,
+        city,
+        contact,
+        country,
+        email,
+        firstName,
+        lastName,
+        state,
+        zipCode,
+      } = this.shippingForm.value;
+      if (contact) {
+        this.store.dispatch(
+          saveShippingDetails({ shippingPayload: {
+            address1: address1!,
+            address2: address2 || null,
+            city: city!,
+            contact: contactValue,
+            country: country!,
+            email: email!,
+            firstName: firstName!,
+            lastName: lastName!,
+            state: state!,
+            zipCode: zipCode!,
+          }, isProfile: false })
+        );
+      }
+      this.store.select(selectAddressValidationState).pipe(
+        tap((isVerified) => {
+          this.addressVerified = isVerified
+          if (this.addressVerified) {
+            this.cdkStepper.next();
+            this.store.dispatch(validationFailure())
+          }
+          this.addressVerified = false
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe()
   }
 
   paymentDetails() {
@@ -248,12 +278,7 @@ export class CheckoutComponent implements OnInit {
       state: '',
       city: '',
       zipCode: '',
-      contact: {
-        country: '',
-        dialCode: '',
-        iso2Code: '',
-        phoneNumber: '',
-      },
+      contact: '',
     });
     this.intl.setNumber('');
     this.intl.setCountry('us');
@@ -262,54 +287,6 @@ export class CheckoutComponent implements OnInit {
     const selectedIndex = this.cdkStepper.selectedIndex;
     if (selectedIndex === 0) {
       this.userDetails();
-      this.loaderText = "Verifying user address"
-      console.log('Shipping details', this.shippingForm.value);
-      const {
-        address1,
-        address2,
-        city,
-        contact,
-        country,
-        email,
-        firstName,
-        lastName,
-        state,
-        zipCode,
-      } = this.shippingForm.value;
-      if (contact) {
-        const contactValue: Contact = {
-          country: contact.country,
-          dialCode: contact.dialCode,
-          iso2Code: contact.iso2Code,
-          phoneNumber: this.intl?.getNumber(),
-        };
-        this.store.dispatch(
-          saveShippingDetails({ shippingPayload: {
-            address1: address1!,
-            address2: address2!,
-            city: city!,
-            contact: contactValue,
-            country: country!,
-            email: email!,
-            firstName: firstName!,
-            lastName: lastName!,
-            state: state!,
-            zipCode: zipCode!,
-          }, isProfile: false })
-        );
-      }
-      this.store.select(selectAddressValidationState).pipe(
-        tap((isVerified) => {
-          console.log('isVerified', isVerified);
-          this.addressVerified = isVerified
-          if (this.addressVerified) {
-            this.cdkStepper.next();
-            this.store.dispatch(validationFailure())
-          }
-          this.addressVerified = false
-        }),
-        takeUntilDestroyed(this.destroyRef)
-      ).subscribe()
     } else if (selectedIndex === 1) {
       this.paymentDetails();
       this.loaderText = 'Redirecting to PayStack...'

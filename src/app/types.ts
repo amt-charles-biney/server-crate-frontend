@@ -197,6 +197,7 @@ export type ProductItem = {
   stockStatus: string;
   totalLeastStock: Attribute[];
   isWishListItem?: boolean;
+  productAvailability: boolean;
 };
 
 export type ProductResponse = {
@@ -539,7 +540,7 @@ export type ShippingPayload = {
   firstName: string;
   lastName: string;
   address1: string;
-  address2: string;
+  address2: string | null;
   country: string;
   state: string;
   city: string;
@@ -654,7 +655,8 @@ export type ProductItemSubset = {
   productCaseName?: string;
   configurationUrl?: string;
   isWishListItem?: boolean;
-  totalPrice?: number
+  totalPrice?: number;
+  productAvailability: boolean;
 };
 export type WishlistItemSubset = {
   id: string;
@@ -756,3 +758,9 @@ export type ChartData = {
   dayOfWeeks: string[];
   revenue: number[];
 };
+
+export type CancelShipment = {
+  status: string;
+  reason: string;
+  id: string
+}

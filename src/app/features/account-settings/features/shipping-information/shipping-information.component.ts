@@ -30,9 +30,7 @@ export class ShippingInformationComponent implements OnInit {
     
   }
   ngOnInit(): void {
-    if (this.authService.getToken()) {
-      console.log('Token', this.authService.getToken());
-      
+    if (this.authService.getToken()) {      
       this.store.dispatch(getShippingDetails())
     }
     this.shippingForm = new FormGroup({
@@ -66,7 +64,6 @@ export class ShippingInformationComponent implements OnInit {
   ngAfterViewInit(): void {
     if (this.telInput) {
       this.intl = (<any>window).intlTelInput(this.telInput.nativeElement, {
-        nationalMode: true,
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
       });

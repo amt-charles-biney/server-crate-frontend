@@ -24,6 +24,7 @@ import {
   Dashboard,
   ChartData,
   AllCategories,
+  CancelShipment,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -202,6 +203,14 @@ export class AdminService {
 
   getChartData(params?: Record<string, string>) {
     return this.http.get<ChartData>(`${this.baseUrl}/admin/dashboard/revenue`, { params })
+  }
+
+  createShipment(id: string) {
+    return this.http.post(`${this.baseUrl}/admin/shipment`, { id })
+  }
+
+  cancelShipment({ id, reason, status}: CancelShipment) {
+    return this.http.patch(`${this.baseUrl}/admin/orders/${id}`, { reason, status })
   }
 
 }

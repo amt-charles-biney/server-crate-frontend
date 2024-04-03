@@ -39,7 +39,9 @@ export const route: Routes = [
                 loadChildren: () => import('../landing/landing.routes').then(m => m.route),
                 providers: [
                     provideState(FeaturedProductFeature),
+                    provideState(productConfigFeature),
                     provideEffects(FeaturedProductEffect),
+                    provideEffects(ProductSpecEffects),
                 ]
             },
             {

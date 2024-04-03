@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { AllOrders, Content } from "../../types";
+import { AllOrders, CancelShipment, Content } from "../../types";
 
 export const getAdminOrders = createAction('[orders] get admin orders', props<{params?: Record<string, string | number>}>())
 export const gotAdminOrders = createAction('[orders] got admin orders', props<AllOrders>())
@@ -14,3 +14,5 @@ export const gotOrder = createAction('[orders] got order', props<Content>())
 
 
 export const resetOrderDetail = createAction('[orders] reset order detail')
+export const createShipment = createAction('[orders] create shipment', props<{ id: string }>())
+export const cancelShipment = createAction('[orders] cancel shipment', props<CancelShipment>())

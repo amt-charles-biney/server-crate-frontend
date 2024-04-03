@@ -19,9 +19,12 @@ export class CustomStepperComponent extends CdkStepper implements OnChanges{
   @Input() completed!: boolean;
   @Input() price!: number
   @Input() status!: string
+  @Input() isAdmin!: boolean
+  @Input() customClass!: string
+
+  isCanceled: boolean = false
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('Changes', changes);
     if (changes['status']) {
       this.changeStepBasedOnStatus(changes['status'].currentValue)
     }
@@ -32,20 +35,31 @@ export class CustomStepperComponent extends CdkStepper implements OnChanges{
   }
 
   changeStepBasedOnStatus(status: string) {
-    console.log(status);
-    
     switch (status) {
-      case 'Pending': 
+      case 'Order Confirmed': 
         this.selectedIndex = 0;
         break;
-      case 'Shipped': 
+      case 'Assembling': 
         this.selectedIndex = 1;
         break;
-      case 'Out For Delivery':
+      case 'Pending':
         this.selectedIndex = 2;
         break;
-      case 'Delivered': 
+      case 'Cancelled':
+        this.selectedIndex = 2;
+        break;
+      case 'Shipped':
         this.selectedIndex = 3;
+        break;
+      case 'Out For Delivery': 
+        this.selectedIndex = 4;
+        break;
+      case 'Delivered':
+        if (this.isAdmin) {
+          this.selectedIndex = 5;
+        } else {
+          this.selectedIndex = 4
+        }
         break;
     }
   }

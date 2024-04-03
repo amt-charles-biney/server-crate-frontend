@@ -67,10 +67,11 @@ export class BuyNowComponent implements OnInit {
   }
 
   onOptionChange(warranty: boolean) {
-    this.warranty = warranty;
+  this.warranty = warranty;
   }
 
   addToCart(id: string) {    
     this.store.dispatch(addToCartItem({ productId: id, configOptions: { warranty: this.warranty, components: ''}  }))
+    this.closeModal()
   }
 }

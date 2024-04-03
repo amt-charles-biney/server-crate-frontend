@@ -35,32 +35,39 @@
 
           <app-custom-select
           [control]="changeStatus"
-          [options]="['Shipping', 'Cancelled']"
+          [options]="[SHIP_ORDER, CANCEL_ORDER]"
           placeholder="Change Status"
           (onSelect)="getChangeStatus($event)"
+          [isDisabled]="!!order.trackingUrl"
         />
         }
       </div>
     </section>
     <hr class="mt-[23px] mb-[29px]" />
     <section class="mt-16">
-      <app-custom-stepper [status]="order.status" #cdkStepper [completed]="false">
+      <app-custom-stepper customClass="md:w-11/12 2xl:w-4/6" [status]="orderStatus" #cdkStepper [completed]="false" [isAdmin]="isAdmin">
         <cdk-step
           [editable]="false"
           [completed]="false"
           label="Order Confirmed"
         >
         </cdk-step>
-        <cdk-step [editable]="false" [completed]="false" label="Shipped">
+        <cdk-step [editable]="false" [completed]="false" label="Assembling product">
         </cdk-step>
-        <cdk-step
-          [editable]="false"
-          [completed]="false"
-          label="Out for Delivery"
-        >
-        </cdk-step>
-        <cdk-step [editable]="false" [completed]="false" label="Delivered">
-        </cdk-step>
+        @if (isAdmin) {
+          <cdk-step
+            [editable]="false"
+            [completed]="false"
+            [label]="orderStatus"
+          >
+          </cdk-step>
+        }
+        @if (orderStatus !== CANCEL_ORDER) {
+          <cdk-step [editable]="false" [completed]="false" label="Shipping"></cdk-step>
+          <cdk-step [editable]="false" [completed]="false" label="Out For Delivery"></cdk-step>
+          <cdk-step [editable]="false" [completed]="false" label="Delivered">
+          </cdk-step>
+        }
       </app-custom-stepper>
     </section>
     <section>
@@ -90,7 +97,7 @@
       </div>
     </section>
     <hr class="mt-12 mb-6" />
-    <section class="grid grid-cols-5">
+    <section class="flex flex-wrap justify-between">
       <div class="flex flex-col gap-6 col-span-3">
         <div>
           <h4 class="font-semibold">Payment</h4>

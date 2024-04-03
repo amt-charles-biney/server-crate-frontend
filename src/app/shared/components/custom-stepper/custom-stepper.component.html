@@ -1,26 +1,28 @@
-<section class="flex justify-between mx-auto w-[436px]">
+{{ status }}
+<section [ngClass]="customClass" class="flex justify-between mx-auto ">
   @for (step of steps; track step; let i = $index) {
   <div
     [class]="'line-' + i + ' '"
     [ngClass]="{
-      'flex md:w-full items-center after:content-[\'\'] after:w-full after:h-1 after:border-b-2  after:border-1 ':
+      'flex w-full items-center after:content-[\'\'] after:w-full after:h-1 after:border-b-2  after:border-1 ':
         i !== steps.length - 1,
-      'after:border-figma-green': i < selectedIndex
+      'after:border-figma-green': i < selectedIndex,
+      'after:border-red-color': i + 2 === steps.length && step.label === 'Assembling product'
     }"
   >
     <button
       class="flex relative flex-col items-center justify-center w-[36px] h-[36px] p-4 border-2 rounded-full font-inter"
       [ngClass]="
-        selectedIndex === i
-          ? 'bg-white text-figma-green border-figma-green stepperShadow'
-          : i < selectedIndex
-          ? 'bg-figma-green text-white border-figma-green'
-          : ''
+        {
+          'bg-white text-figma-green stepperShadow': selectedIndex === i && step.label !== 'Cancelled',
+'bg-figma-green text-white border-figma-green': i < selectedIndex,
+'bg-red-color border-red-color text-white': step.label === 'Cancelled'
+        }
       "
       (click)="selectStepByIndex(i)"
     >
       <span class="absolute">{{ i + 1 }}</span>
-      <p class="absolute text-black top-9 whitespace-nowrap">{{ step.label }}</p>
+      <p [ngClass]="step.label === 'Cancelled' ? 'text-red-color' : ''" class="absolute text-sm font-inter text-black top-9 whitespace-nowrap">{{ step.label }}</p>
     </button>
   </div>
   }
