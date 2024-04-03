@@ -37,8 +37,11 @@ export class ProfileService {
     this.initials.next(user)
   }
 
-  saveShippingDetails(shippingDetails: ShippingPayload) {
-    return this.http.post(`${this.baseUrl}/profile/shipping-info`, shippingDetails)
+  saveShippingDetails(shippingDetails: ShippingPayload, isProfile = true) {
+    if (isProfile) {
+      return this.http.post(`${this.baseUrl}/profile/shipping-info`, shippingDetails)
+    }
+    return this.http.post(`${this.baseUrl}/shipping`, shippingDetails)
   }
 
   getShippingDetails() {

@@ -2,7 +2,7 @@
   <section class="flex w-full justify-between">
     <h2 class="font-bold text-2xl">Order List</h2>
     <div class="flex items-start gap-[10px]">
-      <!-- @if(isAdmin) {
+      @if(isAdmin) {
 
         <button
           *ngIf="ordersTodelete.size > 0"
@@ -26,7 +26,7 @@
   
           <p>Delete</p>
         </button>
-      } -->
+      }
       <app-custom-select
         [control]="filter"
         [options]="['All', 'Canceled', 'Delivered', 'Pending', 'Shipped', 'Out For Delivery']"
@@ -41,9 +41,9 @@
       <tr
         class="flex items-center text-table-text bg-table-bg text-xs font-[500] border-b h-[44px]"
       >
-        <!-- <th *ngIf="isAdmin" class="w-[5%] ml-3">
+        <th *ngIf="isAdmin" class="w-[5%] ml-3">
           <app-custom-check-box (changeHandler)="removeCheck()" />
-        </th> -->
+        </th>
         <th
           class="overflow-hidden whitespace-nowrap text-ellipsis text-table-text w-[20%] text-start"
         >

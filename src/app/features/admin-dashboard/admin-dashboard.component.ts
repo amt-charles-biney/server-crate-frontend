@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 import { Store } from '@ngrx/store';
 import { getAttributes } from '../../store/category-management/attributes/attributes.actions';
@@ -23,6 +23,8 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { getProducts } from '../../store/admin/products/categories.actions';
+import { getCategoriesAndConfig } from '../../store/category-management/attributes/config/config.actions';
+import { getAdminOrders } from '../../store/orders/order.actions';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -50,25 +52,33 @@ export class AdminDashboardComponent implements OnInit {
   activeLink: string = '';
   showNotifications: boolean = false;
   showSearchBar = false;
+  localParams = {}
   constructor(
     private router: Router,
     private store: Store,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
+    private activatedRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {
     this.searchInput = new FormControl('');
-    this.store.dispatch(getAttributes());
+    this.store.dispatch(getAttributes({ page: 0}));
     this.store.dispatch(getCases());
     this.store.dispatch(getNotifications());
     this.activeLink = this.setTitle(this.router.url);
+    this.activatedRoute.queryParams.subscribe((params) => {
+      console.log('Order', params);
+      this.localParams = params
+    })
     if (this.router)
-    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
-      if (event instanceof NavigationEnd) {                
-        this.activeLink = this.setTitle(this.router.url);
-        this.searchInput.setValue("")
-        this.showSearchBar = false
-      }
-    });
+      this.router.events
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+            this.activeLink = this.setTitle(this.router.url);
+            this.searchInput.setValue('');
+            this.showSearchBar = false;
+          }
+        });
 
     this.searchInput.valueChanges
       .pipe(
@@ -77,6 +87,15 @@ export class AdminDashboardComponent implements OnInit {
           sessionStorage.setItem('search', JSON.stringify(value));
           if (this.activeLink === 'Products') {
             this.store.dispatch(getProducts({ page: 0 }));
+          } else if (this.activeLink === 'Cases') {
+          } else if (this.activeLink === 'Attributes') {
+            this.store.dispatch(getAttributes({ page: 0}))
+          } else if (this.activeLink === 'Categories') {
+            this.store.dispatch(getCategoriesAndConfig({ page: 0 }));
+
+          } else if (this.activeLink === "Orders") {
+            this.store.dispatch(getAdminOrders({ params: this.localParams }))
+
           }
         }),
         takeUntilDestroyed(this.destroyRef)
@@ -91,19 +110,19 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   /**
-   * Uses the url to extract a title 
+   * Uses the url to extract a title
    * @param url
-   * @returns 
+   * @returns
    */
   setTitle(url: string) {
     let title = '';
-    const routes = url.split('admin/');    
-    const possibleTitle = routes[routes.length - 1]
-    
+    const routes = url.split('admin/');
+    const possibleTitle = routes[routes.length - 1];
+
     if (possibleTitle.includes('/')) {
       title = possibleTitle.split('/')[0];
-    } else if (possibleTitle.includes('?')){
-      title = possibleTitle.split('?')[0]
+    } else if (possibleTitle.includes('?')) {
+      title = possibleTitle.split('?')[0];
     } else {
       title = possibleTitle;
     }

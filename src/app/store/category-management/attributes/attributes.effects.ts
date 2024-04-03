@@ -22,7 +22,6 @@ import {
 } from 'rxjs';
 import { AdminService } from '../../../core/services/admin/admin.service';
 import {
-  resetLoader,
   setLoadingSpinner,
 } from '../../loader/actions/loader.actions';
 import { GetAttribute } from '../../../types';
@@ -31,6 +30,7 @@ import { errorHandler } from '../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
 import { getNotifications } from '../../admin/products/notifications.actions';
+import { getProducts } from '../../admin/products/categories.actions';
 
 @Injectable()
 export class AttributeEffect {
@@ -77,16 +77,9 @@ export class AttributeEffect {
   getAttributes$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getAttributes),
-      switchMap(() => {
-        return this.adminService.getAttributes().pipe(
+      switchMap(({ page }) => {
+        return this.adminService.getAttributes(page).pipe(
           map((props: GetAttribute) => {
-            this.store.dispatch(
-              setLoadingSpinner({
-                isError: false,
-                message: props.message,
-                status: false,
-              })
-            );
             return gotAttributes({ attributes: props.data });
           }),
           catchError((err) => {
@@ -107,7 +100,7 @@ export class AttributeEffect {
           .pipe(
             map(() => {
               this.store.dispatch(getNotifications())
-              return getAttributes();
+              return getAttributes({ page: 0});
             }),
             catchError((err) => {
               this.toast.error(errorHandler(err), "Error")
@@ -127,7 +120,8 @@ export class AttributeEffect {
             this.toast.success('Updated attribute successfully', 'Success', { timeOut: 1500 })
             // this.store.dispatch(getProducts({ page: 0 }))
             this.store.dispatch(getNotifications())
-            return getAttributes();
+            this.store.dispatch(getProducts({ page: 0 }))
+            return getAttributes({ page: 0 });
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), 'Error')
@@ -145,7 +139,7 @@ export class AttributeEffect {
         return this.adminService.deleteAttribute(props.attributeId).pipe(
           map(() => {
             this.store.dispatch(getNotifications())
-            return getAttributes();
+            return getAttributes({ page: 0 });
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), "Error")
@@ -162,7 +156,7 @@ export class AttributeEffect {
         return this.adminService.deleteAll(props.deleteList).pipe(
           map(() => {
             this.store.dispatch(getNotifications())
-            return getAttributes();
+            return getAttributes({ page: 0 });
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), "Error")

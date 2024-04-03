@@ -56,7 +56,7 @@
         <ng-container *ngIf="categoriesAndConfig | async as categories">
           <tr
             class=""
-            *ngFor="let category of categories | paginate: { id: 'categories', itemsPerPage: 9, currentPage: page, totalItems: categories.length}"
+            *ngFor="let category of categories.content| paginate: { id: 'categories', itemsPerPage: 9, currentPage: page, totalItems: categories.totalElements}"
           >
           <app-table-row [category]="category" [control]="$any(selectForm.controls[category.name])" (itemSelectedEmitter)="itemSelected($event.selected, $event.id)"/>
           </tr>

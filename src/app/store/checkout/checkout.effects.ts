@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { gotPaymentResponse, gotPaymentVerification, sendingPaymentRequest, verifyPayment } from "./checkout.actions";
-import { catchError, exhaustMap, finalize, map, of, tap } from "rxjs";
+import { EMPTY, catchError, exhaustMap, finalize, map, of, tap } from "rxjs";
 import { PaymentService } from "../../core/services/payment/payment.service";
 import { setLoadingSpinner } from "../loader/actions/loader.actions";
 import { errorHandler } from "../../core/utils/helpers";
@@ -19,17 +19,14 @@ export class CheckoutEffect {
                 return this.paymentService.postPayment(paymentRequest).pipe(
                     map(({data}) => {
                         window.open(data.authorization_url, '_self')
+                        this.ngxService.stop()
                         return gotPaymentResponse(data)
                     }),
                     catchError((err) => {
                         const errorMessage = errorHandler(err)
                         this.ngxService.stop()
                         this.toast.error(errorMessage, 'Error')
-                        return of(setLoadingSpinner({
-                            isError: true,
-                            message: errorHandler(err),
-                            status: false
-                        }))
+                        return EMPTY
                     }),
                 )
             })
@@ -50,11 +47,7 @@ export class CheckoutEffect {
                         const errorMessage = errorHandler(err)
                         this.toast.error(errorMessage, "Error")
                         this.router.navigate(['/checkout'], { replaceUrl: true })
-                        return of(setLoadingSpinner({
-                            isError: true,
-                            message: errorMessage,
-                            status: false
-                        }))
+                        return EMPTY
                     }),
                     finalize(() => {
                         this.ngxService.stop()

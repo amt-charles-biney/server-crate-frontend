@@ -69,4 +69,6 @@ export class UserService {
   getSingleProduct(id: string) {
     return this.http.get<SingleProductResponse>(`${this.baseUrl}/compare/${id}`)
   }
+
+  
 }

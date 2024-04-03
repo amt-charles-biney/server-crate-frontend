@@ -13,7 +13,7 @@ import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { ProductsEffect } from '../../store/admin/products/products.effects';
 import { CartComponent } from '../cart/cart.component';
 import { CheckoutEffect } from '../../store/checkout/checkout.effects';
-import { checkoutFeature, verificationFeature } from '../../store/checkout/checkout.reducers';
+import { addressValidationFeature, checkoutFeature, verificationFeature } from '../../store/checkout/checkout.reducers';
 import { paymentFeature, shippingFeature } from '../../store/account-settings/general-info/general-info.reducers';
 import { GeneralInfoEffect } from '../../store/account-settings/general-info/general-info.effects';
 import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from '../../store/product-spec/product-spec.reducer';
@@ -102,6 +102,7 @@ export const route: Routes = [
                     provideEffects(CheckoutEffect),
                     provideState(checkoutFeature),
                     provideState(verificationFeature),
+                    provideState(addressValidationFeature),
                     provideState(shippingFeature),
                     provideState(paymentFeature),
                     provideEffects(GeneralInfoEffect)
