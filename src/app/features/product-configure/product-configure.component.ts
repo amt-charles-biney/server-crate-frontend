@@ -57,7 +57,7 @@ export class ProductConfigureComponent {
   defaultSelectedValues: (Record<string, IdefaultSelectedProps>) = {}
   defaultIncludedPrices: (Record<string, IdefaultSelectedProps>) = {}
   defaultUIChangePrice: (Record<string, IdefaultSelectedProps>) = {}
-  defaultUIConstantPrice!: number;
+  defaultUIConstantPrice!: number | undefined;
 
   privateQueryParamSubscription: Subscription | undefined;
   privateConfigItemSubscription: Subscription | undefined;
@@ -271,6 +271,7 @@ export class ProductConfigureComponent {
       }
     } else {
       delete this.queryMapper[type];
+      this.defaultUIConstantPrice = undefined;
       this.updateConfigQueryParam(null);
     }
   }
@@ -282,9 +283,10 @@ export class ProductConfigureComponent {
 
 
   getPriceDifference(selectedOption: IdefaultSelectedProps): string {
-    const { id } = selectedOption
+    const { id, isIncluded } = selectedOption
+    console.log("get the price of not included ", this.defaultIncludedPrices[id])
 
-    let priceDifference = this.defaultUIChangePrice[id].price - this.defaultUIConstantPrice
+    let priceDifference = this.defaultUIConstantPrice ? this.defaultUIChangePrice[id].price - this.defaultUIConstantPrice : this.defaultUIChangePrice[id].price
 
     let sign = priceDifference > 0 ? "+" : priceDifference < 0 ? "-" : "";
     
