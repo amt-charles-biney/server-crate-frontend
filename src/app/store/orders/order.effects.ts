@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { AdminService } from "../../core/services/admin/admin.service";
-import { deleteAllAdminOrders, getAdminOrders, getOrder, getUserOrders, gotAdminOrders, gotOrder, gotUserOrders } from "./order.actions";
+import { cancelShipment, createShipment, deleteAllAdminOrders, getAdminOrders, getOrder, getUserOrders, gotAdminOrders, gotOrder, gotUserOrders } from "./order.actions";
 import { EMPTY, catchError, finalize, map, switchMap } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import { errorHandler } from "../../core/utils/helpers";
 import { NgxUiLoaderService } from "ngx-ui-loader";
+import { CancelShipment } from "../../types";
 
 @Injectable()
 export class OrderEffects {
@@ -74,6 +75,41 @@ export class OrderEffects {
                     }),
                     catchError((err) => {
                         this.toast.error(errorHandler(err), 'Error')
+                        return EMPTY
+                    })
+                )
+            })
+        )
+    })
+
+    createShipment$ = createEffect(() => {
+        return this.action$.pipe(
+            ofType(createShipment),
+            switchMap(({ id }) => {
+                return this.adminService.createShipment(id).pipe(
+                    map(() => {
+                        this.ngxService.startLoader('orderDetails')
+                        return getOrder({ id })
+                    }),
+                    catchError((err) => {
+                        this.toast.error(errorHandler(err), "Error")
+                        return EMPTY
+                    })
+                )
+            })
+        )
+    })
+    cancelShipment$ = createEffect(() => {
+        return this.action$.pipe(
+            ofType(cancelShipment),
+            switchMap((props: CancelShipment) => {
+                return this.adminService.cancelShipment(props).pipe(
+                    map(() => {
+                        this.ngxService.startLoader('orderDetails')
+                        return getOrder({ id: props.id })
+                    }),
+                    catchError((err) => {
+                        this.toast.error(errorHandler(err), "Error")
                         return EMPTY
                     })
                 )

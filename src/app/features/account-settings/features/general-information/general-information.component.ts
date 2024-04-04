@@ -114,7 +114,6 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     if (this.telInput) {
       this.intl = (<any>window).intlTelInput(this.telInput.nativeElement, {
-        nationalMode: true,
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js',
       });

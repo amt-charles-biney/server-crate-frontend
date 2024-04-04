@@ -28,7 +28,8 @@ export const productInitialState: AllProducts = {
     isFeatured: false,
     serviceCharge: 0,
     stockStatus: 'Available',
-    totalLeastStock: []
+    totalLeastStock: [],
+    productAvailability: true
   },
 };
 

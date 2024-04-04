@@ -1,4 +1,4 @@
-import { CategoryPayload, EditConfigResponse } from './../../../../types';
+import { Case, CategoryPayload, EditConfigResponse } from './../../../../types';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -59,7 +59,6 @@ import {
   getNumberOfIncompatibles,
   isCategoryEditResponse,
   putInLocalAttributes,
-  removeCloudinaryBaseUrl,
   removeFromLocalAttributes,
   removeFromPayload,
   removeVariantsFromPayload,
@@ -74,6 +73,8 @@ import { ErrorComponent } from '../../../../shared/components/error/error.compon
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
 import { CLOUD_NAME, UPLOAD_PRESET } from '../../../../core/utils/constants';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { getCases } from '../../../../store/case/case.actions';
+import { selectCases } from '../../../../store/case/case.reducers';
 
 @Component({
   selector: 'app-add-category',
@@ -98,22 +99,25 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTooltipModule,
   ],
   templateUrl: './add-category.component.html',
-  styleUrl: './add-category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddCategoryComponent implements OnInit, OnDestroy {
   private attributes$ = new BehaviorSubject<Attribute[]>([]);
+  private cases$ = new BehaviorSubject<Case[]>([]);
   private selectedAttribute$ = new BehaviorSubject<AttributeOption[]>([]);
   private categoryImage$ = new BehaviorSubject<string>('');
   categoryImage = this.categoryImage$.asObservable();
   attributes = this.attributes$.asObservable();
+  cases = this.cases$.asObservable();
   selectedAttributes = this.selectedAttribute$.asObservable();
-
+  selectedCases: Case[] = [];
   categoryConfigPayload: Map<string, CategoryConfig[]> = new Map();
-
+  caseIds: Set<string> = new Set();
   loadingStatus!: Observable<LoadingStatus>;
   categoryForm!: FormGroup;
   localAttributes: Attribute[] = [];
+  localCases: Case[] = [];
+  casesMap: Map<string, Case> = new Map();
   isOverflow = false;
   makeLeftButtonGreen = true;
   makeRightButtonGreen = false;
@@ -135,7 +139,15 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef
   ) {}
   ngOnInit(): void {
+    this.store.dispatch(getCases());
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.cases = this.store.select(selectCases).pipe(
+      tap((cases) => {
+        console.log('Get cases', cases);
+
+        this.localCases = cases;
+      })
+    );
     this.attributes = this.store.select(selectAttributesState).pipe(
       tap((attrs) => {
         this.localAttributes = attrs;
@@ -149,7 +161,10 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
             .select(selectEditConfigState)
             .pipe(
               tap((editConfig: EditConfigResponse) => {
-                const { config, name, thumbnail } = editConfig;
+                const { config, name, thumbnail, cases } = editConfig;
+                cases.forEach((c) => {
+                  this.casesMap.set(c.id, c);
+                });
                 this.coverImage = thumbnail;
                 this.incompatibleSet = generateIncompatiblesTable(config);
                 this.numOfIncompatibles = getNumberOfIncompatibles(
@@ -176,6 +191,12 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
                 });
                 this.categoryConfigPayload = getEditConfigPayload(config);
                 this.categoryForm.patchValue({ ...editFormValues });
+                console.log(
+                  'Already selected cases',
+                  this.categoryForm.value.cases,
+                  editFormValues
+                );
+                this.addSelectedCases(cases);
               }),
               takeUntilDestroyed(this.destroyRef)
             )
@@ -208,7 +229,10 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       name: this.categoryForm.value['categoryName'],
       thumbnail: this.coverImage || '',
       config: categoryConfig,
+      caseIds: Array.from(this.caseIds),
     };
+    console.log('saved case id', payload.caseIds);
+    
 
     if (this.categoryForm.invalid) {
       const controls = this.categoryForm.controls;
@@ -229,6 +253,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       );
     } else {
       this.store.dispatch(sendConfig(payload));
+      console.log('Payload', payload);
+      
     }
   }
 
@@ -263,12 +289,12 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
   addIncompatibleAttribute(
     categoryConfigPayload: Map<string, CategoryConfig[]>,
-    attribute: Attribute,
+    attributeName: string,
     incompatibleAttributeOptions: AttributeOption[]
   ) {
     this.categoryConfigPayload = removeFromPayload(
       categoryConfigPayload,
-      attribute.attributeName,
+      attributeName,
       incompatibleAttributeOptions
     );
 
@@ -289,6 +315,40 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     );
     this.incompatibleSet = incompatibleSet;
     this.localAttributes = localAttributes;
+  }
+
+  addSelectedCases(cases: Case[]) {
+    cases.forEach((c) => {
+      this.casesMap.set(c.id, c);
+    });
+    this.selectedCases = Array.from(this.casesMap.values());
+    this.selectedCases.forEach((selectedCase) => {
+      if (this.caseIds.has(selectedCase.id)) {
+        this.caseIds.delete(selectedCase.id);
+      } else {
+        this.caseIds.add(selectedCase.id);
+      }
+
+      
+
+      selectedCase.incompatibleVariants.forEach((variant) => {
+        this.addIncompatibleAttribute(
+          this.categoryConfigPayload,
+          variant.attribute.name,
+          selectedCase.incompatibleVariants
+        );
+      });
+    });
+    console.log('caseIds', this.caseIds);
+    this.categoryForm.patchValue({ cases: '' });
+  }
+
+  removeCase(caseArg: Case) {
+    console.log('Case arg', caseArg);
+    caseArg.incompatibleVariants.forEach((variant) => {
+      this.removeAttributeOption(variant, this.incompatibleSet[variant.attribute.name])
+    })
+    this.caseIds.delete(caseArg.id)
   }
 
   onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
@@ -318,6 +378,19 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     attributeOption: AttributeOption,
     options: AttributeOption[]
   ) {
+    this.selectedCases = this.selectedCases.filter((selectedCase) => {
+      const found = selectedCase.incompatibleVariants.find(
+        (variant) => variant.id === attributeOption.id
+      );
+      if (found) {        
+        this.caseIds.delete(selectedCase.id)
+        return false;
+      }
+      return true;
+    });
+    console.log('Filtered cases', this.selectedCases);
+    this.categoryForm.patchValue({ cases: this.selectedCases });
+
     const newAttributeOptions = options.filter(
       (option) => option.id !== attributeOption.id
     );
@@ -413,5 +486,9 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
   get variants() {
     return this.categoryForm.get('variants')!;
+  }
+
+  get casesInput() {
+    return this.categoryForm.get('cases')!;
   }
 }

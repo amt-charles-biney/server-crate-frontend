@@ -10,15 +10,15 @@
           />
         </td>
     }
-    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start">
+    <td class="w-[20%] text-start">
         <div class="flex items-center gap-3">
             <div class="w-[33px] h-5">
                 <img [ngSrc]="order.productCoverImage | cloudinaryUrl" height="20" width="33" class="max-w-full max-h-full object-contain" alt="product image">
             </div>
-            <p [title]="order.productName" class="w-20 text-ellipsis overflow-hidden whitespace-nowrap">{{order.productName}}</p>
+            <p [title]="order.productName" class="md:w-20 2xl:w-[80%] text-ellipsis overflow-hidden whitespace-nowrap">{{order.productName}}</p>
         </div>
     </td>
-    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start"><a class="underline" title="Track your order" [href]="order.trackingUrl">{{order.orderId}}</a></td>
+    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start"><a class="underline" title="Track your order" [href]="order.trackingUrl">{{order.orderId}}</a></td>
     @if (isAdmin) {
         <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.customerName}}</td>
     }

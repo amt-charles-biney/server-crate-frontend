@@ -26,7 +26,7 @@
     class="flex-row-reverse !text-sm !pr-[11px] myOption"
     (onSelectionChange)="optionClick()"
     [value]="option"
-    >{{ option.optionName ?? option }}</mat-option
+    >{{ option.optionName ?? option.name ?? option }}</mat-option
   >
   }
 </mat-select>

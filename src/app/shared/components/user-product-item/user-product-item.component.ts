@@ -33,7 +33,7 @@ export class UserProductItemComponent implements OnInit {
   hovered!: boolean;
   colored = false;
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     let productsInStorage = JSON.parse(sessionStorage.getItem('products')!);
     if (productsInStorage[this.product.id]) {
       this.colored = true;
@@ -41,13 +41,16 @@ export class UserProductItemComponent implements OnInit {
   }
 
   buyNow(id: string) {
-    this.dialog.open(BuyNowComponent, {
+    const dialogRef = this.dialog.open(BuyNowComponent, {
       height: '80%',
       width: '70%',
       data: {
         id,
       },
     });
+    if (screen.width > 1280) {
+      dialogRef.updateSize('55%', "70%")
+    }
   }
 
   onNavigateToProduct(event: Event, id: string) {

@@ -6,6 +6,8 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
+  cancelShipment,
+  createShipment,
   getOrder,
   resetOrderDetail,
 } from '../../../../../../store/orders/order.actions';
@@ -45,10 +47,14 @@ import { ReasonModalComponent } from '../../../../../../shared/components/reason
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderDetailsComponent implements OnInit, OnDestroy {
+  CANCEL_ORDER = 'Cancelled'
+  SHIP_ORDER = 'Ship Order'
   order$!: Observable<Content>;
   product!: SummarySubset;
   changeStatus!: FormControl;
   isAdmin: boolean = false;
+  orderId!: string
+  orderStatus!: string
   constructor(
     private store: Store,
     private activatedRoute: ActivatedRoute,
@@ -59,12 +65,12 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.changeStatus = new FormControl('');
     this.isAdmin = this.authService.isAdmin();
-    const id = this.activatedRoute.snapshot.paramMap.get('id')!;
-    this.store.dispatch(getOrder({ id }));
+    this.orderId= this.activatedRoute.snapshot.paramMap.get('id')!;
+    this.store.dispatch(getOrder({ id: this.orderId }));
     this.order$ = this.store.select(selectSingleOrderState).pipe(
       tap((order) => {
-        console.log('Order status', order.status);
-
+        this.orderStatus = order.status
+        this.changeStatus.patchValue(order.trackingUrl ? 'Pre-transit' : 'Waiting for Admin')
         this.product = {
           productName: order.productName,
           quantity: order.configuredProduct[0]?.quantity,
@@ -89,12 +95,27 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   getChangeStatus(selectedStatus: MatSelectChange) {
     const status = selectedStatus.value
 
-    if (status === 'Cancelled') {
-      this.dialog.open(ReasonModalComponent, {
+    if (status === this.CANCEL_ORDER) {
+      this.orderStatus = status
+      const dialogRef = this.dialog.open(ReasonModalComponent, {
         height: 'max-content',
-        width: '40%'
+        width: '40%',
+        data: {
+          id: this.orderId
+        }
       })
+      dialogRef.afterClosed().subscribe(
+        (cancelOrder) => {
+          this.orderStatus = !!cancelOrder ? this.CANCEL_ORDER : 'Assembling'
+          if (!!cancelOrder) {
+            this.changeStatus.patchValue('Cancelled')
+          } else {
+            this.changeStatus.patchValue('Waiting for Admin')
+          }          
+        })
+    } else if (status === this.SHIP_ORDER) {
+      this.store.dispatch(createShipment({ id: this.orderId }))
+      this.router.navigate([`/admin/orders/${this.orderId}`], { replaceUrl: true })
     }
-
   }
 }

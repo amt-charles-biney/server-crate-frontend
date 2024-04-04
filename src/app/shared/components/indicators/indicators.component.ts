@@ -87,7 +87,7 @@ export class IndicatorsComponent implements OnInit {
       // this.router.navigate(['/admin/attributes'])
       let attributeToCheck: Attribute
       if (this.product.inStock === 0) {
-        const noStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock === 0))!
+        const noStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock === 0))!        
         attributeToCheck = noStockAttribute
       } else if (this.product.inStock <= 5) {
         const lowStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock <= 5))!
