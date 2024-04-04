@@ -233,11 +233,11 @@
                       {{
                         isSizablePricing(activeLink)
                           ? "included"
-                          : getPriceDifference({
+                          : getPriceDiffereceMeasured({
                               isIncluded: false,
                               id: activeLink,
                               price: defaultSelectedValues[activeLink].price,
-                              size: defaultSelectedValues[activeLink].size
+                              size: defaultSelectedValues[activeLink].size,
                             })
                       }}
                     </div>
@@ -320,7 +320,7 @@
                           {{
                             getPriceDifference({
                               isIncluded: attributeProduct.isIncluded,
-                              id: activeLink,
+                              id: attributeProduct.compatibleOptionId,
                               price: attributeProduct.price,
                               size: ""
                             })

@@ -16,6 +16,8 @@ import {
   ProductItem,
   IdefaultSelectedProps,
   REQUIRED_CONFIG,
+  IConfiguredOption,
+  ICategoryOption,
 } from '../../types';
 import { Store } from '@ngrx/store';
 import {
@@ -56,6 +58,8 @@ import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-
 export class ProductConfigureComponent {
   defaultSelectedValues: (Record<string, IdefaultSelectedProps>) = {}
   defaultIncludedPrices: (Record<string, IdefaultSelectedProps>) = {}
+  defaultUIChangePrice: (Record<string, IdefaultSelectedProps>) = {}
+  defaultUIConstantPrice!: number;
 
   privateQueryParamSubscription: Subscription | undefined;
   privateConfigItemSubscription: Subscription | undefined;
@@ -135,7 +139,7 @@ export class ProductConfigureComponent {
               id: IncludedProduct.compatibleOptionId,
               price: IncludedProduct.price,
               size: String(IncludedProduct.size) ?? String(IncludedProduct.baseAmount) ?? "0",
-              isIncluded: IncludedProduct.isIncluded
+              isIncluded: IncludedProduct.isIncluded,
             }
           }
           this.setDefaultSelectedValues(key, IncludedProduct || product?.options[key][0])
@@ -143,6 +147,7 @@ export class ProductConfigureComponent {
 
         this.configKeys = keys
         this.setActiveLink(keys[0])
+        this.mapToAttributeVariantsRecord(product.options)
       }
     })
 
@@ -220,7 +225,11 @@ export class ProductConfigureComponent {
     void this.router.navigate([], navigationExtras)
   }
 
-  isActiveSelectedOption = ({ type, id, size }: IConfigureSelectProps): boolean => this.queryMapper[type] === `${id}_${0}`
+  isActiveSelectedOption = ({ type, id, size }: IConfigureSelectProps): boolean => {
+    const isActive = this.queryMapper[type] === `${id}_${0}`
+    if (isActive) this.defaultUIConstantPrice = this.defaultUIChangePrice[id].price
+    return isActive;
+  }
 
 
   generateStorageSizes(attributeId: string, productArr: any[]): string[] {
@@ -236,20 +245,20 @@ export class ProductConfigureComponent {
 
   resetDefault(type: string): void {
     const getIncludedProduct: ICompatibleOption | null = this.productConfig.options[type].find(product => product.isIncluded) ?? null
-  
+
     if (getIncludedProduct !== null) {
       this.setDefaultSelectedValues(type, getIncludedProduct);
-  
+
       if (getIncludedProduct.isMeasured) {
         this.defaultSelectedValues[type].size = String(getIncludedProduct.size) || String(getIncludedProduct.baseAmount);
       }
-  
+
       this.updateConfigQueryParam({
         type,
         id: getIncludedProduct.compatibleOptionId,
         size: (getIncludedProduct.isMeasured) ? getIncludedProduct.size || getIncludedProduct.baseAmount.toString() : '0'
       });
-  
+
       if (this.isSizablePricing(type)) {
         this.defaultSelectedValues[type].size = String(getIncludedProduct.size);
       }
@@ -258,7 +267,6 @@ export class ProductConfigureComponent {
       this.updateConfigQueryParam(null);
     }
   }
-  
 
 
   isActiveLinkMeasured = (activeLink: string): boolean => { return this.productConfig.options[activeLink].some(item => item.isMeasured) }
@@ -267,19 +275,31 @@ export class ProductConfigureComponent {
 
 
   getPriceDifference(selectedOption: IdefaultSelectedProps): string {
-    const { isIncluded, id, price } = selectedOption
-    if (isIncluded) return "included"
+    const { id } = selectedOption
 
-    let priceDifference = this.defaultIncludedPrices[id] ? price - this.defaultIncludedPrices[id].price : price;
+    let priceDifference = this.defaultUIChangePrice[id].price - this.defaultUIConstantPrice
+
     let sign = priceDifference > 0 ? "+" : priceDifference < 0 ? "-" : "";
-
-    return `${sign} $${Math.abs(priceDifference).toFixed(2)}`;
+    
+    return this.isActiveSelectedOption({
+      type: this.activeLink,
+      id: id,
+      size: ""
+    }) ? "Included" : `${sign} $${Math.abs(priceDifference).toFixed(2)}`;
   }
 
 
+  getPriceDiffereceMeasured(selectedOption: IdefaultSelectedProps): string {
+    const { id, price } = selectedOption
+
+    let priceDifference = this.defaultIncludedPrices[id] ? price - this.defaultIncludedPrices[id].price : price;
+    
+    let sign = priceDifference > 0 ? "+" : priceDifference < 0 ? "-" : "";
+    return `${sign} $${Math.abs(priceDifference).toFixed(2)}`
+  }
+
 
   isSizablePricing(activeLink: string): boolean {
-    console.log("test ==>", this.defaultIncludedPrices[activeLink], this.defaultSelectedValues[activeLink])
     if (!this.defaultIncludedPrices[activeLink]) return false;
 
     return this.defaultSelectedValues[activeLink].id === this.defaultIncludedPrices[activeLink].id &&
@@ -288,8 +308,24 @@ export class ProductConfigureComponent {
   }
 
 
-  isRequiredConfig (optionType: string): boolean {
-     return this.RequiredConfig[optionType.toLowerCase()];
+  isRequiredConfig(optionType: string): boolean {
+    return this.RequiredConfig[optionType.toLowerCase()];
+  }
+
+  mapToAttributeVariantsRecord(categoryOptions: ICategoryOption) {
+    Object.keys(categoryOptions).forEach(categoryKey => {
+      const compatibleOptions: ICompatibleOption[] = categoryOptions[categoryKey];
+
+      Object.values(compatibleOptions).forEach((compatibleOptionArray: ICompatibleOption) => {
+        const { compatibleOptionId, attributeId, price } = compatibleOptionArray
+        this.defaultUIChangePrice[compatibleOptionId] = {
+          isIncluded: false,
+          price,
+          id: attributeId,
+          size: ""
+        }
+      });
+    });
   }
 
 
