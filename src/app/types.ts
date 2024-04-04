@@ -1,3 +1,13 @@
+export enum REQUIRED_CONFIG {
+  OPERATING_SYSTEM = "Operating System",
+  BRAND = "Brand",
+  MOTHERBOARD = "Motherboard",
+  CASE="Case",
+  RAM="Ram",
+  STORAGE="Storage",
+  GRAPHICS_CARD="Graphics card"
+}
+
 export type LoadingStatus = {
   status: boolean;
   message: string;
@@ -400,6 +410,7 @@ export interface ICompatibleOption {
   name: string;
   type: string;
   price: number;
+  size: number,
   media: string;
   unit: string;
   isCompatible: boolean;

@@ -13,8 +13,6 @@ import { authGuard } from './core/guards/auth.guard';
 import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
 import { adminGuard } from './core/guards/admin.guard';
 import {
-  productCartItemFeature,
-  productConfigFeature,
   productConfigItemFeature,
 } from './store/product-spec/product-spec.reducer';
 import { ProductSpecEffects } from './store/product-spec/product-spec.effect';
@@ -56,19 +54,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/login/login.component').then((m) => m.LoginComponent),
     providers: [provideState(loginFeature), provideEffects(LoginEffect)],
-  },
-  {
-    path: 'product/configure/:id',
-    loadChildren: () =>
-      import('./features/product-configure/product-configure.routes').then(
-        (m) => m.route
-      ),
-    providers: [
-      provideState(productConfigFeature),
-      provideEffects(ProductSpecEffects),
-      provideState(productCartItemFeature),
-      provideState(productConfigItemFeature),
-    ],
   },
   {
     path: 'forgot-password',

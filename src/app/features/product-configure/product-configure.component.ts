@@ -15,6 +15,9 @@ import {
   IParamConfigOptions,
   ProductItem,
   IdefaultSelectedProps,
+  REQUIRED_CONFIG,
+  IConfiguredOption,
+  ICategoryOption,
 } from '../../types';
 import { Store } from '@ngrx/store';
 import {
@@ -22,7 +25,7 @@ import {
   selectProductConfig,
   selectProductConfigItem,
 } from '../../store/product-spec/product-spec.reducer'
-import { Observable } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 import {
   loadProduct,
   loadProductConfigItem
@@ -39,8 +42,6 @@ import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-
   selector: 'app-product-configure',
   standalone: true,
   imports: [
-    HeaderComponent,
-    FooterComponent,
     CommonModule,
     MatTabsModule,
     RouterModule,
@@ -57,11 +58,26 @@ import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-
 export class ProductConfigureComponent {
   defaultSelectedValues: (Record<string, IdefaultSelectedProps>) = {}
   defaultIncludedPrices: (Record<string, IdefaultSelectedProps>) = {}
+  defaultUIChangePrice: (Record<string, IdefaultSelectedProps>) = {}
+  defaultUIConstantPrice!: number | null;
+
+  privateQueryParamSubscription: Subscription | undefined;
+  privateConfigItemSubscription: Subscription | undefined;
+  privateConfigSubscription: Subscription | undefined;
 
   product$: Observable<ProductItem | null> = this.store.select(selectProduct)
   productConfig$: Observable<any> = this.store.select(selectProductConfig)
   productConfigItem$: Observable<IConfiguredProduct | null> = this.store.select(selectProductConfigItem)
 
+  RequiredConfig: Record<string, boolean> = {
+    [REQUIRED_CONFIG.BRAND.toLowerCase()]: true,
+    [REQUIRED_CONFIG.MOTHERBOARD.toLowerCase()]: true,
+    [REQUIRED_CONFIG.OPERATING_SYSTEM.toLowerCase()]: true,
+    [REQUIRED_CONFIG.CASE.toLowerCase()]: true,
+    [REQUIRED_CONFIG.GRAPHICS_CARD.toLowerCase()]: true,
+    [REQUIRED_CONFIG.RAM.toLowerCase()]: true,
+    [REQUIRED_CONFIG.STORAGE.toLowerCase()]: true,
+  }
 
   productId: string = ''
   productConfig!: ICategoryConfig
@@ -104,36 +120,38 @@ export class ProductConfigureComponent {
 
     this.store.dispatch(loadProduct({ id: this.productId }))
 
-    this.productConfigItem$.subscribe((product: IConfiguredProduct | null) => {
+    this.privateConfigItemSubscription = this.productConfigItem$.subscribe((product: IConfiguredProduct | null) => {
       if (product !== null) this.productConfigItem = product
       this.buildQueryMapper()
       this.cdr.detectChanges()
     })
 
-    this.productConfig$.subscribe((product: ICategoryConfig) => {
+    this.privateConfigSubscription = this.productConfig$.subscribe((product: ICategoryConfig) => {
       if (product !== null) {
         this.productConfig = product
         const keys: string[] = Object.keys(product?.options)
 
         keys.forEach(key => {
           const IncludedProduct = product?.options[key]?.find(option => option.isIncluded)
+
           if (IncludedProduct) {
             this.defaultIncludedPrices[key] = {
               id: IncludedProduct.compatibleOptionId,
               price: IncludedProduct.price,
-              size: String(IncludedProduct.baseAmount) ?? "0",
-              isIncluded: IncludedProduct.isIncluded
+              size: String(IncludedProduct.size) ?? String(IncludedProduct.baseAmount) ?? "0",
+              isIncluded: IncludedProduct.isIncluded,
             }
           }
-          this.setDefaultSelectedValues(key, product?.options[key][0])
+          this.setDefaultSelectedValues(key, IncludedProduct || product?.options[key][0])
         })
 
         this.configKeys = keys
         this.setActiveLink(keys[0])
+        this.mapToAttributeVariantsRecord(product.options)
       }
     })
 
-    this.route.queryParams.subscribe((queryParams: { [x: string]: any; }) => {
+    this.privateQueryParamSubscription = this.route.queryParams.subscribe((queryParams: { [x: string]: any; }) => {
       const configOptions: IParamConfigOptions = {
         warranty: queryParams['warranty'] ?? this.warranty,
         components: queryParams['components']
@@ -144,20 +162,12 @@ export class ProductConfigureComponent {
     })
   }
 
-  /**
-   * Updates the warranty check to involve warranty or not
-   * @param check
-   */
   onOptionChange(check: boolean): void {
     this.warranty = check
     this.updateConfigQueryParam(null, this.warranty)
   }
 
-  /**
- * Builds the query mapper based on the configured products.
- * Assigns query strings to each product's optionType in the queryMapper object.
- * Also assigns default selected values for measured products in the defaultSelectedValues object.
- */
+
   buildQueryMapper = (): void => {
     for (const product of this.productConfigItem.configured) {
       this.queryMapper[product.optionType] = `${product.optionId}_${product.isMeasured ? product?.size || product?.baseAmount : 0}`
@@ -167,49 +177,29 @@ export class ProductConfigureComponent {
     }
   }
 
-  /**
-   * Sets the default selected values for a specific option type based on the provided products.
-   * If the default selected values for the given option type are not already set and the products
-   * are not null and are measured, it extracts necessary properties from the products and assigns them
-   * as default selected values.
-   * 
-   * @param optionType The type of option for which default selected values are being set.
-   * @param products The products containing information about the compatible option.
-   */
 
   setDefaultSelectedValues(optionType: string, products: ICompatibleOption): void {
-    // Check if default selected values for the given option type are not already set and if products are not null and are measured
     if (!this.defaultSelectedValues[optionType] && products != null && products.isMeasured) {
-      // Extract necessary properties from the products
-      const { compatibleOptionId, isIncluded, price, baseAmount } = products;
-      // Assign extracted properties as default selected values for the given option type
+
+      const { compatibleOptionId, isIncluded, price, baseAmount, size } = products;
+
       this.defaultSelectedValues[optionType] = {
         id: compatibleOptionId,
-        size: String(baseAmount),
+        size: String(size) || String(baseAmount),
         price,
         isIncluded: isIncluded
       };
     }
   }
 
-  /**
-   * Handles the change event for sizeable options.
-   * Updates the defaultSelectedValues object with the new size.
-   * Calls updateConfigQueryParam method to update configuration query parameters.
-   * @param {IConfigureSelectProps} - An object containing type, id, and size properties.
-   */
+
+
   onSizeableOptionChange = ({ type, id, size }: IConfigureSelectProps): void => {
     this.defaultSelectedValues[type] = { ...this.defaultSelectedValues[type], size: String(size) }
     this.updateConfigQueryParam({ type, id: this.defaultSelectedValues[type]?.id, size })
   }
 
-  /**
- * Handles the change event for variant sizable options.
- * Retrieves the adjusted size for the selected option.
- * Updates the defaultSelectedValues object with the new id and adjusted size.
- * Calls updateConfigQueryParam method to update configuration query parameters.
- * @param {IConfigureSelectProps} - An object containing type and id properties.
- */
+
   onSelectVariantSizableChange = ({ type, id }: IConfigureSelectProps): void => {
     const getCurrentConfiguredProduct: any = this.productConfig.options[type]?.find(product => product.compatibleOptionId === id)
     const adjustedSize = getCurrentConfiguredProduct?.size
@@ -218,12 +208,7 @@ export class ProductConfigureComponent {
     this.updateConfigQueryParam({ type, id, size: adjustedSize })
   }
 
-  /**
-   * This Updated the query param with new config fetch updates
-   *
-   * @param configItem
-   * @param warranty
-   */
+
 
   updateConfigQueryParam = (configItem: IConfigureSelectProps | null, warranty = this.warranty): void => {
     if (configItem != null) {
@@ -231,7 +216,6 @@ export class ProductConfigureComponent {
     }
 
     const joinQuery = Object.values(this.queryMapper).join(',')
-
     const currentParams = {
       ...this.route.snapshot.queryParams,
       warranty,
@@ -241,15 +225,13 @@ export class ProductConfigureComponent {
     void this.router.navigate([], navigationExtras)
   }
 
-  isActiveSelectedOption = ({ type, id, size }: IConfigureSelectProps): boolean => this.queryMapper[type] === `${id}_${0}`
+  isActiveSelectedOption = ({ type, id, size }: IConfigureSelectProps): boolean => {
+    const isActive = this.queryMapper[type] === `${id}_${0}`
+    if (isActive) this.defaultUIConstantPrice = this.defaultUIChangePrice[id].price
+    return isActive;
+  }
 
-  /**
-   * Takes in the attribute id and generates the sizes ranging from the base amount to the max amount
-   *
-   * @param attributeId
-   * @param productArr
-   * @returns
-   */
+
   generateStorageSizes(attributeId: string, productArr: any[]): string[] {
     const getProduct = productArr.find(product => product.compatibleOptionId === attributeId)
     const storageSize: string[] = []
@@ -257,77 +239,101 @@ export class ProductConfigureComponent {
     for (let size: number = getProduct?.baseAmount; size <= getProduct?.maxAmount; size *= 2) {
       storageSize.push(String(size))
     }
-
     return storageSize
   }
 
-  /**
- * Resets the default configuration for a specified type.
- * If an included product is available for the type, updates the configuration query parameters.
- * If no included product is found, removes the type from the query mapper and updates the configuration query parameters accordingly.
- *
- * @param type - The type of the product configuration to be reset.
- */
 
   resetDefault(type: string): void {
     const getIncludedProduct: ICompatibleOption | null = this.productConfig.options[type].find(product => product.isIncluded) ?? null
 
     if (getIncludedProduct !== null) {
+      this.setDefaultSelectedValues(type, getIncludedProduct);
+
+      if (getIncludedProduct.isMeasured) {
+        this.defaultSelectedValues[type].size = String(getIncludedProduct.size) || String(getIncludedProduct.baseAmount);
+      }
+
       this.updateConfigQueryParam({
         type,
         id: getIncludedProduct.compatibleOptionId,
-        size: (getIncludedProduct.isMeasured) ? getIncludedProduct?.baseAmount.toString() : '0'
-      })
+        size: (getIncludedProduct.isMeasured) ? getIncludedProduct.size || getIncludedProduct.baseAmount.toString() : '0'
+      });
+
+      if (this.isSizablePricing(type)) {
+        this.defaultSelectedValues[type].size = String(getIncludedProduct.size);
+      }
     } else {
-      delete this.queryMapper[type]
-      this.updateConfigQueryParam(null)
+      delete this.queryMapper[type];
+      this.defaultUIConstantPrice = null;
+      this.updateConfigQueryParam(null);
     }
   }
 
-  /**
-     * Checks if the config options having the same attribute type has a measured field
-     * @param activeLink
-     * @returns
-     */
 
   isActiveLinkMeasured = (activeLink: string): boolean => { return this.productConfig.options[activeLink].some(item => item.isMeasured) }
 
   gotoProduct = (): void => { void this.router.navigate(['/servers'], { replaceUrl: true }) }
 
 
-  /**
-   * Calculate the price difference and returns a string value if it is positive or not
-   * with the appropiate positioning
-   * eg. + $200, - $100
-   * 
-   * @Param isIncluded
-   * @Param basePrice
-   * 
-   * @returns
-   */
   getPriceDifference(selectedOption: IdefaultSelectedProps): string {
-    const { isIncluded, id, price } = selectedOption
-    if (isIncluded) return "included"
+    const { id } = selectedOption
 
-    let priceDifference = this.defaultIncludedPrices[id] ? price - this.defaultIncludedPrices[id].price : price;
+    let priceDifference = this.defaultUIChangePrice[id].price - this.defaultUIConstantPrice
+
     let sign = priceDifference > 0 ? "+" : priceDifference < 0 ? "-" : "";
-
-    return `${sign} $${Math.abs(priceDifference).toFixed(2)}`;
+    
+    return this.isActiveSelectedOption({
+      type: this.activeLink,
+      id: id,
+      size: ""
+    }) ? "Included" : `${sign} $${Math.abs(priceDifference).toFixed(2)}`;
   }
 
 
-  /**
-   * Checks if the pricing for the currently active link is sizable.
-   * 
-   * @param activeLink The identifier of the currently active link.
-   * @returns A boolean value indicating whether the pricing is sizable for the active link.
-   */
+  getPriceDiffereceMeasured(selectedOption: IdefaultSelectedProps): string {
+    const { id, price } = selectedOption
+
+    let priceDifference = this.defaultIncludedPrices[id] ? price - this.defaultIncludedPrices[id].price : price;
+    
+    let sign = priceDifference > 0 ? "+" : priceDifference < 0 ? "-" : "";
+    return `${sign} $${Math.abs(priceDifference).toFixed(2)}`
+  }
+
+
   isSizablePricing(activeLink: string): boolean {
     if (!this.defaultIncludedPrices[activeLink]) return false;
 
     return this.defaultSelectedValues[activeLink].id === this.defaultIncludedPrices[activeLink].id &&
       this.defaultSelectedValues[activeLink].size === this.defaultIncludedPrices[activeLink].size &&
       this.defaultSelectedValues[activeLink].isIncluded;
+  }
+
+
+  isRequiredConfig(optionType: string): boolean {
+    return this.RequiredConfig[optionType.toLowerCase()];
+  }
+
+  mapToAttributeVariantsRecord(categoryOptions: ICategoryOption) {
+    Object.keys(categoryOptions).forEach(categoryKey => {
+      const compatibleOptions: ICompatibleOption[] = categoryOptions[categoryKey];
+
+      Object.values(compatibleOptions).forEach((compatibleOptionArray: ICompatibleOption) => {
+        const { compatibleOptionId, attributeId, price } = compatibleOptionArray
+        this.defaultUIChangePrice[compatibleOptionId] = {
+          isIncluded: false,
+          price,
+          id: attributeId,
+          size: ""
+        }
+      });
+    });
+  }
+
+
+  ngOnDestroy(): void {
+    this.privateQueryParamSubscription?.unsubscribe()
+    this.privateConfigItemSubscription?.unsubscribe()
+    this.privateConfigSubscription?.unsubscribe()
   }
 
 }
