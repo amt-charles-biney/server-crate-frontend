@@ -35,7 +35,7 @@ export class CartProductItemComponent implements OnInit {
   }
   
   decrementQuantity() {
-    if (this.quantity === 0) return;
+    if (this.quantity === 1) return;
     this.quantity -= 1
     this.quantityEmitter.emit(this.quantity)
     this.store.dispatch(decreaseQuantity({configuredProductId: this.product.id, quantity: this.quantity}))

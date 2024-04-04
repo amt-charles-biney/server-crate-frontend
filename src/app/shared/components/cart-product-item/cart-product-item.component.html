@@ -34,9 +34,9 @@
       <div class="flex items-center gap-2 mt-[10px] text-sm">
         <p>QTY</p>
         <div class="flex items-center text-[13px] gap-3 bg-[#E8EAEB80] rounded-3xl px-2">
-          <button class="text-lg" (click)="decrementQuantity()">-</button>
+          <button class="text-lg" [ngClass]="quantity === 1 ? 'opacity-25' : ''" (click)="decrementQuantity()">-</button>
           <p class="text-sm">{{quantity}}</p>
-          <button class="text-lg" [ngClass]="quantity === limit ? 'text-table-text' : ''" (click)="incrementQuantity()">+</button>
+          <button class="text-lg" [ngClass]="quantity === limit ? 'opacity-25' : ''" (click)="incrementQuantity()">+</button>
         </div>
       </div>
   
