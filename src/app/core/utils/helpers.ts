@@ -417,3 +417,4 @@ export function isMasterCard(value: string) {
 export function isVisaCard(value: string) {
   return value === '4'
 }
+

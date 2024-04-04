@@ -63,6 +63,7 @@
             [isRequired]="true"
             myClass="font-[500]"
             (onSelect)="onSelectCase($event)"
+            [isDisabled]="cases.length === 0"
           />
         </ng-container>
 

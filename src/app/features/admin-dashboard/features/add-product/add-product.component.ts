@@ -59,7 +59,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { setLoadingSpinner } from '../../../../store/loader/actions/loader.actions';
 import { AuthLoaderComponent } from '../../../../shared/components/auth-loader/auth-loader.component';
 import { selectLoaderState } from '../../../../store/loader/reducers/loader.reducers';
-import { selectConfigurationState } from '../../../../store/admin/products/configuration.reducers';
+import { selectCases, selectConfigurationState } from '../../../../store/admin/products/configuration.reducers';
 import {
   productInitialState,
   selectProduct,
@@ -68,7 +68,6 @@ import { CustomImageComponent } from '../../../../shared/components/custom-image
 import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
 import { getCaseList } from '../../../../store/case/case.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
-import { selectCases } from '../../../../store/case/case.reducers';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { LoaderComponent } from '../../../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../../../shared/components/error/error.component';

@@ -329,6 +329,7 @@ export type EditConfigResponse = {
   thumbnail: string;
   id: string;
   config: CategoryEditResponse[];
+  cases: Case[]
 };
 export type Item = {
   id: string;
@@ -351,11 +352,13 @@ export type BasicConfig = {
   id: string;
   category: Select;
   inStock: number;
+  cases: Case[]
 };
 export type CategoryPayload = {
   name: string;
   thumbnail: string;
   config: CategoryConfig[];
+  caseIds: string[]
 };
 export type CartResponse = {
   configuredProducts: CartProductItem[];

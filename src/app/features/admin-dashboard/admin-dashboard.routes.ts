@@ -41,8 +41,9 @@ export const route: Routes = [
     component: AdminDashboardComponent,
     providers: [
       provideEffects(AttributeEffect),
-      provideState(attributesFeature),
       provideEffects(CaseEffect),
+      provideState(attributesFeature),
+      provideState(attributeCreationFeature),
       provideState(caseFeature),
     ],
     canActivate: [authGuard],
@@ -99,11 +100,6 @@ export const route: Routes = [
       {
         path: 'attributes',
         component: AttributesComponent,
-        providers: [
-          provideEffects(AttributeEffect),
-          provideState(attributeCreationFeature),
-          provideState(attributesFeature),
-        ],
       },
       {
         path: 'orders',

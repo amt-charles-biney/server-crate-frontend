@@ -9,7 +9,8 @@ const initialState: BasicConfig = {
   },
   id: '',
   options: {},
-  inStock: 0
+  inStock: 0,
+  cases: []
 }
 export const configurationFeature = createFeature({
   name: 'configuration',
@@ -20,7 +21,8 @@ export const configurationFeature = createFeature({
             category: data.category,
             id: data.id,
             options: data.options,
-            inStock: data.inStock
+            inStock: data.inStock,
+            cases: data.cases
         }
     }),
     on(resetConfiguration, () => {        
@@ -31,7 +33,8 @@ export const configurationFeature = createFeature({
           },
           id: '',
           options: {},
-          inStock: 0
+          inStock: 0,
+          cases: []
         }
     }),
   ),
@@ -41,4 +44,5 @@ export const {
     name,
     reducer,
     selectConfigurationState,
+    selectCases
 } = configurationFeature

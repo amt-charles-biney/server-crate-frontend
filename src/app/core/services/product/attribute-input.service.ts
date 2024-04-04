@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Attribute, CategoryAndConfig, CategoryEditResponse, Content } from '../../../types';
+import { Attribute, Case, CategoryAndConfig, CategoryEditResponse, Content } from '../../../types';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +22,7 @@ export class AttributeInputService {
     group['attributesInput'] = new FormControl('');
     group['variants'] = new FormControl('');
     group['coverImage'] = new FormControl('')
+    group['cases'] = new FormControl('')
     return new FormGroup(group);
   }
   editFormGroup(attributes: CategoryEditResponse[], name: string) {    
@@ -37,6 +38,9 @@ export class AttributeInputService {
     group['categoryName'] = new FormControl(name, {validators: Validators.required, updateOn: 'blur'});
     group['attributesInput'] = new FormControl('');
     group['variants'] = new FormControl('');
+    group['cases'] = new FormControl()
+    console.log('Edit of cases');
+    
     return new FormGroup(group);
   }
   toSelectFormGroup(attributes: Attribute[] | CategoryAndConfig[] | Content[]) {

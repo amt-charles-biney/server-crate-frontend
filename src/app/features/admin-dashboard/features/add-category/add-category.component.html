@@ -5,11 +5,12 @@
   </ng-container>
 </ng-container>
 <ng-container *ngIf="categoryImage | async"></ng-container>
+<ng-container *ngIf="cases | async"></ng-container>
 <ng-container *ngIf="attributes | async as attributes">
   <form
     [formGroup]="categoryForm"
     (ngSubmit)="createConfig()"
-    class="flex flex-col gap-10 min-h-screen"
+    class=" min-h-screen"
   >
     <section class="grid grid-cols-2 gap-x-20">
       <div>
@@ -81,7 +82,7 @@
             (click)="
               addIncompatibleAttribute(
                 categoryConfigPayload,
-                attributesInput.value,
+                attributesInput.value.attributeName,
                 variants.value || []
               )
             "
@@ -240,7 +241,53 @@
       </button>
     </section>
     <section>
-      <h2 class="font-[700] font-dm-sans mb-[34px]">Base Configuration</h2>
+
+      <section class="grid grid-cols-2 gap-x-20 mt-5">
+          <app-custom-select
+                label="Compatible Cases"
+                [control]="$any(categoryForm.controls['cases'])"
+                [options]="localCases"
+                [isMultipleSelect]="true"
+                [isDisabled]="localCases.length === 0"
+              />
+              <button
+              type="button"
+              (click)="addSelectedCases(casesInput.value)"
+              class="text-figma-green font-inter text-xs text-start self-end underline col-span-1"
+            >
+              Add case
+            </button>
+      </section>
+      <div [ngClass]="selectedCases.length === 0 ? 'bg-white'
+      : 'bg-[#D9D9D91A]'" class="flex items-center gap-[18px] mt-4  pt-[8px] pb-[7px] px-[10px] w-full overflow-auto no-scrollbar">
+        @for (case of selectedCases; track case) {
+          <div
+                type="button"
+                #tooltip="matTooltip"
+                class="flex items-center py-[5px] px-[12px] rounded-[70px] w-[111px] bg-attr-button"
+
+                [matTooltip]="case.name"
+              >
+                <span
+                  class="whitespace-nowrap overflow-hidden text-ellipsis text-xs w-[59px]"
+                  >{{ case.name }}</span
+                >
+                <button
+                  (click)="removeCase(case)"
+                  type="button"
+                >
+                  <img
+                    class="pl-[12px]"
+                    src="/assets/remove.svg"
+                    alt="remove button"
+                  />
+                </button>
+              </div>
+        }
+      </div>
+    </section>
+    <section>
+      <h2 class="font-[700] font-dm-sans mb-[34px] mt-5">Base Configuration</h2>
       <section class="grid grid-cols-2 gap-x-20 gap-y-[2px]">
         @for (attribute of localAttributes; track attribute) { @if
         (attribute.isMeasured) {
