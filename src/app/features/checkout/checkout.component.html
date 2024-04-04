@@ -152,7 +152,7 @@
               <p class="text-[#737373] text-[13px] mb-[44px]">{{verification.trackingId}}</p>
             </div>
             <a
-              [href]="verification.trackingUrl"
+              [routerLink]="isAdmin ? '/admin/orders' : '/settings/orders'"
               class="bg-figma-green hover:bg-green-500 text-center w-[469px] p-[9px] rounded-xl text-white font-[500px] text-[20px]"
             >
               Track Order

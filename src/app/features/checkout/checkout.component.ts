@@ -114,6 +114,7 @@ export class CheckoutComponent implements OnInit {
   loadingStatus!: Observable<LoadingStatus>;
   addressVerified: boolean = false
   loaderText!: string ;
+  isAdmin!: boolean
   constructor(
     private _formBuilder: FormBuilder,
     private store: Store,
@@ -123,6 +124,7 @@ export class CheckoutComponent implements OnInit {
     private authService: AuthService
   ) {}
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin()
     if (this.authService.getToken()) {
       this.store.dispatch(getShippingDetails());
     }
