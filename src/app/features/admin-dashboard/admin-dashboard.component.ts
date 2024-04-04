@@ -66,7 +66,6 @@ export class AdminDashboardComponent implements OnInit {
     this.store.dispatch(getNotifications());
     this.activeLink = this.setTitle(this.router.url);
     this.activatedRoute.queryParams.subscribe((params) => {
-      console.log('Order', params);
       this.localParams = params
     })
     if (this.router)
@@ -90,9 +89,8 @@ export class AdminDashboardComponent implements OnInit {
           } else if (this.activeLink === 'Cases') {
           } else if (this.activeLink === 'Attributes') {
             this.store.dispatch(getAttributes({ page: 0}))
-          } else if (this.activeLink === 'Categories') {
+          } else if (this.activeLink === 'Categories') {            
             this.store.dispatch(getCategoriesAndConfig({ page: 0 }));
-
           } else if (this.activeLink === "Orders") {
             this.store.dispatch(getAdminOrders({ params: this.localParams }))
 

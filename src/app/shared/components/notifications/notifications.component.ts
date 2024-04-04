@@ -34,12 +34,12 @@ export class NotificationsComponent implements OnInit {
 
 
   fixCategoryIssue(id: string) {
-    this.router.navigate([`/admin/add-category/${id}`])
+    this.router.navigate([`/admin/categories/add-category/${id}`])
     this.closeEmitter.emit()
   }
 
   fixUnassignedProducts(id: string) {
-    this.router.navigate([`/admin/add-product/${id}`])
+    this.router.navigate([`/admin/products/add-product/${id}`])
     this.closeEmitter.emit()
   }
 

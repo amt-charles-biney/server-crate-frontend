@@ -35,10 +35,10 @@
 
           <app-custom-select
           [control]="changeStatus"
-          [options]="[SHIP_ORDER, CANCEL_ORDER]"
+          [options]="[SHIP_ORDER, 'Cancel Order']"
           placeholder="Change Status"
           (onSelect)="getChangeStatus($event)"
-          [isDisabled]="!!order.trackingUrl"
+          [isDisabled]="order.status !== 'Assembling'"
         />
         }
       </div>
@@ -54,14 +54,13 @@
         </cdk-step>
         <cdk-step [editable]="false" [completed]="false" label="Assembling product">
         </cdk-step>
-        @if (isAdmin) {
           <cdk-step
             [editable]="false"
             [completed]="false"
             [label]="orderStatus"
           >
           </cdk-step>
-        }
+        
         @if (orderStatus !== CANCEL_ORDER) {
           <cdk-step [editable]="false" [completed]="false" label="Shipping"></cdk-step>
           <cdk-step [editable]="false" [completed]="false" label="Out For Delivery"></cdk-step>

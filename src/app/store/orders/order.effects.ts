@@ -86,9 +86,9 @@ export class OrderEffects {
         return this.action$.pipe(
             ofType(createShipment),
             switchMap(({ id }) => {
+                this.ngxService.startLoader('orderDetails')
                 return this.adminService.createShipment(id).pipe(
                     map(() => {
-                        this.ngxService.startLoader('orderDetails')
                         return getOrder({ id })
                     }),
                     catchError((err) => {

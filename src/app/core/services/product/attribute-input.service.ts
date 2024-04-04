@@ -22,7 +22,7 @@ export class AttributeInputService {
     group['attributesInput'] = new FormControl('');
     group['variants'] = new FormControl('');
     group['coverImage'] = new FormControl('')
-    group['cases'] = new FormControl('')
+    group['cases'] = new FormControl()
     return new FormGroup(group);
   }
   editFormGroup(attributes: CategoryEditResponse[], name: string) {    
@@ -39,7 +39,6 @@ export class AttributeInputService {
     group['attributesInput'] = new FormControl('');
     group['variants'] = new FormControl('');
     group['cases'] = new FormControl()
-    console.log('Edit of cases');
     
     return new FormGroup(group);
   }

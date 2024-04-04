@@ -28,7 +28,6 @@ export class OrderSummaryComponent {
   }
 
   addToWishlist(id: string) {
-    console.log('QuerySnapshot', this.querySnapShot);
     this.store.dispatch(addToWishlist({ id, configOptions: this.querySnapShot }));
   }
 }

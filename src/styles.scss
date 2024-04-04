@@ -421,6 +421,11 @@ app-custom-select .mat-mdc-option .mat-icon,
   background-color: #3cb043;
 }
 
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: #3cb043 !important;
+  font-size: 14px;
+}
+
 app-custom-select .mat-mdc-option .mat-icon,
 .mat-mdc-option .mat-pseudo-checkbox-minimal {
   margin-left: 0px !important;

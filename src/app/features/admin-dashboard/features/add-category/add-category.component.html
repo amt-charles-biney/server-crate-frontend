@@ -34,7 +34,7 @@
         elementId="coverImage"
         containerClass="relative flex flex-col  items-center justify-center border rounded-lg h-[129px]"
         customClass="flex flex-col mt-4 h-full"
-        [previewImage]="coverImage"
+        [previewImage]="coverImage || null"
         [editId]="id"
         width="480"
         height="129"
@@ -241,19 +241,20 @@
       </button>
     </section>
     <section>
-
+      <h2 class="font-bold font-dm-sans mt-4">Compatible Cases</h2>
       <section class="grid grid-cols-2 gap-x-20 mt-5">
           <app-custom-select
-                label="Compatible Cases"
+                label="Cases"
                 [control]="$any(categoryForm.controls['cases'])"
                 [options]="localCases"
                 [isMultipleSelect]="true"
                 [isDisabled]="localCases.length === 0"
+                [isRequired]="!(selectedCases.length > 0)"
               />
               <button
               type="button"
               (click)="addSelectedCases(casesInput.value)"
-              class="text-figma-green font-inter text-xs text-start self-end underline col-span-1"
+              class="text-figma-green font-inter text-xs text-start self-end underline col-span-1 mb-5"
             >
               Add case
             </button>

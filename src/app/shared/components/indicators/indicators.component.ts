@@ -82,7 +82,7 @@ export class IndicatorsComponent implements OnInit {
 
   fix() {
     if (this.categoryIssue) {
-      this.router.navigate(['/admin/add-product', this.product.id])
+      this.router.navigate(['/admin/products/add-product', this.product.id])
     } else {
       // this.router.navigate(['/admin/attributes'])
       let attributeToCheck: Attribute
@@ -91,9 +91,7 @@ export class IndicatorsComponent implements OnInit {
         attributeToCheck = noStockAttribute
       } else if (this.product.inStock <= 5) {
         const lowStockAttribute: Attribute = this.product.totalLeastStock.find((option) => option.attributeOptions.find(opt => opt.inStock <= 5))!
-        attributeToCheck = lowStockAttribute
-        console.log('Attribute To Check', attributeToCheck);
-        
+        attributeToCheck = lowStockAttribute        
       }
       setTimeout(() => {
         this.dialog.open(AttributeModalComponent, {

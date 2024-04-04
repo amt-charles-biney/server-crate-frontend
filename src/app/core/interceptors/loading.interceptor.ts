@@ -19,7 +19,6 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   
   return next(req).pipe(
     timeout({each: 120000, with: () => {
-      console.log('Timeout');
       ngxService.stopAll()
       toast.error('Connection timed out. Please try again later', 'Error')
       return EMPTY

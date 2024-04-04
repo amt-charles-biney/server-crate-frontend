@@ -37,9 +37,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     Chart.defaults.plugins.legend.display = false
-    this.activatedRoute.queryParams.subscribe((params) => {
-      console.log('Params', params);
-      
+    this.activatedRoute.queryParams.subscribe((params) => {      
       this.store.dispatch(getChartData({ params }));
     })
     

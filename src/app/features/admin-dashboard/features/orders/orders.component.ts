@@ -62,10 +62,8 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     
     if (this.isAdmin) {
       this.navigateTo = '/admin/orders'
-      console.log('Get admin orders');
     } else {
       this.navigateTo = '/settings/orders'
-      console.log('Get user orders')
     }
     this.orders = this.store.select(selectOrdersState).pipe(
       tap((data) => {
@@ -75,21 +73,16 @@ export class OrdersComponent implements OnInit, AfterViewInit {
       })
     );
 
-    this.activatedRoute.queryParams.subscribe((params) => {
-      console.log('Params', params);
-      
+    this.activatedRoute.queryParams.subscribe((params) => {      
       this.localParams = { ...this.localParams, ...params }
       if (params['status']) {
         this.filter.patchValue(params['status'])
       }
      
       if (this.isAdmin) {
-        this.store.dispatch(getAdminOrders({ params: this.localParams }))
-        console.log('Admin');
-        
+        this.store.dispatch(getAdminOrders({ params: this.localParams }))        
       } else {
         this.store.dispatch(getUserOrders({ params: this.localParams }))
-        console.log('User');
       }
     });
   }
@@ -103,12 +96,9 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   getPage(pageNumber: number) {
     this.page = pageNumber;
     if (this.isAdmin) {
-      this.store.dispatch(getAdminOrders({ params: {...this.localParams, page: this.page - 1} }))
-      console.log('Admin');
-      
+      this.store.dispatch(getAdminOrders({ params: {...this.localParams, page: this.page - 1} }))      
     } else {
       this.store.dispatch(getUserOrders({ params: {...this.localParams, page: this.page - 1} }))
-      console.log('User');
     }
     document.body.scrollTo({ top: 0, behavior: 'smooth' });
   }

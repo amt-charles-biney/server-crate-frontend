@@ -278,6 +278,15 @@ export function generateSizes(
   return sizes;
 }
 
+export function generateStorageSizes(baseAmount: number, maxAmount: number, unit: string): string[] {
+  const storageSize: string[] = []
+
+  for (let size = baseAmount; size <= maxAmount; size *= 2) {
+    storageSize.push(`${String(size)}`)
+  }
+  return storageSize
+}
+
 export function generateIncompatiblesTable(config: CategoryEditResponse[]) {
   const newIncompatibleSet: Record<string, AttributeOption[]> = {};
   config.forEach((categoryAttribute) => {
@@ -323,7 +332,7 @@ export function removeFromPayload(
   );
   const newConfig = categoryConfigPayload
     .get(attributeName)!
-    .map((categoryConfig) => {
+    ?.map((categoryConfig) => {
       if (optionIds.includes(categoryConfig.attributeOptionId)) {
         return {
           ...categoryConfig,

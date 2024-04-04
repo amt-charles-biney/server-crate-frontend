@@ -95,7 +95,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   getChangeStatus(selectedStatus: MatSelectChange) {
     const status = selectedStatus.value
 
-    if (status === this.CANCEL_ORDER) {
+    if (status === 'Cancel Order') {
       this.orderStatus = status
       const dialogRef = this.dialog.open(ReasonModalComponent, {
         height: 'max-content',

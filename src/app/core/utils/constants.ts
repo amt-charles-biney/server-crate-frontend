@@ -13,7 +13,7 @@ export const LOCALSTORAGE_TOKEN = 'server-crate-token'
 export const LOCALSTORAGE_EMAIL = 'server-crate-email'
 
 export const COLOR_MAPPING: StatusColors = {
-    'Canceled': {
+    'Cancelled': {
         color: 'text-red-status',
         background: 'bg-[#FCE6E799]',
         circle: 'bg-red-status'
@@ -22,6 +22,11 @@ export const COLOR_MAPPING: StatusColors = {
         color: 'text-green-status',
         background: 'bg-[#ECFDF399]',
         circle: 'bg-green-status'
+    },
+    'Assembling': {
+        color: 'text-[#FF8901]',
+        background: 'bg-[#FFF3E499]',
+        circle: 'bg-[#FF8901]'
     },
     'Pending': {
         color: 'text-[#FF8901]',

@@ -25,12 +25,8 @@ export class SummaryComponent implements OnInit, OnChanges {
 
   constructor(private store: Store, private router: Router) {}
 
-  ngOnInit(): void {
-    console.log('QUnatity', this.quantity);
-    
-    if (this.cartItem) {
-      console.log('CartItem', this.cartItem);
-      
+  ngOnInit(): void {    
+    if (this.cartItem) {      
       this.quantity = this.cartItem.quantity
       this.subTotal = this.cartItem.totalPrice * this.quantity
       this.subTotalEmitter.emit(this.subTotal)    

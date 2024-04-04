@@ -118,8 +118,6 @@ export class CreditCardPaymentComponent implements OnInit {
   }
 
   addCard() {
-    console.log('Submit');
-
     this.creditCardForm.markAllAsTouched();
     if (this.creditCardForm.invalid) return;
     const { month, year, ...rest } = this.creditCardForm.value;

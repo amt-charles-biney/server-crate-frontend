@@ -1,7 +1,10 @@
 <span [ngClass]="myClass" class="mt-4 mb-4">{{ label }}</span>
 @if (isMultipleSelect) {
+  <mat-form-field appearance="outline">
+    <mat-error>Required</mat-error>
 <mat-select
   panelClass="myPanel"
+  [required]="isRequired"
   #matSelect
   [placeholder]="placeholder"
   [ngClass]="{
@@ -12,7 +15,7 @@
   [formControl]="control"
   multiple
   (selectionChange)="select($event)"
-  [disabled]="isDisabled"
+  [disabled]="isDisabled"  
 >
   <button
     (click)="toggleAllSelection()"
@@ -30,6 +33,7 @@
   >
   }
 </mat-select>
+</mat-form-field>
 } @else {
   <mat-form-field appearance="outline">
     <mat-error>Required</mat-error>

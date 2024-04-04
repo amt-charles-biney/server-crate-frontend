@@ -55,11 +55,8 @@ export class CustomStepperComponent extends CdkStepper implements OnChanges{
         this.selectedIndex = 4;
         break;
       case 'Delivered':
-        if (this.isAdmin) {
-          this.selectedIndex = 5;
-        } else {
-          this.selectedIndex = 4
-        }
+        this.selectedIndex = 5;
+        
         break;
     }
   }
