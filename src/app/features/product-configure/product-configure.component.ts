@@ -59,7 +59,7 @@ export class ProductConfigureComponent {
   defaultSelectedValues: (Record<string, IdefaultSelectedProps>) = {}
   defaultIncludedPrices: (Record<string, IdefaultSelectedProps>) = {}
   defaultUIChangePrice: (Record<string, IdefaultSelectedProps>) = {}
-  defaultUIConstantPrice!: number;
+  defaultUIConstantPrice!: number | null;
 
   privateQueryParamSubscription: Subscription | undefined;
   privateConfigItemSubscription: Subscription | undefined;
@@ -264,6 +264,7 @@ export class ProductConfigureComponent {
       }
     } else {
       delete this.queryMapper[type];
+      this.defaultUIConstantPrice = null;
       this.updateConfigQueryParam(null);
     }
   }
