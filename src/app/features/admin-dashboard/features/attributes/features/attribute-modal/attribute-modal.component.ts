@@ -224,7 +224,6 @@ export class AttributeModalComponent implements OnInit {
     }    
     const validAttributes = this.attributeForm.value.attributes.map(
       (attr: any, index: number) => {      
-        console.log('Attr', attr);
         if (attr.baseAmount > attr.maxAmount) {
           return null
         }
