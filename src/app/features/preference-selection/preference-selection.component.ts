@@ -2,7 +2,7 @@ import { Store } from '@ngrx/store';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CustomCheckBoxComponent } from '../../shared/components/custom-check-box/custom-check-box.component';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CustomButtonComponent } from '../../shared/components/custom-button/custom-button.component';
 import { BehaviorSubject, Observable, startWith, tap } from 'rxjs';
 import { ProductItem, Select } from '../../types';
@@ -21,6 +21,7 @@ import { filter } from '../../store/users/users.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { selectBrands, selectCategories, selectCases } from '../../store/admin/products/categories.reducers';
+import { AttributeInputService } from '../../core/services/product/attribute-input.service';
 
 @Component({
   selector: 'app-preference-selection',
@@ -56,11 +57,15 @@ export class PreferenceSelectionComponent implements OnInit {
   search: string = '';
   isGridMode: boolean = true;
   initialParams: Record<string, string> = { 'page': '0', 'size': '9' }
+
+  localBrands: Record<string, string> = {}
   constructor(
     private store: Store,
     public dialog: MatDialog,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    private inputService: AttributeInputService
   ) {}
   ngOnInit(): void {
     this.onLoad();
@@ -74,7 +79,12 @@ export class PreferenceSelectionComponent implements OnInit {
     if (this.search) {
       this.store.dispatch(filter({ page: 0, params: {...this.initialParams, query: this.search } }))
     }
-    this.brands$ = this.store.select(selectBrands)
+    this.brands$ = this.store.select(selectBrands).pipe(
+      tap((brands) => {
+        this.localBrands = this.inputService.createDynamicGroup(brands)
+        this.filterForm.patchValue({ brand: this.localBrands})
+      })
+    )
     this.categories$ = this.store.select(selectCategories)
     this.cases$ = this.store.select(selectCases)
   }
@@ -94,24 +104,31 @@ export class PreferenceSelectionComponent implements OnInit {
   }
   onLoad() {
     this.queryParams = {
-      productType: new Set(),
-      processor: new Set(),
       price: new Set(),
       brand: new Set(),
       categories: new Set(),
       productCase: new Set(),
-      mounting: new Set(),
       query: new Set(),
     };
-    this.filterForm = new FormGroup({
-      productType: new FormControl(''),
-      processor: new FormControl(''),
-      price: new FormControl(''),
-      brand: new FormControl(''),
-      categories: new FormControl(''),
-      productCase: new FormControl(''),
-      mounting: new FormControl(''),
-    });
+    // this.filterForm = new FormGroup({
+    //   price: new FormControl(''),
+    //   brand: new FormControl(''),
+    //   categories: new FormControl(''),
+    //   productCase: new FormControl(''),
+    // });
+
+    this.filterForm = this.fb.group({
+      price: this.fb.group({
+        price1: '',
+        price2: '',
+        price3: '',
+        price4: ''
+      }),
+      brand: this.fb.group(this.localBrands),
+      categories: this.fb.group({}),
+      productCase: this.fb.group({})
+    })
+   
   }
   itemSelected(selected: { name: string; value: string; isAdded: boolean }) {
     if (selected.isAdded) {
@@ -147,13 +164,10 @@ export class PreferenceSelectionComponent implements OnInit {
 
   buildParams(params: Record<string, Set<string>>) {
     const keys = [
-      'productType',
-      'processor',
       'price',
       'brand',
       'categories',
       'productCase',
-      'mounting',
       'query',
     ];
     let paramMap: Record<string, string> = { page: '0', size: '9' };
@@ -173,5 +187,9 @@ export class PreferenceSelectionComponent implements OnInit {
 
   get productType() {
     return this.filterForm.get('productType')!;
+  }
+
+  get price() {
+    return this.filterForm.get('price') as FormArray
   }
 }
