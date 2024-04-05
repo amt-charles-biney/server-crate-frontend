@@ -239,15 +239,13 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
         ...payload,
         id: this.id,
       };
-      console.log('Payload', payload);
       
       this.store.dispatch(
         sendEditedConfig({ configuration: editPayload, id: this.id })
       );
     } else {
-      console.log('Sent config', payload);
       
-      // this.store.dispatch(sendConfig(payload));
+      this.store.dispatch(sendConfig(payload));
     }
   }
 
@@ -312,14 +310,10 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   
 
   addSelectedCases(cases: Case[]) {  
-    console.log('Cases', cases);
       
-    console.log('CasesMap before loop', this.casesMap);
     cases.forEach((c) => {
-      console.log('Case', c);
       this.casesMap.set(c.id, c);
     });
-    console.log('CasesMap', this.casesMap);
     this.selectedCases = Array.from(this.casesMap.values());
     
     this.selectedCases.forEach((selectedCase) => {
@@ -339,12 +333,9 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       this.removeAttributeOption(variant, this.incompatibleSet[variant.attribute.name])
     })
 
-    console.log('CasesMap before deleting case', this.casesMap);
     this.casesMap.delete(caseArg.id)
-    console.log('CasesMap after deleting case', this.casesMap);
     
     this.selectedCases = Array.from(this.casesMap.values());
-    console.log('Showing', this.selectedCases);
     this.categoryForm.patchValue({ cases: '' });
   }
 
@@ -384,9 +375,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
         return false;
       }
       return true;
-    });
-    console.log("Show after delete", this.selectedCases);
-    
+    });    
     this.categoryForm.patchValue({ cases: '' });
 
     const newAttributeOptions = options.filter(
