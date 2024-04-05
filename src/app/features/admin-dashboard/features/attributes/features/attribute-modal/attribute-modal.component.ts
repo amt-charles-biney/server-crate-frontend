@@ -223,7 +223,11 @@ export class AttributeModalComponent implements OnInit {
       return;
     }    
     const validAttributes = this.attributeForm.value.attributes.map(
-      (attr: any, index: number) => {                
+      (attr: any, index: number) => {      
+        console.log('Attr', attr);
+        if (attr.baseAmount > attr.maxAmount) {
+          return null
+        }
         return {
           ...attr,
           media: null,
@@ -231,6 +235,12 @@ export class AttributeModalComponent implements OnInit {
         };
       }
     );
+
+    if (validAttributes.includes(null)) {
+      this.toast.info('Make sure Base Amount is less than Max amount')
+      return
+    }
+    
 
     this.store.dispatch(
       updateAttributesInStore({ attributes: validAttributes })

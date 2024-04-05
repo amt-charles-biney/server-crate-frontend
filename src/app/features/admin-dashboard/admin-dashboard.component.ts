@@ -93,7 +93,6 @@ export class AdminDashboardComponent implements OnInit {
             this.store.dispatch(getCategoriesAndConfig({ page: 0 }));
           } else if (this.activeLink === "Orders") {
             this.store.dispatch(getAdminOrders({ params: this.localParams }))
-
           }
         }),
         takeUntilDestroyed(this.destroyRef)
