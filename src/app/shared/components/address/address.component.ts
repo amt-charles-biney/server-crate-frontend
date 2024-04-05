@@ -16,14 +16,16 @@ declare var google: any;
   standalone: true,
   imports: [ReactiveFormsModule],
   template: `
-    <label for="address" class="flex flex-col gap-0.5 mt-4">Address</label>
+    <label for="ship-address" class="flex flex-col gap-0.5 mt-4 ">
+      <span>Address</span>
     <input
-      id="address"
+      id="ship-address"
       [formControl]="control"
-      class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
+      class="w-full overflow-hidden border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
       placeholder="Address"
       #autocomplete
     />
+  </label>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -115,18 +115,22 @@ export class CheckoutComponent implements OnInit {
   addressVerified: boolean = false
   loaderText!: string ;
   isAdmin!: boolean
+  isGuest!: boolean
   constructor(
     private _formBuilder: FormBuilder,
     private store: Store,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private destroyRef: DestroyRef,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin()
+
     if (this.authService.getToken()) {
       this.store.dispatch(getShippingDetails());
+    } else {
+      this.isGuest = true
     }
     this.cartItems = this.store.select(selectConfiguredProducts);
 
@@ -238,6 +242,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   paymentDetails() {
+    this.paymentDetailsComponent.mobileMoneyComponent.mobileMoneyForm.markAllAsTouched()
     this.paymentDetailsComponent.shareForm();
     if (this.paymentDetailsComponent.currentIndex === 2) {
       const paymentRequest: PaymentRequest = {

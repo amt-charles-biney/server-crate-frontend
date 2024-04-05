@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    base_url: 'http://99.81.103.204:8081/api/v1', 
+    base_url: 'https://gpu-configurator-api.amalitech-dev.net/api/v1', 
 };
