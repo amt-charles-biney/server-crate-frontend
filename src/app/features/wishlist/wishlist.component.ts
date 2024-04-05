@@ -5,11 +5,12 @@ import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { UserProductItemComponent } from '../../shared/components/user-product-item/user-product-item.component';
 import { selectContent } from '../../store/admin/products/wishlist.reducers';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-wishlist',
   standalone: true,
-  imports: [CommonModule, UserProductItemComponent],
+  imports: [CommonModule, UserProductItemComponent, RouterLink],
   templateUrl: './wishlist.component.html',
 })
 export class WishlistComponent implements OnInit {

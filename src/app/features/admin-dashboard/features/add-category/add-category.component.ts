@@ -245,7 +245,9 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
         sendEditedConfig({ configuration: editPayload, id: this.id })
       );
     } else {
-      this.store.dispatch(sendConfig(payload));
+      console.log('Sent config', payload);
+      
+      // this.store.dispatch(sendConfig(payload));
     }
   }
 
@@ -307,6 +309,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     this.incompatibleSet = incompatibleSet;
     this.localAttributes = localAttributes;
   }
+  
 
   addSelectedCases(cases: Case[]) {  
     console.log('Cases', cases);
