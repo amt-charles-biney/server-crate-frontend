@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Link, Username } from '../../../../types';
 import { Observable } from 'rxjs';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ProfileService } from '../../../../core/services/user-profile/profile.service';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -44,8 +44,10 @@ export class SettingsComponent {
   constructor(
     private profileService: ProfileService,
     private authService: AuthService,
+    private router: Router
   ) {}
   ngOnInit(): void {
+    this.router.navigateByUrl('/admin/settings/general', { replaceUrl: true })
     this.isAdmin = this.authService.isAdmin();
     this.navLinks = [
       {
