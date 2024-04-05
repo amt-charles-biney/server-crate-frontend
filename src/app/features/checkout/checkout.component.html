@@ -42,7 +42,10 @@
                   placeholder="Enter your email"
                   formControlName="email"
                 />
-                <app-address [control]="shippingForm.controls['address1']" (addressEmitter)="getAddress($event)"/>
+                <div class="relative">
+                  
+                  <app-address [control]="shippingForm.controls['address1']" (addressEmitter)="getAddress($event)"/>
+                </div>
                 <app-custom-input
                   id="address2"
                   label="Address 2"
@@ -152,10 +155,14 @@
               <p class="text-[#737373] text-[13px] mb-[44px]">{{verification.trackingId}}</p>
             </div>
             <a
-              [routerLink]="isAdmin ? '/admin/orders' : '/settings/orders'"
+              [routerLink]="isAdmin ? '/admin/orders' : isGuest ? '/servers' : '/settings/orders'"
               class="bg-figma-green hover:bg-green-500 text-center w-[469px] p-[9px] rounded-xl text-white font-[500px] text-[20px]"
             >
-              Track Order
+            @if (isGuest) {
+              <span>Continue Browsing</span>
+            } @else {
+              <span>Track Order</span>
+            }
           </a>
           </section>
         </ng-container>
