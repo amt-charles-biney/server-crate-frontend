@@ -71,8 +71,6 @@ export class HeaderComponent implements OnInit {
       .pipe(
         debounceTime(900),
         tap((value) => {
-          console.log('Value', value);
-
           if (value) {
             this.router.navigate(['/servers'], {
               queryParams: { query: `${value}` },

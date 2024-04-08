@@ -52,6 +52,9 @@
       [compareWith]="compareFn"
       [value]="control.value"
     >
+      @if(showingNonRequiredAttributes) {
+        <p class="flex pl-4 pr-[11px] text-gray-400 text-sm w-full justify-between items-center">Non required attributes</p>
+      }
       @for (option of options; track option;) {
       <mat-option class="flex-row !text-sm !pr-[11px] myOption" [value]="option">{{
         option.optionName ?? option.attributeName ?? option.name ?? option

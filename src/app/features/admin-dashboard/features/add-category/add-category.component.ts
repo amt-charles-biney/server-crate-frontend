@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 import { CustomInputComponent } from '../../../../shared/components/custom-input/custom-input.component';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, filter, map, tap } from 'rxjs';
 import { selectAttributesState } from '../../../../store/category-management/attributes/attributes.reducers';
 import { CommonModule } from '@angular/common';
 import {
@@ -113,6 +113,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   loadingStatus!: Observable<LoadingStatus>;
   categoryForm!: FormGroup;
   localAttributes: Attribute[] = [];
+  nonRequiredAttributes: Attribute[] = []
   localCases: Case[] = [];
   casesMap!: Map<string, Case>;
   isOverflow = false;
@@ -153,8 +154,12 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       })
     );
     this.attributes = this.store.select(selectAttributesState).pipe(
-      tap((attrs) => {
+      filter((attrs, index) => {
+        return attrs.length !== 0
+      }),
+      tap((attrs) => {        
         this.localAttributes = attrs;
+        this.nonRequiredAttributes = attrs.filter((attr) => !attr.isRequired)
         this.categoryForm = this.attributeService.toFormGroup(attrs);
 
         if (this.id) {
@@ -176,7 +181,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
                   config,
                   name
                 ).value;
-                config.forEach((categoryConfig) => {
+                config.forEach((categoryConfig) => {                  
                   if (!categoryConfig.isCompatible) {
                     this.addSingleIncompatible(categoryConfig);
                     this.localAttributes = removeFromLocalAttributes(

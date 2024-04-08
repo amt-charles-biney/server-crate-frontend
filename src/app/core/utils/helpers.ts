@@ -154,9 +154,7 @@ export function removeFromLocalAttributes(
 export function putInLocalAttributes(
   localAttributes: Attribute[],
   newOption: AttributeOption
-) {
-  console.log('New Option', newOption);
-  
+) {  
   let newLocalAttributes: Attribute[] = [];
   newLocalAttributes = localAttributes?.map((attribute) => {
     let newLocalAttributeOptions: AttributeOption[] = [];
