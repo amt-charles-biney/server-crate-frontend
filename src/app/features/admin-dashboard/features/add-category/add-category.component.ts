@@ -223,13 +223,17 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
 
   createConfig() {
     const selectedMap = new Map();
-
+    const cases = Array.from(this.casesMap.keys())
+    
     if (this.categoryForm.invalid) {
       const controls = this.categoryForm.controls;
       for (const name in controls) {
         this.categoryForm.controls[name].markAsTouched();
         this.categoryForm.controls[name].updateValueAndValidity();
       }
+      return;
+    } else if (cases.length < 1) {
+      this.toast.info("Add compatible cases")
       return;
     }
 
@@ -299,7 +303,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       name: this.categoryForm.value['categoryName'],
       thumbnail: this.coverImage || '',
       config: finalConfig,
-      caseIds: Array.from(this.casesMap.keys()),
+      caseIds: cases
     };
     document.body.scrollTo({ top: 0, behavior: 'smooth' });
     if (this.id) {
