@@ -61,7 +61,8 @@
           <app-custom-select
             label="Attributes"
             [control]="$any(categoryForm.controls['attributesInput'])"
-            [options]="localAttributes"
+            [options]="nonRequiredAttributes"
+            [showingNonRequiredAttributes]="true"
             (onSelect)="onSelectChange($event)"
           />
         </div>
@@ -81,7 +82,6 @@
             type="button"
             (click)="
               addIncompatibleAttribute(
-                categoryConfigPayload,
                 attributesInput.value.attributeName,
                 variants.value || []
               )

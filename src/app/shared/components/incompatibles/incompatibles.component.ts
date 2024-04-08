@@ -48,7 +48,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTooltipModule
   ],
   templateUrl: './incompatibles.component.html',
-  styleUrl: './incompatibles.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('collapse', [
@@ -76,6 +75,7 @@ export class IncompatiblesComponent implements OnInit, OnChanges {
   attributes = this.attributes$.asObservable();
   selectedAttributes = this.selectedAttribute$.asObservable();
   localAttributes: Attribute[] = [];
+  nonRequiredAttributes: Attribute[] = []
   incompatibleSet: Record<string, AttributeOption[]> = {};
   numOfIncompatibles = 0;
 
@@ -104,6 +104,7 @@ export class IncompatiblesComponent implements OnInit, OnChanges {
     this.attributes = this.store.select(selectAttributesState).pipe(
       tap((attrs) => {
         this.localAttributes = attrs;
+        this.nonRequiredAttributes = attrs.filter((attr) => !attr.isRequired)
         this.incompatibleAttributeOptions.forEach((attributeOption) => {
           this.localAttributes = removeFromLocalAttributes(
             this.localAttributes,
