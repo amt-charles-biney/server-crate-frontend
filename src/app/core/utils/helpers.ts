@@ -136,99 +136,6 @@ export function convertAttributeOptionToCategoryConfig(
   };
 }
 
-export function getConfigPayload(
-  attributes: Attribute[]
-): Map<string, CategoryConfig[]> {
-  let categoryConfigMap: Map<string, CategoryConfig[]> = new Map();
-  attributes.forEach((attribute: Attribute) => {
-    attribute.attributeOptions.forEach((attributeOption) => {
-      if (categoryConfigMap.has(attribute.attributeName)) {
-        categoryConfigMap.set(attribute.attributeName, [
-          ...categoryConfigMap.get(attribute.attributeName)!,
-          convertAttributeOptionToCategoryConfig(attributeOption, true, false),
-        ]);
-      } else {
-        categoryConfigMap.set(attribute.attributeName, [
-          convertAttributeOptionToCategoryConfig(attributeOption, true, false),
-        ]);
-      }
-    });
-  });
-  return categoryConfigMap;
-}
-
-export function updateConfigPayload(
-  attributeOption: AttributeOption,
-  configPayload: Map<string, CategoryConfig[]>,
-  included: boolean
-): Map<string, CategoryConfig[]> {
-  if (!configPayload.has(attributeOption.attribute.name)) {
-    configPayload.set(attributeOption.attribute.name, [
-      {
-        attributeId: attributeOption.attribute.id,
-        attributeName: attributeOption.attribute.name,
-        attributeOptionId: attributeOption.id,
-        isCompatible: true,
-        isIncluded: included,
-        isMeasured: attributeOption.attribute.isMeasured,
-        size: attributeOption.additionalInfo.baseAmount,
-      },
-    ]);
-  }
-  const newPayload = configPayload
-    .get(attributeOption.attribute.name)!
-    .map((config) => {
-      if (config.attributeOptionId === attributeOption.id) {
-        return {
-          ...config,
-          isIncluded: included,
-          isCompatible: true,
-        };
-      } else if (config.attributeId === attributeOption.attribute.id) {
-        return {
-          ...config,
-          isIncluded: false,
-        };
-      }
-      return config;
-    });
-  configPayload.set(attributeOption.attribute.name, newPayload);
-  return configPayload;
-}
-
-export function getEditConfigPayload(configs: CategoryEditResponse[]) {
-  const mapping: Map<string, CategoryConfig[]> = new Map();
-  configs.forEach((config) => {
-    if (mapping.has(config.type)) {
-      mapping.set(config.type, [
-        ...mapping.get(config.type)!,
-        convertToCategoryConfig(config),
-      ]);
-    } else {
-      mapping.set(config.type, [convertToCategoryConfig(config)]);
-    }
-  });
-  return mapping;
-}
-
-export function updateConfigSizes(
-  attributeName: string,
-  optionId: string,
-  configPayload: Map<string, CategoryConfig[]>,
-  size: number
-) {
-  const newPayload = configPayload.get(attributeName)!.map((config) => {
-    if (config.attributeOptionId === optionId) {
-      return {
-        ...config,
-        size,
-      };
-    }
-    return config;
-  });
-  configPayload.set(attributeName, newPayload);
-  return configPayload;
-}
 export function removeFromLocalAttributes(
   localAttributes: Attribute[],
   optionId: string
@@ -248,6 +155,8 @@ export function putInLocalAttributes(
   localAttributes: Attribute[],
   newOption: AttributeOption
 ) {
+  console.log('New Option', newOption);
+  
   let newLocalAttributes: Attribute[] = [];
   newLocalAttributes = localAttributes?.map((attribute) => {
     let newLocalAttributeOptions: AttributeOption[] = [];
@@ -320,55 +229,6 @@ export function getAttributeOptionsFromConfig(config: CategoryEditResponse) {
     config.attributeId,
     config.attributeOptionId
   );
-}
-
-export function removeFromPayload(
-  categoryConfigPayload: Map<string, CategoryConfig[]> = new Map(),
-  attributeName: string,
-  incompatibleAttributeOptions: AttributeOption[]
-) {
-  const optionIds = incompatibleAttributeOptions.map(
-    (attributeOption) => attributeOption.id
-  );
-  const newConfig = categoryConfigPayload
-    .get(attributeName)!
-    ?.map((categoryConfig) => {
-      if (optionIds.includes(categoryConfig.attributeOptionId)) {
-        return {
-          ...categoryConfig,
-          isCompatible: false,
-          isIncluded: false,
-        };
-      }
-      return categoryConfig;
-    });
-  const newCategoryConfigPayload = categoryConfigPayload.set(
-    attributeName,
-    newConfig
-  );
-  return newCategoryConfigPayload;
-}
-
-export function removeVariantsFromPayload(
-  configPayload: Map<string, CategoryConfig[]> = new Map(),
-  incompatibleAttributeOptions: AttributeOption[] = []
-) {
-  incompatibleAttributeOptions.forEach((option) => {
-    const newPayload = configPayload
-      .get(option.attribute.name)!
-      .map((config) => {
-        if (config.attributeOptionId === option.id) {
-          return {
-            ...config,
-            isIncluded: false,
-            isCompatible: false,
-          };
-        } 
-        return config;
-      });
-    configPayload.set(option.attribute.name, newPayload);
-  });
-  return configPayload;
 }
 
 export function generateIncompatibleSet(

@@ -320,7 +320,7 @@ export type CategoryConfig = {
   isIncluded: boolean;
   isMeasured: boolean;
   isCompatible: boolean;
-  size: number;
+  size: number | null;
   attributeName: string;
 };
 
