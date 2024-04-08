@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    base_url: 'https://concrete-redfish-vaguely.ngrok-free.app/api/v1' 
+    base_url: 'http://localhost:8080/api/v1', 
 };
