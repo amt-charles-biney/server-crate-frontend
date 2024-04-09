@@ -62,7 +62,7 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
     this.store.dispatch(getGeneralInfo());
     this.generalInfoForm = new FormGroup({
       firstName: new FormControl('', {
-        validators: [Validators.required, Validators.pattern('/^[A-Za-z]+$/')],
+        validators: [Validators.required],
         updateOn: 'blur',
       }),
       lastName: new FormControl('', {
