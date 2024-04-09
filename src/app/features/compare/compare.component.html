@@ -29,8 +29,11 @@
       <div class="row h-[39px]">
         <p>Storage</p>
       </div>
-      <div class="row h-[39px] !border-b-0">
+      <div class="row h-[39px]">
         <p>Operating System</p>
+      </div>
+      <div class="row h-[39px] ">
+        <p>Processor</p>
       </div>
       <div class="row h-[39px] !border-b-0">
       </div>
@@ -75,7 +78,7 @@
             <div
               class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
             >
-              <p>{{ product.options["graphics"] || "Not available" }}</p>
+              <p>{{ product.options["gpu"] || "Not available" }}</p>
             </div>
             <div
               class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
@@ -96,7 +99,14 @@
               class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
             >
               <p>
-                {{ product.options["operating systems"] || "Not available" }}
+                {{ product.options["operating system"] || "Not available" }}
+              </p>
+            </div>
+            <div
+              class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
+            >
+              <p>
+                {{ product.options["processor"] || "Not available" }}
               </p>
             </div>
             <button (click)="goToConfiguration(product.productId)" class="w-full my-2 rounded-xl text-xl text-white py-4 px-[72px] bg-figma-green">

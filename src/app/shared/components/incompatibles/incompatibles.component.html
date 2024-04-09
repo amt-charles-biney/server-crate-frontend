@@ -30,7 +30,8 @@
           <app-custom-select
             label="Attributes"
             [control]="$any(incompatibleForm.controls['attribute'])"
-            [options]="localAttributes"
+            [showingNonRequiredAttributes]="true"
+            [options]="nonRequiredAttributes"
             (onSelect)="onSelectChange($event)"
           />
         </div>
