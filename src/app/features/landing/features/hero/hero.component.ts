@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/co
 import { heroSlider } from './hero.interface';
 import { CommonModule } from '@angular/common';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hero',
@@ -56,10 +57,14 @@ export class HeroComponent {
     })
   }
 
+  navigateToServers() {
+    this.router.navigate(['/servers']);
+  }
+
   ngOnDestroy() {
     if (this.slider) this.slider.destroy()
   }
 
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, private router: Router) {}
 }
