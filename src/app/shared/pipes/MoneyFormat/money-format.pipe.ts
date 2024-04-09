@@ -10,8 +10,8 @@ export class MoneyFormatPipe implements PipeTransform {
     if (value > 1000000) {
       return `\$${(value/1000000).toFixed()}M`
 
-    } else if ( value > 100000) {
-      return `\$${(value/100000).toFixed()}K`
+    } else if ( value >= 1000) {
+      return `\$${(value/1000).toFixed()}K`
     }
     return `${value}`
   }
