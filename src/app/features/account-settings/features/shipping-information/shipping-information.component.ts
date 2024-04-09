@@ -48,8 +48,8 @@ export class ShippingInformationComponent implements OnInit {
 
     this.shippingInfoForm$ = this.store.select(selectShippingDetailsState).pipe(
       tap((shippingDetails) => {
-        this.shippingForm.patchValue({...shippingDetails })
-        this.intl?.setNumber(shippingDetails.contact?.phoneNumber)
+        this.shippingForm.patchValue({...shippingDetails, contact: shippingDetails.contact?.phoneNumber })
+        this.intl?.setNumber(shippingDetails.contact?.phoneNumber)        
       })
     )
 

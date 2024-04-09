@@ -62,7 +62,7 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.searchInput = new FormControl('');
     this.store.dispatch(getAttributes({ page: 0}));
-    this.store.dispatch(getCases());
+    // this.store.dispatch(getCases());
     this.store.dispatch(getNotifications());
     this.activeLink = this.setTitle(this.router.url);
     this.activatedRoute.queryParams.subscribe((params) => {

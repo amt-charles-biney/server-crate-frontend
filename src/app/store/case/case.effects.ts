@@ -11,7 +11,7 @@ import {
 } from './case.actions';
 import { catchError, exhaustMap, finalize, map, of, switchMap, tap } from 'rxjs';
 import { AdminService } from '../../core/services/admin/admin.service';
-import { Case, CaseResponse } from '../../types';
+import { AllCases, Case, CaseResponse } from '../../types';
 import { setLoadingSpinner } from '../loader/actions/loader.actions';
 import { errorHandler } from '../../core/utils/helpers';
 import { Router } from '@angular/router';
@@ -23,10 +23,10 @@ export class CaseEffect {
   gotCases$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getCases),
-      exhaustMap(() => {
-        return this.adminService.getCases().pipe(
-          map((response: CaseResponse) => {
-            return gotCases({ cases: response });
+      exhaustMap(({ page }) => {
+        return this.adminService.getCases(page).pipe(
+          map((allCases: AllCases) => {
+            return gotCases(allCases);
           })
         );
       })
@@ -67,7 +67,7 @@ export class CaseEffect {
           map(() => {
             document.body.scrollTo({ top: 0, behavior: 'smooth' });
             this.router.navigateByUrl('/admin/cases');
-            return getCases();
+            return getCases({ page: 0});
           }),
           catchError((err) => {
             return of(
@@ -96,7 +96,7 @@ export class CaseEffect {
             setTimeout(() => {
               this.router.navigateByUrl('/admin/cases');
             }, 500);
-            return getCases();
+            return getCases({ page: 0 });
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), 'Error')
@@ -120,7 +120,7 @@ export class CaseEffect {
             setTimeout(() => {
               this.router.navigateByUrl('/admin/cases');
             }, 500);
-            return getCases();
+            return getCases({page: 0});
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), 'Error')

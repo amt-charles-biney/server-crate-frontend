@@ -72,7 +72,7 @@ import { CustomImageComponent } from '../../../../shared/components/custom-image
 import { CLOUD_NAME, UPLOAD_PRESET } from '../../../../core/utils/constants';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { getCases } from '../../../../store/case/case.actions';
-import { selectCases } from '../../../../store/case/case.reducers';
+import { selectContent } from '../../../../store/case/case.reducers';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -145,10 +145,10 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     private toast: ToastrService
   ) {}
   ngOnInit(): void {
-    this.store.dispatch(getCases());
+    this.store.dispatch(getCases({ page: 0}));
     this.casesMap = new Map();
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.cases = this.store.select(selectCases).pipe(
+    this.cases = this.store.select(selectContent).pipe(
       tap((cases) => {
         this.localCases = cases;
       })

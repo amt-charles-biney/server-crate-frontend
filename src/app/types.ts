@@ -768,3 +768,11 @@ export type CancelShipment = {
   reason: string;
   id: string
 }
+
+export type AllCases = {
+  content: Case[],
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  case: Case
+}
