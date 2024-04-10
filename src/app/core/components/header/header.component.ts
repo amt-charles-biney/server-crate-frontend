@@ -1,16 +1,9 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
 import { UserProfileImageComponent } from '../../../shared/components/user-profile-image/user-profile-image.component';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import {
   FormControl,
   FormGroup,
@@ -22,7 +15,7 @@ import { Store } from '@ngrx/store';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
-import { BehaviorSubject, Observable, debounceTime, tap } from 'rxjs';
+import { Observable, debounceTime, tap } from 'rxjs';
 import { selectCount } from '../../../store/cart/cart.reducers';
 import { MegaMenuComponent } from './mega-menu/mega-menu.component';
 import { selectTotalElements } from '../../../store/admin/products/wishlist.reducers';
@@ -47,6 +40,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit {
+  @ViewChild('searchBar') searchBar!: ElementRef<HTMLInputElement>
   isMegaMenu: boolean = false;
   isAuthenticated!: boolean;
   showSearch: boolean = false;
@@ -89,6 +83,10 @@ export class HeaderComponent implements OnInit {
     this.showSearch = !this.showSearch;
     if (!this.showSearch) {
       this.searchForm.patchValue({ searchValue: '' })
+    } else {
+      setTimeout(() => {
+        this.searchBar.nativeElement.focus()
+      }, 0);
     }
   }
 

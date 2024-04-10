@@ -3,15 +3,20 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterModule,
+} from '@angular/router';
 import { UserProfileImageComponent } from '../../shared/components/user-profile-image/user-profile-image.component';
 import { Store } from '@ngrx/store';
 import { getAttributes } from '../../store/category-management/attributes/attributes.actions';
 import { clearStorage } from '../../core/utils/helpers';
-import { getCases } from '../../store/case/case.actions';
 import { LoaderComponent } from '../../core/components/loader/loader.component';
 import { getNotifications } from '../../store/admin/products/notifications.actions';
 import { Observable, debounceTime, tap } from 'rxjs';
@@ -46,13 +51,14 @@ import { getAdminOrders } from '../../store/orders/order.actions';
 })
 export class AdminDashboardComponent implements OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
+  @ViewChild('searchBar') searchBar!: ElementRef<HTMLInputElement>;
   searchInput!: FormControl;
 
   numberOfNotifications$!: Observable<number>;
   activeLink: string = '';
   showNotifications: boolean = false;
   showSearchBar = false;
-  localParams = {}
+  localParams = {};
   constructor(
     private router: Router,
     private store: Store,
@@ -61,13 +67,12 @@ export class AdminDashboardComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.searchInput = new FormControl('');
-    this.store.dispatch(getAttributes({ page: 0}));
-    // this.store.dispatch(getCases());
+    this.store.dispatch(getAttributes({ page: 0 }));
     this.store.dispatch(getNotifications());
     this.activeLink = this.setTitle(this.router.url);
     this.activatedRoute.queryParams.subscribe((params) => {
-      this.localParams = params
-    })
+      this.localParams = params;
+    });
     if (this.router)
       this.router.events
         .pipe(takeUntilDestroyed(this.destroyRef))
@@ -88,11 +93,11 @@ export class AdminDashboardComponent implements OnInit {
             this.store.dispatch(getProducts({ page: 0 }));
           } else if (this.activeLink === 'Cases') {
           } else if (this.activeLink === 'Attributes') {
-            this.store.dispatch(getAttributes({ page: 0}))
-          } else if (this.activeLink === 'Categories') {            
+            this.store.dispatch(getAttributes({ page: 0 }));
+          } else if (this.activeLink === 'Categories') {
             this.store.dispatch(getCategoriesAndConfig({ page: 0 }));
-          } else if (this.activeLink === "Orders") {
-            this.store.dispatch(getAdminOrders({ params: this.localParams }))
+          } else if (this.activeLink === 'Orders') {
+            this.store.dispatch(getAdminOrders({ params: this.localParams }));
           }
         }),
         takeUntilDestroyed(this.destroyRef)
@@ -104,6 +109,13 @@ export class AdminDashboardComponent implements OnInit {
 
   setAdminLink(link: string) {
     this.activeLink = link;
+  }
+
+  toggleSearchBar() {
+    this.showSearchBar = !this.showSearchBar;
+    setTimeout(() => {
+      this.searchBar.nativeElement.focus();
+    }, 0);
   }
 
   /**

@@ -278,6 +278,7 @@ export type Attribute = {
   unit: string;
   description: string;
   attributeOptions: AttributeOption[];
+  isDefaultRequired: boolean;
   isRequired: boolean;
 };
 export type ConfigurationEdit = {

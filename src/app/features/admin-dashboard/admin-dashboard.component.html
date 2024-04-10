@@ -371,9 +371,10 @@
           @if (showSearchBar) {
           <input
             [formControl]="searchInput"
+            [placeholder]="'Search for ' + activeLink"
             class="outline outline-2 rounded outline-figma-green mx-4 py-1 pl-2 h-fit ml-auto w-72"
             type="text"
-            autofocus
+            #searchBar
           />
           }
 
@@ -397,7 +398,7 @@
 
               <button
                 class="hover:bg-gray-200 p-1.5"
-                (click)="showSearchBar = !showSearchBar"
+                (click)="toggleSearchBar()"
               >
                 @if (showSearchBar) {
                 <svg
