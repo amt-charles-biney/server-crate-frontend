@@ -93,13 +93,7 @@ export class AdminService {
   }
 
   getAttributes(page: number) {
-    const query = JSON.parse(sessionStorage.getItem("search") || '')
-    let params
-    if (query) {
-      params = { page, q: query, size: 9}
-    } else {
-      params = { page, size: 9}
-    }
+    const params = { page, size: 9}
     return this.http.get<GetAttribute>(`${this.baseUrl}/admin/attributes`, { params });
   }
 
@@ -185,10 +179,9 @@ export class AdminService {
   }
 
   getAdminOrders(params?: Record<string, string | number>) {
-    const query = JSON.parse(sessionStorage.getItem("search") || '')
     let newParams
     if (params) {
-     newParams = { q: query || '', size: 9, page:0, ...params}
+     newParams = {  page:0, size: 9, ...params}
     }
 
     return this.http.get<AllOrders>(`${this.baseUrl}/admin/orders`, { params: newParams })

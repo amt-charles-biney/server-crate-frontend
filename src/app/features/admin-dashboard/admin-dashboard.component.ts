@@ -30,6 +30,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { getProducts } from '../../store/admin/products/categories.actions';
 import { getCategoriesAndConfig } from '../../store/category-management/attributes/config/config.actions';
 import { getAdminOrders } from '../../store/orders/order.actions';
+import { getCases } from '../../store/case/case.actions';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -92,13 +93,10 @@ export class AdminDashboardComponent implements OnInit {
           if (this.activeLink === 'Products') {
             this.store.dispatch(getProducts({ page: 0 }));
           } else if (this.activeLink === 'Cases') {
-          } else if (this.activeLink === 'Attributes') {
-            this.store.dispatch(getAttributes({ page: 0 }));
-          } else if (this.activeLink === 'Categories') {
+            this.store.dispatch(getCases({ page: 0 }));
+          }  else if (this.activeLink === 'Categories') {
             this.store.dispatch(getCategoriesAndConfig({ page: 0 }));
-          } else if (this.activeLink === 'Orders') {
-            this.store.dispatch(getAdminOrders({ params: this.localParams }));
-          }
+          } 
         }),
         takeUntilDestroyed(this.destroyRef)
       )
@@ -117,6 +115,8 @@ export class AdminDashboardComponent implements OnInit {
       setTimeout(() => {
         this.searchBar.nativeElement.focus();
       }, 0);
+    } else {
+      this.searchInput.patchValue('')
     }
   }
 
