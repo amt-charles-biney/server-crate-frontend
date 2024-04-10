@@ -128,8 +128,8 @@ export class GeneralInformationComponent implements OnInit, AfterViewInit {
       iso2Code: contact.iso2,
       phoneNumber: this.intl?.getNumber(),
     };
-
-    if (!this.intl.isValidNumber()) {
+    
+    if (!this.intl.isValidNumber() && this.intl?.getNumber()) {
       this.showWarning = 'Please enter a valid phone number';
       return;
     }
