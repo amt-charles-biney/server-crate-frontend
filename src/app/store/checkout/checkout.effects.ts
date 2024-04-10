@@ -41,6 +41,7 @@ export class CheckoutEffect {
                 return this.paymentService.verifyPayment(reference).pipe(
                     map((props) => {
                         sessionStorage.setItem("order", JSON.stringify(props))
+                        this.toast.success("Order Complete. Please check your mail")
                         return gotPaymentVerification(props)
                     }),
                     catchError((err) => {
