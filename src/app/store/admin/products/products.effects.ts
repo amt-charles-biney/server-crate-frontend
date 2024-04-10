@@ -20,13 +20,17 @@ import { UserService } from '../../../core/services/user/user.service';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { errorHandler } from '../../../core/utils/helpers';
 import { ToastrService } from 'ngx-toastr';
+import { CacheService } from '../../../core/services/cache/cache.service';
+import { Store } from '@ngrx/store';
 
+const cache = new Map()
 @Injectable()
 export class ProductsEffect {
   loadProduct$ = createEffect(() => {
     return this.action$.pipe(
       ofType(getProducts),
       exhaustMap((props) => {
+        
         return this.adminService.getProducts(props.page).pipe(
           map((products: AllProducts) => {
             sessionStorage.setItem("search", JSON.stringify(""))
@@ -155,6 +159,8 @@ export class ProductsEffect {
     private action$: Actions,
     private adminService: AdminService,
     private userService: UserService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private cacheService: CacheService,
+    private store: Store
   ) {}
 }

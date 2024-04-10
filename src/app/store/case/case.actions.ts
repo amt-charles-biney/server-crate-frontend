@@ -1,11 +1,11 @@
 import { createAction, props } from "@ngrx/store";
-import { Case, CaseResponse, Item } from "../../types";
+import { AllCases, Case, CaseResponse, Item } from "../../types";
 
-export const getCases = createAction('[Case] get cases')
+export const getCases = createAction('[Case] get cases', props<{ page: number }>())
 
 export const getCaseList = createAction('[Case] get case list')
 
-export const gotCases = createAction('[Case] got cases', props<{cases: CaseResponse}>())
+export const gotCases = createAction('[Case] got cases', props<AllCases>())
 
 export const getSingleCase = createAction('[Case] get single case', props<Item>())
 

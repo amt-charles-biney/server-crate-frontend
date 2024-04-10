@@ -25,6 +25,7 @@ import {
   ChartData,
   AllCategories,
   CancelShipment,
+  AllCases,
 } from '../../../types';
 import { CLOUD_NAME, NO_AUTH } from '../../utils/constants';
 
@@ -48,7 +49,12 @@ export class AdminService {
 
   getProducts(page: number) {
     const query = JSON.parse(sessionStorage.getItem("search") || '')
-    const params = { page, q: query || '', size: 9}
+    let params
+    if (query) {
+      params = { page, q: query, size: 9}
+    } else {
+      params = { page, size: 9}
+    }
     return this.http.get<AllProducts>(
       `${this.baseUrl}/admin/product`, { params }
     );
@@ -88,7 +94,12 @@ export class AdminService {
 
   getAttributes(page: number) {
     const query = JSON.parse(sessionStorage.getItem("search") || '')
-    const params = { page, q: query || '', size: 9}
+    let params
+    if (query) {
+      params = { page, q: query, size: 9}
+    } else {
+      params = { page, size: 9}
+    }
     return this.http.get<GetAttribute>(`${this.baseUrl}/admin/attributes`, { params });
   }
 
@@ -146,8 +157,15 @@ export class AdminService {
     return this.http.put(`${this.baseUrl}/admin/category/config/${id}`, categoryConfig)
   }
 
-  getCases() {
-    return this.http.get<CaseResponse>(`${this.baseUrl}/admin/cases`)
+  getCases(page: number) {
+    const query = JSON.parse(sessionStorage.getItem("search") || '')
+    let params
+    if (query) {
+      params = { page, q: query, size: 9}
+    } else {
+      params = { page, size: 9}
+    }
+    return this.http.get<AllCases>(`${this.baseUrl}/admin/cases`, { params })
   }
 
   getCase(id: string) {

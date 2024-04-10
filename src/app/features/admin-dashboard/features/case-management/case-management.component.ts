@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Store } from '@ngrx/store';
 import { getCases } from '../../../../store/case/case.actions';
-import { selectCases, selectTotalCases } from '../../../../store/case/case.reducers';
+import { selectContent, selectTotalElements } from '../../../../store/case/case.reducers';
 import { RouterModule } from '@angular/router';
 import { CaseItemComponent } from '../../../../shared/components/case-item/case-item.component';
 import { PaginatedComponent } from '../../../../shared/components/paginated/paginated.component';
@@ -24,12 +24,14 @@ export class CaseManagementComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.cases = this.store.select(selectCases);
-    this.total = this.store.select(selectTotalCases)
+    this.getPage(1)
   }
-
+  
   getPage(pageNumber: number) {
     this.page = pageNumber;
+    this.store.dispatch(getCases({ page: pageNumber - 1}));
     document.body.scrollTo({ top: 0, behavior: 'smooth'})
+    this.cases = this.store.select(selectContent);
+    this.total = this.store.select(selectTotalElements)
   }
 }

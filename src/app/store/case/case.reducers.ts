@@ -1,10 +1,10 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { Case } from "../../types";
+import { AllCases, Case } from "../../types";
 import { gotCases, gotSingleCase, resetCase } from "./case.actions";
 
-export const caseInitialState: { cases: Case[], totalCases: number, case: Case} = {
-    cases: [],
-    totalCases: 0,
+export const caseInitialState: AllCases = {
+    content: [],
+    totalElements: 0,
     case: {
         coverImageUrl: '',
         description: '',
@@ -13,17 +13,21 @@ export const caseInitialState: { cases: Case[], totalCases: number, case: Case} 
         incompatibleVariants: [],
         name: '',
         price: 0
-    }
+    },
+    size: 0,
+    totalPages: 0
 }
 export const caseFeature = createFeature({
     name: 'caseFeature',
     reducer: createReducer(
         caseInitialState,
-        on(gotCases, (state, { cases }) => {
+        on(gotCases, (state, { content, size, totalElements, totalPages }) => {
             return {
                 ...state,
-                cases: cases.content,
-                totalCases: cases.totalElements
+                content,
+                totalElements,
+                totalPages,
+                size,
             }
         }),
         on(gotSingleCase, (state, caseProp) => {
@@ -41,4 +45,4 @@ export const caseFeature = createFeature({
     )
 })
 
-export const { selectCases, selectTotalCases, selectCase } = caseFeature
+export const { selectContent, selectTotalElements, selectCase } = caseFeature
