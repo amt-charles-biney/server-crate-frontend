@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import UrlPattern from 'url-pattern';
 
 @Injectable({
   providedIn: 'root',
