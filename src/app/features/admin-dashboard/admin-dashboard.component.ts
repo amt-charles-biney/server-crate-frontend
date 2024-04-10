@@ -113,9 +113,11 @@ export class AdminDashboardComponent implements OnInit {
 
   toggleSearchBar() {
     this.showSearchBar = !this.showSearchBar;
-    setTimeout(() => {
-      this.searchBar.nativeElement.focus();
-    }, 0);
+    if (this.showSearchBar) {
+      setTimeout(() => {
+        this.searchBar.nativeElement.focus();
+      }, 0);
+    }
   }
 
   /**
