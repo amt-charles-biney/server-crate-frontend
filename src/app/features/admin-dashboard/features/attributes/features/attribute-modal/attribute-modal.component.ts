@@ -52,11 +52,12 @@ import {
   attributeFormValidator,
   unitRequiredIfMeasured,
 } from '../../../../../../core/utils/validators';
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 import { IncompatiblesComponent } from '../../../../../../shared/components/incompatibles/incompatibles.component';
 import { LoaderComponent } from '../../../../../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../../../../../shared/components/error/error.component';
 import { ToastrService } from 'ngx-toastr';
+import { CacheService } from '../../../../../../core/services/cache/cache.service';
 @Component({
   selector: 'app-attribute-modal',
   standalone: true,
@@ -72,7 +73,7 @@ import { ToastrService } from 'ngx-toastr';
     CustomSelectComponent,
     IncompatiblesComponent,
     LoaderComponent,
-    ErrorComponent
+    ErrorComponent,
   ],
   templateUrl: './attribute-modal.component.html',
   styleUrl: './attribute-modal.component.scss',
@@ -85,17 +86,19 @@ export class AttributeModalComponent implements OnInit {
   loadingStatus$!: Observable<LoadingStatus>;
   id = '';
   editId: string | null = null;
-  incompatibleAttributeOptions: string[] = []
-  incompatibleVariants: Record<string, AttributeOption[]> = {}
-  incompatibleSet: Record<string, string[]> = {}
-  collapsedIndex!: number 
+  incompatibleAttributeOptions: string[] = [];
+  incompatibleVariants: Record<string, AttributeOption[]> = {};
+  incompatibleSet: Record<string, string[]> = {};
+  collapsedIndex!: number;
   constructor(
     public dialogRef: MatDialogRef<AttributeModalComponent>,
     private store: Store,
     private toast: ToastrService,
     private fb: FormBuilder,
     private destroyRef: DestroyRef,
-    @Inject(MAT_DIALOG_DATA) public data: { attribute: Attribute, index: number }
+    private cacheService: CacheService,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { attribute: Attribute; index: number }
   ) {}
   ngOnInit(): void {
     this.loadingStatus$ = this.store.select(selectLoaderState);
@@ -120,13 +123,17 @@ export class AttributeModalComponent implements OnInit {
         const priceFactor = attr.additionalInfo.priceFactor
           ? attr.additionalInfo.priceFactor.toString()
           : '';
-        const brand = attr.brand ? attr.brand.toString() : ''
-        const inStock = attr.inStock ? attr.inStock.toString() : ''
+        const brand = attr.brand ? attr.brand.toString() : '';
+        const inStock = attr.inStock ? attr.inStock.toString() : '';
         const price = attr.optionPrice ? attr.optionPrice.toString() : '';
-        const incompatibleAttributeOptions = attr.incompatibleAttributeOptions ? attr.incompatibleAttributeOptions : []
-        this.incompatibleVariants[index] = incompatibleAttributeOptions
-        this.incompatibleSet[index] = incompatibleAttributeOptions.map((option) => option.id)
-        
+        const incompatibleAttributeOptions = attr.incompatibleAttributeOptions
+          ? attr.incompatibleAttributeOptions
+          : [];
+        this.incompatibleVariants[index] = incompatibleAttributeOptions;
+        this.incompatibleSet[index] = incompatibleAttributeOptions.map(
+          (option) => option.id
+        );
+
         this.store.dispatch(
           addAttributeToStore({
             baseAmount,
@@ -138,36 +145,32 @@ export class AttributeModalComponent implements OnInit {
             priceFactor,
             brand,
             inStock,
-            incompatibleAttributeOptions
+            incompatibleAttributeOptions,
           })
         );
-      })
-      this.collapsedIndex = this.data.index      
-      this.attributeForm = this.fb.group(
-        {
-          attributeName: [attributeName, Validators.required],
-          description: [description],
-          isMeasured: [isMeasured],
-          isRequired: [isRequired],
-          unit: [unit || 'GB', unitRequiredIfMeasured()],
-          attributes: this.fb.array(
-            attributeOptions.map((attributeOption) =>
-              this.createAttr(attributeOption)
-            )
-          ),
-        },
-      );
+      });
+      this.collapsedIndex = this.data.index;
+      this.attributeForm = this.fb.group({
+        attributeName: [attributeName, Validators.required],
+        description: [description],
+        isMeasured: [isMeasured],
+        isRequired: [isRequired],
+        unit: [unit || 'GB', unitRequiredIfMeasured()],
+        attributes: this.fb.array(
+          attributeOptions.map((attributeOption) =>
+            this.createAttr(attributeOption)
+          )
+        ),
+      });
     } else {
-      this.attributeForm = this.fb.group(
-        {
-          attributeName: ['', Validators.required],
-          description: [''],
-          isMeasured: [false],
-          isRequired: [false],
-          unit: ['GB', unitRequiredIfMeasured()],
-          attributes: this.fb.array<FormGroup[]>([]),
-        },
-      );
+      this.attributeForm = this.fb.group({
+        attributeName: ['', Validators.required],
+        description: [''],
+        isMeasured: [false],
+        isRequired: [false],
+        unit: ['GB', unitRequiredIfMeasured()],
+        attributes: this.fb.array<FormGroup[]>([]),
+      });
       this.addAttributeForm();
     }
   }
@@ -180,7 +183,7 @@ export class AttributeModalComponent implements OnInit {
       optionPrice,
       brand,
       inStock,
-      incompatibleAttributeOptions
+      incompatibleAttributeOptions,
     } = attributeOption;
     this.coverImage.push(optionMedia || null);
     return this.fb.group({
@@ -194,7 +197,7 @@ export class AttributeModalComponent implements OnInit {
       coverImage: optionMedia,
       brand,
       inStock,
-      incompatibleAttributeOptions
+      incompatibleAttributeOptions,
     });
   }
   replaceImage(
@@ -219,38 +222,36 @@ export class AttributeModalComponent implements OnInit {
 
   addAttribute() {
     if (this.attributeForm.invalid) {
-      this.attributeForm.markAllAsTouched()
+      this.attributeForm.markAllAsTouched();
       return;
-    }    
+    }
     const validAttributes = this.attributeForm.value.attributes.map(
-      (attr: any, index: number) => {      
+      (attr: any, index: number) => {
         if (attr.baseAmount > attr.maxAmount) {
-          return null
+          return null;
         }
         return {
           ...attr,
           media: null,
-          incompatibleAttributeOptions: this.incompatibleSet[index]
+          incompatibleAttributeOptions: this.incompatibleSet[index],
         };
       }
     );
 
     if (validAttributes.includes(null)) {
-      this.toast.info('Make sure Base Amount is less than Max amount')
-      return
+      this.toast.info('Make sure Base Amount is less than Max amount');
+      return;
     }
-    
+    this.cacheService.removeKeyFromCache('/admin/product');
 
     this.store.dispatch(
       updateAttributesInStore({ attributes: validAttributes })
     );
     if (this.editId) {
-      
-
       this.store
         .select(selectAttributeCreationState)
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((options) => {          
+        .subscribe((options) => {
           const isMeasured = this.attributeForm.value.isMeasured;
           let attribute = {
             attributeName: this.attributeForm.value.attributeName,
@@ -259,8 +260,8 @@ export class AttributeModalComponent implements OnInit {
             isRequired: this.attributeForm.value.isRequired,
             unit: isMeasured ? this.attributeForm.value.unit : '',
             variantOptions: options,
-            id: this.editId
-          };          
+            id: this.editId,
+          };
           this.store.dispatch(updateAttribute(attribute));
         });
       this.dialogRef.close();
@@ -269,7 +270,7 @@ export class AttributeModalComponent implements OnInit {
     this.store
       .select(selectAttributeCreationState)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((options) => {        
+      .subscribe((options) => {
         let attribute = {
           attributeName: this.attributeForm.value.attributeName,
           description: this.attributeForm.value.description,
@@ -277,51 +278,67 @@ export class AttributeModalComponent implements OnInit {
           isRequired: this.attributeForm.value.isRequired,
           unit: this.attributeForm.value.unit,
           variantOptions: options,
-        };        
+        };
         this.store.dispatch(addAttribute(attribute));
         this.dialogRef.close();
       });
   }
 
-  updateValidator(controlName: string, validator: ValidatorFn, form: FormGroup) {
-    form.get(controlName)?.setValidators(validator)
-    form.get(controlName)?.updateValueAndValidity()
+  updateValidator(
+    controlName: string,
+    validator: ValidatorFn,
+    form: FormGroup
+  ) {
+    form.get(controlName)?.setValidators(validator);
+    form.get(controlName)?.updateValueAndValidity();
   }
-  removeValidator(controlName: string, validator: ValidatorFn | null, form: FormGroup) {
+  removeValidator(
+    controlName: string,
+    validator: ValidatorFn | null,
+    form: FormGroup
+  ) {
+    if (validator !== null) {
+      form.get(controlName)?.removeValidators(validator);
+    } else {
+      form.get(controlName)?.clearValidators();
+    }
+    form.get(controlName)?.updateValueAndValidity();
+  }
 
-      if (validator !== null ) {
-        form.get(controlName)?.removeValidators(validator)
-      } else {
-        form.get(controlName)?.clearValidators()
-      }
-    form.get(controlName)?.updateValueAndValidity()
-  }
-  
   modifyValidator() {
     this.attributes.controls.forEach((formGroup: AbstractControl) => {
       if (formGroup instanceof FormGroup) {
         if (this.isMeasured.value) {
-          this.updateValidator('baseAmount', Validators.required, formGroup)
-          this.updateValidator('maxAmount', Validators.required, formGroup)
-          this.updateValidator('priceFactor', Validators.required, formGroup)
-          this.updateValidator('unit', unitRequiredIfMeasured(), formGroup)          
+          this.updateValidator('baseAmount', Validators.required, formGroup);
+          this.updateValidator('maxAmount', Validators.required, formGroup);
+          this.updateValidator('priceFactor', Validators.required, formGroup);
+          this.updateValidator('unit', unitRequiredIfMeasured(), formGroup);
         } else {
-          this.removeValidator('baseAmount', Validators.required, formGroup)
-          this.removeValidator('maxAmount', Validators.required, formGroup)
-          this.removeValidator('priceFactor', Validators.required, formGroup)
-          this.removeValidator('unit', null, formGroup)
+          this.removeValidator('baseAmount', Validators.required, formGroup);
+          this.removeValidator('maxAmount', Validators.required, formGroup);
+          this.removeValidator('priceFactor', Validators.required, formGroup);
+          this.removeValidator('unit', null, formGroup);
         }
       }
     });
   }
 
-  getIncompatibleAttributeOptions({index, variants}: {index: number, variants: string[]}) {
-    this.incompatibleSet[index] = [...variants]
-    this.incompatibleAttributeOptions = [...this.incompatibleAttributeOptions, ...variants]
+  getIncompatibleAttributeOptions({
+    index,
+    variants,
+  }: {
+    index: number;
+    variants: string[];
+  }) {
+    this.incompatibleSet[index] = [...variants];
+    this.incompatibleAttributeOptions = [
+      ...this.incompatibleAttributeOptions,
+      ...variants,
+    ];
   }
 
   addAttributeForm() {
-    const id = uuidv4()
+    const id = uuidv4();
     const commonAttributes = {
       name: ['', Validators.required],
       brand: ['', Validators.required],
@@ -333,7 +350,7 @@ export class AttributeModalComponent implements OnInit {
       priceFactor: this.isMeasured.value ? ['', Validators.required] : [''],
       id,
       coverImage: '',
-      incompatibleAttributeOptions: [[]]
+      incompatibleAttributeOptions: [[]],
     };
 
     this.attributes.push(
@@ -366,10 +383,10 @@ export class AttributeModalComponent implements OnInit {
       this.store.dispatch(
         deleteAttributeOption({ optionId, attributeId: this.data.attribute.id })
       );
-      this.attributes.removeAt(index)
+      this.attributes.removeAt(index);
     } else {
       if (index === 0) {
-        this.toast.info("Attributes must have at least one option", "Info")
+        this.toast.info('Attributes must have at least one option', 'Info');
       } else {
         this.attributes.removeAt(index);
       }

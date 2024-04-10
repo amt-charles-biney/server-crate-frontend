@@ -32,6 +32,24 @@ export class CacheService {
     }
   }
 
+  removeKeyFromCache(key: string | string[]) {
+    if (typeof key === 'string') {
+      Array.from(this.cache.keys()).forEach((cacheKey) => {
+        if (cacheKey.includes(key)) {
+            this.cache.delete(cacheKey);
+        }
+      })
+    } else {
+      key.forEach((k) => {
+        Array.from(this.cache.keys()).forEach((cacheKey) => {
+          if (cacheKey.includes(k)) {
+              this.cache.delete(cacheKey);
+          }
+        })
+      })
+    }
+  }
+
   shouldCache(url: string): boolean {
     return this.keysToCache.some((key) => url.includes(key));
   }

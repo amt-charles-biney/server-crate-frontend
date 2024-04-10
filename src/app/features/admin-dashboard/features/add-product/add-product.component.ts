@@ -71,6 +71,7 @@ import { CustomSelectComponent } from '../../../../shared/components/custom-sele
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { LoaderComponent } from '../../../../core/components/loader/loader.component';
 import { ErrorComponent } from '../../../../shared/components/error/error.component';
+import { CacheService } from '../../../../core/services/cache/cache.service';
 @Component({
   selector: 'app-add-product',
   standalone: true,
@@ -122,6 +123,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
     private destroyRef: DestroyRef,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private cacheService: CacheService
   ) {}
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
@@ -300,6 +302,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
         isError: false,
       })
     );
+    this.cacheService.removeKeyFromCache('/admin/category/config')
     document.body.scrollTo({ top: 0, behavior: 'smooth' });
     const product: ProductPayload = {
       productName: this.productName.value,

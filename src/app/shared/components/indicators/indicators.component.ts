@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AttributeModalComponent } from '../../../features/admin-dashboard/features/attributes/features/attribute-modal/attribute-modal.component';
 import { CommonModule } from '@angular/common';
+import { CacheService } from '../../../core/services/cache/cache.service';
 
 @Component({
   selector: 'app-indicators',
@@ -16,7 +17,7 @@ import { CommonModule } from '@angular/common';
 export class IndicatorsComponent implements OnInit {
   @Input() product!: ProductItem;
   @Output() closeNotification = new EventEmitter();
-  constructor(private router: Router, private dialog: MatDialog) {}
+  constructor(private router: Router, private dialog: MatDialog, private cacheService: CacheService) {}
   categoryIssue: boolean = false;
   stockIssue: boolean = false;
   inViewport!: boolean
@@ -102,5 +103,6 @@ export class IndicatorsComponent implements OnInit {
         
       }, 0);
     }
+    this.cacheService.removeKeyFromCache(['/admin/product', '/admin/attributes'])
   }
 }
