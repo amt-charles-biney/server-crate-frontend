@@ -37,6 +37,7 @@ import { LoaderComponent } from '../../../../../../core/components/loader/loader
 import { ErrorComponent } from '../../../../../../shared/components/error/error.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteModalComponent } from '../../../../../../shared/components/delete-modal/delete-modal.component';
+import { CacheService } from '../../../../../../core/services/cache/cache.service';
 
 @Component({
   selector: 'app-add-case',
@@ -76,7 +77,8 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cacheService: CacheService
   ) {}
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')!;
@@ -288,6 +290,8 @@ export class AddCaseComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(addCase({ formData }));
     }
+
+    this.cacheService.removeKeyFromCache('/admin/product')
   }
   get name() {
     return this.caseForm.get('name')!;

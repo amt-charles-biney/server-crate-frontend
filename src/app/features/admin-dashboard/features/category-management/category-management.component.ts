@@ -1,12 +1,13 @@
+import { CacheService } from './../../../../core/services/cache/cache.service';
 import { RouterModule } from '@angular/router';
 import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { CustomCheckBoxComponent } from '../../../../shared/components/custom-check-box/custom-check-box.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { getCategoriesAndConfig } from '../../../../store/category-management/attributes/config/config.actions';
-import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { AllCategories, CategoryAndConfig } from '../../../../types';
-import { selectCategoryAndConfigState, selectContent, selectTotalElements } from '../../../../store/category-management/attributes/config/config.reducers';
+import { selectCategoryAndConfigState, selectTotalElements } from '../../../../store/category-management/attributes/config/config.reducers';
 import { CommonModule } from '@angular/common';
 import { AttributeInputService } from '../../../../core/services/product/attribute-input.service';
 import { MatMenuModule } from '@angular/material/menu';
@@ -50,7 +51,8 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
   constructor(
     private store: Store,
     private inputService: AttributeInputService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private cacheService: CacheService
   ) {}
   ngOnInit(): void {
     this.store.dispatch(getCategoriesAndConfig({ page: 0}));
@@ -164,5 +166,6 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
         this.toggleCheckbox = false;
       }
     });
+    this.cacheService.removeKeyFromCache('/admin/product')
   }
 }

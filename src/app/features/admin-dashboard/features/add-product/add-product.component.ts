@@ -156,7 +156,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       this.store.dispatch(getProduct({ id: this.id }));
       this.product = this.store.select(selectProduct).pipe(
         tap((data: ProductItem) => {
-          if (data.category.id) {
+          if (data.category.id &&  data.category.name !== 'unassigned') {            
             this.store.dispatch(
               getConfiguration({
                 name: data.category.name,
@@ -181,9 +181,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
             serviceCharge: data.serviceCharge,
           };
           this.addProductForm.patchValue({ ...this.formGroup });
-          setTimeout(() => {
-            this.addProductForm.markAllAsTouched();
-          }, 1);
+          this.addProductForm.controls['category'].markAsTouched()
         })
       );
     }
