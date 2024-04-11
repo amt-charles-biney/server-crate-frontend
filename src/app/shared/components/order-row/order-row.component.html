@@ -18,7 +18,11 @@
             <p [title]="order.productName" class="md:w-20 2xl:w-[80%] text-ellipsis overflow-hidden whitespace-nowrap">{{order.productName}}</p>
         </div>
     </td>
-    <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start"><a class="underline" title="Track your order" [href]="order.trackingUrl">{{order.orderId}}</a></td>
+    @if (order.status === 'Cancelled' || order.status === 'Assembling') {
+        <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start"><p>Not Available</p></td>
+    } @else {
+        <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[20%] text-start"><a class="underline" title="Track your order" [href]="order.trackingUrl">{{order.orderId}}</a></td>
+    }
     @if (isAdmin) {
         <td class="overflow-hidden whitespace-nowrap text-ellipsis w-[15%] text-start">{{order.customerName}}</td>
     }

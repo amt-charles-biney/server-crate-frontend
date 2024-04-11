@@ -41,11 +41,9 @@ export class LoginComponent implements OnInit {
     this.loginForm = new FormGroup({
       email: new FormControl('', {
         validators: [Validators.required, Validators.email],
-        updateOn: 'submit',
       }),
       password: new FormControl('', {
         validators: [Validators.required],
-        updateOn: 'submit',
       }),
     });
     this.loadingState$ = this.store.select(selectLoaderState);

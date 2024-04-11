@@ -23,7 +23,7 @@
         placeholder="Enter your first name"
         formControlName="firstName"
       />
-      @if (firstName.invalid && (firstName.touched || firstName.dirty)) {
+      @if (submitted && firstName.invalid && (firstName.touched || firstName.dirty)) {
 
       <div *ngIf="firstName?.errors?.['required']">
         <span class="text-red-600 text-sm">A first name is required</span>
@@ -36,7 +36,7 @@
         placeholder="Enter your last name"
         formControlName="lastName"
       />
-      @if (lastName.invalid && (lastName.touched || lastName.dirty)) {
+      @if (submitted && lastName.invalid && (lastName.touched || lastName.dirty)) {
 
       <div *ngIf="lastName?.errors?.['required']">
         <span class="text-red-600 text-sm">A last name is required</span>
@@ -49,7 +49,7 @@
         placeholder="Enter your email"
         formControlName="email"
       />
-      @if (email.invalid && (email.touched || email.dirty)) {
+      @if (submitted && email.invalid && (email.touched || email.dirty)) {
       <span class="text-red-600 text-sm">Please enter a valid email</span>
       }
       <app-custom-input
@@ -59,7 +59,7 @@
         placeholder="Enter password"
         formControlName="password"
       />
-      @if (password.invalid && (password.touched || password.dirty)) {
+      @if (submitted && password.invalid && (password.touched || password.dirty)) {
       <div *ngIf="password?.errors?.['required']">
         <span class="text-red-600 text-sm">Please enter a password</span>
       </div>
@@ -83,7 +83,7 @@
         placeholder="Confirm password"
         formControlName="confirmPwd"
       />
-      @if (confirmPwd.invalid && (confirmPwd.touched || confirmPwd.dirty)) {
+      @if (submitted && confirmPwd.invalid && (confirmPwd.touched || confirmPwd.dirty)) {
       <div *ngIf="password?.errors?.['required']">
         <span class="text-red-600 text-sm">Please enter a password</span>
       </div>

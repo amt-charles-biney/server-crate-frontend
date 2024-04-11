@@ -12,6 +12,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
@@ -65,7 +66,7 @@ import {
   selectProduct,
 } from '../../../../store/admin/products/products.reducers';
 import { CustomImageComponent } from '../../../../shared/components/custom-image/custom-image.component';
-import { categoryIsNotUnassigned } from '../../../../core/utils/validators';
+import { caseIsUnassigned, categoryIsNotUnassigned } from '../../../../core/utils/validators';
 import { getCaseList } from '../../../../store/case/case.actions';
 import { CustomSelectComponent } from '../../../../shared/components/custom-select/custom-select.component';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
@@ -148,7 +149,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       ],
       productId: `${getUniqueId(2)}`,
       category: ['', categoryIsNotUnassigned()],
-      cases: [''],
+      cases: ['', caseIsUnassigned()],
       inStock: [0],
     };
     this.addProductForm = this.fb.group(this.formGroup);
@@ -156,7 +157,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
       this.store.dispatch(getProduct({ id: this.id }));
       this.product = this.store.select(selectProduct).pipe(
         tap((data: ProductItem) => {
-          if (data.category.id &&  data.category.name !== 'unassigned') {            
+          const isUnassigned = data.category.name === 'unassigned'
+          if (data.category.id && !isUnassigned) {            
             this.store.dispatch(
               getConfiguration({
                 name: data.category.name,
@@ -169,8 +171,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
             productDescription: data.productDescription,
             productPrice: data.productPrice,
             cases: {
-              name: data.productBrand.name,
-              price: data.productBrand.price
+              name: isUnassigned ? '' : data.productBrand.name,
+              price: isUnassigned ? 0 : data.productBrand.price
             },
             productId: data.productId,
             inStock: data.inStock,

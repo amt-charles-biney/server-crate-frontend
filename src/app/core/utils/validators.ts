@@ -26,6 +26,15 @@ export function categoryIsNotUnassigned(): ValidatorFn {
     return null
   };
 }
+export function caseIsUnassigned(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const cases = control.parent?.get('cases');
+    if (cases?.value.name === '') {
+      return { cases: { value: 'Cases is unassigned' } };
+    }    
+    return null
+  };
+}
 
 export function formValidator(
   password: string,

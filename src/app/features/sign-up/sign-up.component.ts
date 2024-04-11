@@ -51,6 +51,7 @@ import { selectLoaderState } from '../../store/loader/reducers/loader.reducers';
 export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
   loadingState$!: Observable<LoadingStatus>;
+  submitted = false
   constructor(
     public termsModal: MatDialog,
     private destroyRef: DestroyRef,
@@ -61,27 +62,23 @@ export class SignUpComponent implements OnInit {
       {
         firstName: new FormControl('', {
           validators: [Validators.required],
-          updateOn: 'submit',
         }),
         lastName: new FormControl('', {
           validators: [Validators.required],
-          updateOn: 'submit',
         }),
         email: new FormControl('', {
           validators: [Validators.required, Validators.email],
-          updateOn: 'submit',
         }),
         password: new FormControl('', {
           validators: [
             Validators.required,
             Validators.minLength(8),
             Validators.pattern(passwordRegex),
-          ],
-          updateOn: 'submit',
+          ], updateOn: 'blur'
         }),
         confirmPwd: new FormControl('', {
           validators: [Validators.required, checkIfPasswordsMatch()],
-          updateOn: 'submit',
+          updateOn: 'blur'
         }),
         acceptTerms: new FormControl(null, [
           Validators.required,
@@ -99,7 +96,10 @@ export class SignUpComponent implements OnInit {
    */
   submitRegistrationForm(): void {
     this.signUpForm.markAllAsTouched()
-    if (this.signUpForm.invalid) return;
+    if (this.signUpForm.invalid) {
+      this.submitted = true;
+      return;
+    };
     document.body.scrollTo({ top: 0, behavior: 'smooth' });
     const { firstName, lastName, email, password } = this.signUpForm.value;
     const formData: UserSignUp = {
