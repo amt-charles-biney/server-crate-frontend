@@ -56,10 +56,8 @@ import {
 import {
   buildIncompatibleTable,
   generateIncompatiblesTable,
-  generateSizes,
+  generateStorageSizes,
   getNumberOfIncompatibles,
-  isAttributeOption,
-  isCategoryEditResponse,
   putInLocalAttributes,
   removeFromLocalAttributes,
 } from '../../../../core/utils/helpers';
@@ -190,7 +188,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
                     );
                   }
                   if (categoryConfig.isMeasured && categoryConfig.isIncluded) {
-                    this.sizes[categoryConfig.type] = generateSizes(
+                    this.sizes[categoryConfig.type] = generateStorageSizes(
                       categoryConfig.baseAmount,
                       categoryConfig.maxAmount,
                       categoryConfig.unit
@@ -482,7 +480,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   onSelectConfigOptions(event: MatSelectChange, attribute: Attribute) {
     const selectedAttributeOption = event.value as AttributeOption;
     if (attribute.isMeasured) {
-      this.sizes[attribute.attributeName] = generateSizes(
+      this.sizes[attribute.attributeName] = generateStorageSizes(
         selectedAttributeOption.additionalInfo.baseAmount,
         selectedAttributeOption.additionalInfo.maxAmount,
         attribute.unit

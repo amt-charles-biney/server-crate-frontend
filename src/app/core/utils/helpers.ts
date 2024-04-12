@@ -173,23 +173,11 @@ export function getNumberOfIncompatibles(
   return Object.values(incompatibleSet).length;
 }
 
-export function generateSizes(
-  baseAmount: number,
-  maxAmount: number,
-  unit: string
-) {
-  const sizes: string[] = [];
-  for (let size = baseAmount; size <= maxAmount; size = size + baseAmount) {
-    sizes.push(`${size} ${unit}`);
-  }
-  return sizes;
-}
-
 export function generateStorageSizes(baseAmount: number, maxAmount: number, unit: string): string[] {
   const storageSize: string[] = []
 
   for (let size = baseAmount; size <= maxAmount; size *= 2) {
-    storageSize.push(`${String(size)}`)
+    storageSize.push(`${String(size)} ${unit}`)
   }
   return storageSize
 }
