@@ -58,7 +58,7 @@ export class PreferenceSelectionComponent implements OnInit {
   isGridMode: boolean = true;
   initialParams: Record<string, string> = { 'page': '0', 'size': '9' }
 
-  localBrands: Record<string, string> = {}
+  localBrands: Select[] = []
   constructor(
     private store: Store,
     public dialog: MatDialog,
@@ -74,6 +74,9 @@ export class PreferenceSelectionComponent implements OnInit {
 
     this.activatedRoute.queryParams
       .subscribe((params) => {        
+        console.log('Params', params);
+        console.log('Brands', this.brands);
+        
         this.store.dispatch(getUserProducts({ page: 0, params: {...this.initialParams, ...params } }));
       });
     if (this.search) {
@@ -81,8 +84,10 @@ export class PreferenceSelectionComponent implements OnInit {
     }
     this.brands$ = this.store.select(selectBrands).pipe(
       tap((brands) => {
-        this.localBrands = this.inputService.createDynamicGroup(brands)
-        this.filterForm.patchValue({ brand: this.localBrands})
+        this.localBrands = brands
+        brands.forEach((brand) => this.brands.push(new FormControl({ name: brand.name, checked: false})))
+        // this.localBrands = this.inputService.createDynamicGroup(brands)
+        // this.filterForm.patchValue({ brand: this.localBrands})
       })
     )
     this.categories$ = this.store.select(selectCategories)
@@ -124,18 +129,20 @@ export class PreferenceSelectionComponent implements OnInit {
         price3: '',
         price4: ''
       }),
-      brand: this.fb.group(this.localBrands),
+      brands: new FormArray([]),
       categories: this.fb.group({}),
       productCase: this.fb.group({})
-    })
-   
+    })   
   }
-  itemSelected(selected: { name: string; value: string; isAdded: boolean }) {
+  itemSelected(selected: { name: string; value: string; isAdded: boolean }, name?: string) {
+    console.log('Brands', this.brands);
+    
     if (selected.isAdded) {
-      this.queryParams[selected.name].add(selected.value);
+      this.queryParams[name!].add(selected.value);
     } else {
-      this.queryParams[selected.name].delete(selected.value);
+      this.queryParams[name!].delete(selected.value);
     }
+    
     const params = this.buildParams(this.queryParams);
     this.router.navigate(['/servers'], {
       queryParams: params,
@@ -191,5 +198,9 @@ export class PreferenceSelectionComponent implements OnInit {
 
   get price() {
     return this.filterForm.get('price') as FormArray
+  }
+
+  get brands() {
+    return this.filterForm.controls['brands'] as FormArray
   }
 }
