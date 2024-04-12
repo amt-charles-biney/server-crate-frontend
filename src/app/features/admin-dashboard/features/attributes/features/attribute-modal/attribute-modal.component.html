@@ -59,15 +59,17 @@
           formControlName="description"
         />
       </div>
-      <div *ngIf="editId && !data.attribute.isDefaultRequired" class="w-[30%] mt-10">
-        <app-custom-check-box
-          name="isRequired"
-          class="font-[500]"
-          label="Make Attribute Required"
-          customClass="w-full"
-          formControlName="isRequired"
-        />
-      </div>
+      @if ((editId && !data.attribute.isDefaultRequired) || (!editId) ) {
+        <div class="w-[30%] mt-10">
+          <app-custom-check-box
+            name="isRequired"
+            class="font-[500]"
+            label="Make Attribute Required"
+            customClass="w-full"
+            formControlName="isRequired"
+          />
+        </div>
+      } 
     </div>
 
     <button
