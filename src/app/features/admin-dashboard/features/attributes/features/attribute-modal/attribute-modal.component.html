@@ -59,7 +59,7 @@
           formControlName="description"
         />
       </div>
-      <div *ngIf="!data.attribute.isDefaultRequired" class="w-[30%] mt-10">
+      <div *ngIf="editId && !data.attribute.isDefaultRequired" class="w-[30%] mt-10">
         <app-custom-check-box
           name="isRequired"
           class="font-[500]"
