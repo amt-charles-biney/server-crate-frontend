@@ -329,6 +329,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   deleteProduct(id: string) {
     document.body.scrollTo({ top: 0, behavior: 'smooth' });
     this.store.dispatch(deleteProduct({ id }));
+    this.cacheService.removeKeyFromCache('/admin/category/config')
   }
 
   get category() {

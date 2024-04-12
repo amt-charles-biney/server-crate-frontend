@@ -242,6 +242,7 @@ export class AddCaseComponent implements OnInit, OnDestroy {
         caseName: this.caseForm.value.name,
       },
     });
+    this.cacheService.removeKeyFromCache('/admin/product')
   }
 
   getIncompatibleAttributeOptions({
