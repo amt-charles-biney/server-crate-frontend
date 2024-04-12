@@ -1,3 +1,4 @@
+<!-- <ng-container *ngIf="brands$ | async "></ng-container> -->
 <main
   class="relative grid grid-cols-4 gap-[69px] max-w-[1239px] px-14 lg:px-0 w-full mx-auto mt-12"
 >
@@ -18,11 +19,11 @@
               Shop By Price
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul class="flex flex-col gap-2">
+          <ul formGroupName="price" class="flex flex-col gap-2">
             <li>
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
-                formControlName="price"
+                formControlName="price1"
                 name="price"
                 value="0-500"
                 label="$0 - $500"
@@ -31,7 +32,7 @@
             <li>
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
-                formControlName="price"
+                formControlName="price2"
                 name="price"
                 value="500-1000"
                 label="$500 - $1000"
@@ -40,7 +41,7 @@
             <li>
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
-                formControlName="price"
+                formControlName="price3"
                 name="price"
                 value="1000-1500"
                 label="$1000 - $1500"
@@ -49,7 +50,7 @@
             <li>
               <app-custom-check-box
                 (changeHandler)="itemSelected($event)"
-                formControlName="price"
+                formControlName="price4"
                 name="price"
                 value="> 1500"
                 label="Over $1500"
@@ -58,25 +59,28 @@
           </ul>
         </mat-expansion-panel>
       </mat-accordion>
-      <mat-accordion class="border-b">
-        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="text-[16px]"> Brand </mat-panel-title>
-          </mat-expansion-panel-header>
-          <ul class="flex flex-col gap-2" *ngIf="brands$ | async as brands">
-            <li *ngFor="let brand of brands">
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="brand"
-                name="brand"
-                [value]="brand.name"
-                [label]="brand.name"
-              />
-            </li>
-          </ul>
-        </mat-expansion-panel>
-      </mat-accordion>
-      <mat-accordion class="border-b">
+      <ng-container *ngIf="brands$ | async">
+        <mat-accordion class="border-b">
+          <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="text-[16px]"> Brand </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul formArrayName="brands" class="flex flex-col gap-2">
+              <li *ngFor="let brand of brands.controls; let i = index">
+                {{ brand.value | json }}
+                <app-custom-check-box
+                  (changeHandler)="itemSelected($event, 'brand')"
+                  [formControlName]="i"
+                  name="brands"
+                  [value]="localBrands[i].name"
+                  [label]="localBrands[i].name"
+                />
+              </li>
+            </ul>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-container>
+      <!-- <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title class="text-[16px]"> Categories </mat-panel-title>
@@ -96,8 +100,8 @@
             </li>
           </ul>
         </mat-expansion-panel>
-      </mat-accordion>
-      <mat-accordion class="border-b">
+      </mat-accordion> -->
+      <!-- <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title class="text-[16px]"> Cases </mat-panel-title>
@@ -114,7 +118,7 @@
             </li>
           </ul>
         </mat-expansion-panel>
-      </mat-accordion>
+      </mat-accordion> -->
       <!-- <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
