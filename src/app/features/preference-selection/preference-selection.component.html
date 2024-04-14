@@ -1,4 +1,3 @@
-<!-- <ng-container *ngIf="brands$ | async "></ng-container> -->
 <main
   class="relative grid grid-cols-4 gap-[69px] max-w-[1239px] px-14 lg:px-0 w-full mx-auto mt-12"
 >
@@ -22,36 +21,36 @@
           <ul formGroupName="price" class="flex flex-col gap-2">
             <li>
               <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
+                (changeHandler)="itemSelected($event, 'price')"
                 formControlName="price1"
-                name="price"
+                name="0-500"
                 value="0-500"
                 label="$0 - $500"
               />
             </li>
             <li>
               <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
+                (changeHandler)="itemSelected($event, 'price')"
                 formControlName="price2"
-                name="price"
+                name="500-1000"
                 value="500-1000"
                 label="$500 - $1000"
               />
             </li>
             <li>
               <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
+                (changeHandler)="itemSelected($event, 'price')"
                 formControlName="price3"
-                name="price"
+                name="1000-1500"
                 value="1000-1500"
                 label="$1000 - $1500"
               />
             </li>
             <li>
               <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
+                (changeHandler)="itemSelected($event, 'price')"
                 formControlName="price4"
-                name="price"
+                name="> 1500"
                 value="> 1500"
                 label="Over $1500"
               />
@@ -67,11 +66,10 @@
             </mat-expansion-panel-header>
             <ul formArrayName="brands" class="flex flex-col gap-2">
               <li *ngFor="let brand of brands.controls; let i = index">
-                {{ brand.value | json }}
                 <app-custom-check-box
                   (changeHandler)="itemSelected($event, 'brand')"
                   [formControlName]="i"
-                  name="brands"
+                  [name]="localBrands[i].name"
                   [value]="localBrands[i].name"
                   [label]="localBrands[i].name"
                 />
@@ -80,90 +78,46 @@
           </mat-expansion-panel>
         </mat-accordion>
       </ng-container>
-      <!-- <mat-accordion class="border-b">
+      <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title class="text-[16px]"> Categories </mat-panel-title>
           </mat-expansion-panel-header>
           <ul
+            formArrayName="categories"
             class="flex flex-col gap-2"
-            *ngIf="categories$ | async as categories"
+            *ngIf="categories$ | async"
           >
-            <li *ngFor="let category of categories">
+            <li *ngFor="let category of categories.controls; let i = index">
               <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="categories"
-                name="categories"
-                [value]="category.name"
-                [label]="category.name"
+                (changeHandler)="itemSelected($event, 'categories')"
+                [formControlName]="i"
+                [name]="localCategories[i].name"
+                [value]="localCategories[i].name"
+                [label]="localCategories[i].name"
               />
             </li>
           </ul>
         </mat-expansion-panel>
-      </mat-accordion> -->
-      <!-- <mat-accordion class="border-b">
+      </mat-accordion>
+      <mat-accordion class="border-b">
         <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title class="text-[16px]"> Cases </mat-panel-title>
           </mat-expansion-panel-header>
-          <ul class="flex flex-col gap-2" *ngIf="cases$ | async as cases">
-            <li *ngFor="let case of cases">
+          <ul formArrayName="productCase" class="flex flex-col gap-2" *ngIf="cases$ | async">
+            <li *ngFor="let case of cases.controls; let i = index">
               <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="productCase"
-                name="productCase"
-                [value]="case.name"
-                [label]="case.name"
+                (changeHandler)="itemSelected($event, 'productCase')"
+                [formControlName]="i"
+                [name]="localCases[i].name"
+                [value]="localCases[i].name"
+                [label]="localCases[i].name"
               />
             </li>
           </ul>
         </mat-expansion-panel>
-      </mat-accordion> -->
-      <!-- <mat-accordion class="border-b">
-        <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="text-[16px]"> Mounting </mat-panel-title>
-          </mat-expansion-panel-header>
-          <ul class="flex flex-col gap-2">
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="mounting"
-                name="mounting"
-                value="2U"
-                label="Asus"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="mounting"
-                name="mounting"
-                value="1U"
-                label="1U"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="mounting"
-                name="mounting"
-                value="Rack mount"
-                label="Rack mount"
-              />
-            </li>
-            <li>
-              <app-custom-check-box
-                (changeHandler)="itemSelected($event)"
-                formControlName="mounting"
-                name="mounting"
-                value="Hewlett-Packard"
-                label="Hewlett-Packard"
-              />
-            </li>
-          </ul>
-        </mat-expansion-panel>
-      </mat-accordion> -->
+      </mat-accordion>
     </form>
   </aside>
   <section class="col-span-3 2xl:w-[923px] flex flex-col">

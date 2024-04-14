@@ -63,14 +63,4 @@ export class AttributeInputService {
     }
     return new FormGroup(group)
   }
-
-  createDynamicGroup(formValues: Array<{name: string}>) {
-    console.log('Formvalues', formValues);
-    
-    const group: Record<string, string> = {}
-    for (let key of formValues) {
-      group[key.name] = ''    
-    }
-    return group
-  }
 }
