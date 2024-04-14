@@ -36,7 +36,7 @@ export class CustomCheckBoxComponent {
   @Input() customClass: string = "max-w-28 overflow-hidden text-ellipsis whitespace-nowrap"
   @Output() changeHandler = new EventEmitter<{ name: string, value: string, isAdded: boolean }>();
   @ViewChild('inputState') inputState!: ElementRef<HTMLInputElement>
-  onChange: OnChange<string> = () => {};
+  onChange: OnChange<any> = () => {};
   onTouched: OnTouch = () => {};
   formControl!: FormControl;
   randomId = getUniqueId(1)
@@ -49,8 +49,8 @@ export class CustomCheckBoxComponent {
     });
     this.formControl.valueChanges
       .pipe(
-        tap((value) => {           
-          this.onChange(value);          
+        tap((value) => {                
+          this.onChange({ name: this.name, checked: value });          
           this.changeHandler.emit({name: this.name, value: this.value, isAdded: value })           
         }),
         takeUntilDestroyed(this.destroyRef)
@@ -58,11 +58,12 @@ export class CustomCheckBoxComponent {
       .subscribe();
   }
 
-  writeValue(value: string): void {
+  writeValue(value: any): void {    
     if (value === null) return;
-    this.formControl.setValue(value, { emitEvent: false });   
+    this.onChange(value)
+    this.formControl.patchValue(value.checked, { emitEvent: false });   
   }
-  registerOnChange(fn: OnChange<string>): void {    
+  registerOnChange(fn: OnChange<any>): void {    
     this.onChange = fn;
   }
   registerOnTouched(fn: OnTouch): void {
