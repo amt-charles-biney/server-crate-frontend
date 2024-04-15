@@ -62,7 +62,9 @@
       </td>
       <td class="col-span-1 self-center">
         <button (click)="$event.stopPropagation()" class="flex justify-center w-full" [matMenuTriggerFor]="menu">
-          <img src="/assets/ellipses.svg" alt="ellipses" />
+          <span class="flex justify-center items-center w-6 h-6 hover:bg-gray-200">
+            <img src="/assets/ellipses.svg" alt="ellipses" />
+          </span>
         </button>
         <mat-menu #menu="matMenu" panelClass="customMenu">
           <button (click)="editOption(attribute)" mat-menu-item>
