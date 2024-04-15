@@ -166,8 +166,8 @@ export class AttributeModalComponent implements OnInit {
       this.attributeForm = this.fb.group({
         attributeName: ['', Validators.required],
         description: [''],
-        isMeasured: [false],
-        isRequired: [false],
+        isMeasured: [{name: 'isMeasured', checked: false}],
+        isRequired: [{name: 'isRequired', checked: false }],
         unit: ['GB', unitRequiredIfMeasured()],
         attributes: this.fb.array<FormGroup[]>([]),
       });
@@ -274,8 +274,8 @@ export class AttributeModalComponent implements OnInit {
         let attribute = {
           attributeName: this.attributeForm.value.attributeName,
           description: this.attributeForm.value.description,
-          isMeasured: this.attributeForm.value.isMeasured,
-          isRequired: this.attributeForm.value.isRequired,
+          isMeasured: this.attributeForm.value.isMeasured.checked,
+          isRequired: this.attributeForm.value.isRequired.checked,
           unit: this.attributeForm.value.unit,
           variantOptions: options,
         };

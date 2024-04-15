@@ -121,7 +121,6 @@ export class PreferenceSelectionComponent implements OnInit {
         this.localCategories = categories
         categories.forEach((category) => this.categories.push(new FormControl({ name: category.name, checked: false}))) 
         this.getFiltersFromQuery(this.initialParams['categories'], this.categories)
-
       })
     )
     this.cases$ = this.store.select(selectCases).pipe(
