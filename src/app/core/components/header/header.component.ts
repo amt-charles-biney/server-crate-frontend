@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, DestroyRef, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
@@ -38,6 +38,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatBadgeModule,
   ],
   templateUrl: './header.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('searchBar') searchBar!: ElementRef<HTMLInputElement>
@@ -61,28 +62,13 @@ export class HeaderComponent implements OnInit {
     });
     this.numberOfCartItems$ = this.store.select(selectCount);
     this.numberOfWishlistItems$ = this.store.select(selectTotalElements);
-    this.searchValue.valueChanges
-      .pipe(
-        debounceTime(900),
-        tap((value) => {
-          if (value) {
-            this.router.navigate(['/servers'], {
-              queryParams: { query: `${value}` },
-            });
-          } else if (value === '') {
-            this.router.navigate(['/servers'], { replaceUrl: true });
-          }
-          
-        }),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe();
   }
 
   openSearch() {
     this.showSearch = !this.showSearch;
     if (!this.showSearch) {
       this.searchForm.patchValue({ searchValue: '' })
+      this.router.navigate([], {queryParams: {}})
     } else {
       setTimeout(() => {
         this.searchBar.nativeElement.focus()
@@ -91,7 +77,7 @@ export class HeaderComponent implements OnInit {
   }
 
   search() {
-    if (this.searchForm.invalid) return;
+    if (this.searchForm.invalid) return;    
     this.router.navigate(['/servers'], {
       queryParams: { query: `${this.searchValue.value}` },
     });
