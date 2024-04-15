@@ -32,12 +32,12 @@ export class BuyNowComponent implements OnInit {
   product!: Observable<any>;
   productConfig!: Observable<IConfiguredProduct | null>;
   allowedOptionTypes: string[] = [
-    'Graphics',
+    'GPU',
     'Motherboard',
     'RAM',
     'Storage',
-    'Operating Systems',
-    'Processors'
+    'Operating System',
+    'Processor'
   ];
   warranty: boolean = false;
   constructor(

@@ -47,7 +47,7 @@
               >
             </li>
             @for (option of productConfig.configured; track option) { @if
-            (option.optionType === 'Operating Systems') {
+            (option.optionType === 'Operating System') {
             <li>
               <span
                 class="w-28 text-ellipsis overflow-hidden whitespace-nowrap"
@@ -55,7 +55,7 @@
               >
               included
             </li>
-            } @else if (option.optionType === 'Processors') {
+            } @else if (option.optionType === 'Processor') {
             <li>
               <span
                 class="w-28 text-ellipsis overflow-hidden whitespace-nowrap"
@@ -63,7 +63,7 @@
               >
               Processor
             </li>
-            } @else if (option.optionType === "Graphics") {
+            } @else if (option.optionType === "GPU") {
             <li>
               With the pretty visuals of
               <span
