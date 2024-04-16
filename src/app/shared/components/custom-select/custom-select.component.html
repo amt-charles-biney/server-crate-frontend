@@ -57,7 +57,7 @@
       }
       @for (option of options; track option;) {
       <mat-option class="flex-row !text-sm !pr-[11px] myOption" [value]="option">{{
-        option.optionName ?? option.attributeName ?? option.name ?? option
+        option.description ?? option.optionName ?? option.attributeName ?? option.name ?? option
       }}</mat-option>
       }
     </mat-select>
