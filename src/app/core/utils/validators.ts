@@ -67,7 +67,7 @@ export function attributeFormValidator(): ValidatorFn {
 
 export function unitRequiredIfMeasured(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const isMeasured = control.get('isMeasured')?.value
+    const isMeasured = control.get('isMeasured')?.value.checked
     const unit = control.get('unit')?.value
     return isMeasured && !unit ? {
       unit: { value: 'Unit is required for a measured attribute'}

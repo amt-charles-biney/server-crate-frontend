@@ -40,7 +40,7 @@
           customClass="w-full"
           (changeHandler)="modifyValidator()"
         />
-        @if (isMeasured.value.checked) {
+        @if (isMeasured.value.checked ?? isMeasured.value) {
         <app-custom-select
           [control]="$any(attributeForm.controls['unit'])"
           [options]="['KB', 'GB', 'TB']"
@@ -111,13 +111,13 @@
           >
             Model
           </th>
-          @if (isMeasured.value.checked) {
+          @if (isMeasured.value.checked ?? isMeasured.value) {
           <th
             class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
           >
             Base Amount
           </th>
-          } @if (isMeasured.value.checked) {
+          } @if (isMeasured.value.checked ?? isMeasured.value) {
           <th
             class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
           >
@@ -134,7 +134,7 @@
           >
             SKU
           </th>
-          @if (isMeasured.value.checked) {
+          @if (isMeasured.value.checked ?? isMeasured.value) {
           <th
             class="overflow-hidden whitespace-nowrap text-ellipsis text-gray-500 w-[15%] text-center"
           >
@@ -220,7 +220,7 @@
                   formControlName="name"
                 />
               </td>
-              @if (isMeasured.value.checked) {
+              @if (isMeasured.value.checked ?? isMeasured.value) {
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <input
                   class="w-full outline-none text-center placeholder:text-placeholder"
@@ -229,7 +229,7 @@
                   formControlName="baseAmount"
                 />
               </td>
-              } @if (isMeasured.value.checked) {
+              } @if (isMeasured.value.checked ?? isMeasured.value) {
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <input
                   class="w-full outline-none text-center placeholder:text-placeholder"
@@ -255,7 +255,7 @@
                   formControlName="inStock"
                 />
               </td>
-              @if (isMeasured.value.checked) {
+              @if (isMeasured.value.checked ?? isMeasured.value) {
               <td class="text-gray-500 font-[500] text-sm w-[15%] text-center">
                 <input
                   class="w-full outline-none text-center placeholder:text-placeholder"

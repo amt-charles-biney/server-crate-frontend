@@ -165,7 +165,7 @@ export class AttributesComponent implements OnInit, AfterViewInit {
     this.store.dispatch(deleteAttribute({attributeId: id }))
   }
 
-  editOption(attribute: Attribute) {
+  editOption(attribute: Attribute) {    
     const dialogRef = this.dialog.open(AttributeModalComponent, {
       data: { attribute },
       height: '80%',

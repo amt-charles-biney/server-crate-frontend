@@ -58,10 +58,14 @@ export class CustomCheckBoxComponent {
       .subscribe();
   }
 
-  writeValue(value: any): void {    
+  writeValue(value: boolean | { checked: boolean, name: string}): void {
     if (value === null) return;
     this.onChange(value)
-    this.formControl.patchValue(value.checked, { emitEvent: false });   
+    if (typeof value === 'boolean') {
+      this.formControl.patchValue(value, { emitEvent: false });   
+    } else {
+      this.formControl.patchValue(value.checked, { emitEvent: false });   
+    }
   }
   registerOnChange(fn: OnChange<any>): void {    
     this.onChange = fn;

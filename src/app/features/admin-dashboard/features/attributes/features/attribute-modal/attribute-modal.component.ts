@@ -153,7 +153,7 @@ export class AttributeModalComponent implements OnInit {
       this.attributeForm = this.fb.group({
         attributeName: [attributeName, Validators.required],
         description: [description],
-        isMeasured: [isMeasured],
+        isMeasured: isMeasured,
         isRequired: [isRequired],
         unit: [unit || 'GB', unitRequiredIfMeasured()],
         attributes: this.fb.array(
@@ -166,8 +166,8 @@ export class AttributeModalComponent implements OnInit {
       this.attributeForm = this.fb.group({
         attributeName: ['', Validators.required],
         description: [''],
-        isMeasured: [{name: 'isMeasured', checked: false}],
-        isRequired: [{name: 'isRequired', checked: false }],
+        isMeasured: [{ name: 'isMeasured', checked: false }],
+        isRequired: [{ name: 'isRequired', checked: false }],
         unit: ['GB', unitRequiredIfMeasured()],
         attributes: this.fb.array<FormGroup[]>([]),
       });
@@ -252,12 +252,15 @@ export class AttributeModalComponent implements OnInit {
         .select(selectAttributeCreationState)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((options) => {
-          const isMeasured = this.attributeForm.value.isMeasured;
+          const isMeasured =
+            typeof this.attributeForm.value.isMeasured === 'boolean'
+              ? this.attributeForm.value.isMeasured
+              : this.attributeForm.value.isMeasured.checked;
           let attribute = {
             attributeName: this.attributeForm.value.attributeName,
             description: this.attributeForm.value.description,
             isMeasured,
-            isRequired: this.attributeForm.value.isRequired,
+            isRequired: typeof this.attributeForm.value.isRequired === 'boolean' ? this.attributeForm.value.isRequired : this.attributeForm.value.isRequired.checked,
             unit: isMeasured ? this.attributeForm.value.unit : '',
             variantOptions: options,
             id: this.editId,
@@ -308,7 +311,7 @@ export class AttributeModalComponent implements OnInit {
   modifyValidator() {
     this.attributes.controls.forEach((formGroup: AbstractControl) => {
       if (formGroup instanceof FormGroup) {
-        if (this.isMeasured.value) {
+        if (this.isMeasured.value.checked) {
           this.updateValidator('baseAmount', Validators.required, formGroup);
           this.updateValidator('maxAmount', Validators.required, formGroup);
           this.updateValidator('priceFactor', Validators.required, formGroup);
@@ -345,9 +348,15 @@ export class AttributeModalComponent implements OnInit {
       inStock: ['', Validators.required],
       price: ['', Validators.required],
       media: null,
-      baseAmount: this.isMeasured.value ? ['', [Validators.required]] : [''],
-      maxAmount: this.isMeasured.value ? ['', Validators.required] : [''],
-      priceFactor: this.isMeasured.value ? ['', Validators.required] : [''],
+      baseAmount: this.isMeasured.value.checked
+        ? ['', [Validators.required]]
+        : [''],
+      maxAmount: this.isMeasured.value.checked
+        ? ['', Validators.required]
+        : [''],
+      priceFactor: this.isMeasured.value.checked
+        ? ['', Validators.required]
+        : [''],
       id,
       coverImage: '',
       incompatibleAttributeOptions: [[]],
@@ -355,7 +364,7 @@ export class AttributeModalComponent implements OnInit {
 
     this.attributes.push(
       this.fb.group(
-        this.isMeasured.value
+        this.isMeasured.value.checked
           ? { ...commonAttributes, ...{ validators: attributeFormValidator() } }
           : commonAttributes
       )
