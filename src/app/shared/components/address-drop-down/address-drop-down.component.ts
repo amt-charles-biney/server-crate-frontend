@@ -7,7 +7,6 @@ import { ClickOutsideDirective } from '../../directives/click/click-outside.dire
   standalone: true,
   imports: [ClickOutsideDirective],
   templateUrl: './address-drop-down.component.html',
-  styleUrl: './address-drop-down.component.scss',
 })
 export class AddressDropDownComponent implements OnChanges {
   @Input() predictions: google.maps.places.QueryAutocompletePrediction[] = [];
