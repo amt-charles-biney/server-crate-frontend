@@ -1,4 +1,4 @@
-<section [ngClass]="customClass" class="flex justify-between mx-auto ">
+<section [ngClass]="customClass" class="flex justify-between mx-auto pointer-events-none">
   @for (step of steps; track step; let i = $index) {
   <div
     [class]="'line-' + i + ' '"
