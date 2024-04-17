@@ -57,7 +57,7 @@ export class ProductConfigureComponent {
   defaultSelectedValues: (Record<string, IdefaultSelectedProps>) = {}
   defaultIncludedPrices: (Record<string, IdefaultSelectedProps>) = {}
   defaultUIChangePrice: (Record<string, IdefaultSelectedProps>) = {}
-  defaultUIConstantPrice!: number | null;
+  defaultUIConstantPrice: (Record<string, number | null>) = {};
 
   privateQueryParamSubscription: Subscription | undefined;
   privateConfigItemSubscription: Subscription | undefined;
@@ -234,7 +234,7 @@ export class ProductConfigureComponent {
 
   isActiveSelectedOption = ({ type, id, size }: IConfigureSelectProps): boolean => {
     const isActive = this.queryMapper[type] === `${id}_${0}`
-    if (isActive) this.defaultUIConstantPrice = this.defaultUIChangePrice[id].price
+    if (isActive) this.defaultUIConstantPrice[this.activeLink] = this.defaultUIChangePrice[id].price ?? null
     return isActive;
   }
 
@@ -271,7 +271,7 @@ export class ProductConfigureComponent {
       }
     } else {
       delete this.queryMapper[type];
-      this.defaultUIConstantPrice = null;
+      this.defaultUIConstantPrice[this.activeLink] = null;
       this.updateConfigQueryParam(null);
     }
   }
@@ -283,9 +283,10 @@ export class ProductConfigureComponent {
 
 
   getPriceDifference(selectedOption: IdefaultSelectedProps): string {
-    const { id, isIncluded } = selectedOption
+    const { id } = selectedOption
 
-    let priceDifference = this.defaultUIConstantPrice ? this.defaultUIChangePrice[id].price - this.defaultUIConstantPrice : this.defaultUIChangePrice[id].price
+    const defaultPrice = this.defaultUIConstantPrice[this.activeLink] ?? 0
+    let priceDifference = this.defaultUIConstantPrice[this.activeLink] ? this.defaultUIChangePrice[id].price - defaultPrice: this.defaultUIChangePrice[id].price
 
     let sign = priceDifference > 0 ? "+" : priceDifference < 0 ? "-" : "";
     
