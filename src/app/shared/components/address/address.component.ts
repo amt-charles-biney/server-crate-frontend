@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 import { Address } from '../../../types';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import '@googlemaps/extended-component-library/place_picker.js';
 import { CustomSelectComponent } from '../custom-select/custom-select.component';
 import { CustomInputComponent } from '../custom-input/custom-input.component';
 import { ClickOutsideDirective } from '../../directives/click/click-outside.directive';
