@@ -66,7 +66,7 @@
         class="transition-all ease-in-out duration-300"
         (click)="navigateToProductByFilter(option, activeMenu)"
         (mouseenter)="onHoverMenuOption(option)"
-        *ngFor="let option of productOptions[activeMenu]"
+        *ngFor="let option of productOptions[activeMenu] | slice:0:11"
       >
         <div class="flex flex-row gap-2 items-center cursor-pointer">
           <img src="/assets/mega-chevron.svg" alt="Inactive Image" />
@@ -75,6 +75,20 @@
           }}</span>
         </div>
       </div>
+      <div
+      class="transition-all ease-in-out duration-300"
+    >
+      <button
+      (click)="navigateToProductServers()"
+      *ngIf="productOptions[activeMenu] && productOptions[activeMenu].length > 10"
+        class="flex flex-row gap-2 items-center cursor-pointer">
+        <img src="/assets/mega-chevron.svg" alt="Inactive Image" />
+        <span class="text-[#1D2939] hover:underline w-32 overflow-hidden whitespace-nowrap text-ellipsis hover:text-[#3CB043]">
+          Browse all {{ activeMenu }}
+        </span>
+      </button>
+ 
+    </div>
     </div>
 
     <div
