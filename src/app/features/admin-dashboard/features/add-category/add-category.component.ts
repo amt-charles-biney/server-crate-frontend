@@ -72,6 +72,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { getCases } from '../../../../store/case/case.actions';
 import { selectContent } from '../../../../store/case/case.reducers';
 import { ToastrService } from 'ngx-toastr';
+import { CacheService } from '../../../../core/services/cache/cache.service';
 
 @Component({
   selector: 'app-add-category',
@@ -140,7 +141,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     private destroyRef: DestroyRef,
     private activatedRoute: ActivatedRoute,
     private changeDetectorRef: ChangeDetectorRef,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private cacheService: CacheService
   ) {}
   ngOnInit(): void {
     this.store.dispatch(getCases({ page: 0}));
@@ -316,6 +318,8 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(sendConfig(payload));
     }
+
+    this.cacheService.removeKeyFromCache('/admin/product')
   }
 
   checkOverflow() {
