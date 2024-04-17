@@ -1,3 +1,4 @@
+import { CacheService } from './../../../core/services/cache/cache.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ProductItem } from '../../../types';
 import {
@@ -40,7 +41,7 @@ export class ProductItemComponent implements OnInit {
   isFeatured: boolean = false;
   showNotification: boolean = false;
   notification!: string;
-  constructor(private store: Store) {}
+  constructor(private store: Store, private cacheService: CacheService) {}
   ngOnInit(): void {
     this.isFeatured = this.product.isFeatured;
     this.notification =
@@ -58,6 +59,7 @@ export class ProductItemComponent implements OnInit {
       this.store.dispatch(addToFeature({ id }));
       this.isFeatured = true;
     }
+    this.cacheService.removeKeyFromCache('/admin/product')
   }
 
   outsideClick() {
