@@ -1,19 +1,26 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Address } from '../../../types';
+import { ClickOutsideDirective } from '../../directives/click/click-outside.directive';
 
 @Component({
   selector: 'app-address-drop-down',
   standalone: true,
-  imports: [],
+  imports: [ClickOutsideDirective],
   templateUrl: './address-drop-down.component.html',
   styleUrl: './address-drop-down.component.scss',
 })
-export class AddressDropDownComponent {
+export class AddressDropDownComponent implements OnChanges {
   @Input() predictions: google.maps.places.QueryAutocompletePrediction[] = [];
   @Input() sessionToken!: google.maps.places.AutocompleteSessionToken;
+  @Input() showPredictions!: boolean
   @Output() placeEmitter = new EventEmitter<Address>();
   address!: Address
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['predictions'] && changes['predictions'].currentValue.length > 0) {
+      this.showPredictions = true;
+    }
+  }
   selectPlace(placeId: string = '') {
     if (placeId) {
       const service = new google.maps.places.PlacesService(
@@ -24,19 +31,16 @@ export class AddressDropDownComponent {
         fields: ['address_components', 'formatted_address'],
         sessionToken: this.sessionToken,
       };
-      console.log('Place ID', placeId);
-
       service.getDetails(request, (place: google.maps.places.PlaceResult | null, status: google.maps.places.PlacesServiceStatus) => this.getAddress(place, status));
       if (this.address) {
         this.placeEmitter.emit(this.address)
       }
+      this.showPredictions = false
     }
   }
 
   getAddress(place: google.maps.places.PlaceResult | null, status: google.maps.places.PlacesServiceStatus) {
-    if (!place || status != google.maps.places.PlacesServiceStatus.OK) return;
-    console.log('Place', place);
-    
+    if (!place || status != google.maps.places.PlacesServiceStatus.OK) return;    
     let address: Address = {
       address: place?.formatted_address,
       city: '',
@@ -72,10 +76,11 @@ export class AddressDropDownComponent {
         };
       }
     });
-    console.log('Dropdown address', address)
-    this.address = address
-    console.log('this', this);
-    
+    this.address = address    
     this.placeEmitter.emit(this.address)
+  }
+
+  onClickOutside() {
+    this.showPredictions = false;
   }
 }

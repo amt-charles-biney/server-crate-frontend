@@ -1,14 +1,18 @@
-<div
-  class="absolute top-full py-2 mt-2 w-full customShadow rounded z-10 border bg-white max-h-[200px] overflow-auto"
->
-  @for (prediction of predictions; track prediction) {
+@if (showPredictions) {
   <div
-    class="flex flex-col items-start justify-center px-4 min-h-12 w-full hover:bg-[#f5f5f5]"
-    (click)="selectPlace(prediction.place_id)"
+  appClickOutside
+  (clickOutside)="onClickOutside()"
+    class="absolute top-full py-2 mt-2 w-full customShadow rounded z-10 border bg-white max-h-[200px] overflow-auto"
   >
-    <span class="text-sm">
-      {{ prediction.description }}
-    </span>
+    @for (prediction of predictions; track prediction) {
+    <div
+      class="flex flex-col items-start justify-center px-4 min-h-12 w-full hover:bg-[#f5f5f5]"
+      (click)="selectPlace(prediction.place_id)"
+    >
+      <span class="text-sm">
+        {{ prediction.description }}
+      </span>
+    </div>
+    }
   </div>
-  }
-</div>
+}

@@ -181,7 +181,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   getAddress(address: Address) {
-    console.log('Address', address);
     this.shippingForm.patchValue({ ...address, address1: address.address });
   }
 
