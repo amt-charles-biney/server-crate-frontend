@@ -128,9 +128,9 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
   id!: string | null;
 
   configMap = new Map([
-    ['incompatibles', {}],
-    ['selected', {}],
-    ['notSelected', {}],
+    ['incompatibles', new Map()],
+    ['selected', new Map()],
+    ['notSelected', new Map()],
   ]);
   incompatibleMap = new Map();
 
@@ -277,6 +277,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
       string,
       CategoryConfig
     >;
+
     const allSelected = this.configMap.get('selected') as Map<
       string,
       CategoryConfig
@@ -414,7 +415,7 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
     allSelected: Map<string, CategoryConfig>,
     localAttributes: Attribute[]
   ) {
-    const nonIncludedMap = new Map();
+    const nonIncludedMap = new Map();    
     localAttributes.forEach((attribute) => {
       attribute.attributeOptions.forEach((option) => {
         if (!allIncompatibles.has(option.id) && !allSelected.has(option.id)) {
