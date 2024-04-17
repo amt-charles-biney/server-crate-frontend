@@ -49,12 +49,12 @@ export class AttributeInputService {
         
       } else {
         if ('attributeName' in attribute) {
-          group[attribute.attributeName] = new FormControl(null);
+          group[attribute.attributeName] = new FormControl(false);
         } else if( 'orderId' in attribute) {
-          group[attribute.orderId] = new FormControl(null)
+          group[attribute.orderId] = new FormControl(false)
         }
         else {
-          group[attribute.name] = new FormControl(null);
+          group[attribute.name] = new FormControl(false);
         }
       }
     });
