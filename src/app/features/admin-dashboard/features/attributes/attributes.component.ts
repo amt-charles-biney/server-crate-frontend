@@ -23,7 +23,7 @@ import {
   deleteAttribute,
   resetAttributeCreation,
 } from '../../../../store/category-management/attributes/attributes.actions';
-import {CdkAccordionModule} from '@angular/cdk/accordion';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { ExpandableComponent } from '../../../../shared/components/expandable/expandable.component';
 import { PaginatedComponent } from '../../../../shared/components/paginated/paginated.component';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -41,7 +41,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     CdkAccordionModule,
     ExpandableComponent,
     PaginatedComponent,
-    NgxPaginationModule
+    NgxPaginationModule,
   ],
   templateUrl: './attributes.component.html',
 })
@@ -49,10 +49,10 @@ export class AttributesComponent implements OnInit, AfterViewInit {
   private attributes$ = new BehaviorSubject<Attribute[]>([]);
   attributes = this.attributes$.asObservable();
   attributesTodelete: Set<string> = new Set();
-  localAttributes!: Attribute[]
+  localAttributes!: Attribute[];
   indeterminateCheckbox!: HTMLInputElement;
   selectForm!: FormGroup;
-  toggleCheckbox = false
+  toggleCheckbox = false;
   page: number = 1;
   @ViewChild(CustomCheckBoxComponent) check!: CustomCheckBoxComponent;
   constructor(
@@ -67,13 +67,13 @@ export class AttributesComponent implements OnInit, AfterViewInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((attrs) => {
         this.selectForm = this.attrService.toSelectFormGroup(attrs);
-        this.localAttributes = attrs
+        this.localAttributes = attrs;
       });
   }
 
   getPage(pageNumber: number) {
     this.page = pageNumber;
-    document.body.scrollTo({ top: 0, behavior: 'smooth'})
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   ngAfterViewInit(): void {
@@ -82,31 +82,32 @@ export class AttributesComponent implements OnInit, AfterViewInit {
   }
 
   removeCheck() {
-    this.toggleCheckbox = !this.toggleCheckbox
+    this.toggleCheckbox = !this.toggleCheckbox;
     Object.keys(this.selectForm.value).forEach((value) => {
       this.selectForm.patchValue({ [value]: this.toggleCheckbox });
     });
     const someValuesSelected = Object.values(this.selectForm.value).some(
-      (value) => value
+      (value: any) => typeof value === 'boolean' ? value : value.checked
     );
-    const allSelected = Object.values(
-      this.selectForm.value
-    ).every((value) => value);
+    const allSelected = Object.values(this.selectForm.value).every(
+      (value: any) => typeof value === 'boolean' ? value : value.checked
+    );
 
     if (allSelected) {
       this.indeterminateCheckbox.checked = true;
-      this.check.inputState.nativeElement.className = ''
-      this.indeterminateCheckbox.indeterminate = false
+      this.check.inputState.nativeElement.className = '';
+      this.indeterminateCheckbox.indeterminate = false;
 
-        this.localAttributes.map((attr) => {
-        this.itemSelected({ name: '', isAdded: false, value: '' }, attr.id);
+      this.localAttributes.map((attr) => {
+        if (!attr.isDefaultRequired) {
+          this.itemSelected({ name: '', isAdded: false, value: '' }, attr.id);
+        }
       });
-    }
-    else if (someValuesSelected) {
+    } else if (someValuesSelected) {
       this.clearSelected();
-      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
     } else {
-      this.clearSelected()
+      this.clearSelected();
     }
     // else {
     //   this.localAttributes.map((attr) => {
@@ -130,30 +131,30 @@ export class AttributesComponent implements OnInit, AfterViewInit {
     } else {
       this.attributesTodelete.add(id);
     }
-    const allSelected = Object.values(
-      this.selectForm.value
-    ).every((value) => value);
-    const someSelected = Object.values(
-      this.selectForm.value
-    ).some((value) => value);
+    const allSelected = Object.values(this.selectForm.value).every(
+      (value: any) => typeof value === 'boolean' ? value : value.checked
+    );
+    const someSelected = Object.values(this.selectForm.value).some(
+      (value: any) => typeof value === 'boolean' ? value : value.checked
+    );
 
     if (allSelected) {
-      this.indeterminateCheckbox.checked = true
-      this.indeterminateCheckbox.indeterminate = false
-      this.check.inputState.nativeElement.className = ''
+      this.indeterminateCheckbox.checked = true;
+      this.indeterminateCheckbox.indeterminate = false;
+      this.check.inputState.nativeElement.className = '';
     } else if (someSelected) {
-      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
-      this.indeterminateCheckbox.indeterminate = true
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
+      this.indeterminateCheckbox.indeterminate = true;
     } else {
-      this.indeterminateCheckbox.indeterminate = false
-      this.check.inputState.nativeElement.className = 'indeterminateCheckbox'
-    }    
+      this.indeterminateCheckbox.indeterminate = false;
+      this.check.inputState.nativeElement.className = 'indeterminateCheckbox';
+    }
   }
 
   deleteAttributes() {
     const deleteList = Array.from(this.attributesTodelete);
     if (deleteList.length === 0) {
-      return
+      return;
     }
     this.store.dispatch(deleteAll({ deleteList }));
 
@@ -162,10 +163,10 @@ export class AttributesComponent implements OnInit, AfterViewInit {
   }
 
   deleteAttribute({ id }: { id: string }) {
-    this.store.dispatch(deleteAttribute({attributeId: id }))
+    this.store.dispatch(deleteAttribute({ attributeId: id }));
   }
 
-  editOption(attribute: Attribute) {    
+  editOption(attribute: Attribute) {
     const dialogRef = this.dialog.open(AttributeModalComponent, {
       data: { attribute },
       height: '80%',

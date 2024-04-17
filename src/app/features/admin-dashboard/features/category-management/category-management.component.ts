@@ -90,10 +90,10 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
       this.selectForm.patchValue({ [value]: this.toggleCheckbox });
     });
     const someValuesSelected = Object.values(this.selectForm.value).some(
-      (value) => value
+      (value: any) => typeof value === 'boolean' ? value : value.checked
     );
     const allSelected = Object.values(this.selectForm.value).every(
-      (value) => value
+      (value: any) => typeof value === 'boolean' ? value : value.checked
     );
 
     if (allSelected) {
@@ -127,10 +127,10 @@ export class CategoryManagementComponent implements OnInit, AfterViewInit {
       this.categoriesTodelete.add(id);
     }
     const allSelected = Object.values(this.selectForm.value).every(
-      (value) => value
+      (value: any) => typeof value === 'boolean' ? value : value.checked
     );
     const someSelected = Object.values(this.selectForm.value).some(
-      (value) => value
+      (value: any) => typeof value === 'boolean' ? value : value.checked
     );
 
     if (allSelected) {

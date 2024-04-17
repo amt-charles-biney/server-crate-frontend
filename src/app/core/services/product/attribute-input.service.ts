@@ -45,13 +45,17 @@ export class AttributeInputService {
   toSelectFormGroup(attributes: Attribute[] | CategoryAndConfig[] | Content[]) {
     const group: any = {};
     attributes.forEach((attribute) => {
-      if ('attributeName' in attribute) {
-        group[attribute.attributeName] = new FormControl(null);
-      } else if( 'orderId' in attribute) {
-        group[attribute.orderId] = new FormControl(null)
-      }
-      else {
-        group[attribute.name] = new FormControl(null);
+      if ('isDefaultRequired' in attribute && attribute.isDefaultRequired) {
+        
+      } else {
+        if ('attributeName' in attribute) {
+          group[attribute.attributeName] = new FormControl(null);
+        } else if( 'orderId' in attribute) {
+          group[attribute.orderId] = new FormControl(null)
+        }
+        else {
+          group[attribute.name] = new FormControl(null);
+        }
       }
     });
     return new FormGroup(group);

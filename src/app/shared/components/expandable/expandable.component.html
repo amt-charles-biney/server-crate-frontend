@@ -6,7 +6,7 @@
       <td
         class="flex items-center gap-9 pr-5 md:col-span-3 2xl:col-span-2"
       >
-        <div [ngClass]="attribute.isDefaultRequired ? 'pointer-events-none opacity-0' : ''">
+        <div *ngIf="!attribute.isDefaultRequired">
           <app-custom-check-box
             (changeHandler)="itemSelected($event, attribute.id)"
             [formControl]="control"
@@ -14,7 +14,7 @@
             [value]="attribute.id"
           />
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3" [ngClass]="attribute.isDefaultRequired ? 'ml-14' : ''">
           <button *ngIf="showChevron" class="">
             <img [ngClass]="collapsed ? '' : 'rotate-90'" class=" transition-transform duration-300 w-4 h-4" src="/assets/rotate-chevron.svg" alt="expand" />
           </button>
