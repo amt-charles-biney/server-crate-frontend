@@ -74,7 +74,7 @@
       @for (option of filteredOptions | async; track option) {
       <mat-option [value]="option" class="relative">
         <span>
-          {{ option.name ?? option.productName }}
+          {{ option.description ?? option.name ?? option.productName }}
         </span>
       </mat-option>
       }
