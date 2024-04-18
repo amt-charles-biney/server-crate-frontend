@@ -21,6 +21,7 @@ import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect
 import { wishlistFeature } from '../../store/admin/products/wishlist.reducers';
 import { CompareEffect } from '../../store/compare/compare.effects';
 import { compareFeature } from '../../store/compare/compare.reducers';
+import { NotFoundPageComponent } from '../not-found-page/not-found-page.component';
 
 export const route: Routes = [
     {
@@ -118,6 +119,10 @@ export const route: Routes = [
                     provideState(recommendationsFeature)
                 ]
             },
+            {
+                path: '**',
+                component: NotFoundPageComponent
+            }
         ],
         component: HomeComponent,
     },
