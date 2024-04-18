@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { heroSlider } from './hero.interface';
 import { CommonModule } from '@angular/common';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: [
     "../../../../../../node_modules/keen-slider/keen-slider.min.css",
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeroComponent {
 

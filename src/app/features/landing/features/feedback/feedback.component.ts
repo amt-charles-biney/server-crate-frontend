@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider';
 
 @Component({
@@ -10,6 +10,7 @@ import KeenSlider, { KeenSliderInstance } from 'keen-slider';
   styleUrls: [
     "../../../../../../node_modules/keen-slider/keen-slider.min.css",
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeedbackComponent {
 

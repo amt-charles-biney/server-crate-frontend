@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { HeroComponent } from './features/hero/hero.component';
 import { BannerComponent } from './features/banner/banner.component';
 import { FeaturedProductsComponent } from './features/featured-products/featured-products.component';
@@ -10,6 +10,7 @@ import { FeedbackComponent } from './features/feedback/feedback.component';
   standalone: true,
   imports: [HeroComponent, BannerComponent, FeaturedProductsComponent, AboutComponent, PopularProductsComponent, FeedbackComponent],
   templateUrl: './landing.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LandingComponent {
 

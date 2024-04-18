@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { ProductItem } from '../../../../types';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
 import { Store } from '@ngrx/store';
@@ -15,6 +15,7 @@ import { UserProductItemComponent } from '../../../../shared/components/user-pro
   styleUrls: [
     "../../../../../../node_modules/keen-slider/keen-slider.min.css"
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PopularProductsComponent {
   @ViewChild('popularSliderRef') popularSliderRef!: ElementRef<HTMLElement>

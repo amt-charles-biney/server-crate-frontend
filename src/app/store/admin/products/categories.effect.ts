@@ -204,11 +204,9 @@ export class CategoryEffect {
         this.ngxService.startLoader('product');
         return this.adminService.deleteProduct(props.id).pipe(
           map(() => {
-            setTimeout(() => {
               this.router.navigateByUrl('/admin/products', {
                 replaceUrl: true,
               });
-            }, 500);
             return getProducts({ page: 0 });
           }),
           timeout(5000),
@@ -242,11 +240,9 @@ export class CategoryEffect {
           }),
           tap(() => {
             this.ngxService.stopLoader('product');
-            setTimeout(() => {
               this.router.navigateByUrl('/admin/products', {
                 replaceUrl: true,
               });
-            }, 500);
           }),
           catchError((err) => {
             this.toast.error(errorHandler(err), 'Error')
@@ -270,11 +266,9 @@ export class CategoryEffect {
               timeOut: 1000
             })
             this.ngxService.stopLoader('product');
-            setTimeout(() => {
               this.router.navigateByUrl('/admin/products', {
                 replaceUrl: true,
               });
-            }, 500);
             return getNotifications()
           }),
           catchError((err) => {

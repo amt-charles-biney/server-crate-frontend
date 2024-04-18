@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ProductItem } from '../../../../types';
 import { CommonModule } from '@angular/common';
 import { ProductItemComponent } from '../../../../shared/components/product-item/product-item.component';
@@ -14,6 +14,7 @@ import { UserProductItemComponent } from '../../../../shared/components/user-pro
   standalone: true,
   imports: [CommonModule, UserProductItemComponent],
   templateUrl: './featured-products.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeaturedProductsComponent {
 

@@ -9,7 +9,15 @@ import {
   gotSingleCase,
   updateCase,
 } from './case.actions';
-import { catchError, exhaustMap, finalize, map, of, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  exhaustMap,
+  finalize,
+  map,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { AdminService } from '../../core/services/admin/admin.service';
 import { AllCases, Case, CaseResponse } from '../../types';
 import { setLoadingSpinner } from '../loader/actions/loader.actions';
@@ -37,7 +45,7 @@ export class CaseEffect {
     return this.action$.pipe(
       ofType(getSingleCase),
       switchMap(({ id }) => {
-        this.ngxService.startLoader('case')
+        this.ngxService.startLoader('case');
         return this.adminService.getCase(id).pipe(
           map((data: Case) => {
             return gotSingleCase(data);
@@ -52,7 +60,7 @@ export class CaseEffect {
             );
           }),
           finalize(() => {
-            this.ngxService.stopLoader('case')
+            this.ngxService.stopLoader('case');
           })
         );
       })
@@ -62,12 +70,12 @@ export class CaseEffect {
     return this.action$.pipe(
       ofType(deleteCase),
       exhaustMap(({ id }) => {
-        this.ngxService.startLoader('case')
+        this.ngxService.startLoader('case');
         return this.adminService.deleteCase(id).pipe(
           map(() => {
             document.body.scrollTo({ top: 0, behavior: 'smooth' });
             this.router.navigateByUrl('/admin/cases');
-            return getCases({ page: 0});
+            return getCases({ page: 0 });
           }),
           catchError((err) => {
             return of(
@@ -79,7 +87,7 @@ export class CaseEffect {
             );
           }),
           finalize(() => {
-            this.ngxService.stopLoader('case')
+            this.ngxService.stopLoader('case');
           })
         );
       })
@@ -90,20 +98,18 @@ export class CaseEffect {
     return this.action$.pipe(
       ofType(addCase),
       exhaustMap(({ formData }) => {
-        this.ngxService.startLoader('case')
+        this.ngxService.startLoader('case');
         return this.adminService.addCase({ formData }).pipe(
           map(() => {
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/cases');
-            }, 500);
+            this.router.navigateByUrl('/admin/cases');
             return getCases({ page: 0 });
           }),
           catchError((err) => {
-            this.toast.error(errorHandler(err), 'Error')
+            this.toast.error(errorHandler(err), 'Error');
             return of();
           }),
           finalize(() => {
-            this.ngxService.stopLoader('case')
+            this.ngxService.stopLoader('case');
           })
         );
       })
@@ -114,20 +120,18 @@ export class CaseEffect {
     return this.action$.pipe(
       ofType(updateCase),
       exhaustMap(({ formData, id }) => {
-        this.ngxService.startLoader('case')
+        this.ngxService.startLoader('case');
         return this.adminService.updateCase({ formData, id }).pipe(
           map(() => {
-            setTimeout(() => {
-              this.router.navigateByUrl('/admin/cases');
-            }, 500);
-            return getCases({page: 0});
+            this.router.navigateByUrl('/admin/cases');
+            return getCases({ page: 0 });
           }),
           catchError((err) => {
-            this.toast.error(errorHandler(err), 'Error')
+            this.toast.error(errorHandler(err), 'Error');
             return of();
           }),
           finalize(() => {
-            this.ngxService.stopLoader('case')
+            this.ngxService.stopLoader('case');
           })
         );
       })
