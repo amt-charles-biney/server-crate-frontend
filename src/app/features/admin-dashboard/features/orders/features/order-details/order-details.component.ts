@@ -1,3 +1,4 @@
+import { CacheService } from './../../../../../../core/services/cache/cache.service';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -60,7 +61,8 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cacheService: CacheService
   ) {}
   ngOnInit(): void {
     this.changeStatus = new FormControl('');
@@ -115,6 +117,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
         })
     } else if (status === this.SHIP_ORDER) {
       this.store.dispatch(createShipment({ id: this.orderId }))
+      this.cacheService.removeKeyFromCache('/admin/product')
       this.router.navigate([`/admin/orders/${this.orderId}`], { replaceUrl: true })
     }
   }
