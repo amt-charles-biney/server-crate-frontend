@@ -42,7 +42,7 @@ import {
   AttributeOption,
   LoadingStatus,
 } from '../../../../../../types';
-import { selectAttributeCreationState } from '../../../../../../store/category-management/attributes/attributes.reducers';
+import { selectAttributes } from '../../../../../../store/category-management/attributes/attributes.reducers';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthLoaderComponent } from '../../../../../../shared/components/auth-loader/auth-loader.component';
 import { Observable } from 'rxjs';
@@ -115,17 +115,17 @@ export class AttributeModalComponent implements OnInit {
       this.editId = id;
       attributeOptions.forEach((attr, index) => {
         const baseAmount = attr.additionalInfo.baseAmount
-          ? attr.additionalInfo.baseAmount.toString()
-          : '';
+          ? attr.additionalInfo.baseAmount
+          : 0;
         const maxAmount = attr.additionalInfo.maxAmount
-          ? attr.additionalInfo.maxAmount.toString()
-          : '';
+          ? attr.additionalInfo.maxAmount
+          : 0;
         const priceFactor = attr.additionalInfo.priceFactor
-          ? attr.additionalInfo.priceFactor.toString()
-          : '';
+          ? attr.additionalInfo.priceFactor
+          : 0;
         const brand = attr.brand ? attr.brand.toString() : '';
-        const inStock = attr.inStock ? attr.inStock.toString() : '';
-        const price = attr.optionPrice ? attr.optionPrice.toString() : '';
+        const inStock = attr.inStock ? attr.inStock : 0;
+        const price = attr.optionPrice ? attr.optionPrice : 0;
         const incompatibleAttributeOptions = attr.incompatibleAttributeOptions
           ? attr.incompatibleAttributeOptions
           : [];
@@ -203,8 +203,7 @@ export class AttributeModalComponent implements OnInit {
   replaceImage(
     obj: { imgSrc: string; imageToChange: string; file?: File },
     id: number,
-    attrs: AbstractControl,
-    index: number
+    index: number,
   ) {
     const data = new FormData();
     this.coverImage[index] = obj.imgSrc;
@@ -249,7 +248,7 @@ export class AttributeModalComponent implements OnInit {
     );
     if (this.editId) {
       this.store
-        .select(selectAttributeCreationState)
+        .select(selectAttributes)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((options) => {
           const isMeasured =
@@ -271,7 +270,7 @@ export class AttributeModalComponent implements OnInit {
       return;
     }
     this.store
-      .select(selectAttributeCreationState)
+      .select(selectAttributes)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((options) => {
         let attribute = {
@@ -373,13 +372,13 @@ export class AttributeModalComponent implements OnInit {
     this.store.dispatch(
       addAttributeToStore({
         name: '',
-        price: '',
+        price: 0,
         media: '',
-        baseAmount: '',
-        maxAmount: '',
-        priceFactor: '',
+        baseAmount: 0,
+        maxAmount: 0,
+        priceFactor: 0,
         brand: '',
-        inStock: '',
+        inStock: 0,
         incompatibleAttributeOptions: [],
         id,
       })

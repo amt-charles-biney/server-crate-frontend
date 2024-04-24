@@ -10,50 +10,65 @@ import {
   resetAttributeCreation,
   updateAttributesInStore,
 } from './attributes.actions';
+type AttributeCreation = {
+  attributeImages: Map<string, string | null>;
+  attributes: StoreVariant[];
+};
 
-const initialState: StoreVariant[] = [];
+const initialState: AttributeCreation = {
+  attributeImages: new Map(),
+  attributes: [],
+};
 
 export const attributeCreationFeature = createFeature({
   name: 'attributeCreation',
   reducer: createReducer(
     initialState,
     on(gotImage, (state, { url, id }) => {
-      const oldAttributes = state.filter((attribute) => attribute.id !== id);
-      const newAttribute: StoreVariant = {
-        baseAmount: '',
-        id,
-        maxAmount: '',
-        media: url,
-        name: '',
-        price: '',
-        priceFactor: '',
-        brand: '',
-        inStock: '',
-        incompatibleAttributeOptions: [],
+      const newImageMap: Map<string, string | null> = new Map([
+        ...Array.from(state.attributeImages.entries()),
+        [id, url],
+      ]);
+      return {
+        ...state,
+        attributeImages: newImageMap,
       };
-      return [...oldAttributes, newAttribute];
     }),
     on(addAttributeToStore, (state, props) => {
       const newAttribute: StoreVariant = {
         ...props,
       };
+      const newImageMap: Map<string, string | null> = new Map([
+        ...Array.from(state.attributeImages.entries()),
+        [newAttribute.id, newAttribute.media],
+      ]);
 
-      return [...state, newAttribute];
+      return {
+        ...state,
+        attributes: [...state.attributes, newAttribute],
+        attributeImages: newImageMap,
+      };
     }),
     on(updateAttributesInStore, (state, props) => {
-      const newState = props.attributes.map((attr, index) => {
+      const newState = props.attributes.map((attr) => {
         return {
           ...attr,
-          media: state[index].media,
+          media: state.attributeImages.get(attr.id)!,
           incompatibleAttributeOptions: attr.incompatibleAttributeOptions
             ? attr.incompatibleAttributeOptions
             : [],
         };
       });
-      return newState;
+      return {
+        ...state,
+        attributes: newState,
+      };
     }),
     on(resetAttributeCreation, () => {
-      return [];
+      return {
+        attributeImages: new Map(),
+        attributes: [],
+      };
     })
   ),
 });
@@ -92,5 +107,6 @@ export const attributesFeature = createFeature({
   ),
 });
 
-export const { selectAttributeCreationState } = attributeCreationFeature;
+export const { selectAttributes, selectAttributeImages } =
+  attributeCreationFeature;
 export const { selectAttributesState } = attributesFeature;

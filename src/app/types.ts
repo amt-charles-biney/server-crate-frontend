@@ -256,14 +256,14 @@ export type UpdateAttribute = {
 };
 export type StoreVariant = {
   name: string;
-  price: string;
+  price: number;
   media: string;
-  baseAmount: string;
-  maxAmount: string;
-  priceFactor: string;
+  baseAmount: number;
+  maxAmount: number;
+  priceFactor: number;
   id: string;
   brand: string;
-  inStock: string;
+  inStock: number;
   incompatibleAttributeOptions: AttributeOption[];
 };
 export type GetAttribute = {

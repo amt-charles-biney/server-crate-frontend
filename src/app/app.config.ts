@@ -34,7 +34,7 @@ export const appConfig: ApplicationConfig = {
     provideEffects(),
     provideHttpClient(withInterceptors([loadingInterceptor, authInterceptor, cookieInterceptor])),
     provideCloudinaryLoader('https://res.cloudinary.com/dah4l2inx'),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode(), serialize: true }),
     provideToastr({toastComponent: CustomToastComponent, progressBar: true, autoDismiss: true, maxOpened: 1, preventDuplicates: true })
   ],
 };
