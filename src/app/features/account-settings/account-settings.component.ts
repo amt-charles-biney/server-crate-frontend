@@ -76,7 +76,13 @@ export class AccountSettingsComponent implements OnInit {
     this.name$ = this.profileService.getUser();
   }
 
-
+  
+  /**
+   * The function `onActiveChange` sets the active link based on a boolean value.
+   * @param {boolean} isActiveChange - The `isActiveChange` indicates
+   * whether the current route is active
+   * @param {Link} link - The `link` provides the data for the current route
+   */
   onActiveChange(isActiveChange: boolean, link: Link) {
     if (isActiveChange) {
       this.activeLink = link

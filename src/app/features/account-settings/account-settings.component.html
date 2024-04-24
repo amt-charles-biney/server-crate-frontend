@@ -9,6 +9,7 @@
         [routerLink]="link.link"
         routerLinkActive
         #rla="routerLinkActive"
+        data-testid="settings-tab"
         (isActiveChange)="onActiveChange($event, link)"
       >
         <span
