@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common'
-import { Component, Input } from '@angular/core'
+import { Component, DestroyRef, Input } from '@angular/core'
 import { Store } from '@ngrx/store';
 import { getBrands, getCases, getUserCategories } from '../../../../store/admin/products/categories.actions';
 import { selectCategoriesState } from '../../../../store/admin/products/categories.reducers';
@@ -7,6 +7,8 @@ import { Select } from '../../../../types';
 import { Router } from '@angular/router';
 import { CloudinaryUrlPipe } from '../../../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
 import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { refineActiveMenuFilter } from '../../../utils/helpers';
 
 
 @Component({
@@ -48,7 +50,7 @@ export class MegaMenuComponent {
     this.store.dispatch(getCases())
     this.store.dispatch(getBrands())
 
-    this.privateOptionsSubscription = this.store.select(selectCategoriesState).subscribe(state => {
+    this.privateOptionsSubscription = this.store.select(selectCategoriesState).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(state => {
       this.productOptions[this.CASE_OPTION] = state.cases
       this.productOptions[this.CATEGORY_OPTION] = state.categories
       this.productOptions[this.BRAND_OPTION] = state.brands
@@ -73,7 +75,7 @@ export class MegaMenuComponent {
   }
 
   navigateToProductByFilter(product: Select, activeMenu: string) {    
-    this.router.navigate(['/servers'], { replaceUrl: true, queryParams: { page: 0, size: 9,  [this.refineActiveMenuFilter(activeMenu)]: `${product?.name}` }, queryParamsHandling: 'merge' })
+    this.router.navigate(['/servers'], { replaceUrl: true, queryParams: { page: 0, size: 9,  [refineActiveMenuFilter(activeMenu)]: `${product?.name}` }, queryParamsHandling: 'merge' })
     this.closeMenu()
   }
 
@@ -87,17 +89,9 @@ export class MegaMenuComponent {
   }
 
 
-  refineActiveMenuFilter(activeMenu: string): string {
-    let activeFilter = activeMenu.toLowerCase()
-    if (activeFilter === "case")
-      return 'productCase'
-
-    return activeFilter
-  }
-
   getMenuOptionsName = (name: string) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
-  constructor(private store: Store, private router: Router) { }
+  constructor(private store: Store, private router: Router, private destroyRef: DestroyRef) { }
 
   ngOnDestroy() {
      this.privateOptionsSubscription?.unsubscribe()

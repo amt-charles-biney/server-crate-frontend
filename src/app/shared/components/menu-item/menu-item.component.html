@@ -1,0 +1,30 @@
+    <section (click)="selectMenuItem()" [ngClass]="{
+        'flex-row-reverse': menuItemIsOpen,
+        'border-b mb-3': openMenuItem
+    }" class="flex items-center justify-between py-3">
+      <p [ngClass]="menuItemIsOpen ? 'text-center' : ''" class="font-semibold text-opacity-90 text-lg w-full">{{ nameOfMenuItem }}</p>
+      <svg
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        width="1em"
+        height="1em"
+        [ngClass]="menuItemIsOpen ? 'rotate-180' : ''"
+    
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5l7 7-7 7"
+        ></path>
+      </svg>
+    </section>
+    @if (menuItemIsOpen) {
+      <div class="max-h-[400px] overflow-auto">
+        @for (child of children; track child) {
+            <p (click)="filterByChild(nameOfMenuItem, child.name)" class="font-semibold text-opacity-55 text-lg w-full py-3">{{ child.name }}</p>
+        }
+      </div>
+    }
+

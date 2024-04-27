@@ -1,5 +1,6 @@
 <main class="relative min-h-screen">
-  <app-header />
+  <app-header [numberOfCartItems]="(numberOfCartItems$ | async) || 0" [numberOfWishlistItems]="(numberOfWishlistItems$ | async) || 0"/>
+  <app-mobile-header [numberOfCartItems]="(numberOfCartItems$ | async) || 0" [numberOfWishlistItems]="(numberOfWishlistItems$ | async) || 0"/>
   <section class="md:pb-[456px] pb-[770px] mx-auto">
     <router-outlet />
   </section>

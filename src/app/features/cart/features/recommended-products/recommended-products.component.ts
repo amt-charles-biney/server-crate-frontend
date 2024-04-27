@@ -30,8 +30,7 @@ export class RecommendedProductsComponent {
   constructor(private store: Store, private cdr: ChangeDetectorRef) { }
   
   ngOnInit() {
-    this.store.dispatch(getRecommendations())
-    this.store.dispatch(loadFeaturedProducts());
+     this.store.dispatch(getRecommendations())
     this.recommendedProducts$ = this.store.select(selectRecommendedState)
     this.featuredProducts$ = this.store.select(selectFeaturedProducts)
   }

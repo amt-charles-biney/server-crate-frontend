@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { CustomButtonComponent } from '../../../shared/components/custom-button/custom-button.component';
@@ -16,10 +16,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Observable, debounceTime, tap } from 'rxjs';
-import { selectCount } from '../../../store/cart/cart.reducers';
 import { MegaMenuComponent } from './mega-menu/mega-menu.component';
-import { selectTotalElements } from '../../../store/admin/products/wishlist.reducers';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CartIconButtonComponent } from '../../../shared/components/cart-icon-button/cart-icon-button.component';
+import { WishlistIconButtonComponent } from '../../../shared/components/wishlist-icon-button/wishlist-icon-button.component';
 
 @Component({
   selector: 'app-header',
@@ -35,19 +35,20 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     FormsModule,
     MatButtonModule,
     MatMenuModule,
-    MatBadgeModule,
+    CartIconButtonComponent,
+    WishlistIconButtonComponent
   ],
   templateUrl: './header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('searchBar') searchBar!: ElementRef<HTMLInputElement>
+  @Input() numberOfCartItems!: number
+  @Input() numberOfWishlistItems!: number
   isMegaMenu: boolean = false;
   isAuthenticated!: boolean;
   showSearch: boolean = false;
   searchForm!: FormGroup;
-  numberOfCartItems$!: Observable<number>;
-  numberOfWishlistItems$!: Observable<number>;
   constructor(
     private authService: AuthService,
     private store: Store,
@@ -60,8 +61,6 @@ export class HeaderComponent implements OnInit {
     this.searchForm = new FormGroup({
       searchValue: new FormControl('', Validators.required),
     });
-    this.numberOfCartItems$ = this.store.select(selectCount);
-    this.numberOfWishlistItems$ = this.store.select(selectTotalElements);
   }
 
   openSearch() {

@@ -25,7 +25,6 @@ export class FeaturedProductsComponent {
       this.featuredProducts$ = this.store.select(selectFeaturedProducts);
       this.loading$ = this.store.select(selectLoading);
 
-      this.store.dispatch(loadFeaturedProducts());
     }
 
     navigateToProduct = () => {

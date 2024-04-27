@@ -1,5 +1,5 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { loadFeaturedProducts, loadFeaturedProductsFailure, loadFeaturedProductsSuccess, loadNewProducts, loadNewProductsFailure, loadNewProductsSuccess } from './featured-product.action';
+import { loadFeaturedProductsFailure, loadFeaturedProductsSuccess, loadNewProductsFailure, loadNewProductsSuccess } from './featured-product.action';
 import { ProductItem } from '../../../types';
 
 interface FeatureState {
@@ -20,10 +20,6 @@ export const FeaturedProductFeature = createFeature({
     name: "featured-product",
     reducer: createReducer(
         initialState,
-        on(loadFeaturedProducts, (state) => ({
-            ...state,
-            loading: true
-        })),
         on(loadFeaturedProductsSuccess, (state, { featuredProducts }) => ({
             ...state,
             loading: false,
@@ -33,10 +29,6 @@ export const FeaturedProductFeature = createFeature({
             ...state,
             loading: false,
             error
-        })),
-        on(loadNewProducts, (state) => ({
-            ...state,
-            loading: true
         })),
         on(loadNewProductsSuccess, (state, { newProducts }) => ({
             ...state,

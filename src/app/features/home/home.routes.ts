@@ -7,9 +7,7 @@ import { Routes } from '@angular/router';
 import { FeaturedProductFeature } from '../../store/product/featured-product/featured-product.reducer';
 import { FeaturedProductEffect } from '../../store/product/featured-product/featured-product.effect';
 import { allProductsFeature, productsFeature, recommendationsFeature } from '../../store/admin/products/products.reducers';
-import { categoryFeature } from '../../store/admin/products/categories.reducers';
 import { UserEffect } from '../../store/users/users.effects';
-import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { ProductsEffect } from '../../store/admin/products/products.effects';
 import { CartComponent } from '../cart/cart.component';
 import { CheckoutEffect } from '../../store/checkout/checkout.effects';
@@ -18,7 +16,6 @@ import { paymentFeature, shippingFeature } from '../../store/account-settings/ge
 import { GeneralInfoEffect } from '../../store/account-settings/general-info/general-info.effects';
 import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from '../../store/product-spec/product-spec.reducer';
 import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
-import { wishlistFeature } from '../../store/admin/products/wishlist.reducers';
 import { CompareEffect } from '../../store/compare/compare.effects';
 import { compareFeature } from '../../store/compare/compare.reducers';
 import { NotFoundPageComponent } from '../not-found-page/not-found-page.component';
@@ -38,26 +35,16 @@ export const route: Routes = [
             {
                 path: '',
                 loadChildren: () => import('../landing/landing.routes').then(m => m.route),
-                providers: [
-                    provideState(FeaturedProductFeature),
-                    provideState(productConfigFeature),
-                    provideEffects(FeaturedProductEffect),
-                    provideEffects(ProductSpecEffects),
-                ]
             },
             {
                 path: 'servers',
                 loadComponent: () => import('../preference-selection/preference-selection.component').then(m => m.PreferenceSelectionComponent),
                 providers: [
                     provideEffects(ProductsEffect),
-                    provideEffects(CategoryEffect),
                     provideEffects(UserEffect),
-                    provideEffects(ProductSpecEffects),
                     provideState(productsFeature),
-                    provideState(categoryFeature),
                     provideState(productConfigFeature),
                     provideState(productConfigItemFeature)
-
                 ]
             },
             {
@@ -125,5 +112,9 @@ export const route: Routes = [
             }
         ],
         component: HomeComponent,
+        providers: [
+            provideState(FeaturedProductFeature),
+            provideEffects(FeaturedProductEffect),
+        ]
     },
 ]

@@ -1,0 +1,103 @@
+<header class="md:hidden border-b relative">
+  <nav
+    (click)="this.searchIsVisible = false"
+    class="flex justify-between h-[53px] px-3"
+  >
+    <div class="flex items-center gap-2">
+      <button (click)="openMenu()">
+        @if (menuIsOpen) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18 18 6M6 6l12 12"
+          />
+        </svg>
+        } @else {
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          />
+        </svg>
+        }
+      </button>
+      <h3 (click)="goToLandingPage()" class="tracking-widest font-extrabold">
+        S3RVERS
+      </h3>
+    </div>
+    <div class="flex items-center gap-3">
+      <button (click)="openSearchBar($event)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+          />
+        </svg>
+      </button>
+      <app-cart-icon-button [numberOfCartItems]="numberOfCartItems" />
+      <app-wishlist-icon-button
+        [numberOfWishlistItems]="numberOfWishlistItems"
+      />
+    </div>
+  </nav>
+  @if (searchIsVisible) {
+  <div class="absolute z-20 top-full w-full h-12">
+    <div class="relative bg-[#494851] flex items-center px-3">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-5 h-5 text-[#c7c7cd]"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+        />
+      </svg>
+      <form [formGroup]="searchForm" (ngSubmit)="search()">
+        <input
+          formControlName="searchValue"
+          type="text"
+          #searchBar
+          placeholder="Search S3RVERS"
+          class="ml-3 outline-none text-white placeholder:text-[#c2c2c1] placeholder:font-semibold tracking-wider font-dm-sans bg-transparent h-12 w-full"
+        />
+      </form>
+    </div>
+    <div
+      class="h-screen bg-black bg-opacity-30 w-full"
+      (click)="searchIsVisible = false"
+    ></div>
+  </div>
+  }
+
+  <app-menu [menuIsOpen]="menuIsOpen" (closeMenuEmitter)="menuIsOpen = false" />
+</header>

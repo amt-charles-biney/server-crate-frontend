@@ -18,6 +18,14 @@ export function resetLoaderFn() {
   }))
 }
 
+export function refineActiveMenuFilter(activeMenu: string): string {
+  let activeFilter = activeMenu.toLowerCase()
+  if (activeFilter === "case")
+    return 'productCase'
+
+  return activeFilter
+}
+
 export function isInStorage(id: string){
   const productsInStorage = JSON.parse(sessionStorage.getItem("products")!)
   if (!productsInStorage[id]) {

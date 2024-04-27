@@ -6,6 +6,7 @@ import { ToastrService } from "ngx-toastr";
 import { EMPTY, catchError, map, switchMap, tap } from "rxjs";
 import { errorHandler } from "../../../core/utils/helpers";
 import { Store } from "@ngrx/store";
+import { loadFeaturedProducts } from "../../product/featured-product/featured-product.action";
 
 @Injectable()
 export class WishlistEffect {
@@ -34,6 +35,7 @@ export class WishlistEffect {
               map(() => {
                 this.toast.success('Added product to wishlist')
                 this.store.dispatch(getUserProducts({ page: 0, params: {}}))
+                this.store.dispatch(loadFeaturedProducts());
                 return getWishlist()
               }),
               catchError((err) => {
@@ -53,6 +55,7 @@ export class WishlistEffect {
               map(() => {
                 this.toast.success('Removed product from wishlist')
                 this.store.dispatch(getUserProducts({ page: 0, params: {}}))
+                this.store.dispatch(loadFeaturedProducts());
                 return getWishlist()
               }),
               catchError((err) => {
