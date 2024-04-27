@@ -1,0 +1,11 @@
+@if (isAdmin) {
+    <button [ngClass]="customClass" (click)="navigateToDashboard()" class="py-[10px] border-t text-sm text-profile-text w-full text-start">
+        <span class="text-sm text-profile-text">Go to Dashboard</span>
+    </button>
+  }
+  <button [ngClass]="customClass" (click)="navigateToSettings()" class="py-[10px] border-t text-sm text-profile-text w-full text-start">
+      <span class="text-sm text-profile-text">Account Settings</span>
+  </button>
+  <button [ngClass]="customClass" (click)="accountLogout()" class="py-[10px] border-t text-sm text-profile-text w-full text-start">
+      <span class="text-sm text-profile-text">Logout</span>
+  </button>

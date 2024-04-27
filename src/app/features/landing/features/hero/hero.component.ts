@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { heroSlider } from './hero.interface';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import KeenSlider, { KeenSliderInstance } from 'keen-slider'
 import { Router } from '@angular/router';
+import { CloudinaryUrlPipe } from '../../../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgOptimizedImage, CloudinaryUrlPipe],
   templateUrl: './hero.component.html',
   styleUrls: [
     "../../../../../../node_modules/keen-slider/keen-slider.min.css",
@@ -21,6 +22,8 @@ export class HeroComponent {
   currentSlide: number = 0
   dotHelper: Array<Number> = []
   slider: KeenSliderInstance | any;
+
+  image = "http://res.cloudinary.com/dah4l2inx/image/upload/v1714210781/adew94pjze3bjgwpjurj.jpg"
 
   sliders: heroSlider[] = [{
     img: "/assets/hero1.jpg",

@@ -13,17 +13,7 @@
     </div>
     <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm text-profile-text">{{ initials.firstName }} {{ initials.lastName }}</p>
   </div>
-  @if (isAdmin()) {
-    <button (click)="navigateToDashboard()" class="py-[10px] px-4 border-t text-sm text-profile-text w-full text-start">
-        <span class="text-sm text-profile-text">Go to Dashboard</span>
-    </button>
-  }
-  <button (click)="navigateToSettings()" class="py-[10px] px-4 border-t text-sm text-profile-text w-full text-start">
-      <span class="text-sm text-profile-text">Account Settings</span>
-  </button>
-  <button (click)="accountLogout()" class="py-[10px] px-4 border-t text-sm text-profile-text w-full text-start">
-      <span class="text-sm text-profile-text">Logout</span>
-  </button>
+  <app-user-options customClass="px-4"/>
 </mat-menu>
 </ng-container>
 

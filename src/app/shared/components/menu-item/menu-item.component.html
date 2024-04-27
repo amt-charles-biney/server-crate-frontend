@@ -2,7 +2,7 @@
         'flex-row-reverse': menuItemIsOpen,
         'border-b mb-3': openMenuItem
     }" class="flex items-center justify-between py-3">
-      <p [ngClass]="menuItemIsOpen ? 'text-center' : ''" class="font-semibold text-opacity-90 text-lg w-full">{{ nameOfMenuItem }}</p>
+      <p [ngClass]="menuItemIsOpen ? 'text-center' : ''" class="font-semibold text-opacity-90 text-lg w-full cursor-pointer">{{ nameOfMenuItem }}</p>
       <svg
         fill="none"
         viewBox="0 0 24 24"
@@ -23,7 +23,7 @@
     @if (menuItemIsOpen) {
       <div class="max-h-[400px] overflow-auto">
         @for (child of children; track child) {
-            <p (click)="filterByChild(nameOfMenuItem, child.name)" class="font-semibold text-opacity-55 text-lg w-full py-3">{{ child.name }}</p>
+            <button (click)="filterByChild(nameOfMenuItem, child.name)" class="font-semibold text-opacity-55 text-lg w-full py-3">{{ child.name }}</button>
         }
       </div>
     }

@@ -1,7 +1,9 @@
 <main class="relative min-h-screen">
   <app-header [numberOfCartItems]="(numberOfCartItems$ | async) || 0" [numberOfWishlistItems]="(numberOfWishlistItems$ | async) || 0"/>
-  <app-mobile-header [numberOfCartItems]="(numberOfCartItems$ | async) || 0" [numberOfWishlistItems]="(numberOfWishlistItems$ | async) || 0"/>
-  <section class="md:pb-[456px] pb-[770px] mx-auto">
+  <div class="fixed -top-[1px] left-0 z-30 w-full bg-white">
+    <app-mobile-header [numberOfCartItems]="(numberOfCartItems$ | async) || 0" [numberOfWishlistItems]="(numberOfWishlistItems$ | async) || 0"/>
+  </div>
+  <section class="md:pb-[456px] pb-[770px] pt-[53px] md:pt-0 mx-auto">
     <router-outlet />
   </section>
   <app-footer />

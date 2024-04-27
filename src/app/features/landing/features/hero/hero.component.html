@@ -1,4 +1,4 @@
-<main class="w-full h-auto">
+<main class="hidden md:block w-full h-auto">
   <section
     class="flex py-6 max-w-[1240px] mx-auto max-h-28 h-full flex-row items-center justify-between"
   >
@@ -50,33 +50,52 @@
   <section
     class="w-[99vw] relative left-1/2 transform -translate-x-1/2 overflow-x-hidden no-scrollbar z-10"
   >
-  <div class="relative w-full max-w-[1240px] mx-auto">
-    <div
-      class="absolute max-w-sm w-full bg-white backdrop-blur-md backdrop-opacity-50 bg-opacity-80 -mt-10 pt-20 p-8 z-20 shadow-lg flex flex-col gap-10"
-    >
-      <h4 class="text-5xl font-bold leading-[3.5rem] tracking-wide">
-        High-Quality <span class="text-green-600">Servers</span> Just For you
-      </h4>
-      <p class="font-light tracking-wider text-sm">
-        Top-Tier Materials Tailored To Meet The Demands Of Your Digital
-        Infrastructure
-      </p>
-      <button 
-      (click)="navigateToServers()"
-      class="p-4 rounded-md bg-green-600 text-white hover:bg-green-500">
-        shop now
-      </button>
+    <div class="relative w-full max-w-[1240px] mx-auto">
+      <div
+        class="absolute max-w-sm w-full bg-white backdrop-blur-md backdrop-opacity-50 bg-opacity-80 -mt-10 pt-20 p-8 z-20 shadow-lg flex flex-col gap-10"
+      >
+        <h4 class="text-5xl font-bold leading-[3.5rem] tracking-wide">
+          High-Quality <span class="text-green-600">Servers</span> Just For you
+        </h4>
+        <p class="font-light tracking-wider text-sm">
+          Top-Tier Materials Tailored To Meet The Demands Of Your Digital
+          Infrastructure
+        </p>
+        <button
+          (click)="navigateToServers()"
+          class="p-4 rounded-md bg-green-600 text-white hover:bg-green-500"
+        >
+          shop now
+        </button>
+      </div>
     </div>
-
-  </div>
     <div class="keen-slider w-full" #sliderRef>
       <div
         *ngFor="let slider of sliders; let idx = index"
         class="keen-slider__slide h-[70vh] w-screen bg-cover bg-center bg-no-repeat"
         [style.backgroundImage]="'url(' + slider.img + ')'"
       >
-      <div class="absolute inset-0 bg-gradient-to-r from-black via-black to-transparent opacity-30"></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-black via-black to-transparent opacity-30"
+        ></div>
       </div>
     </div>
+  </section>
+</main>
+<main class="md:hidden font-inter">
+  <section class="flex flex-col bg-black text-white">
+    <article class="flex flex-col gap-2 pt-12 px-6 items-center justify-center text-3xl font-extrabold text-center max-w-xs mx-auto">
+        <h4 class="text-2xl tracking-wider font-black">S3RVERS</h4>
+        <p class="text-3xl">SUPER Fast. SUPER Powered.</p>
+        <button (click)="navigateToServers()" class="border-2 rounded-md w-28 py-1 px-2 text-base">Shop Now</button>
+    </article>
+    <img
+      [ngSrc]="image | cloudinaryUrl"
+      width="600"
+      height="600"
+      class="mt-auto"
+      priority
+      alt="Image of a gpu"
+    />
   </section>
 </main>

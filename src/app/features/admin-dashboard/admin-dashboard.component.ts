@@ -105,10 +105,6 @@ export class AdminDashboardComponent implements OnInit {
     this.numberOfNotifications$ = this.store.select(selectCount);
   }
 
-  setAdminLink(link: string) {
-    this.activeLink = link;
-  }
-
   toggleSearchBar() {
     this.showSearchBar = !this.showSearchBar;
     if (this.showSearchBar) {

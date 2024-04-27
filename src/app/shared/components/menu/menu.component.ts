@@ -5,17 +5,20 @@ import { Select } from '../../../types';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectCategoriesState } from '../../../store/admin/products/categories.reducers';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { UserOptionsComponent } from '../user-options/user-options.component';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [MenuItemComponent, RouterLink],
+  imports: [MenuItemComponent, RouterLink, UserOptionsComponent],
   templateUrl: './menu.component.html',
 })
 export class MenuComponent implements OnInit, OnChanges {
   @Input() menuIsOpen!: boolean;
   @Output() closeMenuEmitter = new EventEmitter<boolean>();
   localMenuIsOpen = this.menuIsOpen
+  isAuthenticated!: boolean
   menu: Record<string, Select[]> = {
     Categories: [],
     Case: [],
@@ -24,9 +27,10 @@ export class MenuComponent implements OnInit, OnChanges {
 
   menuItemSelected = '';
 
-  constructor(private store: Store, private destroyRef: DestroyRef) {}
+  constructor(private store: Store, private destroyRef: DestroyRef, private authService: AuthService) {}
   ngOnInit(): void {
     this.localMenuIsOpen = this.menuIsOpen
+    this.isAuthenticated = this.authService.isAuthenticated()
     this.store
       .select(selectCategoriesState)
       .pipe(takeUntilDestroyed(this.destroyRef))

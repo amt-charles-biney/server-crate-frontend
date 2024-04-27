@@ -3,11 +3,11 @@
   (hoverEmitter)="hovered = !hovered"
   [ngClass]="{
     'border-4 border-figma-green': isSelected,
-    'flex flex-col max-w-[297px] w-full h-[245px] gap-[9px]': isGrid,
+    'flex flex-col w-[170px] md:max-w-[297px] md:w-full h-[245px] gap-[9px]': isGrid,
     'grid grid-cols-2 gap-6 w-[618px] h-[166px]': !isGrid
   }"
 >
-  <div class="relative w-[297px] h-[166px] border rounded-2xl p-[4.5px]">
+  <div class="relative flex w-full h-[166px] border rounded-2xl p-[4.5px]">
     <img
       class="object-contain max-w-full max-h-full"
       [ngSrc]="
@@ -32,9 +32,9 @@
     }
   </div>
   <div class="flex flex-col pr-[7.5px]">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2 justify-between">
       <p
-        class="font-bold max-w-[145px] overflow-hidden whitespace-nowrap text-ellipsis"
+        class="font-bold truncate"
       >
         {{ product.productName }}
       </p>
@@ -88,7 +88,7 @@
       </div>
     </div>
     <p
-      class="text-product-text font-[500] text-sm max-w-[145px] overflow-hidden whitespace-nowrap text-ellipsis"
+      class="text-product-text font-[500] text-sm truncate"
     >
       {{
         product.productBrand ? product.productBrand : product.productCaseName
@@ -99,7 +99,7 @@
       class="flex items-center justify-between"
     >
       <p
-        class="text-sm font-[500] max-w-[145px] overflow-hidden whitespace-nowrap text-ellipsis"
+        class="text-sm font-[500] truncate"
       >
         {{ product.totalPrice || product.productPrice | currency }}
       </p>
