@@ -1,23 +1,24 @@
-<main class="flex flex-col pt-[60px] max-w-[1239px] w-full mx-auto">
-  <h2 class="font-bold text-2xl">Wishlist</h2>
+<main class="flex flex-col md:pt-[60px] pt-14 max-w-[1239px] w-full mx-auto px-3 md:px-0">
+  <h2 class="hidden md:block text-3xl font-extrabold w-full md:border-0 border-b pb-3 mb-3">Wishlist</h2>
   <ng-container *ngIf="wishlist | async as wishlist">
     <section
-      *ngIf="wishlist.length > 0; else is_empty"
-      class="flex mt-6 flex-wrap gap-x-2 xl:gap-x-4 gap-y-[40px]"
+    *ngIf="wishlist.length > 0; else is_empty"
+    class="grid grid-cols-2 md:px-0 gap-y-[10px] md:flex md:mt-6 flex-wrap gap-x-2 xl:gap-x-4 md:gap-y-[40px]"
     >
+    <h2 class="text-3xl font-extrabold w-full md:border-0 border-b pb-3 mb-3">Wishlist</h2>
       @for (product of wishlist; track product) {
       <app-user-product-item [product]="product" />
       }
     </section>
     <ng-template #is_empty>
-      <section class="mt-14 text-center">
+      <section class="hidden md:block mt-14 text-center">
         <img class="mx-auto" src="/assets/cart-empty.svg" alt="cart is empty" />
         <h2 class="font-[500] text-[32px]">Wishlist is empty</h2>
         <article class="flex flex-col mt-4 text-[#838282] text-2xl">
           <p>Your wishlist is empty</p>
           <p>Start adding items to enjoy shopping!</p>
-          <button routerLink="/servers" class="flex items-center justify-center px-3 py-1 rounded-md mx-auto mt-3 w-fit gap-2 text-white bg-figma-green">
-            <span class="font-inter">Shop</span>
+          <button routerLink="/servers" class="flex items-center justify-center px-3 py-1 rounded-md mx-auto mt-3 w-fit gap-2 text-white bg-figma-green bg-opacity-80 hover:bg-opacity-100 text-lg">
+            <span class="font-inter">Don&apos;t miss out</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
               </svg>
@@ -25,6 +26,13 @@
           </button>
         </article>
       </section>
+      <div class="md:hidden bg-[#f5f5f8] p-8 rounded-md text-center">
+        <h3 class="text-2xl font-bold">Your wishlist is empty</h3>
+          <p class="">Time to treat yourself! Add some items to your wishlist and start planning your next purchase.</p>
+          <button routerLink="/servers" class="bg-figma-green bg-opacity-80 hover:bg-opacity-100 text-white px-4 py-1.5 text-lg rounded mt-2">
+            Don&apos;t miss out
+          </button>
+      </div>
     </ng-template>
   </ng-container>
 </main>

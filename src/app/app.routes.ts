@@ -17,6 +17,7 @@ import { CategoryEffect } from './store/admin/products/categories.effect';
 import { categoryFeature } from './store/admin/products/categories.reducers';
 import { NotificationEffect } from './store/admin/products/notifications.effects';
 import { notificationFeature } from './store/admin/products/notifications.reducers';
+import { productConfigFeature, productConfigItemFeature } from './store/product-spec/product-spec.reducer';
 
 export const routes: Routes = [
   {
@@ -66,6 +67,10 @@ export const routes: Routes = [
       provideState(categoryFeature),
       provideEffects(CategoryEffect),
       provideEffects(ProductSpecEffects),
+      provideState(productConfigFeature),
+      provideState(productConfigItemFeature)
+
+
     ],
   },
 ];

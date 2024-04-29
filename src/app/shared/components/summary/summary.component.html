@@ -1,7 +1,7 @@
 @if (cartItem) {
 <div
   [ngClass]="{
-    'pt-6 pb-[13px] w-[421px] h-fit': page === 'cart',
+    'pt-6 pb-[13px] md:w-[421px] h-fit': page === 'cart',
     'pt-[10px] pb-[51px] w-[410px] max-h-[448px]':
       page === 'checkout' || page === 'details'
   }"
@@ -30,7 +30,7 @@
     (click)="goToCheckout()"
     class="bg-figma-green hover:bg-green-500 w-full p-[9px] rounded-xl text-white font-[500px] text-[20px]"
   >
-    Check Out
+    Proceed to Checkout
   </button>
   } @else if (page === 'checkout') {
   <p class="text-figma-green underline text-xs font-inter">
