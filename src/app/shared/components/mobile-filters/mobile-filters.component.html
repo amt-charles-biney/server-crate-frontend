@@ -9,11 +9,12 @@
                     <img src="/assets/close.svg" alt="close button">
                 </button>
             </div>
-            <div class="flex-1">
-
+            <div class="flex-1 overflow-auto p-3">
+                <app-filter-table />
             </div>
-            <div class="border py-2 px-3">
-                <button class="bg-figma-green text-white px-4 py-1 w-full">Clear Selections</button>
+            <div class="flex items-center gap-2 border py-2 px-3">
+                <button (click)="clearAllFilters()" class="bg-figma-green text-white px-4 py-1 w-full rounded text-sm">View results ({{numberOfResults}})</button>
+                <button (click)="clearAllFilters()" class="bg-figma-green text-white px-4 py-1 w-full rounded text-sm">Clear all</button>
             </div>
         </div>
         <div (click)="closeFilterMenu()" class="w-[20%] bg-[#7f7f7f] bg-opacity-70">
