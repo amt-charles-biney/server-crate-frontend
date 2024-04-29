@@ -23,7 +23,7 @@
     @if (menuItemIsOpen) {
       <div class="max-h-[400px] overflow-auto">
         @for (child of children; track child) {
-            <button (click)="filterByChild(nameOfMenuItem, child.name)" class="font-semibold text-opacity-55 text-lg w-full py-3">{{ child.name }}</button>
+            <button (click)="filterByChild(nameOfMenuItem, child.name)" class="font-semibold text-opacity-55 text-lg w-full text-left py-3 truncate">{{ child.name }}</button>
         }
       </div>
     }

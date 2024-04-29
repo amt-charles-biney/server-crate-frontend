@@ -20,6 +20,7 @@ import { filter } from '../../store/users/users.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { selectBrands, selectCategories, selectCases } from '../../store/admin/products/categories.reducers';
+import { MobileFiltersComponent } from '../../shared/components/mobile-filters/mobile-filters.component';
 
 @Component({
   selector: 'app-preference-selection',
@@ -32,6 +33,7 @@ import { selectBrands, selectCategories, selectCases } from '../../store/admin/p
     CustomButtonComponent,
     NgxPaginationModule,
     UserProductItemComponent,
+    MobileFiltersComponent
   ],
   templateUrl: './preference-selection.component.html',
 })
@@ -43,6 +45,7 @@ export class PreferenceSelectionComponent implements OnInit {
     new EventEmitter<number>();
   filterForm!: FormGroup;
   queryParams!: Record<string, Set<string>>
+  filtersMenuIsVisible = true;
 
   private products$ = new BehaviorSubject<ProductItem[]>([]);
   products: Observable<ProductItem[]> = this.products$.asObservable();
@@ -144,6 +147,10 @@ export class PreferenceSelectionComponent implements OnInit {
     }
     this.products = this.store.select(selectContent);
     this.total = this.store.select(selectTotalElements);
+  }
+
+  openFiltersSideBar() {
+    this.filtersMenuIsVisible = !this.filtersMenuIsVisible;
   }
 
   compareEvent() {

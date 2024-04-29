@@ -1,0 +1,23 @@
+@if (menuIsVisible) {
+    <section class="min-h-screen fixed z-30 top-0 left-0 bottom-0 flex w-full">
+        <div class="w-[80%] bg-white flex flex-col">
+            <div class="flex w-full border divide-x">
+                <div class="flex-1 py-3 px-4">
+                    <span class="font-semibold text-lg tracking-wide font-dm-sans">Search Filters</span>
+                </div>
+                <button (click)="closeFilterMenu()" class="py-3 px-4">
+                    <img src="/assets/close.svg" alt="close button">
+                </button>
+            </div>
+            <div class="flex-1">
+
+            </div>
+            <div class="border py-2 px-3">
+                <button class="bg-figma-green text-white px-4 py-1 w-full">Clear Selections</button>
+            </div>
+        </div>
+        <div (click)="closeFilterMenu()" class="w-[20%] bg-[#7f7f7f] bg-opacity-70">
+    
+        </div>
+    </section>
+}
