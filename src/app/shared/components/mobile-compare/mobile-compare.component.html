@@ -1,30 +1,31 @@
-<section class="mt-[39px] px-3">
-  <h2 class="font-bold text-3xl border-b pb-3">Compare Servers</h2>
-  <form [formGroup]="comparisonProductsGroup" class="grid grid-cols-2 gap-3 mt-4">
-    <app-custom-input
-      id="firstProduct"
-      type="async"
-      placeholder="Add a server to compare"
-      formControlName="firstProduct"
-      [filteredOptions]="filteredProducts"
-      (optionSelectedEmitter)="onProductSelected($event, 'firstProduct')"
-      myClass="font-[500]"
-    />
-    <app-custom-input
-      id="secondProduct"
-      type="async"
-      placeholder="Add a server to compare"
-      formControlName="secondProduct"
-      [filteredOptions]="filteredProducts"
-      (optionSelectedEmitter)="onProductSelected($event, 'secondProduct')"
-      myClass="font-[500]"
-    />
+<section class="px-3">
+  <form #dropdown [formGroup]="comparisonProductsGroup">
+    <h2 class="font-bold text-3xl border-b pb-3 mt-[39px]">Compare Servers</h2>
+    <section class="grid grid-cols-2 gap-3 mt-4 border-b">
+      <app-custom-input
+        id="firstProduct"
+        type="async"
+        placeholder="Add a server to compare"
+        formControlName="firstProduct"
+        [filteredOptions]="filteredProducts"
+        (optionSelectedEmitter)="onProductSelected($event, 'firstProduct')"
+        myClass="font-[500]"
+      />
+      <app-custom-input
+        id="secondProduct"
+        type="async"
+        placeholder="Add a server to compare"
+        formControlName="secondProduct"
+        [filteredOptions]="filteredProducts"
+        (optionSelectedEmitter)="onProductSelected($event, 'secondProduct')"
+        myClass="font-[500]"
+      />
+    </section>
   </form>
 
-  @if (copyOfComparisons.length > 0) {
 
   <section>
-    <h3>Processor</h3>
+    <h3 #processorTable>Processor</h3>
     <table class="grid grid-cols-2">
       <tr class="border">
         <td class="font-dm-sans">
@@ -113,5 +114,5 @@
       </tr>
     </table>
   </section>
-  }
+  
 </section>
