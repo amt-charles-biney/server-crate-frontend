@@ -5,10 +5,29 @@ import {
   AttributeOption,
   CategoryConfig,
   CategoryEditResponse,
+  Comparison,
+  Select,
 } from '../../types';
 import { LOCALSTORAGE_EMAIL, LOCALSTORAGE_TOKEN, LOCALSTORAGE_USER } from './constants';
 import { Store } from '@ngrx/store';
 
+export function isSelect(value: any): value is Select {
+  return (typeof value.thumbnail === 'string')
+}
+
+export function isComparison(obj: any): obj is Comparison {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof obj.productName === 'string' &&
+    typeof obj.productId === 'string' &&
+    typeof obj.description === 'string' &&
+    typeof obj.coverImage === 'string' &&
+    typeof obj.options === 'object' &&
+    typeof obj.productPrice === 'number' &&
+    typeof obj.productCase === 'string'
+  );
+}
 export function resetLoaderFn() {
   const store = inject(Store)
   store.dispatch(resetLoader({

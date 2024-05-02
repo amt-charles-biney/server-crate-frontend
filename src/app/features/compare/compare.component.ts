@@ -30,6 +30,7 @@ import { selectData } from '../../store/compare/compare.reducers';
 import { isInStorage } from '../../core/utils/helpers';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { MobileCompareComponent } from '../../shared/components/mobile-compare/mobile-compare.component';
 
 @Component({
   selector: 'app-compare',
@@ -41,7 +42,8 @@ import { Router } from '@angular/router';
     ReactiveFormsModule,
     CommonModule,
     MatAutocompleteTrigger,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MobileCompareComponent
   ],
   templateUrl: './compare.component.html',
   styleUrl: './compare.component.scss',

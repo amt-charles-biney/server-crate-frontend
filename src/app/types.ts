@@ -777,3 +777,5 @@ export type AllCases = {
   size: number;
   case: Case
 }
+
+export type SelectedDropdown = 'firstProduct' | 'secondProduct'

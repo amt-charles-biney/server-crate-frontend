@@ -10,7 +10,7 @@
   <h2 class="font-bold text-xl">{{ title }}</h2>
   <div class="flex flex-col gap-5 max-h-[420px] pr-2 overflow-auto myScroll">
     <div class="flex items-center justify-between">
-      <span class="text-[13px]">{{ cartItem.productName }}</span>
+      <span class="text-[13px] truncate w-[40%]">{{ cartItem.productName }}</span>
       <div class="flex items-center gap-7 text-[13px]">
         <p>QTY <span class="bg-[#8E98A81A] px-2 py-[0.5px] ml-[5px] rounded">x{{quantity}}</span></p>
         <span class="text-sm font-[500]">{{

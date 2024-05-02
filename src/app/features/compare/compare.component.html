@@ -1,5 +1,5 @@
 <ng-container *ngIf="singleProduct | async"></ng-container>
-<main class="max-w-[1239px] mx-auto mt-[66px]">
+<main class="hidden md:block max-w-[1239px] mx-auto mt-[66px]">
   <header class="flex justify-between mb-6">
     <h2 class="text-2xl font-bold">Compare Servers</h2>
     <button (click)="clearSelections()" class="text-sm text-red-600 underline">
@@ -32,11 +32,10 @@
       <div class="row h-[39px]">
         <p>Operating System</p>
       </div>
-      <div class="row h-[39px] ">
+      <div class="row h-[39px]">
         <p>Processor</p>
       </div>
-      <div class="row h-[39px] !border-b-0">
-      </div>
+      <div class="row h-[39px] !border-b-0"></div>
     </div>
     <div class="flex gap-[73px] ml-[17px] overflow-auto myScroll">
       <ng-container *ngIf="allProducts | async as allProducts">
@@ -44,7 +43,7 @@
           @for (product of products; track product) {
           <div class="flex flex-col">
             <div class="py-3 px-2 product">
-              <p class="font-bold">{{ product.productName }}</p>
+              <p class="font-bold truncate">{{ product.productName }}</p>
             </div>
             <div class="relative h-[180px] product !rounded-2xl mt-3">
               <img
@@ -61,62 +60,65 @@
               >
                 <img src="/assets/heart.svg" alt="" />
               </button>
-              <p class="absolute bottom-2 right-3 font-[500] text-sm">
+              <p class="absolute bottom-2 right-3 font-[500] text-sm truncate">
                 {{ product.productPrice | currency }}
               </p>
             </div>
             <div
-              class="border-b w-[469px] flex flex-col justify-center items-center h-[147px]"
+              class="border-b w-[469px] truncate flex flex-col justify-center items-center h-[147px]"
             >
               <p>{{ product.description }}</p>
             </div>
             <div
-              class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
+              class="border-b w-[469px] truncate flex flex-col justify-center items-center h-[39px]"
             >
               <p>{{ product.productCase }}</p>
             </div>
             <div
-              class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
+              class="border-b w-[469px] truncate flex flex-col justify-center items-center h-[39px]"
             >
               <p>{{ product.options["gpu"] || "Not available" }}</p>
             </div>
             <div
-              class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
+              class="border-b w-[469px] truncate flex flex-col justify-center items-center h-[39px]"
             >
               <p>{{ product.options["motherboard"] || "Not available" }}</p>
             </div>
             <div
-              class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
+              class="border-b w-[469px] truncate flex flex-col justify-center items-center h-[39px]"
             >
               <p>{{ product.options["ram"] || "Not available" }}</p>
             </div>
             <div
-              class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
+              class="border-b w-[469px] truncate flex flex-col justify-center items-center h-[39px]"
             >
               <p>{{ product.options["storage"] || "Not available" }}</p>
             </div>
             <div
-              class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
+              class="border-b w-[469px] truncate flex flex-col justify-center items-center h-[39px]"
             >
               <p>
                 {{ product.options["operating system"] || "Not available" }}
               </p>
             </div>
             <div
-              class="border-b w-[469px] flex flex-col justify-center items-center h-[39px]"
+              class="border-b w-[469px] truncate flex flex-col justify-center items-center h-[39px]"
             >
               <p>
                 {{ product.options["processor"] || "Not available" }}
               </p>
             </div>
-            <button (click)="goToConfiguration(product.productId)" class="w-full my-2 rounded-xl text-xl text-white py-4 px-[72px] bg-figma-green">
+            <button
+              (click)="goToConfiguration(product.productId)"
+              class="w-full my-2 rounded-xl text-xl text-white py-4 px-[72px] bg-figma-green"
+            >
               Configure
             </button>
           </div>
           }
           <ng-container *ngIf="products.length < 5">
-          <div class="flex flex-col gap-3">
-            <div class="product ">
+            <div class="flex flex-col gap-3">
+              <div class="product">
                 <form [formGroup]="productList">
                   <div class="relative">
                     <label for="comparison">
@@ -142,7 +144,11 @@
                     [displayWith]="displayFn"
                     #productsAuto="matAutocomplete"
                   >
-                    <mat-option [value]="option" class="relative" *ngFor="let option of filteredOptions | async">
+                    <mat-option
+                      [value]="option"
+                      class="relative"
+                      *ngFor="let option of filteredOptions | async"
+                    >
                       {{ option.name }}
                     </mat-option>
                   </mat-autocomplete>
@@ -150,32 +156,39 @@
                 <!-- <p class="font-bold">{{ product.productName }}</p> -->
               </div>
               <div
-              class="flex flex-col justify-center items-center flex-1 p-1 w-full rounded-3xl"
+                class="flex flex-col justify-center items-center flex-1 p-1 w-full rounded-3xl"
               >
-              <button (click)="openPanel($event)">
-                <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-20 h-20 text-gray-200"
-                >
-                <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            </button>
-            <p class="font-inter text-lg text-gray-300 text-center">
-              Add a product
-            </p>
-          </div>
-        </div>
-      </ng-container>
+                <button (click)="openPanel($event)">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-20 h-20 text-gray-200"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </button>
+                <p class="font-inter text-lg text-gray-300 text-center">
+                  Add a product
+                </p>
+              </div>
+            </div>
+          </ng-container>
         </ng-container>
       </ng-container>
     </div>
   </section>
+</main>
+<main class="md:hidden">
+  <ng-container *ngIf="allProducts | async as allProducts">
+    <ng-container *ngIf="productsToCompare | async as productsToCompare">
+      <app-mobile-compare [allProducts]="allProducts" [productsToCompare]="productsToCompare"/>
+    </ng-container>
+  </ng-container>
 </main>

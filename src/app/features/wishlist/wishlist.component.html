@@ -1,11 +1,11 @@
-<main class="flex flex-col md:pt-[60px] pt-14 max-w-[1239px] w-full mx-auto px-3 md:px-0">
+<main class="flex flex-col md:pt-[60px] pt-[39px] max-w-[1239px] w-full mx-auto px-3 md:px-0">
   <h2 class="hidden md:block text-3xl font-extrabold w-full md:border-0 border-b pb-3 mb-3">Wishlist</h2>
   <ng-container *ngIf="wishlist | async as wishlist">
+    <h2 class="text-3xl font-extrabold w-full md:border-0 border-b pb-3 mb-3">Wishlist</h2>
     <section
     *ngIf="wishlist.length > 0; else is_empty"
     class="grid grid-cols-2 md:px-0 gap-y-[10px] md:flex md:mt-6 flex-wrap gap-x-2 xl:gap-x-4 md:gap-y-[40px]"
     >
-    <h2 class="text-3xl font-extrabold w-full md:border-0 border-b pb-3 mb-3">Wishlist</h2>
       @for (product of wishlist; track product) {
       <app-user-product-item [product]="product" />
       }

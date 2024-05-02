@@ -57,7 +57,7 @@
           type="text"
           [id]="id"
           [placeholder]="placeholder"
-          class="w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
+          class="truncate placeholder:mr-1 w-full border-[1.5px] placeholder:text-figma-gray outline-figma-green px-4 py-2 rounded-md"
           aria-label="Number"
           matInput
           [formControl]="formControl"
@@ -71,6 +71,13 @@
       [displayWith]="displayFn"
       #auto="matAutocomplete"
     >
+    @if (formControl.value) {
+      <mat-option value="Clear" class="relative">
+        <span>
+          Clear
+        </span>
+      </mat-option>
+    }
       @for (option of filteredOptions | async; track option) {
       <mat-option [value]="option" class="relative">
         <span>

@@ -24,8 +24,9 @@ import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { Select, OnChange, OnTouch } from '../../../types';
+import { Select, OnChange, OnTouch, Comparison, Product } from '../../../types';
 import { Store } from '@ngrx/store';
+import { isComparison, isSelect } from '../../../core/utils/helpers';
 
 @Component({
   selector: 'app-custom-input',
@@ -89,6 +90,10 @@ export class CustomInputComponent
   }
 
   optionSelected(event: MatAutocompleteSelectedEvent) {
+    if (event.option.value === 'Clear') {
+      this.clearSelection()
+      
+    }
     this.optionSelectedEmitter.emit(event)
   }
   ngAfterViewInit(): void {
@@ -100,12 +105,19 @@ export class CustomInputComponent
       });
     }
   }
-  displayFn(option: Select): string {    
-    return option && option.name ? option.name : ''
+  displayFn(option: Select | Comparison): string { 
+    if (isComparison(option)) {
+      return option && option.productName ? option.productName : ''
+    }
+    return option && option.name ? option.name : '' 
   }
   showPasswordHandler(event: Event) {
     event.stopPropagation();
     this.showPassword = !this.showPassword;
+  }
+
+  clearSelection() {
+    this.formControl.setValue('')
   }
 
   writeValue(value: string): void {
