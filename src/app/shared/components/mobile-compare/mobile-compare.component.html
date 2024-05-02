@@ -2,16 +2,22 @@
   <form #dropdown [formGroup]="comparisonProductsGroup">
     <h2 class="font-bold text-3xl border-b pb-3 mt-[39px]">Compare Servers</h2>
     <section class="grid grid-cols-2 gap-3 mt-4 border-b">
-      <app-custom-input
-        id="firstProduct"
-        type="async"
-        placeholder="Add a server to compare"
-        formControlName="firstProduct"
-        [filteredOptions]="filteredProducts"
-        (optionSelectedEmitter)="onProductSelected($event, 'firstProduct')"
-        myClass="font-[500]"
-      />
-      <app-custom-input
+      <div class="flex flex-col">
+        <app-custom-input
+          id="firstProduct"
+          type="async"
+          placeholder="Add a server to compare"
+          formControlName="firstProduct"
+          [filteredOptions]="filteredProducts"
+          (optionSelectedEmitter)="onProductSelected($event, 'firstProduct')"
+          myClass="font-[500]"
+        />
+        @if (firstProduct.value) {
+          <button (click)="goToConfiguration(firstProduct.value.productId ?? firstProduct.value.id)" class="bg-figma-green text-white rounded-md px-3 py-0.5">Configure</button>
+        }
+      </div>
+      <div class="flex flex-col">
+        <app-custom-input
         id="secondProduct"
         type="async"
         placeholder="Add a server to compare"
@@ -19,7 +25,11 @@
         [filteredOptions]="filteredProducts"
         (optionSelectedEmitter)="onProductSelected($event, 'secondProduct')"
         myClass="font-[500]"
-      />
+        />
+        @if (secondProduct.value) {
+          <button (click)="goToConfiguration(secondProduct.value.productId ?? secondProduct.value.id)" class="bg-figma-green text-white rounded-md px-3 py-0.5">Configure</button>
+        }
+      </div>
     </section>
   </form>
 

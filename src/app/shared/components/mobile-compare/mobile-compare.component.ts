@@ -27,6 +27,7 @@ import { Store } from '@ngrx/store';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { getSingleProduct } from '../../../store/admin/products/categories.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mobile-compare',
@@ -62,7 +63,7 @@ export class MobileCompareComponent implements OnInit, OnChanges, AfterViewInit,
     private cdr: ChangeDetectorRef,
     private destroyRef: DestroyRef,
     private ngZone: NgZone,
-    private readonly scroller: ViewportScroller
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -126,10 +127,12 @@ export class MobileCompareComponent implements OnInit, OnChanges, AfterViewInit,
       const firstProduct = this.copyOfComparisons[0];
       const secondProduct = this.copyOfComparisons[1];
 
-      this.comparisonProductsGroup.patchValue({
-        firstProduct,
-        secondProduct,
-      });
+      if (this.comparisonProductsGroup) {
+        this.comparisonProductsGroup.patchValue({
+          firstProduct,
+          secondProduct,
+        });
+      }
       this.prevSelectedFirstProduct = {
         name: firstProduct.productName,
         id: firstProduct.productId,
@@ -158,7 +161,7 @@ export class MobileCompareComponent implements OnInit, OnChanges, AfterViewInit,
     // 170 is the sum of the heights of everything above the dropdowns
     if (top < 170) {
       this.dropdown.nativeElement.className = `fixed top-[25px] mt-[28px] left-0 right-0 bg-white w-full shadow-sm px-3`
-      this.processorTable.nativeElement.className = `mt-[174px] pt-0`
+      this.processorTable.nativeElement.className = `mt-[202px] pt-0`
     }
     if (document.body.scrollTop === 0) {
       this.dropdown.nativeElement.className = ''
@@ -272,6 +275,10 @@ export class MobileCompareComponent implements OnInit, OnChanges, AfterViewInit,
     );
 
     return [productToDelete, filteredProducts];
+  }
+
+  goToConfiguration(id: string) {
+    this.router.navigate([`/product/configure/${id}`])
   }
 
   get firstProduct() {
