@@ -26,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Select, OnChange, OnTouch, Comparison, Product } from '../../../types';
 import { Store } from '@ngrx/store';
-import { isComparison, isSelect } from '../../../core/utils/helpers';
+import { isComparison } from '../../../core/utils/helpers';
 
 @Component({
   selector: 'app-custom-input',

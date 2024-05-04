@@ -235,6 +235,7 @@ export type AllProducts = {
   size: number;
   content: ProductItem[];
   product: ProductItem;
+  callState: CallState
 };
 
 export type UploadResponse = {
@@ -778,4 +779,15 @@ export type AllCases = {
   case: Case
 }
 
-export type SelectedDropdown = 'firstProduct' | 'secondProduct'
+export type SelectedDropdown = 'firstProduct' | 'secondProduct';
+
+export const enum LoadingState {
+  INIT = 'INIT',
+  LOADING = 'LOADING',
+  LOADED = 'LOADED',
+}
+export interface ErrorState {
+  errorMessage: string;
+}
+
+export type CallState = LoadingState | ErrorState;

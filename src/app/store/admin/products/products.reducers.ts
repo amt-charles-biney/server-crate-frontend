@@ -1,6 +1,6 @@
-import { createFeature, createReducer, on } from '@ngrx/store';
-import { AllProducts, Comparison, Product, ProductItemSubset } from './../../../types';
-import { gotAllProducts, gotProduct, gotProducts, gotRecommendations, gotSingleProduct, resetProduct } from './categories.actions';
+import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
+import { AllProducts, Comparison, Product, ProductItemSubset, CallState, LoadingState } from './../../../types';
+import { gotAllProducts, getUserProducts, gotProduct, gotProducts, gotProductsFailure, gotRecommendations, gotSingleProduct, resetProduct } from './categories.actions';
 import { getUniqueId } from '../../../core/utils/settings';
 export const productInitialState: AllProducts = {
   content: [],
@@ -31,19 +31,31 @@ export const productInitialState: AllProducts = {
     totalLeastStock: [],
     productAvailability: true
   },
+  callState: LoadingState.INIT
 };
 
 export const productsFeature = createFeature({
   name: 'products',
   reducer: createReducer(
     productInitialState,
+    on(getUserProducts, (state) => ({
+      ...state,
+      callState: LoadingState.LOADING,
+    })),
     on(gotProducts, (state, { products }) => ({
       ...state,
       content: [...products.content],
       totalElements: products.totalElements,
       size: products.size,
-      totalPages: products.totalPages
+      totalPages: products.totalPages,
+      callState: LoadingState.LOADED
     })),
+    on(gotProductsFailure, (state, { errorMessage }) => {
+      return {
+        ...state,
+        callState: { errorMessage }
+      }
+    }),
     on(gotProduct, (state, product) => ({ ...state, product })),
     on(resetProduct, (state) => {
       return {
@@ -59,7 +71,9 @@ export const {
   reducer,
   selectContent,
   selectProduct,
-  selectTotalElements
+  selectTotalElements,
+  selectCallState,
+  selectProductsState
 } = productsFeature;
 
 

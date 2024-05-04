@@ -69,6 +69,8 @@ export const gotProducts = createAction(
   props<{ products: AllProducts }>()
 );
 
+export const gotProductsFailure = createAction('[products] got products failure', props<{ errorMessage: string }>());
+
 export const  getConfiguration = createAction(
   '[products] get category config',
   props<Select>()

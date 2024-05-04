@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserService } from '../../core/services/user/user.service';
 import { filter } from './users.actions';
 import { catchError, map, of, shareReplay, switchMap, tap } from 'rxjs';
-import { AllProducts } from '../../types';
+import { AllProducts, LoadingState } from '../../types';
 import { gotProducts } from '../admin/products/categories.actions';
 import { setLoadingSpinner } from '../loader/actions/loader.actions';
 import { errorHandler } from '../../core/utils/helpers';
@@ -23,7 +23,8 @@ export class UserEffect {
                 size: products.size,
                 totalElements: products.totalElements,
                 totalPages: products.totalPages,
-                product: products.content[0]
+                product: products.content[0],
+                callState: LoadingState.LOADED
               },
             });
           }),

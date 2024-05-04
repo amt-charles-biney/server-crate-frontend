@@ -7,12 +7,22 @@ import {
   CategoryEditResponse,
   Comparison,
   Select,
+  ErrorState,
+  CallState,
+  LoadingState
 } from '../../types';
 import { LOCALSTORAGE_EMAIL, LOCALSTORAGE_TOKEN, LOCALSTORAGE_USER } from './constants';
 import { Store } from '@ngrx/store';
 
-export function isSelect(value: any): value is Select {
-  return (typeof value.thumbnail === 'string')
+export function getCallState(callState: CallState): [boolean, string | null] { 
+  let isLoading = false
+  let error = null;
+  if ((callState as ErrorState).errorMessage !== undefined) { 
+      error = (callState as ErrorState).errorMessage
+  } 
+  isLoading = callState === LoadingState.LOADING
+
+  return [ isLoading, error ]
 }
 
 export function isComparison(obj: any): obj is Comparison {

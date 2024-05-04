@@ -8,6 +8,7 @@ import {
   getUserProducts,
   gotAllProducts,
   gotProducts,
+  gotProductsFailure,
   gotRecommendations,
   gotSingleProduct,
   removeFromFeature,
@@ -93,11 +94,7 @@ export class ProductsEffect {
           }),
           shareReplay(1),
           catchError((err) => {
-            return of(setLoadingSpinner({
-              isError: true,
-              message: errorHandler(err),
-              status: false
-            }));
+            return of(gotProductsFailure({ errorMessage: errorHandler(err) }))
           })
         );
       })
