@@ -1,12 +1,9 @@
 import { Routes } from '@angular/router';
-import { AdminDashboardComponent } from './admin-dashboard.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 import { CategoryEffect } from '../../store/admin/products/categories/categories.effect';
 import { categoryFeature } from '../../store/admin/products/categories/categories.reducers';
 import { configurationFeature } from '../../store/admin/products/configuration.reducers';
-import { AttributesComponent } from './features/attributes/attributes.component';
 import { AttributeEffect } from '../../store/category-management/attributes/attributes.effects';
 import {
   attributeCreationFeature,
@@ -18,38 +15,36 @@ import {
   configFeature,
   editConfigFeature,
 } from '../../store/category-management/attributes/config/config.reducers';
-import { TransactionsComponent } from './features/transactions/transactions.component';
-import { CustomersComponent } from './features/customers/customers.component';
 import { CaseEffect } from '../../store/case/case.effects';
 import { caseFeature } from '../../store/case/case.reducers';
 import { authGuard } from '../../core/guards/auth.guard';
 import { OrderEffects } from '../../store/orders/order.effects';
 import { orderFeature } from '../../store/orders/order.reducers';
-import { OrdersOutletComponent } from './features/orders/orders-outlet.component';
 import { CustomerEffect } from '../../store/customers/customers.effects';
 import { customerFeature } from '../../store/customers/customers.reducers';
 import { DashboardEffect } from '../../store/dashboard/dashboard.effects';
 import { dashboardFeature } from '../../store/dashboard/dashboard.reducers';
-import { ProductsOutlet } from './features/products-page/products-outlet.component';
-import { CasesOutletComponent } from './features/case-management/cases-outlet.component';
+import { NotificationEffect } from '../../store/admin/products/notifications/notifications.effects';
+import { notificationFeature } from '../../store/admin/products/notifications/notifications.reducers';
 
 export const route: Routes = [
   {
     path: '',
-    component: AdminDashboardComponent,
+    loadComponent: () => import('../admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
     providers: [
       provideEffects(AttributeEffect),
       provideEffects(CaseEffect),
       provideState(attributesFeature),
       provideState(attributeCreationFeature),
       provideState(caseFeature),
+      provideEffects(NotificationEffect),
+      provideState(notificationFeature),
     ],
     canActivate: [authGuard],
     canActivateChild: [authGuard],
     children: [
       {
         path: 'products',
-        component: ProductsOutlet,
         providers: [
           provideEffects(CategoryEffect),
           provideState(categoryFeature),
@@ -62,7 +57,6 @@ export const route: Routes = [
       },
       {
         path: 'cases',
-        component: CasesOutletComponent,
         providers: [provideEffects(CaseEffect), provideState(caseFeature)],
         loadChildren: () =>
           import('./features/case-management/cases.routes').then(
@@ -71,7 +65,7 @@ export const route: Routes = [
       },
       {
         path: 'dashboard',
-        component: DashboardComponent,
+        loadComponent: () => import('../admin-dashboard/features/dashboard/dashboard.component').then(m => m.DashboardComponent),
         providers: [
           provideEffects(DashboardEffect),
           provideState(dashboardFeature),
@@ -95,22 +89,21 @@ export const route: Routes = [
       },
       {
         path: 'attributes',
-        component: AttributesComponent,
+        loadComponent: () => import('../admin-dashboard/features/attributes/attributes.component').then(m => m.AttributesComponent),
       },
       {
         path: 'orders',
-        component: OrdersOutletComponent,
         providers: [provideEffects(OrderEffects), provideState(orderFeature)],
         loadChildren: () =>
           import('./features/orders/orders.routes').then((m) => m.routes),
       },
       {
         path: 'transactions',
-        component: TransactionsComponent,
+        loadComponent: () => import('../admin-dashboard/features/transactions/transactions.component').then(m => m.TransactionsComponent),
       },
       {
         path: 'customers',
-        component: CustomersComponent,
+        loadComponent: () => import('../admin-dashboard/features/customers/customers.component').then(m => m.CustomersComponent),
         providers: [
           provideEffects(CustomerEffect),
           provideState(customerFeature),
@@ -118,6 +111,7 @@ export const route: Routes = [
       },
       {
         path: 'settings',
+        loadComponent: () => import('../admin-dashboard/features/settings/settings.component').then(m => m.SettingsComponent),
         loadChildren: () =>
           import('./features/settings/settings.routes').then((m) => m.route),
       },

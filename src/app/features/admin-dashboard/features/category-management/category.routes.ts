@@ -1,18 +1,16 @@
 import { Routes } from "@angular/router";
-import { CategoryManagementComponent } from "./category-management.component";
-import { AddCategoryComponent } from "../add-category/add-category.component";
 
 export const routes: Routes = [
     {
         path: '',
-        component: CategoryManagementComponent,
+        loadComponent: () => import('./category-management.component').then(m => m.CategoryManagementComponent),
     },
     {
         path: 'add-category',
-        component: AddCategoryComponent,
+        loadComponent: () => import('../add-category/add-category.component').then(m => m.AddCategoryComponent),
     },
     {
         path: 'add-category/:id',
-        component: AddCategoryComponent,
+        loadComponent: () => import('../add-category/add-category.component').then(m => m.AddCategoryComponent),
     },
 ]

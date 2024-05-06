@@ -1,5 +1,6 @@
 import { HttpContextToken } from "@angular/common/http";
 import { StatusColors } from "../../types";
+import { MatSnackBarConfig } from "@angular/material/snack-bar";
 
 export const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/
 export const UPLOAD_PRESET = 'n6gwltfs'
@@ -61,3 +62,5 @@ export const IMAGE_MAPPING: {[key:string]: string} = {
 }
 
 export const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+
+export const snackbarConfig: MatSnackBarConfig = { duration: 4000, horizontalPosition: "end", verticalPosition: "bottom" }

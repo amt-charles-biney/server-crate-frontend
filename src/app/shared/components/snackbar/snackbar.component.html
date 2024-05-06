@@ -1,0 +1,11 @@
+<div class="flex items-center justify-between text-white">
+  <span>
+    {{ data.message }}
+  </span>
+  <span
+    class="hover:bg-white hover:bg-opacity-50 px-3 py-1 rounded-md"
+    matSnackBarActions
+  >
+    <button (click)="closeSnackbar()">Close</button>
+  </span>
+</div>

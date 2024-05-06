@@ -16,13 +16,11 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 html,
-body {
-  height: 100%;
-  overflow-x: hidden;
-}
+
 body {
   margin: 0;
   font-family: "Roboto", sans-serif;
+  --mdc-snackbar-container-color: #E1000F;
 }
 input[type="checkbox"] {
   display: grid;
@@ -376,7 +374,6 @@ app-preference-selection {
 
 app-wishlist-button {
   --mdc-circular-progress-active-indicator-color: #f59e0b;
-
 }
 
 app-custom-select .mat-mdc-select-arrow {

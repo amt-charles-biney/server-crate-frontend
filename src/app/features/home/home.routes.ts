@@ -2,13 +2,11 @@ import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { authGuard } from '../../core/guards/auth.guard';
 import { settingsGuard } from '../../core/guards/settings.guard';
-import { HomeComponent } from './home.component';
 import { Routes } from '@angular/router';
 import { FeaturedProductFeature } from '../../store/product/featured-product/featured-product.reducer';
 import { FeaturedProductEffect } from '../../store/product/featured-product/featured-product.effect';
 import { allProductsFeature, recommendationsFeature } from '../../store/admin/products/products.reducers';
 import { UserEffect } from '../../store/users/users.effects';
-import { CartComponent } from '../cart/cart.component';
 import { CheckoutEffect } from '../../store/checkout/checkout.effects';
 import { addressValidationFeature, checkoutFeature, verificationFeature } from '../../store/checkout/checkout.reducers';
 import { paymentFeature, shippingFeature } from '../../store/account-settings/general-info/general-info.reducers';
@@ -17,7 +15,6 @@ import { productCartItemFeature, productConfigFeature, productConfigItemFeature 
 import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
 import { CompareEffect } from '../../store/compare/compare.effects';
 import { compareFeature } from '../../store/compare/compare.reducers';
-import { NotFoundPageComponent } from '../not-found-page/not-found-page.component';
 
 export const route: Routes = [
     {
@@ -95,17 +92,17 @@ export const route: Routes = [
             },
             {
                 path: 'cart',
-                component: CartComponent,
+                loadComponent: () => import('../cart/cart.component').then(m => m.CartComponent),
                 providers: [
                     provideState(recommendationsFeature)
                 ]
             },
             {
                 path: '**',
-                component: NotFoundPageComponent
+                loadComponent: () => import('../not-found-page/not-found-page.component').then(m => m.NotFoundPageComponent)
             }
         ],
-        component: HomeComponent,
+        loadComponent: () => import('./home.component').then(m => m.HomeComponent),
         providers: [
             provideState(FeaturedProductFeature),
             provideEffects(FeaturedProductEffect),

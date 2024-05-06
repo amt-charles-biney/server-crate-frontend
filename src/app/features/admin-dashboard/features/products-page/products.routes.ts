@@ -1,19 +1,16 @@
 import { Routes } from "@angular/router";
-import { ProductsPageComponent } from "./products-page.component";
-import { AddProductComponent } from "../add-product/add-product.component";
-
 
 export const routes: Routes = [
     {
         path: '',
-        component: ProductsPageComponent,
+        loadComponent: () => import('./products-page.component').then(m => m.ProductsPageComponent),
     },
     {
         path: 'add-product',
-        component: AddProductComponent,
+        loadComponent: () => import('../add-product/add-product.component').then(m => m.AddProductComponent),
       },
       {
         path: 'add-product/:id',
-        component: AddProductComponent,
+        loadComponent: () => import('../add-product/add-product.component').then(m => m.AddProductComponent),
       },
 ]

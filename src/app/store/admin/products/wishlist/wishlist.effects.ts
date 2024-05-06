@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { addToWishlist, getUserProducts, getWishlist, gotWishlist, removeFromWishlist, updateUserProduct, wishlistUpdateFailure } from "../categories/categories.actions";
+import { addToWishlist, getWishlist, gotWishlist, removeFromWishlist, updateUserProduct, wishlistUpdateFailure } from "../categories/categories.actions";
 import { UserService } from "../../../../core/services/user/user.service";
-import { ToastrService } from "ngx-toastr";
-import { EMPTY, catchError, concatMap, exhaustMap, map, of, switchMap, tap } from "rxjs";
+import { EMPTY, catchError, concatMap, map, of, switchMap } from "rxjs";
 import { errorHandler } from "../../../../core/utils/helpers";
 import { Store } from "@ngrx/store";
-import { loadFeaturedProducts } from "../../../product/featured-product/featured-product.action";
+import {MatSnackBar} from '@angular/material/snack-bar';
+import { snackbarConfig } from "../../../../core/utils/constants";
+import { SnackbarComponent } from "../../../../shared/components/snackbar/snackbar.component";
 
 @Injectable()
 export class WishlistEffect {
@@ -19,7 +20,12 @@ export class WishlistEffect {
                 return gotWishlist({ content, size, totalElements, totalPages })
               }),
               catchError((err) => {
-                this.toast.error(errorHandler(err), 'Error')
+                this.snackbar.openFromComponent(SnackbarComponent, {
+                  data: {
+                    message: errorHandler(err),
+                  },
+                  ...snackbarConfig
+                })
                 return EMPTY
               })
             )
@@ -34,11 +40,15 @@ export class WishlistEffect {
             return this.userService.addToWishlist(id, configOptions).pipe(
               map(() => {
                 this.store.dispatch(updateUserProduct({ id }))
-                this.store.dispatch(getWishlist());
-                return loadFeaturedProducts()
-              }),
+                return getWishlist()
+              }), 
               catchError((err) => {
-                this.toast.error(errorHandler(err), 'Error')
+                this.snackbar.openFromComponent(SnackbarComponent, {
+                  data: {
+                    message: errorHandler(err),
+                  },
+                  ...snackbarConfig
+                })
                 return of(wishlistUpdateFailure({ id }))
               })
             )
@@ -53,11 +63,15 @@ export class WishlistEffect {
             return this.userService.removeFromWishlist(id).pipe(
               map(() => {
                 this.store.dispatch(updateUserProduct({ id }))
-                this.store.dispatch(getWishlist());
-                return loadFeaturedProducts()
+                return getWishlist()
               }),
               catchError((err) => {
-                this.toast.error(errorHandler(err), 'Error')
+                this.snackbar.openFromComponent(SnackbarComponent, {
+                  data: {
+                    message: errorHandler(err),
+                  },
+                  ...snackbarConfig
+                })
                 return of(wishlistUpdateFailure({ id }))
               })
             )
@@ -68,7 +82,7 @@ export class WishlistEffect {
       constructor(
         private action$: Actions,
         private userService: UserService,
-        private toast: ToastrService,
-        private store: Store
+        private store: Store,
+        private snackbar: MatSnackBar
       ) {}
 }

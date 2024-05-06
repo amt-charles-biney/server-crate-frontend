@@ -10,13 +10,10 @@ import { ResetEffect } from './store/reset/effects/reset.effects';
 import { otpFeature } from './store/otp/otp.reducers';
 import { settingsGuard } from './core/guards/settings.guard';
 import { authGuard } from './core/guards/auth.guard';
-import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
 import { adminGuard } from './core/guards/admin.guard';
 import { ProductSpecEffects } from './store/product-spec/product-spec.effect';
 import { CategoryEffect } from './store/admin/products/categories/categories.effect';
 import { categoryFeature } from './store/admin/products/categories/categories.reducers';
-import { NotificationEffect } from './store/admin/products/notifications/notifications.effects';
-import { notificationFeature } from './store/admin/products/notifications/notifications.reducers';
 import { productConfigFeature, productConfigItemFeature } from './store/product-spec/product-spec.reducer';
 
 export const routes: Routes = [
@@ -35,11 +32,6 @@ export const routes: Routes = [
         (m) => m.route
       ),
     canActivate: [settingsGuard, adminGuard, authGuard],
-    providers: [
-      provideEffects(GeneralInfoEffect),
-      provideEffects(NotificationEffect),
-      provideState(notificationFeature),
-    ],
   },
   {
     path: 'otp',

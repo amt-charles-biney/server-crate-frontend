@@ -1,7 +1,4 @@
 import { Routes } from '@angular/router';
-import { AccountSettingsComponent } from './account-settings.component';
-import { GeneralInformationComponent } from './features/general-information/general-information.component';
-import { TermsAndConditionsComponent } from '../../shared/components/terms-and-conditions/terms-and-conditions.component';
 import { provideEffects } from '@ngrx/effects';
 import { GeneralInfoEffect } from '../../store/account-settings/general-info/general-info.effects';
 import { provideState } from '@ngrx/store';
@@ -10,19 +7,14 @@ import {
   paymentFeature,
   shippingFeature,
 } from '../../store/account-settings/general-info/general-info.reducers';
-import { PasswordInformationComponent } from './features/password-information/password-information.component';
 import { ChangePasswordEffect } from '../../store/profile/changePassword/changePassword.effects';
-import { ShippingInformationComponent } from './features/shipping-information/shipping-information.component';
-import { PaymentDetailsComponent } from './features/payment-details/payment-details.component';
-import { PrivacyPolicyComponent } from '../../shared/components/privacy-policy/privacy-policy.component';
 import { orderFeature } from '../../store/orders/order.reducers';
 import { OrderEffects } from '../../store/orders/order.effects';
-import { OrdersOutletComponent } from '../admin-dashboard/features/orders/orders-outlet.component';
 
 export const route: Routes = [
   {
     path: '',
-    component: AccountSettingsComponent,
+    loadComponent: () => import('../account-settings/account-settings.component').then(m => m.AccountSettingsComponent),
     providers: [
       provideEffects(GeneralInfoEffect),
       provideEffects(OrderEffects),
@@ -30,27 +22,26 @@ export const route: Routes = [
     children: [
       {
         path: 'general',
-        component: GeneralInformationComponent,
+        loadComponent: () => import('../account-settings/features/general-information/general-information.component').then(m => m.GeneralInformationComponent),
         providers: [provideState(generalInfoFeature)],
       },
       {
         path: 'password',
-        component: PasswordInformationComponent,
+        loadComponent: () => import('../account-settings/features/password-information/password-information.component').then(m => m.PasswordInformationComponent),
         providers: [provideEffects(ChangePasswordEffect)],
       },
       {
         path: 'shipping',
-        component: ShippingInformationComponent,
+        loadComponent: () => import('../account-settings/features/shipping-information/shipping-information.component').then(m => m.ShippingInformationComponent),
         providers: [provideState(shippingFeature)],
       },
       {
         path: 'payment',
-        component: PaymentDetailsComponent,
+        loadComponent: () => import('../account-settings/features/payment-details/payment-details.component').then(m => m.PaymentDetailsComponent),
         providers: [provideState(paymentFeature)],
       },
       {
         path: 'orders',
-        component: OrdersOutletComponent,
         providers: [provideState(orderFeature)],
         loadChildren: () =>
           import('../admin-dashboard/features/orders/orders.routes').then(
@@ -59,11 +50,11 @@ export const route: Routes = [
       },
       {
         path: 'terms-conditions',
-        component: TermsAndConditionsComponent,
+        loadComponent: () => import('../../shared/components/terms-and-conditions/terms-and-conditions.component').then(m => m.TermsAndConditionsComponent),
       },
       {
         path: 'privacy-policy',
-        component: PrivacyPolicyComponent,
+        loadComponent: () => import('../../shared/components/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent),
       },
     ],
   },

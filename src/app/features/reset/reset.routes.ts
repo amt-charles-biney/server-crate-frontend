@@ -1,8 +1,4 @@
 import { Routes } from "@angular/router";
-import { ResetComponent } from "./reset.component";
-import { ResetLinkComponent } from "./reset-link/reset-link.component";
-import { ResetPasswordComponent } from "./reset-password/reset-password.component";
-import { OTPComponent } from "../../shared/components/otp/otp.component";
 import { provideEffects } from "@ngrx/effects";
 import { VerifyOtpEffects } from "../../store/reset/effects/verifyOtp.effects";
 import { ResetPasswordEffect } from "../../store/reset/effects/resetPassword.effects";
@@ -10,22 +6,22 @@ import { ResetPasswordEffect } from "../../store/reset/effects/resetPassword.eff
 export const route: Routes = [
     {
         path: '',
-        component: ResetComponent,
+        loadComponent: () => import('./reset.component').then(m => m.ResetComponent),
         children: [
             {
                 path: 'reset-link',
-                component: ResetLinkComponent
+                loadComponent: () => import('./reset-link/reset-link.component').then(m => m.ResetLinkComponent),
             },
             {
                 path: 'reset-password',
-                component: ResetPasswordComponent,
+                loadComponent: () => import('./reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
                 providers: [
                     provideEffects(ResetPasswordEffect)
                 ]
             },
             {
                 path: 'otp',
-                component: OTPComponent,
+                loadComponent: () => import('../../shared/components/otp/otp.component').then(m => m.OTPComponent),
                 providers: [
                     provideEffects(VerifyOtpEffects)
                 ]
