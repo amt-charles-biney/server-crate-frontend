@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { selectNewProducts } from '../../../../store/product/featured-product/featured-product.reducer';
 import { CommonModule } from '@angular/common';
 import { UserProductItemComponent } from '../../../../shared/components/user-product-item/user-product-item.component';
+import { loadNewProducts } from '../../../../store/product/featured-product/featured-product.action';
 
 @Component({
   selector: 'app-popular-products',
@@ -26,6 +27,7 @@ export class PopularProductsComponent {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
+      this.store.dispatch(loadNewProducts())
       if (this.popularSliderRef) {
         this.popularProductSlider = new KeenSlider(this.popularSliderRef.nativeElement, {
           initial: this.currentPopularSlide,

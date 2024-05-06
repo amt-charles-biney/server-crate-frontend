@@ -27,8 +27,6 @@ export class HomeComponent implements OnInit{
   ngOnInit(): void {
     this.numberOfCartItems$ = this.store.select(selectCount);
     this.numberOfWishlistItems$ = this.store.select(selectTotalElements);
-    this.store.dispatch(loadFeaturedProducts());
-    this.store.dispatch(loadNewProducts())
   }
 
 }
