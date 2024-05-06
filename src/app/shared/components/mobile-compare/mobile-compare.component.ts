@@ -25,7 +25,7 @@ import {
 } from '../../../store/admin/products/products.reducers';
 import { Store } from '@ngrx/store';
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { getSingleProduct } from '../../../store/admin/products/categories.actions';
+import { getSingleProduct } from '../../../store/admin/products/categories/categories.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 

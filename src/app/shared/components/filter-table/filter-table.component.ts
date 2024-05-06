@@ -16,9 +16,9 @@ import {
   selectBrands,
   selectCases,
   selectCategories,
-} from '../../../store/admin/products/categories.reducers';
+} from '../../../store/admin/products/categories/categories.reducers';
 import { ActivatedRoute, Router } from '@angular/router';
-import { getUserProducts } from '../../../store/admin/products/categories.actions';
+import { getUserProducts } from '../../../store/admin/products/categories/categories.actions';
 
 @Component({
   selector: 'app-filter-table',

@@ -16,7 +16,7 @@ import {
   addToWishlist,
   getAllProducts,
   getSingleProduct,
-} from '../../store/admin/products/categories.actions';
+} from '../../store/admin/products/categories/categories.actions';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
 import { BehaviorSubject, Observable, map, of, startWith, tap } from 'rxjs';
 import {

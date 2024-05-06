@@ -1,8 +1,8 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common'
 import { Component, DestroyRef, Input } from '@angular/core'
 import { Store } from '@ngrx/store';
-import { getBrands, getCases, getUserCategories } from '../../../../store/admin/products/categories.actions';
-import { selectCategoriesState } from '../../../../store/admin/products/categories.reducers';
+import { getBrands, getCases, getUserCategories } from '../../../../store/admin/products/categories/categories.actions';
+import { selectCategoriesState } from '../../../../store/admin/products/categories/categories.reducers';
 import { Select } from '../../../../types';
 import { Router } from '@angular/router';
 import { CloudinaryUrlPipe } from '../../../../shared/pipes/cloudinary-url/cloudinary-url.pipe';

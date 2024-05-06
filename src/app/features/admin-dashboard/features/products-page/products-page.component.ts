@@ -11,7 +11,7 @@ import { ProductItemComponent } from '../../../../shared/components/product-item
 import { ProductItem } from '../../../../types';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { getProducts } from '../../../../store/admin/products/categories.actions';
+import { getProducts } from '../../../../store/admin/products/categories/categories.actions';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { selectContent, selectTotalElements } from '../../../../store/admin/products/products.reducers';
 import { CommonModule } from '@angular/common';

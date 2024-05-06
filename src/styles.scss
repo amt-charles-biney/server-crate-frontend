@@ -19,7 +19,6 @@ html,
 body {
   height: 100%;
   overflow-x: hidden;
-  --mdc-circular-progress-active-indicator-color: #3cb043;
 }
 body {
   margin: 0;
@@ -369,6 +368,15 @@ app-notifications .mat-mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
 
 app-preference-selection .mat-expansion-indicator:after {
   border-color: black;
+}
+
+app-preference-selection {
+  --mdc-circular-progress-active-indicator-color: #3cb043;
+}
+
+app-wishlist-button {
+  --mdc-circular-progress-active-indicator-color: #f59e0b;
+
 }
 
 app-custom-select .mat-mdc-select-arrow {

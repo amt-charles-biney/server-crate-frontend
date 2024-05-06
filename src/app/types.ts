@@ -197,6 +197,7 @@ export type ProductItem = {
   stockStatus: string;
   totalLeastStock: Attribute[];
   isWishListItem?: boolean;
+  isLoading?: boolean;
   productAvailability: boolean;
 };
 
@@ -661,6 +662,7 @@ export type ProductItemSubset = {
   productCaseName?: string;
   configurationUrl?: string;
   isWishListItem?: boolean;
+  isLoading?: boolean;
   totalPrice?: number;
   productAvailability: boolean;
 };

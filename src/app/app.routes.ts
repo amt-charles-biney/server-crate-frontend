@@ -13,10 +13,10 @@ import { authGuard } from './core/guards/auth.guard';
 import { GeneralInfoEffect } from './store/account-settings/general-info/general-info.effects';
 import { adminGuard } from './core/guards/admin.guard';
 import { ProductSpecEffects } from './store/product-spec/product-spec.effect';
-import { CategoryEffect } from './store/admin/products/categories.effect';
-import { categoryFeature } from './store/admin/products/categories.reducers';
-import { NotificationEffect } from './store/admin/products/notifications.effects';
-import { notificationFeature } from './store/admin/products/notifications.reducers';
+import { CategoryEffect } from './store/admin/products/categories/categories.effect';
+import { categoryFeature } from './store/admin/products/categories/categories.reducers';
+import { NotificationEffect } from './store/admin/products/notifications/notifications.effects';
+import { notificationFeature } from './store/admin/products/notifications/notifications.reducers';
 import { productConfigFeature, productConfigItemFeature } from './store/product-spec/product-spec.reducer';
 
 export const routes: Routes = [
@@ -69,8 +69,6 @@ export const routes: Routes = [
       provideEffects(ProductSpecEffects),
       provideState(productConfigFeature),
       provideState(productConfigItemFeature)
-
-
     ],
   },
 ];

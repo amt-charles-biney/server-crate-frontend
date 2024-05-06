@@ -3,7 +3,8 @@
   (hoverEmitter)="hovered = !hovered"
   [ngClass]="{
     'border-4 border-figma-green': isSelected,
-    'flex flex-col w-[170px] md:max-w-[297px] md:w-full h-[245px] gap-[9px]': isGrid,
+    'flex flex-col w-[170px] md:max-w-[297px] md:w-full h-[245px] gap-[9px]':
+      isGrid,
     'grid grid-cols-2 gap-6 w-[618px] h-[166px]': !isGrid
   }"
 >
@@ -22,20 +23,18 @@
       [alt]="'image of ' + product.productName"
     />
     @if (product.productAvailability) {
-      <button
-        *ngIf="hovered"
-        (click)="buyNow(product.id)"
-        class="hidden md:block absolute w-[85px] h-[23px] m-auto left-0 right-0 rounded-lg bottom-[9px] px-[17px] pb-0.5 bg-[#DADADA8F]"
-      >
-        <span class="text-figma-green text-xs">Buy Now</span>
-      </button>
+    <button
+      *ngIf="hovered"
+      (click)="buyNow(product.id)"
+      class="hidden md:block absolute w-[85px] h-[23px] m-auto left-0 right-0 rounded-lg bottom-[9px] px-[17px] pb-0.5 bg-[#DADADA8F]"
+    >
+      <span class="text-figma-green text-xs">Buy Now</span>
+    </button>
     }
   </div>
   <div class="flex flex-col pr-[7.5px]">
     <div class="flex items-center gap-2 justify-between">
-      <p
-        class="font-bold truncate"
-      >
+      <p class="font-bold truncate">
         {{ product.productName }}
       </p>
       <div class="flex gap-2 items-center">
@@ -58,38 +57,16 @@
             />
           </svg>
         </button>
-        <button
-          (click)="
+        <app-wishlist-button
+          [alreadyInWishlist]="
             product.configurationUrl || product.isWishListItem
-              ? removeFromWishlist(product.id)
-              : addToWishlist(product.id)
           "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6"
-            [ngClass]="
-              product.configurationUrl || product.isWishListItem
-                ? 'text-[#F59E0B] fill-[#F59E0B]'
-                : ''
-            "
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-            />
-          </svg>
-        </button>
+          [id]="product.id"
+          [isLoadingInput]="!!product.isLoading"
+        />
       </div>
     </div>
-    <p
-      class="text-product-text font-[500] text-sm truncate"
-    >
+    <p class="text-product-text font-[500] text-sm truncate">
       {{
         product.productBrand ? product.productBrand : product.productCaseName
       }}
@@ -98,21 +75,19 @@
       [ngClass]="!isGrid ? 'mt-[38px]' : ''"
       class="flex items-center justify-between"
     >
-      <p
-        class="text-sm font-[500] truncate"
-      >
+      <p class="text-sm font-[500] truncate">
         {{ product.totalPrice || product.productPrice | currency }}
       </p>
       @if (product.productAvailability) {
-        <button
-          (click)="onNavigateToProduct($event, product.id)"
-          class="flex items-center w-fit gap-[10px] text-figma-green"
-        >
-          <span class="text-sm font-[500]">configure</span>
-          <img src="/assets/arrow-right.svg" alt="" />
-        </button>
+      <button
+        (click)="onNavigateToProduct($event, product.id)"
+        class="flex items-center w-fit gap-[10px] text-figma-green"
+      >
+        <span class="text-sm font-[500]">configure</span>
+        <img src="/assets/arrow-right.svg" alt="" />
+      </button>
       } @else {
-        <p class="text-sm font-[500] text-red-color">Out of stock</p>
+      <p class="text-sm font-[500] text-red-color">Out of stock</p>
       }
     </div>
   </div>

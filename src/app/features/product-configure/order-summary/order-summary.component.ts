@@ -5,7 +5,7 @@ import { addToCartItem } from '../../../store/product-spec/product-spec.action'
 import { Observable } from 'rxjs'
 import { selectProductCartItemLoading } from '../../../store/product-spec/product-spec.reducer'
 import { CommonModule } from '@angular/common'
-import { addToWishlist } from '../../../store/admin/products/categories.actions'
+import { addToWishlist } from '../../../store/admin/products/categories/categories.actions'
 
 @Component({
   selector: 'app-order-summary',

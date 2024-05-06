@@ -10,7 +10,7 @@ import {
   Product,
   Comparison,
   IParamConfigOptions,
-} from '../../../types';
+} from '../../../../types';
 
 export const getCategories = createAction('[products] get categories');
 export const getUserCategories = createAction('[products] get user categories');
@@ -83,7 +83,7 @@ export const gotConfiguration = createAction(
 
 export const resetConfiguration = createAction('[products] reset config');
 export const resetProduct = createAction('[products] reset product')
-
+export const updateUserProduct = createAction('[products] update user product', props<{ id: string }>())
 export const deleteProduct = createAction(
   '[products] delete product',
   props<Item>()
@@ -119,3 +119,5 @@ export const getWishlist = createAction('[wishlist] get wishlist')
 export const gotWishlist = createAction('[wishlist] got wishlist', props<Wishlist>())
 export const addToWishlist = createAction('[wishlist] add to wishlist', props<{ id: string, configOptions: IParamConfigOptions }>())
 export const removeFromWishlist = createAction('[wishlist] remove from wishlist', props<{ id: string }>())
+export const wishlistUpdateFailure = createAction('[wishlist] wishlist update failed', props<{ id: string }>())
+export const startLoader = createAction('[wishlist] load', props<{id: string}>())

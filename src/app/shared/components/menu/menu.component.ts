@@ -3,7 +3,7 @@ import { MenuItemComponent } from '../menu-item/menu-item.component';
 import { Store } from '@ngrx/store';
 import { Select } from '../../../types';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { selectCategoriesState } from '../../../store/admin/products/categories.reducers';
+import { selectCategoriesState } from '../../../store/admin/products/categories/categories.reducers';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { UserOptionsComponent } from '../user-options/user-options.component';

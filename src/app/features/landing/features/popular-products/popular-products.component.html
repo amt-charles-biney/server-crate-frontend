@@ -11,13 +11,14 @@
         <div class="keen-slider__slide w-full mx-auto sm:mx-0 md:max-w-[320px]">
           <div class="w-[297px]">
             <app-user-product-item [product]="{
-              id: product.id,
+            id: product.id,
               productName: product.productName,
               coverImage: product.coverImage,
               productPrice: product.productPrice,
               productBrand: product.productBrand,
               productAvailability: product.productAvailability,
-              isWishListItem: product.isWishListItem
+              isWishListItem: product.isWishListItem,
+              isLoading: product.isLoading,
             }"></app-user-product-item>
           </div>
         </div>

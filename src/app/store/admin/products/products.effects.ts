@@ -12,17 +12,15 @@ import {
   gotRecommendations,
   gotSingleProduct,
   removeFromFeature,
-} from './categories.actions';
+} from './categories/categories.actions';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, catchError, exhaustMap, map, of, shareReplay, switchMap } from 'rxjs';
+import { EMPTY, catchError, exhaustMap, map, of, switchMap } from 'rxjs';
 import { AllProducts } from '../../../types';
 import { UserService } from '../../../core/services/user/user.service';
 import { setLoadingSpinner } from '../../loader/actions/loader.actions';
 import { errorHandler } from '../../../core/utils/helpers';
 import { ToastrService } from 'ngx-toastr';
-import { CacheService } from '../../../core/services/cache/cache.service';
-import { Store } from '@ngrx/store';
 
 const cache = new Map()
 @Injectable()
@@ -37,7 +35,6 @@ export class ProductsEffect {
             sessionStorage.setItem("search", JSON.stringify(""))
             return gotProducts({ products });
           }),
-          shareReplay(1),
           catchError((err) => {
             return of(setLoadingSpinner({
               isError: true,
@@ -92,7 +89,6 @@ export class ProductsEffect {
           map((products: AllProducts) => {
             return gotProducts({ products });
           }),
-          shareReplay(1),
           catchError((err) => {
             return of(gotProductsFailure({ errorMessage: errorHandler(err) }))
           })
@@ -157,7 +153,5 @@ export class ProductsEffect {
     private adminService: AdminService,
     private userService: UserService,
     private toast: ToastrService,
-    private cacheService: CacheService,
-    private store: Store
   ) {}
 }

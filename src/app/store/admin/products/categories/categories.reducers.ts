@@ -1,5 +1,5 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { Select } from '../../../types';
+import { Select } from '../../../../types';
 import { gotBrands, gotCases, gotCategories } from './categories.actions';
 
 const initialState: { categories: Select[], brands: Select[], cases: Select[] } = {

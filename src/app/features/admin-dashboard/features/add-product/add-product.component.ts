@@ -35,7 +35,7 @@ import {
 import { Store } from '@ngrx/store';
 import {
   selectCategories,
-} from '../../../../store/admin/products/categories.reducers';
+} from '../../../../store/admin/products/categories/categories.reducers';
 import {
   addProduct,
   deleteProduct,
@@ -45,7 +45,7 @@ import {
   resetConfiguration,
   resetProduct,
   updateProduct,
-} from '../../../../store/admin/products/categories.actions';
+} from '../../../../store/admin/products/categories/categories.actions';
 import {
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,

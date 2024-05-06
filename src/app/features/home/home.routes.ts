@@ -6,9 +6,8 @@ import { HomeComponent } from './home.component';
 import { Routes } from '@angular/router';
 import { FeaturedProductFeature } from '../../store/product/featured-product/featured-product.reducer';
 import { FeaturedProductEffect } from '../../store/product/featured-product/featured-product.effect';
-import { allProductsFeature, productsFeature, recommendationsFeature } from '../../store/admin/products/products.reducers';
+import { allProductsFeature, recommendationsFeature } from '../../store/admin/products/products.reducers';
 import { UserEffect } from '../../store/users/users.effects';
-import { ProductsEffect } from '../../store/admin/products/products.effects';
 import { CartComponent } from '../cart/cart.component';
 import { CheckoutEffect } from '../../store/checkout/checkout.effects';
 import { addressValidationFeature, checkoutFeature, verificationFeature } from '../../store/checkout/checkout.reducers';
@@ -40,9 +39,7 @@ export const route: Routes = [
                 path: 'servers',
                 loadComponent: () => import('../preference-selection/preference-selection.component').then(m => m.PreferenceSelectionComponent),
                 providers: [
-                    provideEffects(ProductsEffect),
                     provideEffects(UserEffect),
-                    provideState(productsFeature),
                     provideState(productConfigFeature),
                     provideState(productConfigItemFeature)
                 ]
@@ -64,9 +61,7 @@ export const route: Routes = [
                 path: 'compare',
                 loadComponent: () => import('../compare/compare.component').then(c => c.CompareComponent),
                 providers:  [
-                    provideEffects(ProductsEffect),
                     provideEffects(CompareEffect),
-                    provideState(productsFeature),
                     provideState(compareFeature),
                     provideState(allProductsFeature)
                 ]
@@ -102,7 +97,6 @@ export const route: Routes = [
                 path: 'cart',
                 component: CartComponent,
                 providers: [
-                    provideEffects(ProductsEffect),
                     provideState(recommendationsFeature)
                 ]
             },

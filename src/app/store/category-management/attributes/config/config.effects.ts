@@ -23,7 +23,7 @@ import { AllCategories, CategoryAndConfig } from '../../../../types';
 import { errorHandler } from '../../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
-import { getNotifications } from '../../../admin/products/notifications.actions';
+import { getNotifications } from '../../../admin/products/notifications/notifications.actions';
 
 @Injectable()
 export class ConfigEffect {

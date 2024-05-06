@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { selectCount } from '../../store/cart/cart.reducers';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
-import { selectTotalElements } from '../../store/admin/products/wishlist.reducers';
+import { selectTotalElements } from '../../store/admin/products/wishlist/wishlist.reducers';
 import { loadFeaturedProducts, loadNewProducts } from '../../store/product/featured-product/featured-product.action';
 
 @Component({

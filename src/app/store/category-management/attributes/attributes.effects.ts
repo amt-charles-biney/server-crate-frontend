@@ -29,8 +29,8 @@ import { Store } from '@ngrx/store';
 import { errorHandler } from '../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
-import { getNotifications } from '../../admin/products/notifications.actions';
-import { getProducts } from '../../admin/products/categories.actions';
+import { getNotifications } from '../../admin/products/notifications/notifications.actions';
+import { getProducts } from '../../admin/products/categories/categories.actions';
 
 @Injectable()
 export class AttributeEffect {

@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { gotNotifications } from "./notifications.actions";
-import { NotificationData } from "../../../types";
+import { NotificationData } from "../../../../types";
 
 const initialNotificationState: NotificationData = {
     count: 0,

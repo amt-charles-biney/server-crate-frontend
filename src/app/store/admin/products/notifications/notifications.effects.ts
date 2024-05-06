@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AdminService } from "../../../core/services/admin/admin.service";
+import { AdminService } from "../../../../core/services/admin/admin.service";
 import { getNotifications, gotNotifications } from "./notifications.actions";
 import { exhaustMap, map } from "rxjs";
 

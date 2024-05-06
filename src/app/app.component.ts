@@ -4,7 +4,7 @@ import { RouterOutlet, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { getCartItems } from './store/cart/cart.actions';
 import { CookieConsentComponent } from './features/cookie-consent/cookie-consent.component';
-import { getWishlist } from './store/admin/products/categories.actions';
+import { getUserProducts, getWishlist } from './store/admin/products/categories/categories.actions';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -16,6 +16,12 @@ export class AppComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
+    this.store.dispatch(
+      getUserProducts({
+        page: 0,
+        params: {},
+      })
+    );
     this.store.dispatch(getCartItems());
     this.store.dispatch(getWishlist())
     const productsInStorage = sessionStorage.getItem("products")

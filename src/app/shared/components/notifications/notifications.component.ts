@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from 
 import { Subject } from 'rxjs';
 import { Attribute, NotificationData } from '../../../types';
 import { Store } from '@ngrx/store';
-import { selectNotificationsState } from '../../../store/admin/products/notifications.reducers';
+import { selectNotificationsState } from '../../../store/admin/products/notifications/notifications.reducers';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AttributeModalComponent } from '../../../features/admin-dashboard/features/attributes/features/attribute-modal/attribute-modal.component';

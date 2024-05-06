@@ -11,7 +11,7 @@ import { errorHandler } from '../../../core/utils/helpers';
 import { getCartItems } from '../../cart/cart.actions';
 import { ToastrService } from 'ngx-toastr';
 import { Store } from '@ngrx/store';
-import { getWishlist } from '../../admin/products/categories.actions';
+import { getWishlist } from '../../admin/products/categories/categories.actions';
 
 @Injectable()
 export class LoginEffect {

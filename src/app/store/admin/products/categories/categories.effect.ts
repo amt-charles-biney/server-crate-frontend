@@ -33,19 +33,19 @@ import {
   throwError,
   timeout,
 } from 'rxjs';
-import { AdminService } from '../../../core/services/admin/admin.service';
-import { Select, Item, ProductItem, PageAbleResponseData } from '../../../types';
+import { AdminService } from '../../../../core/services/admin/admin.service';
+import { Select, Item, ProductItem, PageAbleResponseData } from '../../../../types';
 import { Store } from '@ngrx/store';
 import {
   resetLoader,
   setLoadingSpinner,
-} from '../../loader/actions/loader.actions';
+} from '../../../loader/actions/loader.actions';
 import { Router } from '@angular/router';
-import { UserService } from '../../../core/services/user/user.service';
-import { errorHandler } from '../../../core/utils/helpers';
+import { UserService } from '../../../../core/services/user/user.service';
+import { errorHandler } from '../../../../core/utils/helpers';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
-import { getNotifications } from './notifications.actions';
+import { getNotifications } from '../notifications/notifications.actions';
 
 @Injectable()
 export class CategoryEffect {

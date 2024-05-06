@@ -1,6 +1,27 @@
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
-import { AllProducts, Comparison, Product, ProductItemSubset, CallState, LoadingState } from './../../../types';
-import { gotAllProducts, getUserProducts, gotProduct, gotProducts, gotProductsFailure, gotRecommendations, gotSingleProduct, resetProduct } from './categories.actions';
+import {
+  AllProducts,
+  Comparison,
+  Product,
+  ProductItemSubset,
+  CallState,
+  LoadingState,
+} from './../../../types';
+import {
+  gotAllProducts,
+  getUserProducts,
+  gotProduct,
+  gotProducts,
+  gotProductsFailure,
+  gotRecommendations,
+  gotSingleProduct,
+  resetProduct,
+  updateUserProduct,
+  addToWishlist,
+  removeFromWishlist,
+  startLoader,
+  wishlistUpdateFailure,
+} from './categories/categories.actions';
 import { getUniqueId } from '../../../core/utils/settings';
 export const productInitialState: AllProducts = {
   content: [],
@@ -14,7 +35,7 @@ export const productInitialState: AllProducts = {
     productId: `${getUniqueId(2)}`,
     productBrand: {
       name: '',
-      price: 0
+      price: 0,
     },
     id: '',
     imageUrl: [],
@@ -29,9 +50,9 @@ export const productInitialState: AllProducts = {
     serviceCharge: 0,
     stockStatus: 'Available',
     totalLeastStock: [],
-    productAvailability: true
+    productAvailability: true,
   },
-  callState: LoadingState.INIT
+  callState: LoadingState.INIT,
 };
 
 export const productsFeature = createFeature({
@@ -48,20 +69,67 @@ export const productsFeature = createFeature({
       totalElements: products.totalElements,
       size: products.size,
       totalPages: products.totalPages,
-      callState: LoadingState.LOADED
+      callState: LoadingState.LOADED,
     })),
     on(gotProductsFailure, (state, { errorMessage }) => {
       return {
         ...state,
-        callState: { errorMessage }
-      }
+        callState: { errorMessage },
+      };
     }),
     on(gotProduct, (state, product) => ({ ...state, product })),
     on(resetProduct, (state) => {
       return {
         ...state,
-        product: productInitialState.product
-      }
+        product: productInitialState.product,
+      };
+    }),
+    on(updateUserProduct, (state, { id }) => {
+      const newContent = state.content.map((productItem) => {
+        if (productItem.id === id) {
+          return {
+            ...productItem,
+            isWishListItem: !productItem.isWishListItem,
+            isLoading: false,
+          };
+        }
+        return productItem;
+      });
+      return {
+        ...state,
+        content: newContent,
+      };
+    }),
+    on(wishlistUpdateFailure, (state, { id }) => {
+      const newContent = state.content.map((productItem) => {
+        if (productItem.id === id) {
+          return {
+            ...productItem,
+            isLoading: false,
+          };
+        }
+        return productItem;
+      });
+      return {
+        ...state,
+        content: newContent,
+      };
+    }),
+    on(startLoader, (state, { id }) => {
+      const newContent = state.content.map((productItem) => {
+        if (productItem.id === id) {
+          return {
+            ...productItem,
+            isLoading: true,
+          };
+        }
+        return productItem;
+      });
+
+      return {
+        ...state,
+        content: newContent,
+      };
     })
   ),
 });
@@ -73,32 +141,30 @@ export const {
   selectProduct,
   selectTotalElements,
   selectCallState,
-  selectProductsState
+  selectProductsState,
 } = productsFeature;
 
-
-const recommendationState: ProductItemSubset[] = []
+const recommendationState: ProductItemSubset[] = [];
 
 export const recommendationsFeature = createFeature({
   name: 'recommended',
   reducer: createReducer(
     recommendationState,
     on(gotRecommendations, (_, { recommendations }) => {
-      return recommendations
+      return recommendations;
     })
-  )
-})
+  ),
+});
 
-
-export const { selectRecommendedState } = recommendationsFeature
+export const { selectRecommendedState } = recommendationsFeature;
 
 const allProductsInit: {
-  products: Product[],
-  singleProduct: Comparison | null
+  products: Product[];
+  singleProduct: Comparison | null;
 } = {
   products: [],
-  singleProduct: null
-}
+  singleProduct: null,
+};
 
 export const allProductsFeature = createFeature({
   name: 'allProducts',
@@ -107,16 +173,17 @@ export const allProductsFeature = createFeature({
     on(gotAllProducts, (state, { products }) => {
       return {
         ...state,
-        products
-      }
+        products,
+      };
     }),
     on(gotSingleProduct, (state, singleProduct) => {
       return {
         ...state,
-        singleProduct: singleProduct
-      } 
+        singleProduct: singleProduct,
+      };
     })
-  )
-})
+  ),
+});
 
-export const { selectAllProductsState, selectProducts, selectSingleProduct } = allProductsFeature
+export const { selectAllProductsState, selectProducts, selectSingleProduct } =
+  allProductsFeature;

@@ -1,4 +1,4 @@
-import { Store, createSelector } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import {
   Component,
   EventEmitter,
@@ -8,14 +8,13 @@ import {
   ViewChild,
 } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { ErrorState, LoadingState, ProductItem } from '../../types';
+import { ProductItem } from '../../types';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import {
   selectCallState,
   selectContent,
   selectTotalElements,
-  selectProductsState,
 } from '../../store/admin/products/products.reducers';
 import { UserProductItemComponent } from '../../shared/components/user-product-item/user-product-item.component';
 import { filter } from '../../store/users/users.actions';

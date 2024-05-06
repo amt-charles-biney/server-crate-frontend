@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { BasicConfig } from '../../../types';
-import { gotConfiguration, resetConfiguration } from './categories.actions';
+import { gotConfiguration, resetConfiguration } from './categories/categories.actions';
 
 const initialState: BasicConfig = {
   category: {

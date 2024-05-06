@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { addToWishlist, getUserProducts, getWishlist, gotWishlist, removeFromWishlist } from "./categories.actions";
-import { UserService } from "../../../core/services/user/user.service";
+import { addToWishlist, getUserProducts, getWishlist, gotWishlist, removeFromWishlist, updateUserProduct, wishlistUpdateFailure } from "../categories/categories.actions";
+import { UserService } from "../../../../core/services/user/user.service";
 import { ToastrService } from "ngx-toastr";
-import { EMPTY, catchError, map, switchMap, tap } from "rxjs";
-import { errorHandler } from "../../../core/utils/helpers";
+import { EMPTY, catchError, concatMap, exhaustMap, map, of, switchMap, tap } from "rxjs";
+import { errorHandler } from "../../../../core/utils/helpers";
 import { Store } from "@ngrx/store";
-import { loadFeaturedProducts } from "../../product/featured-product/featured-product.action";
+import { loadFeaturedProducts } from "../../../product/featured-product/featured-product.action";
 
 @Injectable()
 export class WishlistEffect {
@@ -33,14 +33,13 @@ export class WishlistEffect {
           switchMap(({ id, configOptions }) => {
             return this.userService.addToWishlist(id, configOptions).pipe(
               map(() => {
-                this.toast.success('Added product to wishlist')
-                this.store.dispatch(getUserProducts({ page: 0, params: {}}))
-                this.store.dispatch(loadFeaturedProducts());
-                return getWishlist()
+                this.store.dispatch(updateUserProduct({ id }))
+                this.store.dispatch(getWishlist());
+                return loadFeaturedProducts()
               }),
               catchError((err) => {
                 this.toast.error(errorHandler(err), 'Error')
-                return EMPTY
+                return of(wishlistUpdateFailure({ id }))
               })
             )
           })
@@ -50,17 +49,16 @@ export class WishlistEffect {
       removeFromWishlist$ = createEffect(() => {
         return this.action$.pipe(
           ofType(removeFromWishlist),
-          switchMap(({ id }) => {
+          concatMap(({ id }) => {
             return this.userService.removeFromWishlist(id).pipe(
               map(() => {
-                this.toast.success('Removed product from wishlist')
-                this.store.dispatch(getUserProducts({ page: 0, params: {}}))
-                this.store.dispatch(loadFeaturedProducts());
-                return getWishlist()
+                this.store.dispatch(updateUserProduct({ id }))
+                this.store.dispatch(getWishlist());
+                return loadFeaturedProducts()
               }),
               catchError((err) => {
                 this.toast.error(errorHandler(err), 'Error')
-                return EMPTY
+                return of(wishlistUpdateFailure({ id }))
               })
             )
           })

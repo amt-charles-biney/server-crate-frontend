@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserService } from '../../core/services/user/user.service';
 import { filter } from './users.actions';
-import { catchError, map, of, shareReplay, switchMap, tap } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { AllProducts, LoadingState } from '../../types';
-import { gotProducts } from '../admin/products/categories.actions';
-import { setLoadingSpinner } from '../loader/actions/loader.actions';
+import { gotProducts } from '../admin/products/categories/categories.actions';
 import { errorHandler } from '../../core/utils/helpers';
 import { ToastrService } from 'ngx-toastr';
 
@@ -28,7 +27,6 @@ export class UserEffect {
               },
             });
           }),
-          shareReplay(1),
           catchError((err) => {
             this.toast.error(errorHandler(err), 'Error');
             return of();

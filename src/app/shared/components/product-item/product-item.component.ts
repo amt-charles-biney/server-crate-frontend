@@ -13,7 +13,7 @@ import { Store } from '@ngrx/store';
 import {
   addToFeature,
   removeFromFeature,
-} from '../../../store/admin/products/categories.actions';
+} from '../../../store/admin/products/categories/categories.actions';
 import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
 import { IndicatorsComponent } from '../indicators/indicators.component';
 import { ClickOutsideDirective } from '../../directives/click/click-outside.directive';

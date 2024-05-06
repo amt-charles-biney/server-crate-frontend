@@ -5,13 +5,10 @@ import { Router } from '@angular/router';
 import { CloudinaryUrlPipe } from '../../pipes/cloudinary-url/cloudinary-url.pipe';
 import { BuyNowComponent } from './features/buy-now/buy-now.component';
 import { Store } from '@ngrx/store';
-import {
-  addToWishlist,
-  removeFromWishlist,
-} from '../../../store/admin/products/categories.actions';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { HoverDirective } from '../../directives/hover/hover.directive';
+import { WishlistButtonComponent } from '../wishlist-button/wishlist-button.component';
 
 @Component({
   selector: 'app-user-product-item',
@@ -23,6 +20,7 @@ import { HoverDirective } from '../../directives/hover/hover.directive';
     CommonModule,
     CloudinaryUrlPipe,
     HoverDirective,
+    WishlistButtonComponent
   ],
   templateUrl: './user-product-item.component.html',
 })
@@ -60,14 +58,6 @@ export class UserProductItemComponent implements OnInit {
     } else {
       this.router.navigate(['/product/configure', id]);
     }
-  }
-
-  addToWishlist(id: string) {
-    this.store.dispatch(addToWishlist({ id, configOptions: { components: '', warranty: false } }));
-  }
-
-  removeFromWishlist(id: string) {
-    this.store.dispatch(removeFromWishlist({ id }));
   }
 
   addToCompare(id: string) {

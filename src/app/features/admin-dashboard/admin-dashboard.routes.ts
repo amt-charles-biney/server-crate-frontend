@@ -1,12 +1,10 @@
 import { Routes } from '@angular/router';
 import { AdminDashboardComponent } from './admin-dashboard.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { ProductsEffect } from '../../store/admin/products/products.effects';
-import { productsFeature } from '../../store/admin/products/products.reducers';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
-import { CategoryEffect } from '../../store/admin/products/categories.effect';
-import { categoryFeature } from '../../store/admin/products/categories.reducers';
+import { CategoryEffect } from '../../store/admin/products/categories/categories.effect';
+import { categoryFeature } from '../../store/admin/products/categories/categories.reducers';
 import { configurationFeature } from '../../store/admin/products/configuration.reducers';
 import { AttributesComponent } from './features/attributes/attributes.component';
 import { AttributeEffect } from '../../store/category-management/attributes/attributes.effects';
@@ -53,9 +51,7 @@ export const route: Routes = [
         path: 'products',
         component: ProductsOutlet,
         providers: [
-          provideEffects(ProductsEffect),
           provideEffects(CategoryEffect),
-          provideState(productsFeature),
           provideState(categoryFeature),
           provideState(configurationFeature),
         ],
