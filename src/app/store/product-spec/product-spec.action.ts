@@ -25,6 +25,10 @@ export const loadProductConfigFailure = createAction(
   props<{ error: any }>()
 );
 
+export const productConfigReset = createAction(
+  '[ProductConfig Component] reset product config'
+)
+
 export const loadProductConfigItem = createAction('[ProductConfigItem Component] Get product Config Item', props<{productId: string, configOptions: IParamConfigOptions}>());
 export const loadProductConfigItemSuccess = createAction('[ProductConfigItem Component] Get product Config Item Success', props<{ productConfigItem: IConfiguredProduct }>());
 export const loadProductConfigItemFailure = createAction('[ProductConfig Component] Get Product Config Item Failure',

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import {
   ActivatedRoute,
   NavigationExtras,
@@ -23,10 +23,11 @@ import {
   selectProductConfig,
   selectProductConfigItem,
 } from '../../store/product-spec/product-spec.reducer'
-import { Observable, Subscription } from 'rxjs'
+import { Observable, Subscription, tap } from 'rxjs'
 import {
   loadProduct,
-  loadProductConfigItem
+  loadProductConfigItem,
+  productConfigReset
 } from '../../store/product-spec/product-spec.action'
 import { CommonModule, NgOptimizedImage } from '@angular/common'
 import { MatTabsModule } from '@angular/material/tabs'
@@ -35,6 +36,7 @@ import { MatSelectModule } from '@angular/material/select'
 import { OrderSummaryComponent } from './order-summary/order-summary.component'
 import { ProductLoadingComponent } from './product-loading/product-loading.component';
 import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
+import { ImageSliderComponent } from '../../mobile/image-slider/image-slider.component';
 
 @Component({
   selector: 'app-product-configure',
@@ -49,11 +51,12 @@ import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-
     ProductLoadingComponent,
     NgOptimizedImage,
     CloudinaryUrlPipe,
+    ImageSliderComponent
   ],
   templateUrl: './product-configure.component.html',
 })
 
-export class ProductConfigureComponent {
+export class ProductConfigureComponent implements OnDestroy {
   defaultSelectedValues: (Record<string, IdefaultSelectedProps>) = {}
   defaultIncludedPrices: (Record<string, IdefaultSelectedProps>) = {}
   defaultUIChangePrice: (Record<string, IdefaultSelectedProps>) = {}
@@ -63,7 +66,16 @@ export class ProductConfigureComponent {
   privateConfigItemSubscription: Subscription | undefined;
   privateConfigSubscription: Subscription | undefined;
 
-  product$: Observable<ProductItem | null> = this.store.select(selectProduct)
+  imageUrls: string[] = []
+  technicalSupportInfoIsClicked = false
+
+  product$: Observable<ProductItem | null> = this.store.select(selectProduct).pipe(
+    tap((product: ProductItem | null) => {
+      if (product !== null) {
+        this.imageUrls = [product.coverImage, ...product.imageUrl]        
+      }
+    })
+  )
   productConfig$: Observable<any> = this.store.select(selectProductConfig)
   productConfigItem$: Observable<IConfiguredProduct | null> = this.store.select(selectProductConfigItem)
 
@@ -115,6 +127,14 @@ export class ProductConfigureComponent {
     this.activeLink = active
   }
 
+  openTechnicalSupportInfo() {
+    this.technicalSupportInfoIsClicked = true;
+  }
+  
+  closeTechnicalSupportInfo() {
+    this.technicalSupportInfoIsClicked = false;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private store: Store,
@@ -123,6 +143,7 @@ export class ProductConfigureComponent {
   ) { }
 
   ngOnInit(): void {
+    scrollTo({top: 0, behavior: 'smooth' })
     this.productId = this.route.snapshot.paramMap.get('id')?.toString() ?? ''
 
     this.store.dispatch(loadProduct({ id: this.productId }))
@@ -168,7 +189,6 @@ export class ProductConfigureComponent {
       this.store.dispatch(loadProductConfigItem({ productId: this.productId, configOptions }))
     })
   }
-
   onOptionChange(check: boolean): void {
     this.warranty = check
     this.updateConfigQueryParam(null, this.warranty)
@@ -342,6 +362,8 @@ export class ProductConfigureComponent {
     this.privateQueryParamSubscription?.unsubscribe()
     this.privateConfigItemSubscription?.unsubscribe()
     this.privateConfigSubscription?.unsubscribe()
+    this.store.dispatch(productConfigReset())
+    this.imageUrls = []
   }
 
 }

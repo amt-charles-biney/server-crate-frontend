@@ -1,0 +1,47 @@
+
+<section class="mt-4 mb-6">
+    <div class="keen-slider h-[357px]" #imageSlider>
+        @defer (on timer(100ms)) {
+            @for (image of images; track image) {
+            <div class="keen-slider__slide flex h-[357px]">
+              <img
+                [ngSrc]="image | cloudinaryUrl"
+                width="257"
+                height="257"
+                class="object-contain max-w-full max-h-full mx-auto"
+                [alt]="'image of ' + image"
+              />
+            </div>
+            }
+        } @placeholder {
+            <div class="w-[357px] h-[357px] bg-black">
+
+            </div>
+        }
+        
+    </div>
+      <div class="flex justify-center py-2 h-3 mt-3">
+        <ng-container
+  *ngIf="{
+    dotHelper: dotHelper$ | async,
+    currentSlide: currentSlide$ | async
+  } as asyncSlider"
+>
+        @for (slide of asyncSlider.dotHelper; track $index) {
+        <button
+          (click)="slider.moveToIdx($index)"
+          [ngClass]="
+            $index === asyncSlider.currentSlide ? 'border-figma-green' : 'border-0'
+          "
+          class="flex flex-col justify-center items-center w-6 h-6 rounded-full mx-1 px-1 border p-1"
+        >
+        <div [ngClass]="
+        $index === asyncSlider.currentSlide ? 'bg-figma-green' : 'bg-[#c5c5c5]'
+      " class="w-2.5 h-2.5 rounded-full">
+    
+        </div>
+    </button>
+        }
+    </ng-container>
+      </div>
+    </section>

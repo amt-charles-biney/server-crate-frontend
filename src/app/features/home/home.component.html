@@ -3,7 +3,7 @@
   <div class="fixed -top-[1px] left-0 z-30 w-full bg-white">
     <app-mobile-header [numberOfCartItems]="(numberOfCartItems$ | async) || 0" [numberOfWishlistItems]="(numberOfWishlistItems$ | async) || 0"/>
   </div>
-  <section class="flex-1 mt-[53px] md:mt-0 md:mb-[126px] mb-16">
+  <section class="flex-1 mt-[53px] md:mt-0 md:mb-[126px] mb-16 overflow-x-hidden">
     <router-outlet />
   </section>
   <app-footer />
