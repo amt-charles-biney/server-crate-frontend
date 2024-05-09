@@ -1,3 +1,4 @@
+import { CallState, LoadingState } from './../../types';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import * as ProductConfigActions from './product-spec.action'; 
 import { IConfiguredProduct, ProductItem } from '../../types';
@@ -19,7 +20,8 @@ export interface ProductCartItemState {
   productCartItem: IConfiguredProduct | null,
   productCartItemLoading: boolean,
   productCartItemError: any,
-  message: String | null
+  message: String | null,
+  callState: CallState
 }
 
 export const initialState: ProductConfigState = {
@@ -39,7 +41,8 @@ export const ProductCartInitialState: ProductCartItemState = {
   productCartItem: null,
   productCartItemLoading: false,
   productCartItemError: null,
-  message: null
+  message: null,
+  callState: LoadingState.INIT
 }
 
 export const productConfigFeature = createFeature({
@@ -70,10 +73,10 @@ export const productCartItemFeature = createFeature({
   name: 'productCartItem',
   reducer: createReducer(
     ProductCartInitialState,
-    on(ProductConfigActions.addToCartItem, state => ({...state, productCartItemLoading: true, productCartItemError: null, message: null})),
-    on(ProductConfigActions.addToCartItemSuccess, (state, { message, configuration }) => ({...state, productCartItem: configuration, message,  productCartItemLoading: false})),
-    on(ProductConfigActions.addToCartItemFailure, (state, { error }) => ({...state, productCartItemError: error, productCartItemLoading: false , message: null})),
-    on(ProductConfigActions.resetCartMessage, (state) => ({...state, message: null}))
+    on(ProductConfigActions.addToCartItem, state => ({...state, productCartItemLoading: true, productCartItemError: null, message: null, callState: LoadingState.LOADING})),
+    on(ProductConfigActions.addToCartItemSuccess, (state, { message, configuration }) => ({...state, productCartItem: configuration, message,  productCartItemLoading: false, callState: LoadingState.LOADED})),
+    on(ProductConfigActions.addToCartItemFailure, (state, { error }) => ({...state, productCartItemError: error, productCartItemLoading: false , message: null, callState: LoadingState.LOADED})),
+  on(ProductConfigActions.resetCartMessage, (state) => ({...state, message: null}))
 
   )
 })
@@ -85,7 +88,7 @@ export const {
   selectError,
   selectLoading,
   selectProductConfig,
-  selectProduct
+  selectProduct,
 } = productConfigFeature
 
 export const {
@@ -100,5 +103,6 @@ export const {
   selectProductCartItemError,
   selectProductCartItemLoading,
   selectProductCartItemState,
-  selectMessage
+  selectMessage,
+  selectCallState
 } = productCartItemFeature

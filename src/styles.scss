@@ -19,8 +19,20 @@ html,
 
 body {
   margin: 0;
-  font-family: "Roboto", sans-serif;
-  --mdc-snackbar-container-color: #E1000F;
+  font-family: "DM Sans", sans-serif;
+}
+
+.mat-mdc-snack-bar-container {
+  &.red-snackbar {
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+    --mdc-snackbar-container-color: #E1000F;
+  }
+  &.green-snackbar {
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+    --mdc-snackbar-container-color: #3cb043;
+  }
 }
 input[type="checkbox"] {
   display: grid;
@@ -371,6 +383,9 @@ app-preference-selection .mat-expansion-indicator:after {
 app-preference-selection {
   --mdc-circular-progress-active-indicator-color: #3cb043;
 }
+app-product-configure {
+  --mdc-circular-progress-active-indicator-color: white;
+}
 
 app-wishlist-button {
   --mdc-circular-progress-active-indicator-color: #f59e0b;
@@ -620,6 +635,12 @@ app-date-picker .mat-mdc-button-persistent-ripple {
 @media only screen and (max-width: 768px) {
   app-payment-details .mat-mdc-tab-group {
     max-width: 100%;
+  }
+}
+
+@media only screen and (min-width:768px) {
+  body {
+    font-family: "Roboto", sans-serif;
   }
 }
 @tailwind base;

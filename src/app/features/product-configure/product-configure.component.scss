@@ -1,0 +1,9 @@
+.backface-visible {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
+
+}
+
+.no-z-translate {
+    transform: translateZ(0);
+}

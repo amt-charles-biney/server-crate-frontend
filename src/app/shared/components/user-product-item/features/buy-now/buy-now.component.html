@@ -98,27 +98,8 @@
           >
             {{ product.productName }}
           </h2>
-          <div
-            class="flex flex-col gap-2 w-full max-w-md mt-5 overflow-hidden text-ellipsis whitespace-nowrap"
-          >
-            <div class="flex flex-row items-center w-full justify-between">
-              <h1 class="text-xs font-light text-[#737373] w-1/2">Brand :</h1>
-              <p class="text-[13px] font-light text-[#000] w-1/2">
-                {{ product.productBrand.name }}
-              </p>
-            </div>
-            @for (option of productConfig.configured; track option) { @if
-            (allowedOptionTypes.includes(option.optionType)) {
-            <div class="flex flex-row items-center w-full justify-between">
-              <h1 class="text-[13px] font-light text-[#737373] w-1/2">
-                {{ option.optionType }} :
-              </h1>
-              <p class="text-[13px] font-light text-[#000] w-1/2">
-                {{ option.optionName }}
-                <span>{{ option?.isMeasured ? option?.size : "" }}</span>
-              </p>
-            </div>
-            } }
+          <div class="mt-5">
+            <app-specifications [brandName]="product.productBrand.name" [specs]="productConfig.configured"/>
           </div>
 
           <div

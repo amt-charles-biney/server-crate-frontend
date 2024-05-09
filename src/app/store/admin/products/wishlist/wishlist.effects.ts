@@ -24,6 +24,7 @@ export class WishlistEffect {
                   data: {
                     message: errorHandler(err),
                   },
+                  panelClass: 'red-snackbar',
                   ...snackbarConfig
                 })
                 return EMPTY
@@ -47,6 +48,7 @@ export class WishlistEffect {
                   data: {
                     message: errorHandler(err),
                   },
+                  panelClass: 'red-snackbar',
                   ...snackbarConfig
                 })
                 return of(wishlistUpdateFailure({ id }))
@@ -70,6 +72,7 @@ export class WishlistEffect {
                   data: {
                     message: errorHandler(err),
                   },
+                  panelClass: 'red-snackbar',
                   ...snackbarConfig
                 })
                 return of(wishlistUpdateFailure({ id }))

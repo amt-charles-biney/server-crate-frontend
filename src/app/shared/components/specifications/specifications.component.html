@@ -1,0 +1,23 @@
+<div
+  class="flex flex-col gap-2 px-3 md:px-0 w-full max-w-md overflow-hidden text-ellipsis whitespace-nowrap"
+>
+    <h2 class="md:hidden text-xl font-bold">Current Configuration</h2>
+  <div class="block font-bold md:flex md:flex-row items-center w-full justify-between">
+    <h1 class="md:text-xs md:font-light md:text-[#737373] w-1/2">Brand <span class="hidden md:inline">:</span></h1>
+    <p class="md:text-[13px] font-light text-[#000] w-1/2 truncate">
+      {{ brandName }}
+    </p>
+  </div>
+  @for (option of specs; track option) { @if
+  (allowedOptionTypes.includes(option.optionType)) {
+  <div class="block font-semibold md:flex md:flex-row items-center w-full justify-between truncate">
+    <h1 class="tracking-wide md:text-[13px] md:font-light md:text-[#737373] w-1/2 truncate">
+      {{ option.optionType }} <span class="hidden md:inline">:</span>
+    </h1>
+    <p class="md:text-[13px] font-light text-[#000] w-1/2 truncate">
+      {{ option.optionName }}
+      <span>{{ option?.isMeasured ? option?.size : "" }}</span>
+    </p>
+  </div>
+  } }
+</div>

@@ -22,7 +22,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['../../../../node_modules/keen-slider/keen-slider.min.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImageSliderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ImageSliderComponent implements AfterViewInit, OnDestroy {
   @ViewChild('imageSlider', { static: true})
   imageSlider!: ElementRef<HTMLElement>;
   slider!: KeenSliderInstance;
@@ -30,10 +30,6 @@ export class ImageSliderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   currentSlide$ = new BehaviorSubject<number>(0)
   dotHelper$ = new BehaviorSubject<Array<Number>>([])
-  
-  ngOnInit(): void {
-    console.log('Input images', this.images);
-  }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -42,21 +38,15 @@ export class ImageSliderComponent implements OnInit, AfterViewInit, OnDestroy {
         loop: true,
         slideChanged: (slide) => {
           this.currentSlide$.next(slide.track.details.rel)
-          console.log('Current slide', this.currentSlide$.value)
         }
       });
       this.dotHelper$.next([
         ...Array(this.slider.track?.details?.slides.length ?? this.images.length).keys()
       ])
-      console.log('Dots', this.dotHelper$.value, ...Array(this.slider.track.details.slides.length).keys());
-      console.log('Slider', this.slider);
-      console.log('Images', this.images);
     }, 300);
   }
 
-  ngOnDestroy(): void {
-    console.log('Image slider destroyed');
-    
+  ngOnDestroy(): void {    
     if (this.slider) this.slider.destroy();
   }
 }

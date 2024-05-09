@@ -1,8 +1,11 @@
-<main class="hidden md:block relative h-auto">
-  <section class="mt-5 w-full max-w-[1239px] px-14 lg:px-0 mx-auto">
+<ng-container *ngIf="callState$ | async"></ng-container>
+<main class="relative h-auto">
+  <section
+    class="md:mt-5 md:w-full md:max-w-[1239px] md:px-14 lg:px-0 md:mx-auto"
+  >
     <ng-container *ngIf="product$ | async as product">
       <div
-        class="text-[13px] font-normal flex flex-row gap-1 items-center text-[#999999]"
+        class="hidden md:flex text-[13px] font-normal flex-row gap-1 items-center text-[#999999]"
       >
         <span
           [routerLink]="['/']"
@@ -25,7 +28,7 @@
       </div>
 
       <div
-        class="w-full mt-10 flex gap-[97px] flex-wrap mx-auto justify-between items-start"
+        class="hidden md:flex w-full mt-10 gap-[97px] flex-wrap mx-auto justify-between items-start"
       >
         <div class="flex flex-col lg:flex-row items-start gap-6 flex-1 mb-20">
           <div class="flex lg:flex-col lg:h-[312px] gap-[49px] items-center">
@@ -68,29 +71,11 @@
               {{ product.productDescription }}
             </p>
 
-            <div
-              class="flex flex-col gap-2 w-full max-w-md overflow-hidden text-ellipsis whitespace-nowrap"
-            >
-              <div class="flex flex-row items-center w-full justify-between">
-                <h1 class="text-xs font-light text-[#737373] w-1/2">Brand :</h1>
-                <p class="text-[13px] font-light text-[#000] w-1/2">
-                  {{ product.productBrand.name }}
-                </p>
-              </div>
-              @for (option of productConfigItem.configured; track option) { @if
-              (allowedOptionTypes.includes(option.optionType)) {
-              <div class="flex flex-row items-center w-full justify-between">
-                <h1 class="text-[13px] font-light text-[#737373] w-1/2">
-                  {{ option.optionType }} :
-                </h1>
-                <p class="text-[13px] font-light text-[#000] w-1/2">
-                  {{ option.optionName }}
-                  <span>{{ option?.isMeasured ? option?.size : "" }}</span>
-                </p>
-              </div>
-              } }
-            </div>
-
+            <!-- Specs -->
+            <app-specifications
+              [brandName]="product.productBrand.name"
+              [specs]="productConfigItem.configured"
+            />
             <div
               class="w-full flex-row items-center flex-wrap mx-auto justify-start gap-8 mt-5 flex"
             >
@@ -132,114 +117,216 @@
           </div>
         </div>
       </div>
-    </ng-container>
-
-    <div
-      class="w-full flex gap-4 mb-20 flex-row flex-wrap mx-auto justify-between items-start"
-    >
-      <div class="flex-1 w-full">
-        <div class="mb-5">
-          <h2 class="text-xl font-bold">Configurations</h2>
-        </div>
-        <ng-container *ngIf="productConfig$ | async as productConfig">
-          <nav
-            class="w-full max-w-[710px]"
-            mat-tab-nav-bar
-            [tabPanel]="tabPanel"
+      <section class="md:hidden relative px-3">
+        <app-image-slider [images]="imageUrls" />
+        <section class="flex flex-col gap-2 pt-4">
+          <h2 class="font-extrabold text-xl">{{ product.productName }}</h2>
+          <button
+            (click)="openTechnicalSupportInfo()"
+            class="flex items-center gap-2 border rounded-md px-2 py-1 max-w-max text-sm"
           >
-            <a
-              *ngFor="let attribute of configKeys; let i = index"
-              [active]="activeLink === attribute"
-              (click)="setActiveLink(attribute)"
-              mat-tab-link
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              class="w-4 h-4"
             >
-              <div class="flex items-center gap-3">
-                <p
-                  [ngClass]="
-                    activeLink === attribute
-                      ? 'text-figma-green'
-                      : 'text-table-text'
-                  "
-                  class="mt-0.5 text-[14px] font-inter font-[400px]"
-                >
-                  {{ attribute }}
-                </p>
-              </div>
-            </a>
-          </nav>
+              <path
+                fill-rule="evenodd"
+                d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0Zm-6 3.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7.293 5.293a1 1 0 1 1 .99 1.667c-.459.134-1.033.566-1.033 1.29v.25a.75.75 0 1 0 1.5 0v-.115a2.5 2.5 0 1 0-2.518-4.153.75.75 0 1 0 1.061 1.06Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span class="text-blue-500">Technical Support</span>
+          </button>
+          <p class="mt-2">{{ product.productDescription }}</p>
+          <div class="flex justify-evenly mt-2">
+            <label
+              for="bring-in-warranty"
+              class="group border-2 rounded-md text-center p-2 has-[:checked]:border-figma-green max-w-36"
+            >
+              <input
+                name="bring-in-warranty"
+                [checked]="warranty"
+                (change)="onOptionChange(true)"
+                class="!w-0 !h-0 invisible"
+                type="checkbox"
+                name="warranty"
+                id="bring-in-warranty"
+              />
+              <span>Bring-in warranty for 36 months</span>
+            </label>
+            <label
+              for="pick-up-warranty"
+              class="group border-2 rounded-md text-center px-3 py-2 has-[:checked]:border-figma-green max-w-36"
+            >
+              <input
+                name="pick-up-warranty"
+                [checked]="!warranty"
+                (change)="onOptionChange(false)"
+                class="!w-0 !h-0 invisible"
+                type="checkbox"
+                name="warranty"
+                id="pick-up-warranty"
+              />
+              <span>Pick up warranty</span>
+            </label>
+          </div>
+          @if (technicalSupportInfoIsClicked) {
+          <div
+            class="fixed top-0 left-0 pt-[59px] flex flex-col gap-3 z-20 bg-white inset-0 h-screen w-full px-4 text-lg"
+          >
+            <button
+              class="w-fit self-end"
+              (click)="closeTechnicalSupportInfo()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z"
+                />
+              </svg>
+            </button>
 
-          <mat-tab-nav-panel #tabPanel>
-            <div class="flex flex-row flex-wrap items-center gap-4 mt-10">
-              @if(isActiveLinkMeasured(activeLink)) {
-              <div class="w-full">
-                <button
-                  (click)="resetDefault(activeLink)"
-                  class="hover:underline cursor-pointer mb-4 flex flex-row gap-2 items-center text-sm text-[#3CB043]"
-                >
-                  <span>Reset to default </span>
-                  <span>
-                    <img src="/assets/reset.svg" alt="reset default" />
-                  </span>
-                </button>
-                <div class="flex flex-row w-full justify-start gap-[90px]">
-                  <div class="max-w-[247px] w-full">
-                    <mat-select
-                      [(value)]="defaultSelectedValues[activeLink].id"
-                      [panelClass]="'mt-4 -ml-2 rounded-md'"
-                      (selectionChange)="
-                        onSelectVariantSizableChange({
-                          type: activeLink,
-                          id: $event.value,
-                          size: defaultSelectedValues[activeLink].size
-                        })
-                      "
-                      class="py-2 x-2 h-[42px] p-2 border-[2px] border-[#E8EAEB] focus:outline-none rounded-md w-full flex-1 max-w-lg appearance-none"
-                    >
-                      <mat-option
-                        [value]="attributeProduct.compatibleOptionId"
-                        *ngFor="
-                          let attributeProduct of productConfig.options[
-                            activeLink
-                          ]
-                        "
-                      >
-                        {{ attributeProduct.name }}
-                      </mat-option>
-                    </mat-select>
-                  </div>
+            <h2 class="font-bold text-2xl mt-5 mb-3">Technical Support</h2>
+            <p>
+              If you have any questions about our warranty or need assistance,
+              please don't hesitate to contact our support team through our
+              email address
+              <a
+                class="text-blue-500 hover:underline"
+                href="mailto: s3rvers_tech@servers.com"
+                >s3rvers_tech&#64;servers.com</a
+              >. We're here to help!
+            </p>
+            <p>
+              Depending on the nature of the problem, we will either repair the
+              faulty component(s) or replace your entire system with a
+              functionally equivalent model.
+            </p>
+            <p>
+              We prioritize repairs whenever possible to minimize downtime. We
+              will pay the costs for transport and logistics within 30 days
+              after delivery.
+            </p>
+          </div>
+          }
+        </section>
+      </section>
+      <div
+        class="w-full flex gap-4 mb-20 flex-row flex-wrap mx-auto justify-between items-start"
+      >
+        <div class="flex-1 w-full">
+          <div class="mb-5">
+            <h2 class="px-3 mt-2 md:mt-0 md:px-0 text-xl font-bold">
+              Configurations
+            </h2>
+          </div>
+          <ng-container *ngIf="productConfig$ | async as productConfig">
+            <nav
+              class="w-full max-w-[710px]"
+              mat-tab-nav-bar
+              [tabPanel]="tabPanel"
+            >
+              <a
+                *ngFor="let attribute of configKeys; let i = index"
+                [active]="activeLink === attribute"
+                (click)="setActiveLink(attribute)"
+                mat-tab-link
+              >
+                <div class="flex items-center gap-3">
+                  <p
+                    [ngClass]="
+                      activeLink === attribute
+                        ? 'text-figma-green'
+                        : 'text-table-text'
+                    "
+                    class="mt-0.5 text-[14px] font-inter font-[400px]"
+                  >
+                    {{ attribute }}
+                  </p>
+                </div>
+              </a>
+            </nav>
 
-                  <div class="flex flex-row items-center gap-[54px] w-full">
-                    <div class="relative max-w-[247px] w-full">
+            <mat-tab-nav-panel #tabPanel>
+              <div
+                class="flex flex-row flex-wrap items-center gap-4 mt-10 px-3 md:px-0"
+              >
+                @if(isActiveLinkMeasured(activeLink)) {
+                <div class="w-full">
+                  <button
+                    (click)="resetDefault(activeLink)"
+                    class="hover:underline cursor-pointer mb-4 flex flex-row gap-2 items-center text-sm text-[#3CB043]"
+                  >
+                    <span>Reset to default </span>
+                    <span>
+                      <img src="/assets/reset.svg" alt="reset default" />
+                    </span>
+                  </button>
+                  <div class="flex flex-row w-full justify-start gap-4 md:gap-[90px]">
+                    <div class="max-w-[247px] w-full">
                       <mat-select
-                        [(value)]="defaultSelectedValues[activeLink].size"
+                        [(value)]="defaultSelectedValues[activeLink].id"
                         [panelClass]="'mt-4 -ml-2 rounded-md'"
                         (selectionChange)="
-                          onSizeableOptionChange({
+                          onSelectVariantSizableChange({
                             type: activeLink,
-                            id: defaultSelectedValues[activeLink].id,
-                            size: $event.value
+                            id: $event.value,
+                            size: defaultSelectedValues[activeLink].size
                           })
                         "
                         class="py-2 x-2 h-[42px] p-2 border-[2px] border-[#E8EAEB] focus:outline-none rounded-md w-full flex-1 max-w-lg appearance-none"
                       >
                         <mat-option
-                          class="hover"
-                          [value]="sizes"
-                          [disabled]=""
+                          [value]="attributeProduct.compatibleOptionId"
                           *ngFor="
-                            let sizes of generateStorageSizes(
-                              defaultSelectedValues[activeLink].id,
-                              productConfig.options[activeLink]
-                            )
+                            let attributeProduct of productConfig.options[
+                              activeLink
+                            ]
                           "
                         >
-                          {{ sizes }} {{ unit }}
+                          {{ attributeProduct.name }}
                         </mat-option>
                       </mat-select>
                     </div>
 
-                    <div class="font-medium text-[20px]">
-                      {{
+                    <div class="flex flex-col md:flex-row items-center md:gap-[54px] w-full">
+                      <div class="relative max-w-[247px] w-full">
+                        <mat-select
+                          [(value)]="defaultSelectedValues[activeLink].size"
+                          [panelClass]="'mt-4 -ml-2 rounded-md'"
+                          (selectionChange)="
+                            onSizeableOptionChange({
+                              type: activeLink,
+                              id: defaultSelectedValues[activeLink].id,
+                              size: $event.value
+                            })
+                          "
+                          class="py-2 x-2 h-[42px] p-2 border-[2px] border-[#E8EAEB] focus:outline-none rounded-md w-full flex-1 max-w-lg appearance-none"
+                        >
+                          <mat-option
+                            class="hover"
+                            [value]="sizes"
+                            [disabled]=""
+                            *ngFor="
+                              let sizes of generateStorageSizes(
+                                defaultSelectedValues[activeLink].id,
+                                productConfig.options[activeLink]
+                              )
+                            "
+                          >
+                            {{ sizes }} {{ unit }}
+                          </mat-option>
+                        </mat-select>
+                      </div>
+
+                      <div class="font-medium text-[20px]">
+                        {{
                         isSizablePricing(activeLink)
                           ? "included"
                           : getPriceDiffereceMeasured({
@@ -248,209 +335,139 @@
                               price: defaultSelectedValues[activeLink].price,
                               size: defaultSelectedValues[activeLink].size,
                             })
-                      }}
+                        }}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              } @else {
-              <div class="w-full">
-                <button
-                  (click)="resetDefault(activeLink)"
-                  class="hover:underline cursor-pointer mb-4 flex flex-row gap-2 items-center text-sm text-[#3CB043]"
-                >
-                  <span>Reset to default </span>
-                  <span>
-                    <img src="/assets/reset.svg" alt="reset default" />
-                  </span>
-                </button>
-                <div class="w-full flex flex-row flex-wrap gap-[70px]">
+                } @else {
+                <div class="w-full">
+                  <button
+                    (click)="resetDefault(activeLink)"
+                    class="hover:underline cursor-pointer mb-4 flex flex-row gap-2 items-center text-sm text-[#3CB043]"
+                  >
+                    <span>Reset to default </span>
+                    <span>
+                      <img src="/assets/reset.svg" alt="reset default" />
+                    </span>
+                  </button>
                   <div
-                    *ngFor="
-                      let attributeProduct of productConfig.options[activeLink];
-                      let i = index
-                    "
+                    class="w-full grid grid-cols-2 md:flex md:flex-row md:flex-wrap gap-4 md:gap-[70px]"
                   >
                     <div
-                      (click)="
-                        updateConfigQueryParam({
-                          type: attributeProduct.type,
-                          id: attributeProduct.compatibleOptionId,
-                          size: '0'
-                        })
+                      *ngFor="
+                        let attributeProduct of productConfig.options[
+                          activeLink
+                        ];
+                        let i = index
                       "
-                      class="cursor-pointer border-[2px] relative hover:border-[#3CB043] {{
-                        isActiveSelectedOption({
-                          type: attributeProduct.type,
-                          id: attributeProduct.compatibleOptionId,
-                          size: attributeProduct.baseAmount
-                        })
-                          ? 'border-green-600 border-2'
-                          : ''
-                      }} flex flex-col justify-between border-[#E6E6E6] rounded-lg w-[190px] h-[170px] p-4"
                     >
                       <div
-                        class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3"
+                        (click)="
+                          updateConfigQueryParam({
+                            type: attributeProduct.type,
+                            id: attributeProduct.compatibleOptionId,
+                            size: '0'
+                          })
+                        "
+                        class="cursor-pointer border-[2px] relative hover:border-[#3CB043] {{
+                          isActiveSelectedOption({
+                            type: attributeProduct.type,
+                            id: attributeProduct.compatibleOptionId,
+                            size: attributeProduct.baseAmount
+                          })
+                            ? 'border-green-600 border-2'
+                            : ''
+                        }} flex flex-col justify-between border-[#E6E6E6] rounded-lg md:w-[190px] md:h-[170px] md:p-4 p-2"
                       >
-                        <img
-                          title="attribute-check"
-                          *ngIf="
-                            isActiveSelectedOption({
-                              type: attributeProduct.type,
-                              id: attributeProduct.compatibleOptionId,
-                              size: attributeProduct.baseAmount
-                            })
-                          "
-                          src="/assets/option.svg"
-                          [alt]="attributeProduct.compatibleOptionId"
-                          class="object-contain max-w-full max-h-full"
-                        />
-                      </div>
-
-                      <div
-                        class="max-w-[155px] flex flex-row items-center justify-center max-h-[65px] h-full"
-                      >
-                        <img
-                          title="attribte-media"
-                          [ngSrc]="attributeProduct.media | cloudinaryUrl"
-                          height="65"
-                          width="155"
-                          priority
-                          [alt]="attributeProduct.media"
-                          class="max-w-full max-h-full object-contain"
-                        />
-                      </div>
-                      <div>
-                        <div class="font-bold text-[13px]">
-                          {{ attributeProduct.name }}
+                        <div
+                          class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3"
+                        >
+                          <img
+                            title="attribute-check"
+                            *ngIf="
+                              isActiveSelectedOption({
+                                type: attributeProduct.type,
+                                id: attributeProduct.compatibleOptionId,
+                                size: attributeProduct.baseAmount
+                              })
+                            "
+                            src="/assets/option.svg"
+                            [alt]="attributeProduct.compatibleOptionId"
+                            class="object-contain max-w-full max-h-full"
+                          />
                         </div>
-                        <div class="font-semibold text-[16px]">
-                          {{
-                            getPriceDifference({
-                              isIncluded: attributeProduct.isIncluded,
-                              id: attributeProduct.compatibleOptionId,
-                              price: attributeProduct.price,
-                              size: ""
-                            })
-                          }}
+
+                        <div
+                          class="md:max-w-[155px] md:max-h-[65px] max-w-20 min-h-20 mx-auto flex flex-row items-center justify-center h-full"
+                        >
+                          <img
+                            title="attribte-media"
+                            [ngSrc]="attributeProduct.media | cloudinaryUrl"
+                            height="65"
+                            width="155"
+                            priority
+                            [alt]="attributeProduct.media"
+                            class="max-w-full max-h-full object-contain"
+                          />
+                        </div>
+                        <div>
+                          <div class="font-bold text-[13px] truncate mt-1">
+                            {{ attributeProduct.name }}
+                          </div>
+                          <div class="font-semibold text-[16px]">
+                            {{
+                              getPriceDifference({
+                                isIncluded: attributeProduct.isIncluded,
+                                id: attributeProduct.compatibleOptionId,
+                                price: attributeProduct.price,
+                                size: ""
+                              })
+                            }}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                }
               </div>
-              }
-            </div>
-          </mat-tab-nav-panel>
-        </ng-container>
-      </div>
-
-      <app-order-summary
-        [productId]="productId"
-        [querySnapShot]="querySnapShot"
-        [productConfigItem]="productConfigItem"
-      />
-    </div>
-  </section>
-</main>
-<main class="md:hidden relative px-3 font-dm-sans">
-  <ng-container *ngIf="product$ | async as product">
-    <app-image-slider [images]="imageUrls" />
-    <section class="flex flex-col gap-2 pt-4">
-      <h2 class="font-extrabold text-2xl">{{ product.productName }}</h2>
-      <button
-        (click)="openTechnicalSupportInfo()"
-        class="flex items-center gap-2 border rounded-md px-2 py-1 max-w-max text-sm"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          class="w-4 h-4"
+            </mat-tab-nav-panel>
+          </ng-container>
+        </div>
+        @if(orderSummaryIsVisible) {
+        <section
+          @slideDown
+          class="md:hidden fixed top-0 left-0 flex items-center justify-between text-lg px-3 h-28 w-full z-30 bg-[#ebebf0]"
         >
-          <path
-            fill-rule="evenodd"
-            d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0Zm-6 3.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7.293 5.293a1 1 0 1 1 .99 1.667c-.459.134-1.033.566-1.033 1.29v.25a.75.75 0 1 0 1.5 0v-.115a2.5 2.5 0 1 0-2.518-4.153.75.75 0 1 0 1.061 1.06Z"
-            clip-rule="evenodd"
-          />
-        </svg>
-        <span class="text-blue-500">Technical Support</span>
-      </button>
-      <p class="mt-2">{{ product.productDescription }}</p>
-      <div class="flex justify-evenly mt-2">
-        <label
-          for="bring-in-warranty"
-          class="group border-2 rounded-md text-center p-2 has-[:checked]:border-figma-green max-w-36"
-        >
-          <input
-            name="bring-in-warranty"
-            [checked]="warranty"
-            (change)="onOptionChange(true)"
-            class="!w-0 !h-0 invisible"
-            type="checkbox"
-            name="warranty"
-            id="bring-in-warranty"
-          />
-          <span>Bring-in warranty for 36 months</span>
-        </label>
-        <label
-          for="pick-up-warranty"
-          class="group border-2 rounded-md text-center px-3 py-2 has-[:checked]:border-figma-green max-w-36"
-        >
-          <input
-            name="pick-up-warranty"
-            [checked]="!warranty"
-            (change)="onOptionChange(false)"
-            class="!w-0 !h-0 invisible"
-            type="checkbox"
-            name="warranty"
-            id="pick-up-warranty"
-          />
-          <span>Pick up warranty</span>
-        </label>
-      </div>
-      @if (technicalSupportInfoIsClicked) {
-      <div
-        class="fixed top-0 left-0 pt-[59px] flex flex-col gap-3 z-3 bg-white inset-0 h-screen w-full px-4 text-lg"
-      >
-        <button class="w-fit self-end" (click)="closeTechnicalSupportInfo()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            class="w-6 h-6"
+          <p class="font-bold">{{ productConfigItem.totalPrice | currency }}</p>
+          <button
+            (click)="addProductToCart()"
+            class="hover:shadow-md hover:scale-105 text-center hover:bg-opacity-100 bg-opacity-95 backface-visible no-z-translate transition-all bg-figma-green py-2 px-4 min-w-[7.5rem] rounded-md text-white font-semibold"
           >
-            <path
-              d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z"
-            />
-          </svg>
-        </button>
-
-        <h2 class="font-bold text-2xl mt-5 mb-3">Technical Support</h2>
-        <p>
-          If you have any questions about our warranty or need assistance,
-          please don't hesitate to contact our support team through our email
-          address
-          <a
-            class="text-blue-500 hover:underline"
-            href="mailto: s3rvers_tech@servers.com"
-            >s3rvers_tech&#64;servers.com</a
-          >. We're here to help!
-        </p>
-        <p>
-          Depending on the nature of the problem, we will either repair the
-          faulty component(s) or replace your entire system with a functionally
-          equivalent model.
-        </p>
-        <p>We prioritize repairs whenever possible to minimize
-          downtime. We will pay the
-          costs for transport and logistics within 30 days after delivery.</p>
+            @if(isLoading) {
+              <mat-spinner class="mx-auto" diameter="20"/>
+            } @else {
+              <span>Add to Cart</span>
+            }
+          </button>
+        </section>
+        }
+        <div class="hidden md:block">
+          <app-order-summary
+            [productId]="productId"
+            [querySnapShot]="querySnapShot"
+            [productConfigItem]="productConfigItem"
+          />
+        </div>
       </div>
-      }
-    </section>
-    <section>
-      
-    </section>
-  </ng-container>
+      <div class="md:hidden">
+        <app-specifications
+          [brandName]="product.productBrand.name"
+          [specs]="productConfigItem.configured"
+        />
+      </div>
+    </ng-container>
+  </section>
 </main>

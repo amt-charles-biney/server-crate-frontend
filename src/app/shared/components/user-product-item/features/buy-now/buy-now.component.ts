@@ -15,30 +15,22 @@ import {
 } from '../../../../../store/product-spec/product-spec.action';
 import {
   selectProduct,
-  selectProductConfig,
   selectProductConfigItem,
 } from '../../../../../store/product-spec/product-spec.reducer';
 import { Observable, tap } from 'rxjs';
 import { IConfiguredProduct, IParamConfigOptions } from '../../../../../types';
+import { SpecificationsComponent } from '../../../specifications/specifications.component';
 
 @Component({
   selector: 'app-buy-now',
   standalone: true,
-  imports: [NgOptimizedImage, CloudinaryUrlPipe, CommonModule],
+  imports: [NgOptimizedImage, CloudinaryUrlPipe, CommonModule, SpecificationsComponent],
   templateUrl: './buy-now.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BuyNowComponent implements OnInit {
   product!: Observable<any>;
   productConfig!: Observable<IConfiguredProduct | null>;
-  allowedOptionTypes: string[] = [
-    'GPU',
-    'Motherboard',
-    'RAM',
-    'Storage',
-    'Operating System',
-    'Processor'
-  ];
   warranty: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<BuyNowComponent>,

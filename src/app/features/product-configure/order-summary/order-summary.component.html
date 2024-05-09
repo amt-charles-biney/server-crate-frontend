@@ -1,3 +1,4 @@
+<ng-container *ngIf="callState$ | async"></ng-container>
 <div
   class="border-[1px] flex-1 h-[327px] max-w-[486px] w-[486px] mt-5 flex flex-col p-4 border-dashed rounded-xl justify-between border-[#E6E6E6]"
 >
@@ -36,7 +37,11 @@
         (click)="addProductToCart()"
         class="bg-[#3CB043] hover:bg-green-500 w-full p-2 rounded-xl text-white font-[500px] text-[20px]"
       >
-        Add to Cart
+        @if (isLoading) {
+          <mat-spinner class="mx-auto" diameter="30"/>
+        } @else {
+          <span>Add to Cart</span>
+        }
       </button>
       <button (click)="addToWishlist(productId)">
         <svg

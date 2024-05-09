@@ -46,6 +46,15 @@ export const COLOR_MAPPING: StatusColors = {
     }
 }
 
+export const allowedOptionTypes: string[] = [
+    'GPU',
+    'Motherboard',
+    'RAM',
+    'Storage',
+    'Operating System',
+    'Processor'
+];
+
 export const NAME_MAPPING: { [key: string]: string} = {
     'pre_transit': 'Pending',
     'unknown': 'Pending',
@@ -63,4 +72,4 @@ export const IMAGE_MAPPING: {[key:string]: string} = {
 
 export const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
 
-export const snackbarConfig: MatSnackBarConfig = { duration: 4000, horizontalPosition: "end", verticalPosition: "bottom" }
+export const snackbarConfig: MatSnackBarConfig = { duration: 4000, horizontalPosition: "center", verticalPosition: "bottom" }

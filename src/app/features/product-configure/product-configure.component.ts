@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
 import {
   ActivatedRoute,
   NavigationExtras,
@@ -14,17 +14,18 @@ import {
   ProductItem,
   IdefaultSelectedProps,
   REQUIRED_CONFIG,
-  IConfiguredOption,
   ICategoryOption,
 } from '../../types';
 import { Store } from '@ngrx/store';
 import {
+  selectCallState,
   selectProduct,
   selectProductConfig,
   selectProductConfigItem,
 } from '../../store/product-spec/product-spec.reducer'
 import { Observable, Subscription, tap } from 'rxjs'
 import {
+  addToCartItem,
   loadProduct,
   loadProductConfigItem,
   productConfigReset
@@ -37,6 +38,10 @@ import { OrderSummaryComponent } from './order-summary/order-summary.component'
 import { ProductLoadingComponent } from './product-loading/product-loading.component';
 import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
 import { ImageSliderComponent } from '../../mobile/image-slider/image-slider.component';
+import { SpecificationsComponent } from '../../shared/components/specifications/specifications.component';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { getCallState } from '../../core/utils/helpers';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-product-configure',
@@ -51,9 +56,26 @@ import { ImageSliderComponent } from '../../mobile/image-slider/image-slider.com
     ProductLoadingComponent,
     NgOptimizedImage,
     CloudinaryUrlPipe,
-    ImageSliderComponent
+    ImageSliderComponent,
+    SpecificationsComponent,
+    MatProgressSpinnerModule
   ],
   templateUrl: './product-configure.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('slideDown', [
+      transition(':enter', [
+        style({
+          transform: 'translateY(-120%)'
+        }),
+        animate('100ms ease-in', style({ transform: 'translateY(0)'}))
+      ]),
+      transition(':leave', [
+        style({ transform: 'translateY(0)'}),
+        animate('100ms ease-in', style({ transform: 'translateY(-120%)'}))
+      ])
+    ])
+  ]
 })
 
 export class ProductConfigureComponent implements OnDestroy {
@@ -68,7 +90,14 @@ export class ProductConfigureComponent implements OnDestroy {
 
   imageUrls: string[] = []
   technicalSupportInfoIsClicked = false
-
+  orderSummaryIsVisible = false
+  isLoading!: boolean;
+  error!: string | null;
+  callState$ = this.store.select(selectCallState).pipe(
+    tap((callState) => {
+      [this.isLoading, this.error] = getCallState(callState)
+    })
+  );
   product$: Observable<ProductItem | null> = this.store.select(selectProduct).pipe(
     tap((product: ProductItem | null) => {
       if (product !== null) {
@@ -113,15 +142,6 @@ export class ProductConfigureComponent implements OnDestroy {
   queryMapper: Record<string, string> = {}
   querySnapShot!: IParamConfigOptions
 
-  allowedOptionTypes: string[] = [
-    'Graphics',
-    'Motherboard',
-    'RAM',
-    'Storage',
-    'Operating Systems',
-    'Processors'
-  ];
-
   setActiveLink = (active: string): void => {
     this.unit = this.productConfig.options[active][0]?.unit ?? 'GB'
     this.activeLink = active
@@ -139,7 +159,7 @@ export class ProductConfigureComponent implements OnDestroy {
     private route: ActivatedRoute,
     private store: Store,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
@@ -188,6 +208,13 @@ export class ProductConfigureComponent implements OnDestroy {
       this.querySnapShot = configOptions
       this.store.dispatch(loadProductConfigItem({ productId: this.productId, configOptions }))
     })
+  }
+  ngOnDestroy(): void {
+    this.privateQueryParamSubscription?.unsubscribe()
+    this.privateConfigItemSubscription?.unsubscribe()
+    this.privateConfigSubscription?.unsubscribe()
+    this.store.dispatch(productConfigReset())
+    this.imageUrls = []
   }
   onOptionChange(check: boolean): void {
     this.warranty = check
@@ -267,6 +294,11 @@ export class ProductConfigureComponent implements OnDestroy {
       storageSize.push(String(size))
     }
     return storageSize
+  }
+
+  addProductToCart (): void {
+    document.body.scrollTo({ top: 0, behavior: 'smooth' })
+    this.store.dispatch(addToCartItem({ productId: this.productId, configOptions: this.querySnapShot  }))
   }
 
 
@@ -357,13 +389,11 @@ export class ProductConfigureComponent implements OnDestroy {
     });
   }
 
-
-  ngOnDestroy(): void {
-    this.privateQueryParamSubscription?.unsubscribe()
-    this.privateConfigItemSubscription?.unsubscribe()
-    this.privateConfigSubscription?.unsubscribe()
-    this.store.dispatch(productConfigReset())
-    this.imageUrls = []
+  @HostListener('document:scroll', ['$event']) onScrollWindow(event: Event) {
+    if (window.scrollY > 375) {
+      this.orderSummaryIsVisible = true
+    } else {
+      this.orderSummaryIsVisible = false
+    }
   }
-
 }
