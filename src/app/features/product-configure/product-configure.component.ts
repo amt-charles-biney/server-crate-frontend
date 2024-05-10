@@ -390,7 +390,7 @@ export class ProductConfigureComponent implements OnDestroy {
   }
 
   @HostListener('document:scroll', ['$event']) onScrollWindow(event: Event) {
-    if (window.scrollY > 375) {
+    if (window.scrollY > 385) {
       this.orderSummaryIsVisible = true
     } else {
       this.orderSummaryIsVisible = false

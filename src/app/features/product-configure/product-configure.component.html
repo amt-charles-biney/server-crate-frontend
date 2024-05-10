@@ -3,7 +3,7 @@
   <section
     class="md:mt-5 md:w-full md:max-w-[1239px] md:px-14 lg:px-0 md:mx-auto"
   >
-    <ng-container *ngIf="product$ | async as product">
+    <ng-container *ngIf="product$ | async as product; else load_product">
       <div
         class="hidden md:flex text-[13px] font-normal flex-row gap-1 items-center text-[#999999]"
       >
@@ -441,7 +441,10 @@
           @slideDown
           class="md:hidden fixed top-0 left-0 flex items-center justify-between text-lg px-3 h-28 w-full z-30 bg-[#ebebf0]"
         >
+        <div>
           <p class="font-bold">{{ productConfigItem.totalPrice | currency }}</p>
+          <p>{{product.productName}}</p>
+        </div>
           <button
             (click)="addProductToCart()"
             class="hover:shadow-md hover:scale-105 text-center hover:bg-opacity-100 bg-opacity-95 backface-visible no-z-translate transition-all bg-figma-green py-2 px-4 min-w-[7.5rem] rounded-md text-white font-semibold"
@@ -469,5 +472,19 @@
         />
       </div>
     </ng-container>
+    <ng-template #load_product> 
+      <section class="flex flex-col items-center mt-10 md:justify-center min-h-screen">
+        <div
+        [ngClass]="size === 'small' ? 'h-5 w-5' : 'h-8 w-8 mt-4'"
+        class="self-center text-figma-green inline-block animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-success motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status"
+      >
+        <span
+          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+          >Loading...</span
+        >
+      </div>
+      </section>
+    </ng-template>
   </section>
 </main>

@@ -55,7 +55,7 @@ export const productConfigFeature = createFeature({
     on(ProductConfigActions.loadProductConfig, state => ({ ...state, loading: true, error: null })),
     on(ProductConfigActions.loadProductConfigSuccess, (state, { productConfig }) => ({ ...state, productConfig, loading: false })),
     on(ProductConfigActions.loadProductConfigFailure, (state, { error }) => ({ ...state, error, loading: false })),
-    on(ProductConfigActions.productConfigReset, (state) => ({...state, productConfig: null }))
+    on(ProductConfigActions.productConfigReset, (state) => ({...state, productConfig: null, product: null }))
 )
 })
 

@@ -13,11 +13,12 @@ import {
 import KeenSlider, { KeenSliderInstance } from 'keen-slider';
 import { CloudinaryUrlPipe } from '../../shared/pipes/cloudinary-url/cloudinary-url.pipe';
 import { BehaviorSubject } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-image-slider',
   standalone: true,
-  imports: [NgOptimizedImage, CloudinaryUrlPipe, CommonModule],
+  imports: [NgOptimizedImage, CloudinaryUrlPipe, CommonModule, MatProgressSpinnerModule],
   templateUrl: './image-slider.component.html',
   styleUrls: ['../../../../node_modules/keen-slider/keen-slider.min.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,7 +44,7 @@ export class ImageSliderComponent implements AfterViewInit, OnDestroy {
       this.dotHelper$.next([
         ...Array(this.slider.track?.details?.slides.length ?? this.images.length).keys()
       ])
-    }, 300);
+    }, 1000);
   }
 
   ngOnDestroy(): void {    
