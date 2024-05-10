@@ -32,8 +32,9 @@ export class ImageSliderComponent implements AfterViewInit, OnDestroy {
   currentSlide$ = new BehaviorSubject<number>(0)
   dotHelper$ = new BehaviorSubject<Array<Number>>([])
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   ngAfterViewInit(): void {
-    setTimeout(() => {
       this.slider = new KeenSlider(this.imageSlider.nativeElement, {
         initial: this.currentSlide$.value,
         loop: true,
@@ -44,7 +45,7 @@ export class ImageSliderComponent implements AfterViewInit, OnDestroy {
       this.dotHelper$.next([
         ...Array(this.slider.track?.details?.slides.length ?? this.images.length).keys()
       ])
-    }, 1000);
+      this.cdr.markForCheck()
   }
 
   ngOnDestroy(): void {    
