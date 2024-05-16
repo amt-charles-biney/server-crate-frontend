@@ -1,18 +1,13 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DestroyRef,
-  ElementRef,
-  HostListener,
   Input,
   NgZone,
   OnChanges,
-  OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild,
 } from '@angular/core';
 import { Comparison, Product, SelectedDropdown } from '../../../types';
 import { CustomInputComponent } from '../custom-input/custom-input.component';
@@ -24,7 +19,7 @@ import {
   selectSingleProduct,
 } from '../../../store/admin/products/products.reducers';
 import { Store } from '@ngrx/store';
-import { CommonModule, ViewportScroller } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { getSingleProduct } from '../../../store/admin/products/categories/categories.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
@@ -41,11 +36,10 @@ import { Router } from '@angular/router';
   styleUrl: './mobile-compare.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MobileCompareComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class MobileCompareComponent implements OnInit, OnChanges {
   @Input() allProducts!: Product[];
   @Input() productsToCompare!: Comparison[];
-  @ViewChild('dropdown', { static: true }) dropdown!: ElementRef<HTMLFormElement>
-  @ViewChild('processorTable', { static: true }) processorTable!: ElementRef<HTMLDivElement>
+
   private filteredProducts$ = new BehaviorSubject<Product[]>([]);
   filteredProducts = this.filteredProducts$.asObservable();
 
@@ -143,31 +137,6 @@ export class MobileCompareComponent implements OnInit, OnChanges, AfterViewInit,
       };
       
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.ngZone.runOutsideAngular(() => {
-      document.addEventListener('scroll', this.scrollCallback, true)
-    })
-  }
-
-  ngOnDestroy(): void {
-    document.removeEventListener('scroll', this.scrollCallback, true)
-  }
-
-  scrollCallback = (event: Event) =>  {
-    const element = this.dropdown.nativeElement
-    const { top } = element.getBoundingClientRect()
-    // 170 is the sum of the heights of everything above the dropdowns
-    if (top < 170) {
-      this.dropdown.nativeElement.className = `fixed top-[25px] mt-[28px] left-0 right-0 bg-white w-full shadow-sm px-3`
-      this.processorTable.nativeElement.className = `mt-[202px] pt-0`
-    }
-    if (document.body.scrollTop === 0) {
-      this.dropdown.nativeElement.className = ''
-      this.processorTable.nativeElement.className = `mt-0`
-    }
-    
   }
 
   private _filter(value: Product | string, filterFrom: Product[]): Product[] {
