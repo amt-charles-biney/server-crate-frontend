@@ -1,5 +1,4 @@
 <main class="relative min-h-screen">
-  <app-header />
   <section
     class="md:pb-[330px] mt-5 pb-[770px] w-full max-w-[1239px] px-14 lg:px-0 mx-auto"
   >
@@ -232,11 +231,7 @@
 
                     <div class="font-medium text-[20px]">
                       {{
-                        defaultSelectedValues[activeLink].id ==
-                          this.defaultIncludedPrices[activeLink].id &&
-                        defaultSelectedValues[activeLink].size ==
-                          this.defaultIncludedPrices[activeLink].size &&
-                        defaultSelectedValues[activeLink].isIncluded
+                          isSizablePricing(activeLink)
                           ? "included"
                           : getPriceDifference({
                               isIncluded: false,
@@ -342,5 +337,4 @@
       />
     </div>
   </section>
-  <app-footer />
 </main>

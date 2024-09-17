@@ -12,6 +12,8 @@ import { UserEffect } from '../../store/users/users.effects';
 import { CategoryEffect } from '../../store/admin/products/categories.effect';
 import { ProductsEffect } from '../../store/admin/products/products.effects';
 import { CartComponent } from '../cart/cart.component';
+import { productCartItemFeature, productConfigFeature, productConfigItemFeature } from '../../store/product-spec/product-spec.reducer';
+import { ProductSpecEffects } from '../../store/product-spec/product-spec.effect';
 
 export const route: Routes = [
     {
@@ -42,6 +44,16 @@ export const route: Routes = [
                     provideEffects(UserEffect),
                     provideState(productsFeature),
                     provideState(categoryFeature),
+                ]
+            },
+            {
+                path: 'product/configure/:id',
+                loadChildren: () => import('../product-configure/product-configure.routes').then(m => m.route),
+                providers: [
+                    provideState(productConfigFeature),
+                    provideEffects(ProductSpecEffects),
+                    provideState(productCartItemFeature),
+                    provideState(productConfigItemFeature)
                 ]
             },
             {

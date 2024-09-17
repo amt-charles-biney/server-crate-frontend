@@ -14,7 +14,7 @@ import {
   IConfiguredProduct,
   IParamConfigOptions,
   ProductItem,
-  IdefaultSelectedProps
+  IdefaultSelectedProps,
 } from '../../types';
 import { Store } from '@ngrx/store';
 import {
@@ -38,8 +38,6 @@ import { ProductLoadingComponent } from './product-loading/product-loading.compo
   selector: 'app-product-configure',
   standalone: true,
   imports: [
-    HeaderComponent,
-    FooterComponent,
     CommonModule,
     MatTabsModule,
     RouterModule,
@@ -101,7 +99,7 @@ export class ProductConfigureComponent {
 
     this.store.dispatch(loadProduct({ id: this.productId }))
 
-    this.productConfigItem$.subscribe((product) => {
+    this.productConfigItem$.subscribe((product: IConfiguredProduct | null) => {
       if (product !== null) this.productConfigItem = product
       this.buildQueryMapper()
       this.cdr.detectChanges()
@@ -109,7 +107,6 @@ export class ProductConfigureComponent {
 
     this.productConfig$.subscribe((product: ICategoryConfig) => {
       if (product !== null) {
-
         this.productConfig = product
         const keys: string[] = Object.keys(product?.options)
 
@@ -123,6 +120,7 @@ export class ProductConfigureComponent {
               isIncluded: IncludedProduct.isIncluded
             }
           }
+          this.setDefaultSelectedValues(key, product?.options[key][0])
         })
 
         this.configKeys = keys
@@ -130,7 +128,7 @@ export class ProductConfigureComponent {
       }
     })
 
-    this.route.queryParams.subscribe((queryParams) => {
+    this.route.queryParams.subscribe((queryParams: { [x: string]: any; }) => {
       const configOptions: IParamConfigOptions = {
         warranty: queryParams['warranty'] ?? this.warranty,
         components: queryParams['components']
@@ -161,6 +159,31 @@ export class ProductConfigureComponent {
       if (product?.isMeasured) {
         this.defaultSelectedValues[product.optionType] = { id: product.optionId, size: product.size || String(product.baseAmount), price: product.optionPrice, isIncluded: product.included }
       }
+    }
+  }
+
+  /**
+   * Sets the default selected values for a specific option type based on the provided products.
+   * If the default selected values for the given option type are not already set and the products
+   * are not null and are measured, it extracts necessary properties from the products and assigns them
+   * as default selected values.
+   * 
+   * @param optionType The type of option for which default selected values are being set.
+   * @param products The products containing information about the compatible option.
+   */
+
+  setDefaultSelectedValues(optionType: string, products: ICompatibleOption): void {
+    // Check if default selected values for the given option type are not already set and if products are not null and are measured
+    if (!this.defaultSelectedValues[optionType] && products != null && products.isMeasured) {
+      // Extract necessary properties from the products
+      const { compatibleOptionId, isIncluded, price, baseAmount } = products;
+      // Assign extracted properties as default selected values for the given option type
+      this.defaultSelectedValues[optionType] = {
+        id: compatibleOptionId,
+        size: String(baseAmount),
+        price,
+        isIncluded: isIncluded
+      };
     }
   }
 
@@ -226,7 +249,7 @@ export class ProductConfigureComponent {
     const getProduct = productArr.find(product => product.compatibleOptionId === attributeId)
     const storageSize: string[] = []
 
-    for (let size: number = getProduct?.baseAmount ?? 8; size <= getProduct?.maxAmount ?? 2056; size *= 2) {
+    for (let size: number = getProduct?.baseAmount; size <= getProduct?.maxAmount; size *= 2) {
       storageSize.push(String(size))
     }
 
@@ -277,14 +300,29 @@ export class ProductConfigureComponent {
    * 
    * @returns
    */
-  getPriceDifference(props: IdefaultSelectedProps): string {
-    const { isIncluded, id, price } = props
-
+  getPriceDifference(selectedOption: IdefaultSelectedProps): string {
+    const { isIncluded, id, price } = selectedOption
     if (isIncluded) return "included"
 
-    let priceDifference = price - this.defaultIncludedPrices[id]?.price
-    let sign = priceDifference > 0 ? "+" : "-";
+    let priceDifference = this.defaultIncludedPrices[id] ? price - this.defaultIncludedPrices[id].price : price;
+    let sign = priceDifference > 0 ? "+" : priceDifference < 0 ? "-" : "";
 
     return `${sign} $${Math.abs(priceDifference).toFixed(2)}`;
   }
+
+
+  /**
+   * Checks if the pricing for the currently active link is sizable.
+   * 
+   * @param activeLink The identifier of the currently active link.
+   * @returns A boolean value indicating whether the pricing is sizable for the active link.
+   */
+  isSizablePricing(activeLink: string): boolean {
+    if (!this.defaultIncludedPrices[activeLink]) return false;
+
+    return this.defaultSelectedValues[activeLink].id === this.defaultIncludedPrices[activeLink].id &&
+      this.defaultSelectedValues[activeLink].size === this.defaultIncludedPrices[activeLink].size &&
+      this.defaultSelectedValues[activeLink].isIncluded;
+  }
+
 }
